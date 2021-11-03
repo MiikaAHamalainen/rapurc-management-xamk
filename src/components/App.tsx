@@ -1,7 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import AccessTokenRefresh from "components/containers/access-token-refresh";
-import MainScreen from "components/screens/main-screen";
+import SurveysScreen from "components/screens/surveys-screen";
+import NewSurveyScreen from "./screens/new-survey-screen";
+import AdminScreen from "./screens/admin-screen";
+import SurveyScreen from "./screens/survey-screen";
 
 /**
  * Application component
@@ -12,10 +15,26 @@ const App: React.FC = () => {
       <Router>
         <Switch>
           <Route
-            path="/"
+            path="/surveys"
             exact
-            component={ MainScreen }
+            component={ SurveysScreen }
           />
+          <Route
+            path="/new-survey"
+            exact
+            component={ NewSurveyScreen }
+          />
+          <Route
+            path="/survey"
+            exact
+            component={ SurveyScreen }
+          />
+          <Route
+            path="/admin"
+            exact
+            component={ AdminScreen }
+          />
+          <Redirect from="/" to="/surveys"/>
         </Switch>
       </Router>
     </AccessTokenRefresh>

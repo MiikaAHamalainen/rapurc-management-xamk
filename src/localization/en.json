@@ -1,4 +1,5 @@
 {
+  "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
     "notImplemented": "Not yet implemented"
@@ -6,6 +7,65 @@
 
   "errorHandling": {
     "title": "Error"
-  }
+  },
 
+  "navigation": {
+    "surveys": "Surveys",
+    "newSurvey": "New survey",
+    "admin": "Admin"
+  },
+
+  "surveysScreen": {
+    "title": "Kartoitukset",
+    "description": "Hae purkukartoituksia osoitteella",
+    "address": "Osoite",
+    "showAll": "Näytä kaikki",
+    "showMine": "Näytä omat",
+    "newSurvey": "Uusi kartoitus",
+    "filter": "Filter"
+  },
+
+  "newSurveyScreen": {
+    "title": "Uusi kartoitus",
+    "description": "Hae kartoituskohdetta osoitteella, kiinteistötunnuksella tai rakennustunnuksella",
+    "address": "Address",
+    "propertyId": "Kiinteistötunnus",
+    "buildingId": "Rakennustunnus",
+    "search": "Hae",
+    "createManually": "Luo manuaalisesti",
+    "createSurvey": "Luo kartoitus"
+  },
+  
+  "surveyScreen": {
+    "title": "Survey",
+    "status": "Status",
+    "ready": "Ready",
+    "incomplete": "Incomplete",
+    "navigation": {
+      "owner": "Owner details",
+      "building": "Building information",
+      "others": "Other demolished structures",
+      "survey": "Survey information",
+      "reusables": "Reusable materials",
+      "waste": "Waste materials",
+      "hazardous": "Hazardous materials",
+      "attatchments": "Attatchments",
+      "summary": "Summary"
+    }
+  },
+  
+  "adminScreen": {
+    "title": "Administration",
+    "description": "Control the contents of survey options.",
+    "navigation": {
+      "dropdownSettings": {
+        "title": "Dropdown menus",
+        "reusableMaterials": "Building part or material",
+        "wasteMaterials": "Waste material",
+        "postProcessing": "Post processing",
+        "hazardousMaterials": "Hazardous material category",
+        "hazardousMaterialsAdditionalInfo": "Hazardous material additional information"
+      }
+    }
+  }
 }

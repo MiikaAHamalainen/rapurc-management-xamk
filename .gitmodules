@@ -1,0 +1,3 @@
+[submodule "rapurc-api-spec"]
+	path = rapurc-api-spec
+	url = git@github.com:Metatavu/rapurc-api-spec.git
