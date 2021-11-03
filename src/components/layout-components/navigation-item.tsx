@@ -7,7 +7,7 @@ import theme from "theme";
  * Component properties
  */
 interface Props {
-  icon?: JSX.Element;
+  icon?: React.ReactNode;
   title: string;
   selected: boolean;
   onClick(): void;
