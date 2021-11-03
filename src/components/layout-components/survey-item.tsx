@@ -14,6 +14,8 @@ interface Props {
 
 /**
  * Survey item component
+ *
+ * @param props component properties
  */
 const SurveyItem: React.FC<Props> = ({
   title,
