@@ -55,6 +55,9 @@ const SurveyScreen: React.FC = () => {
     </List>
   );
 
+  /**
+   * Component render
+   */
   return (
     <SidePanelLayout
       title={ strings.surveyScreen.title }
