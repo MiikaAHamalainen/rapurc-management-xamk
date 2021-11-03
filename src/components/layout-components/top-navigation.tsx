@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
  */
 const TopNavigation: React.FC = () => {
   const history = useHistory();
+
   /**
    * Component render
    */
