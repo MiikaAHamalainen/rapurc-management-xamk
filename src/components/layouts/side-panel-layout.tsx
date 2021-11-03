@@ -4,6 +4,9 @@ import React from "react";
 import { Content, ContentContainer, Root } from "styled/layouts/side-panel-layout";
 import theme from "theme";
 
+/**
+ * Component properties
+ */
 interface Props {
   title: string;
   headerContent?: JSX.Element;
