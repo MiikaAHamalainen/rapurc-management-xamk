@@ -6,6 +6,9 @@ import { useHistory } from "react-router-dom";
 import { AppTitle, Root } from "styled/layout-components/header";
 import Navigation from "./top-navigation";
 
+/**
+ * Component properties
+ */
 interface Props {
   title: string;
   back?: boolean;
