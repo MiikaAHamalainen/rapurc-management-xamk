@@ -16,38 +16,18 @@ const AdminScreen: React.FC = () => {
    */
   const renderSideNavigation = () => (
     <List>
-      <Accordion defaultExpanded={ true } disableGutters>
+      <Accordion defaultExpanded disableGutters>
         <AccordionSummary expandIcon={ <ExpandMore/> }>
           <Typography>
-            { strings.adminScreen.navigation.dropdownSettings.title }
+            { dropdownSettings.title }
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <NavigationItem
-            title={ strings.adminScreen.navigation.dropdownSettings.reusableMaterials }
-            selected={ true }
-            onClick={ () => {} }
-          />
-          <NavigationItem
-            title={ strings.adminScreen.navigation.dropdownSettings.wasteMaterials }
-            selected={ false }
-            onClick={ () => {} }
-          />
-          <NavigationItem
-            title={ strings.adminScreen.navigation.dropdownSettings.postProcessing }
-            selected={ false }
-            onClick={ () => {} }
-          />
-          <NavigationItem
-            title={ strings.adminScreen.navigation.dropdownSettings.hazardousMaterials }
-            selected={ false }
-            onClick={ () => {} }
-          />
-          <NavigationItem
-            title={ strings.adminScreen.navigation.dropdownSettings.hazardousMaterialsAdditionalInfo }
-            selected={ false }
-            onClick={ () => {} }
-          />
+          <NavigationItem title={ dropdownSettings.reusableMaterials } selected/>
+          <NavigationItem title={ dropdownSettings.wasteMaterials }/>
+          <NavigationItem title={ dropdownSettings.postProcessing }/>
+          <NavigationItem title={ dropdownSettings.hazardousMaterials }/>
+          <NavigationItem title={ dropdownSettings.hazardousMaterialsAdditionalInfo }/>
         </AccordionDetails>
       </Accordion>
     </List>
