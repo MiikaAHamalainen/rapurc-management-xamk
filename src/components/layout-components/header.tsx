@@ -46,7 +46,7 @@ const Header: React.FC<Props> = ({
           sx={{ alignItems: "center" }}
         >
           { back &&
-            <IconButton onClick={ () => history.goBack() }>
+            <IconButton onClick={ history.goBack }>
               <ArrowBackIosNewSharp htmlColor="#ffffff"/>
             </IconButton>
           }
