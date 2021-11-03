@@ -17,57 +17,40 @@ const SurveyScreen: React.FC = () => {
       <NavigationItem
         icon={ <PersonOutlined/> }
         title={ strings.surveyScreen.navigation.owner }
-        selected={ true }
-        onClick={ () => {} }
+        selected
       />
       <NavigationItem
         icon={ <Apartment/> }
         title={ strings.surveyScreen.navigation.building }
-        selected={ false }
-        onClick={ () => {} }
       />
       <NavigationItem
         icon={ <NoteAdd/> }
         title={ strings.surveyScreen.navigation.others }
-        selected={ false }
-        onClick={ () => {} }
       />
       <NavigationItem
         icon={ <Engineering/> }
         title={ strings.surveyScreen.navigation.survey }
-        selected={ false }
-        onClick={ () => {} }
       />
       <NavigationItem
         icon={ <ChangeCircle/> }
         title={ strings.surveyScreen.navigation.reusables }
-        selected={ false }
-        onClick={ () => {} }
       />
       <NavigationItem
         icon={ <Delete/> }
         title={ strings.surveyScreen.navigation.waste }
-        selected={ false }
-        onClick={ () => {} }
       />
       <NavigationItem
         icon={ <WarningAmber/> }
         title={ strings.surveyScreen.navigation.hazardous }
-        selected={ false }
-        onClick={ () => {} }
       />
       <Divider/>
       <NavigationItem
         icon={ <Attachment/> }
         title={ strings.surveyScreen.navigation.attatchments }
-        selected={ false }
-        onClick={ () => {} }
       />
       <NavigationItem
         icon={ <Summarize/> }
         title={ strings.surveyScreen.navigation.summary }
-        selected={ false }
-        onClick={ () => {} }
       />
     </List>
   );
