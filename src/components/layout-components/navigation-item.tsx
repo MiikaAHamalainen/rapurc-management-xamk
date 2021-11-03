@@ -9,8 +9,8 @@ import theme from "theme";
 interface Props {
   icon?: React.ReactNode;
   title: string;
-  selected: boolean;
-  onClick(): void;
+  selected?: boolean;
+  onClick?: () => void;
 }
 
 /**
