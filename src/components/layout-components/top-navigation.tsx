@@ -5,8 +5,6 @@ import { useHistory } from "react-router-dom";
 
 /**
  * Navigation component
- *
- * @param props component properties
  */
 const TopNavigation: React.FC = () => {
   const history = useHistory();
