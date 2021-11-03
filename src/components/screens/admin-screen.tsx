@@ -9,6 +9,8 @@ import React from "react";
  * Admin screen component
  */
 const AdminScreen: React.FC = () => {
+  const { dropdownSettings } = strings.adminScreen.navigation;
+
   /**
    * Side navigation content
    */
