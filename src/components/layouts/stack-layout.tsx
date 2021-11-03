@@ -2,6 +2,9 @@ import Header from "components/layout-components/header";
 import React from "react";
 import { Content, Root } from "styled/layouts/stack-layout";
 
+/**
+ * Component properties
+ */
 interface Props {
   title: string;
   headerContent?: JSX.Element;
