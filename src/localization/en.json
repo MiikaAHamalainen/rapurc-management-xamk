@@ -1,4 +1,5 @@
 {
+  "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
     "notImplemented": "Not yet implemented"
@@ -6,6 +7,65 @@
 
   "errorHandling": {
     "title": "Error"
-  }
+  },
 
+  "navigation": {
+    "surveys": "Surveys",
+    "newSurvey": "New survey",
+    "admin": "Admin"
+  },
+
+  "surveysScreen": {
+    "title": "Surveys",
+    "description": "Search surveys by address",
+    "address": "Address",
+    "showAll": "Show all",
+    "showMine": "Show my surveys",
+    "newSurvey": "New survey",
+    "filter": "Filter"
+  },
+
+  "newSurveyScreen": {
+    "title": "New survey",
+    "description": "Search surveyable building by address, building id or property id",
+    "address": "Address",
+    "propertyId": "Property ID",
+    "buildingId": "Building ID",
+    "search": "Search",
+    "createManually": "Create manually",
+    "createSurvey": "Create survey"
+  },
+  
+  "surveyScreen": {
+    "title": "Survey",
+    "status": "Status",
+    "ready": "Ready",
+    "incomplete": "Incomplete",
+    "navigation": {
+      "owner": "Owner details",
+      "building": "Building information",
+      "others": "Other demolished structures",
+      "survey": "Survey information",
+      "reusables": "Reusable materials",
+      "waste": "Waste materials",
+      "hazardous": "Hazardous materials",
+      "attatchments": "Attatchments",
+      "summary": "Summary"
+    }
+  },
+  
+  "adminScreen": {
+    "title": "Administration",
+    "description": "Control the contents of survey options.",
+    "navigation": {
+      "dropdownSettings": {
+        "title": "Dropdown menus",
+        "reusableMaterials": "Building part or material",
+        "wasteMaterials": "Waste material",
+        "postProcessing": "Post processing",
+        "hazardousMaterials": "Hazardous material category",
+        "hazardousMaterialsAdditionalInfo": "Hazardous material additional information"
+      }
+    }
+  }
 }

@@ -1,9 +1,13 @@
 import { createTheme, darkScrollbar } from "@mui/material";
+// Photo by Teodor Drobota on Unsplash
+import background1920 from "../resources/images/teodor-drobota-1920.jpg";
+import background2400 from "../resources/images/teodor-drobota-2400.jpg";
+import background4k from "../resources/images/teodor-drobota-4k.jpg";
 
 /**
  * Values from default theme to use in custom theme
  */
-const { breakpoints, palette } = createTheme();
+const { breakpoints, palette, spacing } = createTheme();
 
 /**
  * Custom theme for Material UI
@@ -12,45 +16,49 @@ export default createTheme({
 
   palette: {
     primary: {
-      main: "#000000"
+      main: "#009E9E",
+      light: "#56D0CF",
+      dark: "#006F70"
     },
     secondary: {
-      main: "#F9473B",
-      light: "#39a849"
+      main: "#FF7F56",
+      light: "#FFB084",
+      dark: "#C74F2B"
     },
     text: {
       primary: "#333333",
       secondary: "#ffffff"
     },
     background: {
-      default: "#E0E0E0",
+      default: "#f7f7f7",
       paper: "#ffffff"
     }
   },
 
   typography: {
     allVariants: {
-      fontFamily: "acumin-pro, sans-serif",
+      fontFamily: "Quicksand, sans-serif",
       fontWeight: 400
     },
     h1: {
-      fontFamily: "ambroise-std, serif",
+      fontFamily: "Oswald, sans-serif",
       fontWeight: 800,
-      fontSize: 42,
-      letterSpacing: "0.05em",
+      fontSize: 36,
       [breakpoints.down("sm")]: {
         fontSize: "1.75rem"
       }
     },
     h2: {
-      fontFamily: "ambroise-std, serif",
+      fontFamily: "Oswald, sans-serif",
       fontWeight: 800,
       fontSize: 30
     },
     h3: {
+      fontFamily: "Oswald, sans-serif",
       fontSize: 26
     },
     h4: {
+      fontFamily: "Oswald, sans-serif",
       fontSize: 20
     },
     body1: {
@@ -62,9 +70,17 @@ export default createTheme({
     h6: {
       fontSize: 12
     },
+    subtitle1: {
+      fontFamily: "Quicksand, sans-serif",
+      fontWeight: 700,
+      fontSize: 16
+    },
     body2: {
       fontSize: 16,
       lineHeight: 1.63
+    },
+    button: {
+      fontWeight: 700
     }
   },
 
@@ -76,7 +92,23 @@ export default createTheme({
             textDecoration: "none"
           }
         },
-        body: palette.mode === "dark" ? darkScrollbar() : null
+        body: {
+          ...(palette.mode === "dark" ? darkScrollbar() : {}),
+          background: `url(${background1920})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          height: "100vh",
+          [breakpoints.up("md")]: {
+            background: `url(${background2400})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover"
+          },
+          [breakpoints.up("xl")]: {
+            background: `url(${background4k})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover"
+          }
+        }
       }
     },
     MuiAppBar: {
@@ -95,6 +127,13 @@ export default createTheme({
         }
       }
     },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          background: "rgba(0, 111, 112, 0.08)"
+        }
+      }
+    },
     MuiDivider: {
       styleOverrides: {
         root: {
@@ -106,23 +145,137 @@ export default createTheme({
       styleOverrides: {
         root: {
           color: "rgba(0, 0, 0, 0.54)"
+        },
+        colorSecondary: {
+          color: "rgba(255,255,255,0.8)",
+          borderColor: "rgba(255,255,255,0.8)",
+          "&.Mui-focused": {
+            color: "rgba(255,255,255,1)",
+            borderColor: "rgba(255,255,255,1)"
+          }
+        },
+        focused: {
+          color: "rgba(255,255,255,1)",
+          borderColor: "rgba(255,255,255,1)"
         }
       }
     },
     MuiTextField: {
       defaultProps: {
-        variant: "outlined",
-        size: "small"
+        variant: "filled",
+        fullWidth: true,
+        size: "medium"
+      },
+      styleOverrides: {
+        root: {
+          [breakpoints.up("sm")]: {
+            maxWidth: 450
+          }
+        }
+      }
+    },
+    MuiSelect: {
+      defaultProps: {
+        fullWidth: true,
+        variant: "filled"
+      },
+      styleOverrides: {
+        iconOutlined: {
+          color: "#fff"
+        }
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          color: "rgba(255,255,255,0.8)",
+          borderColor: "rgba(255,255,255,0.8)",
+          "&.Mui-focused": {
+            color: "rgba(255,255,255,1)",
+            borderColor: "rgba(255,255,255,1)"
+          }
+        },
+        input: {
+          color: "#fff",
+          borderColor: "#fff"
+        },
+        notchedOutline: {
+          color: "rgba(255,255,255,0.8)",
+          borderColor: "rgba(255,255,255,0.8)",
+          "&.Mui-focused": {
+            color: "rgba(255,255,255,1)",
+            borderColor: "rgba(255,255,255,1)"
+          }
+        },
+        focused: {
+          borderColor: "#fff",
+          color: "#fff"
+        }
+      }
+    },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+          backgroundColor: palette.background.default,
+          [breakpoints.up("sm")]: {
+            maxWidth: 450
+          }
+        },
+        input: {
+          backgroundColor: palette.background.default
+        }
       }
     },
     MuiToolbar: {
       styleOverrides: {
         root: {
+          width: "100%",
           alignItems: "center",
           justifyContent: "space-between"
         }
       }
+    },
+    MuiButton: {
+      defaultProps: {
+        variant: "contained",
+        color: "secondary"
+      },
+      styleOverrides: {
+        root: {
+          color: "#fff",
+          fontWeight: 700
+        },
+        containedSecondary: {
+          color: "#fff"
+        }
+      }
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            color: "#006F70",
+            "& .MuiListItemIcon-root": {
+              color: "#006F70"
+            }
+          }
+        }
+      }
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          minWidth: spacing(6)
+        }
+      }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0
+        }
+      }
     }
   }
-
 });
