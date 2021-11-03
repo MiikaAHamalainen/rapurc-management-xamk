@@ -16,24 +16,24 @@
   },
 
   "surveysScreen": {
-    "title": "Kartoitukset",
-    "description": "Hae purkukartoituksia osoitteella",
-    "address": "Osoite",
-    "showAll": "Näytä kaikki",
-    "showMine": "Näytä omat",
-    "newSurvey": "Uusi kartoitus",
+    "title": "Surveys",
+    "description": "Search surveys by address",
+    "address": "Address",
+    "showAll": "Show all",
+    "showMine": "Show my surveys",
+    "newSurvey": "New survey",
     "filter": "Filter"
   },
 
   "newSurveyScreen": {
-    "title": "Uusi kartoitus",
-    "description": "Hae kartoituskohdetta osoitteella, kiinteistötunnuksella tai rakennustunnuksella",
+    "title": "New survey",
+    "description": "Search surveyable building by address, building id or property id",
     "address": "Address",
-    "propertyId": "Kiinteistötunnus",
-    "buildingId": "Rakennustunnus",
-    "search": "Hae",
-    "createManually": "Luo manuaalisesti",
-    "createSurvey": "Luo kartoitus"
+    "propertyId": "Property ID",
+    "buildingId": "Building ID",
+    "search": "Search",
+    "createManually": "Create manually",
+    "createSurvey": "Create survey"
   },
   
   "surveyScreen": {
