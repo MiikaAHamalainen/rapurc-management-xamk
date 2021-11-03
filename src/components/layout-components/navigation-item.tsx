@@ -3,6 +3,9 @@ import React from "react";
 import { NavigationButtonIcon, NavigationButton } from "styled/layout-components/navigation-item";
 import theme from "theme";
 
+/**
+ * Component properties
+ */
 interface Props {
   icon?: JSX.Element;
   title: string;
