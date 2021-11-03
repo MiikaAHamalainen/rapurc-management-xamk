@@ -3,6 +3,9 @@ import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/
 import React from "react";
 import SurveyTitle from "../../styled/layout-components/survey-item";
 
+/**
+ * Component properties
+ */
 interface Props {
   title: string;
   subtitle: string;
