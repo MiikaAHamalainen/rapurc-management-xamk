@@ -15,6 +15,8 @@ interface Props {
 
 /**
  * Side panel navigation item component
+ *
+ * @param props component properties
  */
 const NavigationItem: React.FC<Props> = ({
   icon,
