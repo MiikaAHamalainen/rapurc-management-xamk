@@ -1,4 +1,5 @@
 {
+  "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
     "notImplemented": "Ei vielä toteutettu"
@@ -6,6 +7,65 @@
 
   "errorHandling": {
     "title": "Error"
-  }
+  },
 
+  "navigation": {
+    "surveys": "Kartoitukset",
+    "newSurvey": "Uusi kartoitus",
+    "admin": "Ylläpito"
+  },
+
+  "surveysScreen": {
+    "title": "Kartoitukset",
+    "description": "Hae purkukartoituksia osoitteella",
+    "address": "Osoite",
+    "showAll": "Näytä kaikki",
+    "showMine": "Näytä omat",
+    "newSurvey": "Uusi kartoitus",
+    "filter": "Suodata"
+  },
+
+  "newSurveyScreen": {
+    "title": "Uusi kartoitus",
+    "description": "Hae kartoituskohdetta osoitteella, kiinteistötunnuksella tai rakennustunnuksella",
+    "address": "Address",
+    "propertyId": "Kiinteistötunnus",
+    "buildingId": "Rakennustunnus",
+    "search": "Hae",
+    "createManually": "Luo manuaalisesti",
+    "createSurvey": "Luo kartoitus"
+  },
+  
+  "surveyScreen": {
+    "title": "Kartoitus",
+    "status": "Tila",
+    "ready": "Valmis",
+    "incomplete": "Keskeneräinen",
+    "navigation": {
+      "owner": "Omistajan tiedot",
+      "building": "Rakennuksen tiedot",
+      "others": "Muut purettavat rakennukset / rakennelmat",
+      "survey": "Kartoituksen tiedot",
+      "reusables": "Uudelleenkäytettävät rakennusosat",
+      "waste": "Purkujätemateriaalit",
+      "hazardous": "Haitta-ainetta sisältävät materiaalit",
+      "attatchments": "Liitteet",
+      "summary": "Yhteenveto"
+    }
+  },
+  
+  "adminScreen": {
+    "title": "Ylläpito",
+    "description": "Hallitse alasvetovalikoiden sisältöjä.",
+    "navigation": {
+      "dropdownSettings": {
+        "title": "Alasvetovalikot",
+        "reusableMaterials": "Rakennusosa- tai materiaali",
+        "wasteMaterials": "Rakennus- ja purkujätemateriaali",
+        "postProcessing": "Jatkokäsittely",
+        "hazardousMaterials": "Haitta-ainekategoria",
+        "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne"
+      }
+    }
+  }
 }

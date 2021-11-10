@@ -12,6 +12,7 @@ import AuthUtils from "utils/auth";
  */
 const AccessTokenRefresh: React.FC = ({ children }) => {
   const keycloak = useAppSelector(selectKeycloak);
+  const dispatch = useAppDispatch();
 
   /**
    * Dispatches Keycloak instance to Redux
@@ -19,7 +20,7 @@ const AccessTokenRefresh: React.FC = ({ children }) => {
    * @param keycloak Keycloak instance
    */
   const updateKeycloak = (updatedKeycloak?: KeycloakInstance) => {
-    updatedKeycloak && useAppDispatch()(login(updatedKeycloak));
+    updatedKeycloak && dispatch(login(updatedKeycloak));
   };
 
   /**
