@@ -11,6 +11,7 @@ interface Props {
   title: string;
   headerContent?: JSX.Element;
   sidePanelContent: JSX.Element;
+  headerControls?: JSX.Element;
   back?: boolean;
 }
 
@@ -24,6 +25,7 @@ const SidePanelLayout: React.FC<Props> = ({
   headerContent,
   sidePanelContent,
   back,
+  headerControls,
   children
 }) => {
   /**
@@ -33,7 +35,11 @@ const SidePanelLayout: React.FC<Props> = ({
 
   return (
     <Root>
-      <Header back={ back } title={ title }>
+      <Header
+        back={ back }
+        title={ title }
+        customControls={ headerControls }
+      >
         { headerContent }
       </Header>
       <ContentContainer direction="row" spacing={ isMobile ? 0 : 2 }>

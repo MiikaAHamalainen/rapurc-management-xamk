@@ -8,7 +8,7 @@ export const Root = styled(AppBar, {
   label: "header-root"
 })(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  backgroundColor: "rgba(0,158,158,0.8)",
+  backgroundColor: "rgba(0,158,158,0.85)",
   display: "flex",
   flexDirection: "column",
   paddingBottom: theme.spacing(2)

@@ -13,6 +13,10 @@ const WhiteOutlinedInput = styled(TextField, {
     "& .Mui-focused": {
       color: "rgba(255,255,255,1)",
       borderColor: "rgba(255,255,255,1)"
+    },
+    "&:hover:not(.Mui-disabled)": {
+      color: "rgba(255,255,255,1)",
+      borderColor: "rgba(255,255,255,1)"
     }
   }
 }));
