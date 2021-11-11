@@ -1,4 +1,4 @@
-import { Configuration } from "../generated/client";
+import { Configuration, SurveysApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
@@ -6,13 +6,26 @@ import { Configuration } from "../generated/client";
 export default class Api {
 
   /**
+   * Gets initialized languages API
+   *
+   * @param accessToken access token
+   * @returns initialized languages API
+   */
+  public static getSurveysApi = (accessToken: string) => {
+    return new SurveysApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
    * Gets api configuration
    *
    * @returns new configuration
    */
-  private static getConfiguration() {
+  private static getConfiguration(accessToken: string) {
     return new Configuration({
-      basePath: process.env.REACT_APP_API_BASE_PATH
+      basePath: process.env.REACT_APP_API_BASE_URL,
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
     });
   }
 

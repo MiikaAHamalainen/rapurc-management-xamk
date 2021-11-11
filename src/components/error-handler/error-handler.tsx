@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as React from "react";
 import { Typography } from "@mui/material";
 import strings from "localization/strings";
@@ -28,10 +29,8 @@ const ErrorHandler: React.FC = ({ children }) => {
   const handleError = async (message: string, err?: any) => {
     if (err instanceof Response) {
       try {
-        // eslint-disable-next-line no-console
         console.error(await err.json());
       } catch (e) {
-        // eslint-disable-next-line no-console
         console.error(err);
       }
     }

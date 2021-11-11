@@ -6,7 +6,15 @@
   },
 
   "errorHandling": {
-    "title": "Error"
+    "title": "Error",
+    "missingAccessToken": "API-avain puuttuu",
+    "surveys": {
+      "list": "Virhe listattaessa kartoituksia",
+      "create": "Virhe luodessa uutta kartoitusta",
+      "find": "Virhe haettassa kartoitusta",
+      "update": "Virhe päivitettäessä kartoitusta",
+      "delete": "Virhe poistettaessa karoitusta"
+    }
   },
 
   "navigation": {
@@ -39,17 +47,15 @@
   "surveyScreen": {
     "title": "Kartoitus",
     "status": "Tila",
-    "ready": "Valmis",
-    "incomplete": "Keskeneräinen",
     "navigation": {
       "owner": "Omistajan tiedot",
       "building": "Rakennuksen tiedot",
-      "others": "Muut purettavat rakennukset / rakennelmat",
-      "survey": "Kartoituksen tiedot",
+      "otherStructures": "Muut purettavat rakennukset / rakennelmat",
+      "info": "Kartoituksen tiedot",
       "reusables": "Uudelleenkäytettävät rakennusosat",
       "waste": "Purkujätemateriaalit",
       "hazardous": "Haitta-ainetta sisältävät materiaalit",
-      "attatchments": "Liitteet",
+      "attachments": "Liitteet",
       "summary": "Yhteenveto"
     }
   },
@@ -66,6 +72,13 @@
         "hazardousMaterials": "Haitta-ainekategoria",
         "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne"
       }
+    }
+  },
+
+  "survey": {
+    "surveyStatus": {
+      "draft": "Keskeneräinen",
+      "done": "Valmis"
     }
   }
 }

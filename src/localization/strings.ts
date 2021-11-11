@@ -8,7 +8,7 @@ import fi from "./fi.json";
 export interface Localized extends LocalizedStringsMethods {
 
   /**
-   * Apptitle translation
+   * App title translation
    */
   appTitle: string;
 
@@ -24,6 +24,14 @@ export interface Localized extends LocalizedStringsMethods {
    */
   errorHandling: {
     title: string;
+    missingAccessToken: string;
+    surveys: {
+      list: string;
+      create: string;
+      find: string;
+      update: string;
+      delete: string;
+    };
   };
 
   /**
@@ -68,17 +76,15 @@ export interface Localized extends LocalizedStringsMethods {
   surveyScreen: {
     title: string;
     status: string;
-    ready: string;
-    incomplete: string;
     navigation: {
       owner: string;
       building: string;
-      others: string;
-      survey: string;
+      otherStructures: string;
+      info: string;
       reusables: string;
       waste: string;
       hazardous: string;
-      attatchments: string;
+      attachments: string;
       summary: string;
     }
   };
@@ -99,6 +105,16 @@ export interface Localized extends LocalizedStringsMethods {
         hazardousMaterialsAdditionalInfo: string;
       }
     }
+  };
+
+  /**
+   * Translations related to surveys
+   */
+  survey: {
+    surveyStatus: {
+      draft: string;
+      done: string;
+    };
   };
 }
 

@@ -6,7 +6,15 @@
   },
 
   "errorHandling": {
-    "title": "Error"
+    "title": "Error",
+    "missingAccessToken": "Missing access token",
+    "surveys": {
+      "list": "Error while listing surveys",
+      "create": "Error while creating new survey",
+      "find": "Error while finding survey",
+      "update": "Error while updating survey",
+      "delete": "Error while deleting survey"
+    }
   },
 
   "navigation": {
@@ -39,17 +47,15 @@
   "surveyScreen": {
     "title": "Survey",
     "status": "Status",
-    "ready": "Ready",
-    "incomplete": "Incomplete",
     "navigation": {
       "owner": "Owner details",
       "building": "Building information",
-      "others": "Other demolished structures",
-      "survey": "Survey information",
+      "otherStructures": "Other demolished structures",
+      "info": "Survey information",
       "reusables": "Reusable materials",
       "waste": "Waste materials",
       "hazardous": "Hazardous materials",
-      "attatchments": "Attatchments",
+      "attachments": "Attachments",
       "summary": "Summary"
     }
   },
@@ -66,6 +72,13 @@
         "hazardousMaterials": "Hazardous material category",
         "hazardousMaterialsAdditionalInfo": "Hazardous material additional information"
       }
+    }
+  },
+
+  "survey": {
+    "surveyStatus": {
+      "draft": "Incomplete",
+      "done": "Ready"
     }
   }
 }
