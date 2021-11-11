@@ -12,6 +12,7 @@ import Navigation from "./top-navigation";
 interface Props {
   title: string;
   back?: boolean;
+  customControls?: JSX.Element;
 }
 
 /**
@@ -20,7 +21,8 @@ interface Props {
 const Header: React.FC<Props> = ({
   title,
   children,
-  back
+  back,
+  customControls
 }) => {
   const navigate = useNavigate();
 
@@ -41,18 +43,33 @@ const Header: React.FC<Props> = ({
       </Toolbar>
       <Toolbar>
         <Stack
+          width="100%"
           direction="row"
           spacing={ 2 }
-          sx={{ alignItems: "center" }}
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between"
+          }}
         >
-          { back &&
-            <IconButton onClick={ () => navigate(-1) }>
-              <ArrowBackIosNewSharp htmlColor="#ffffff"/>
-            </IconButton>
-          }
-          <Typography variant="h1">
-            { title }
-          </Typography>
+          <Stack
+            direction="row"
+            spacing={ 2 }
+          >
+            { back &&
+              <IconButton onClick={ () => navigate(-1) }>
+                <ArrowBackIosNewSharp htmlColor="#ffffff"/>
+              </IconButton>
+            }
+            <Typography variant="h1">
+              { title }
+            </Typography>
+          </Stack>
+          <Stack
+            direction="row"
+            spacing={ 2 }
+          >
+            { customControls }
+          </Stack>
         </Stack>
       </Toolbar>
       { children }

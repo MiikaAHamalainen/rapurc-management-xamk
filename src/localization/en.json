@@ -47,8 +47,6 @@
   "surveyScreen": {
     "title": "Survey",
     "status": "Status",
-    "ready": "Ready",
-    "incomplete": "Incomplete",
     "navigation": {
       "owner": "Owner details",
       "building": "Building information",
@@ -74,6 +72,13 @@
         "hazardousMaterials": "Hazardous material category",
         "hazardousMaterialsAdditionalInfo": "Hazardous material additional information"
       }
+    }
+  },
+
+  "survey": {
+    "surveyStatus": {
+      "draft": "Incomplete",
+      "done": "Ready"
     }
   }
 }

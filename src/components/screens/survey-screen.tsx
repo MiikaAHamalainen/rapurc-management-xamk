@@ -1,5 +1,3 @@
-/* tslint:disable */
-/* eslint-disable */
 import { Apartment, Attachment, ChangeCircle, Delete, Engineering, NoteAdd, PersonOutlined, Summarize, WarningAmber } from "@mui/icons-material";
 import { Divider, List, MenuItem, TextField } from "@mui/material";
 import { useAppDispatch } from "app/hooks";
@@ -11,6 +9,7 @@ import { Survey, SurveyStatus } from "generated/client";
 import strings from "localization/strings";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import LocalizationUtils from "utils/localization-utils";
 import SurveyRoutes from "./survey-routes";
 
 /**
@@ -21,6 +20,8 @@ const SurveyScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const errorContext = React.useContext(ErrorContext);
   const { surveyId } = useParams<"surveyId">();
+  const pathParam = useParams<"*">();
+  const currentPath = pathParam["*"];
 
   const [ survey, setSurvey ] = React.useState<Survey | undefined>();
 
@@ -34,6 +35,9 @@ const SurveyScreen: React.FC = () => {
       .catch(error => errorContext.setError(strings.errorHandling.surveys.find, error));
   };
 
+  /**
+   * Effect for fetching surveys. Triggered when survey ID is changed
+   */
   React.useEffect(fetchSurvey, [ surveyId ]);
 
   if (!survey) {
@@ -44,7 +48,7 @@ const SurveyScreen: React.FC = () => {
    * Event handler for survey status change
    */
   const onStatusChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    const { value, name } = target;
+    const { value } = target;
 
     dispatch(updateSurvey({
       ...survey,
@@ -57,6 +61,8 @@ const SurveyScreen: React.FC = () => {
 
   /**
    * Side navigation content
+   *
+   * TODO: Add rest of the routes & components
    */
   const renderSideNavigation = () => (
     <List>
@@ -64,12 +70,13 @@ const SurveyScreen: React.FC = () => {
         icon={ <PersonOutlined/> }
         onClick={ () => navigate("owner") }
         title={ strings.surveyScreen.navigation.owner }
-        selected
+        selected={ currentPath === "owner" }
       />
       <NavigationItem
         icon={ <Apartment/> }
         onClick={ () => navigate("building") }
         title={ strings.surveyScreen.navigation.building }
+        selected={ currentPath === "building" }
       />
       <NavigationItem
         icon={ <NoteAdd/> }
@@ -104,27 +111,29 @@ const SurveyScreen: React.FC = () => {
   );
 
   /**
-   * Renders survey options
+   * Renders survey status select
    */
-  const renderSurveyOptions = () => {
+  const renderStatusSelect = () => {
     const { status, id } = survey;
 
-    const options = Object.values(SurveyStatus).map(status =>
-      <MenuItem key={ status } value={ status }>{ status }</MenuItem>
+    const options = Object.values(SurveyStatus).map(_status =>
+      <MenuItem key={ _status } value={ _status }>
+        { LocalizationUtils.getLocalizedSurveyStatus(_status) }
+      </MenuItem>
     );
 
     return (
-      <>
-        <TextField
-          key={ `SurveyStatus-${id}` }
-          select
-          value={ status }
-          name="status"
-          onChange={ onStatusChange }
-        >
-          { options }
-        </TextField>
-      </>
+      <TextField
+        key={ `SurveyStatus-${id}` }
+        color="secondary"
+        variant="standard"
+        select
+        value={ status }
+        label={ strings.surveyScreen.status }
+        onChange={ onStatusChange }
+      >
+        { options }
+      </TextField>
     );
   };
 
@@ -135,6 +144,7 @@ const SurveyScreen: React.FC = () => {
     <SidePanelLayout
       title={ strings.surveyScreen.title }
       sidePanelContent={ renderSideNavigation() }
+      headerControls={ renderStatusSelect() }
       back
     >
       <SurveyRoutes/>

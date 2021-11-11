@@ -192,7 +192,15 @@ export default createTheme({
           borderColor: "rgba(255,255,255,0.8)",
           "&.Mui-focused": {
             color: "rgba(255,255,255,1)",
-            borderColor: "rgba(255,255,255,1)"
+            borderColor: "rgba(255,255,255,1)",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255,255,255,1)"
+            }
+          },
+          "&:hover:not(.Mui-disabled)": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255,255,255,1)"
+            }
           }
         },
         input: {
@@ -220,10 +228,38 @@ export default createTheme({
           backgroundColor: palette.background.default,
           [breakpoints.up("sm")]: {
             maxWidth: 450
+          },
+          [breakpoints.up("md")]: {
+            maxWidth: 600
+          },
+          "&:before": {
+            borderBottom: "1px solid rgba(0,0,0,0)"
           }
         },
         input: {
           backgroundColor: palette.background.default
+        }
+      }
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        colorSecondary: {
+          "& .MuiSelect-select, .MuiSelect-icon": {
+            color: "#ffffff"
+          },
+          "&.MuiInputBase-root": {
+            "&:before": {
+              borderBottom: "1px solid rgba(255,255,255,0.5)"
+            },
+            "&:after": {
+              borderBottom: "2px solid #ffffff"
+            },
+            "&:hover:not(.Mui-disabled)": {
+              "&:before": {
+                borderBottom: "2px solid rgba(255,255,255,0.8)"
+              }
+            }
+          }
         }
       }
     },

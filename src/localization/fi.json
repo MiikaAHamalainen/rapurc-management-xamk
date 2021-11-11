@@ -47,8 +47,6 @@
   "surveyScreen": {
     "title": "Kartoitus",
     "status": "Tila",
-    "ready": "Valmis",
-    "incomplete": "Keskeneräinen",
     "navigation": {
       "owner": "Omistajan tiedot",
       "building": "Rakennuksen tiedot",
@@ -74,6 +72,13 @@
         "hazardousMaterials": "Haitta-ainekategoria",
         "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne"
       }
+    }
+  },
+
+  "survey": {
+    "surveyStatus": {
+      "draft": "Keskeneräinen",
+      "done": "Valmis"
     }
   }
 }

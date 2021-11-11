@@ -35,6 +35,9 @@ const SurveysScreen: React.FC = () => {
       .catch(error => errorContext.setError(error));
   };
 
+  /**
+   * Effect for listing surveys
+   */
   React.useEffect(listSurveys, []);
 
   /**
@@ -64,6 +67,7 @@ const SurveysScreen: React.FC = () => {
         />
         <ControlsContainer direction="row" spacing={ 2 }>
           <WhiteOutlinedInput
+            color="secondary"
             select
             size={ isMobile ? "medium" : "small" }
             variant="outlined"
