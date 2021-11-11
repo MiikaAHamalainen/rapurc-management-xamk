@@ -4,17 +4,38 @@ import SurveyItem from "components/layout-components/survey-item";
 import StackLayout from "components/layouts/stack-layout";
 import strings from "localization/strings";
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { ControlsContainer, FilterRoot, NewSurveyButton, SearchBar } from "styled/screens/surveys-screen";
 import theme from "theme";
 import WhiteOutlinedInput from "../../styled/generic/inputs";
+import { fetchSurveys } from "features/surveys-slice";
+import { useAppDispatch } from "app/hooks";
+import { ErrorContext } from "components/error-handler/error-handler";
+import { Survey } from "generated/client";
+import moment from "moment";
+import { useNavigate } from "react-router";
 
 /**
  * Surveys screen component
  */
 const SurveysScreen: React.FC = () => {
-  const [filter, setFilter] = React.useState("showAll");
-  const history = useHistory();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const errorContext = React.useContext(ErrorContext);
+
+  const [ filter, setFilter ] = React.useState("showAll");
+  const [ surveys, setSurveys ] = React.useState<Survey[]>([]);
+
+  /**
+   * Lists surveys
+   */
+  const listSurveys = () => {
+    dispatch(fetchSurveys())
+      .unwrap()
+      .then(_surveys => setSurveys(_surveys))
+      .catch(error => errorContext.setError(error));
+  };
+
+  React.useEffect(listSurveys, []);
 
   /**
    * Check if viewport is mobile size
@@ -62,6 +83,7 @@ const SurveysScreen: React.FC = () => {
             variant="contained"
             color="secondary"
             startIcon={ <Add/> }
+            onClick={ () => navigate("/new-survey") }
           >
             { strings.surveysScreen.newSurvey }
           </NewSurveyButton>
@@ -74,12 +96,14 @@ const SurveysScreen: React.FC = () => {
    * Render survey list item
    * 
    */
-  const renderSurveyListItem = () => (
-    <SurveyItem
-      title="Otsikko"
-      subtitle="Alaotsikko"
-      onClick={ () => history.push("/survey") }
-    />
+  const renderSurveyListItems = () => (
+    surveys.map(survey =>
+      <SurveyItem
+        title={ survey.status }
+        subtitle={ moment(survey.startDate).format("DD.MM.YYYY") }
+        onClick={ () => navigate(`/surveys/${survey.id}`) }
+      />
+    )
   );
 
   /**
@@ -88,7 +112,7 @@ const SurveysScreen: React.FC = () => {
   const renderSurveyList = () => (
     <Paper>
       <List>
-        { renderSurveyListItem() }
+        { renderSurveyListItems() }
       </List>
     </Paper>
   );

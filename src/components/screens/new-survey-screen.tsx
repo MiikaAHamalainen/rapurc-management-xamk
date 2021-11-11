@@ -1,9 +1,12 @@
-import { Button, Hidden, List, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Button, CircularProgress, Hidden, List, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { useAppDispatch } from "app/hooks";
+import { ErrorContext } from "components/error-handler/error-handler";
 import SurveyItem from "components/layout-components/survey-item";
 import StackLayout from "components/layouts/stack-layout";
+import { createSurvey } from "features/surveys-slice";
 import strings from "localization/strings";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CreateManuallyButton, FilterRoot, SearchContainer } from "styled/screens/new-survey-screen";
 import theme from "theme";
 
@@ -11,12 +14,27 @@ import theme from "theme";
  * New survey screen component
  */
 const NewSurveyScreen: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const errorContext = React.useContext(ErrorContext);
+
+  const [ loading, setLoading ] = React.useState(false);
 
   /**
    * Check if viewport is mobile size
    */
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  /**
+   * Create survey manually
+   */
+  const createSurveyManually = () => {
+    setLoading(true);
+    dispatch(createSurvey())
+      .unwrap()
+      .then(survey => navigate(`/surveys/${survey.id}`))
+      .catch(error => errorContext.setError(strings.errorHandling.surveys.create, error));
+  };
 
   /**
    * Render list filter
@@ -70,7 +88,7 @@ const NewSurveyScreen: React.FC = () => {
           <CreateManuallyButton
             size={ isMobile ? "medium" : "small" }
             variant="outlined"
-            onClick={ () => history.push("/survey")}
+            onClick={ () => createSurveyManually() }
           >
             { strings.newSurveyScreen.createManually }
           </CreateManuallyButton>
@@ -86,7 +104,7 @@ const NewSurveyScreen: React.FC = () => {
     <SurveyItem
       title="Otsikko"
       subtitle="Alaotsikko"
-      onClick={ () => history.push("/survey") }
+      onClick={ () => navigate("/survey") }
     />
   );
 
@@ -101,14 +119,34 @@ const NewSurveyScreen: React.FC = () => {
     </Paper>
   );
 
+  // /**
+  //  * Render building data table for desktop
+  //  */
+  // const renderBuildingDataTable = () => (
+  //   <Paper sx={{ p: 2 }}>
+  //     <Typography>{ strings.generic.notImplemented }</Typography>
+  //   </Paper>
+  // );
+
   /**
-   * Render building data table for desktop
+   * Renders content
    */
-  const renderBuildingDataTable = () => (
-    <Paper sx={{ p: 2 }}>
-      <Typography>{ strings.generic.notImplemented }</Typography>
-    </Paper>
-  );
+  const renderContent = () => {
+    if (loading) {
+      return <CircularProgress color="primary" size={ 60 }/>;
+    }
+
+    return (
+      <>
+        <Hidden lgUp>
+          { renderBuildingList() }
+        </Hidden>
+        <Hidden lgDown>
+          { renderBuildingList() }
+        </Hidden>
+      </>
+    );
+  };
 
   return (
     <StackLayout
@@ -116,12 +154,7 @@ const NewSurveyScreen: React.FC = () => {
       headerContent={ renderListFilter() }
       back
     >
-      <Hidden lgUp>
-        { renderBuildingList() }
-      </Hidden>
-      <Hidden lgDown>
-        { renderBuildingDataTable() }
-      </Hidden>
+      { renderContent() }
     </StackLayout>
   );
 };

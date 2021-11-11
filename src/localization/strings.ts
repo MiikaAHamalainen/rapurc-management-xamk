@@ -24,6 +24,14 @@ export interface Localized extends LocalizedStringsMethods {
    */
   errorHandling: {
     title: string;
+    missingAccessToken: string;
+    surveys: {
+      list: string;
+      create: string;
+      find: string;
+      update: string;
+      delete: string;
+    };
   };
 
   /**
@@ -78,7 +86,7 @@ export interface Localized extends LocalizedStringsMethods {
       reusables: string;
       waste: string;
       hazardous: string;
-      attatchments: string;
+      attachments: string;
       summary: string;
     }
   };

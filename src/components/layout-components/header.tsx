@@ -2,7 +2,7 @@ import { ArrowBackIosNewSharp, Person } from "@mui/icons-material";
 import { Hidden, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import strings from "localization/strings";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AppTitle, Root } from "styled/layout-components/header";
 import Navigation from "./top-navigation";
 
@@ -22,7 +22,7 @@ const Header: React.FC<Props> = ({
   children,
   back
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <Root position="relative">
@@ -46,7 +46,7 @@ const Header: React.FC<Props> = ({
           sx={{ alignItems: "center" }}
         >
           { back &&
-            <IconButton onClick={ history.goBack }>
+            <IconButton onClick={ () => navigate(-1) }>
               <ArrowBackIosNewSharp htmlColor="#ffffff"/>
             </IconButton>
           }

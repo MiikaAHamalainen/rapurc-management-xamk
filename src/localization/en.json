@@ -6,7 +6,15 @@
   },
 
   "errorHandling": {
-    "title": "Error"
+    "title": "Error",
+    "missingAccessToken": "Missing access token",
+    "surveys": {
+      "list": "Error while listing surveys",
+      "create": "Error while creating new survey",
+      "find": "Error while finding survey",
+      "update": "Error while updating survey",
+      "delete": "Error while deleting survey"
+    }
   },
 
   "navigation": {
@@ -49,7 +57,7 @@
       "reusables": "Reusable materials",
       "waste": "Waste materials",
       "hazardous": "Hazardous materials",
-      "attatchments": "Attatchments",
+      "attachments": "Attachments",
       "summary": "Summary"
     }
   },
