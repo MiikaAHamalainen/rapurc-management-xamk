@@ -50,8 +50,8 @@
     "navigation": {
       "owner": "Owner details",
       "building": "Building information",
-      "others": "Other demolished structures",
-      "survey": "Survey information",
+      "otherStructures": "Other demolished structures",
+      "info": "Survey information",
       "reusables": "Reusable materials",
       "waste": "Waste materials",
       "hazardous": "Hazardous materials",

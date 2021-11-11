@@ -79,8 +79,8 @@ export interface Localized extends LocalizedStringsMethods {
     navigation: {
       owner: string;
       building: string;
-      others: string;
-      survey: string;
+      otherStructures: string;
+      info: string;
       reusables: string;
       waste: string;
       hazardous: string;

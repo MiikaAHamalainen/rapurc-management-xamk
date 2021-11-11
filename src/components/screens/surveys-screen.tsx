@@ -12,7 +12,7 @@ import { useAppDispatch } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { Survey } from "generated/client";
 import moment from "moment";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Surveys screen component
@@ -105,7 +105,7 @@ const SurveysScreen: React.FC = () => {
       <SurveyItem
         title={ survey.status }
         subtitle={ moment(survey.startDate).format("DD.MM.YYYY") }
-        onClick={ () => navigate(`/surveys/${survey.id}`) }
+        onClick={ () => navigate(`/surveys/${survey.id}/owner`) }
       />
     )
   );

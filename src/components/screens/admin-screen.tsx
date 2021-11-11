@@ -23,11 +23,11 @@ const AdminScreen: React.FC = () => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <NavigationItem title={ dropdownSettings.reusableMaterials } selected/>
-          <NavigationItem title={ dropdownSettings.wasteMaterials }/>
-          <NavigationItem title={ dropdownSettings.postProcessing }/>
-          <NavigationItem title={ dropdownSettings.hazardousMaterials }/>
-          <NavigationItem title={ dropdownSettings.hazardousMaterialsAdditionalInfo }/>
+          <NavigationItem title={ dropdownSettings.reusableMaterials } to="reusables"/>
+          <NavigationItem title={ dropdownSettings.wasteMaterials } to="waste"/>
+          <NavigationItem title={ dropdownSettings.postProcessing } to="postProcessing"/>
+          <NavigationItem title={ dropdownSettings.hazardousMaterials } to="hazardousMaterials"/>
+          <NavigationItem title={ dropdownSettings.hazardousMaterialsAdditionalInfo } to="hazardousMaterialsInfo"/>
         </AccordionDetails>
       </Accordion>
     </List>

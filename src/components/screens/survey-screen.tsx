@@ -8,7 +8,7 @@ import { fetchSelectedSurvey, updateSurvey } from "features/surveys-slice";
 import { Survey, SurveyStatus } from "generated/client";
 import strings from "localization/strings";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import LocalizationUtils from "utils/localization-utils";
 import SurveyRoutes from "./survey-routes";
 
@@ -16,12 +16,9 @@ import SurveyRoutes from "./survey-routes";
  * Survey screen component
  */
 const SurveyScreen: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const errorContext = React.useContext(ErrorContext);
   const { surveyId } = useParams<"surveyId">();
-  const pathParam = useParams<"*">();
-  const currentPath = pathParam["*"];
 
   const [ survey, setSurvey ] = React.useState<Survey | undefined>();
 
@@ -62,49 +59,54 @@ const SurveyScreen: React.FC = () => {
   /**
    * Side navigation content
    *
-   * TODO: Add rest of the routes & components
+   * TODO: Add rest of the components
    */
   const renderSideNavigation = () => (
     <List>
       <NavigationItem
         icon={ <PersonOutlined/> }
-        onClick={ () => navigate("owner") }
+        to="owner"
         title={ strings.surveyScreen.navigation.owner }
-        selected={ currentPath === "owner" }
       />
       <NavigationItem
         icon={ <Apartment/> }
-        onClick={ () => navigate("building") }
+        to="building"
         title={ strings.surveyScreen.navigation.building }
-        selected={ currentPath === "building" }
       />
       <NavigationItem
         icon={ <NoteAdd/> }
-        title={ strings.surveyScreen.navigation.others }
+        to="otherStructures"
+        title={ strings.surveyScreen.navigation.otherStructures }
       />
       <NavigationItem
         icon={ <Engineering/> }
-        title={ strings.surveyScreen.navigation.survey }
+        to="info"
+        title={ strings.surveyScreen.navigation.info }
       />
       <NavigationItem
         icon={ <ChangeCircle/> }
+        to="reusables"
         title={ strings.surveyScreen.navigation.reusables }
       />
       <NavigationItem
         icon={ <Delete/> }
+        to="waste"
         title={ strings.surveyScreen.navigation.waste }
       />
       <NavigationItem
         icon={ <WarningAmber/> }
+        to="hazardous"
         title={ strings.surveyScreen.navigation.hazardous }
       />
       <Divider/>
       <NavigationItem
         icon={ <Attachment/> }
+        to="attachments"
         title={ strings.surveyScreen.navigation.attachments }
       />
       <NavigationItem
         icon={ <Summarize/> }
+        to="summary"
         title={ strings.surveyScreen.navigation.summary }
       />
     </List>

@@ -32,7 +32,7 @@ const NewSurveyScreen: React.FC = () => {
     setLoading(true);
     dispatch(createSurvey())
       .unwrap()
-      .then(survey => navigate(`/surveys/${survey.id}`))
+      .then(survey => navigate(`/surveys/${survey.id}/owner`))
       .catch(error => errorContext.setError(strings.errorHandling.surveys.create, error));
   };
 

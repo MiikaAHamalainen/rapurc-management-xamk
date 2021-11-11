@@ -50,8 +50,8 @@
     "navigation": {
       "owner": "Omistajan tiedot",
       "building": "Rakennuksen tiedot",
-      "others": "Muut purettavat rakennukset / rakennelmat",
-      "survey": "Kartoituksen tiedot",
+      "otherStructures": "Muut purettavat rakennukset / rakennelmat",
+      "info": "Kartoituksen tiedot",
       "reusables": "Uudelleenkäytettävät rakennusosat",
       "waste": "Purkujätemateriaalit",
       "hazardous": "Haitta-ainetta sisältävät materiaalit",
