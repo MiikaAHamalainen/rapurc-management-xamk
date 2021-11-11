@@ -43,6 +43,7 @@ const SurveysScreen: React.FC = () => {
         />
         <ControlsContainer direction="row" spacing={ 2 }>
           <WhiteOutlinedInput
+            color="secondary"
             select
             size={ isMobile ? "medium" : "small" }
             variant="outlined"

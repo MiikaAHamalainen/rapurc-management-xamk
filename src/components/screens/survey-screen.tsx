@@ -1,5 +1,5 @@
 import { Apartment, Attachment, ChangeCircle, Delete, Engineering, NoteAdd, PersonOutlined, Summarize, WarningAmber } from "@mui/icons-material";
-import { Divider, List, Typography } from "@mui/material";
+import { Divider, List, MenuItem, TextField, Typography } from "@mui/material";
 import NavigationItem from "components/layout-components/navigation-item";
 import SidePanelLayout from "components/layouts/side-panel-layout";
 import strings from "localization/strings";
@@ -56,12 +56,33 @@ const SurveyScreen: React.FC = () => {
   );
 
   /**
+   * Render survey status select input
+   */
+  const renderStatusSelect = () => (
+    <TextField
+      color="secondary"
+      variant="standard"
+      select
+      value={ 1 }
+      label={ strings.surveyScreen.status }
+    >
+      <MenuItem value={ 1 }>
+        { strings.surveyScreen.incomplete }
+      </MenuItem>
+      <MenuItem value={ 2 }>
+        { strings.surveyScreen.ready }
+      </MenuItem>
+    </TextField>
+  );
+
+  /**
    * Component render
    */
   return (
     <SidePanelLayout
       title={ strings.surveyScreen.title }
       sidePanelContent={ renderSideNavigation() }
+      headerControls={ renderStatusSelect() }
       back
     >
       <Typography>
