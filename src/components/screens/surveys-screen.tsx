@@ -28,17 +28,19 @@ const SurveysScreen: React.FC = () => {
   /**
    * Lists surveys
    */
-  const listSurveys = () => {
-    dispatch(fetchSurveys())
-      .unwrap()
-      .then(_surveys => setSurveys(_surveys))
-      .catch(error => errorContext.setError(error));
+  const listSurveys = async () => {
+    try {
+      const allSurveys = await dispatch(fetchSurveys()).unwrap();
+      setSurveys(allSurveys);
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.surveys.list, error);
+    }
   };
 
   /**
    * Effect for listing surveys
    */
-  React.useEffect(listSurveys, []);
+  React.useEffect(() => { listSurveys(); }, []);
 
   /**
    * Check if viewport is mobile size

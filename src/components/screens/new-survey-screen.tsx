@@ -28,12 +28,15 @@ const NewSurveyScreen: React.FC = () => {
   /**
    * Create survey manually
    */
-  const createSurveyManually = () => {
+  const createSurveyManually = async () => {
     setLoading(true);
-    dispatch(createSurvey())
-      .unwrap()
-      .then(survey => navigate(`/surveys/${survey.id}/owner`))
-      .catch(error => errorContext.setError(strings.errorHandling.surveys.create, error));
+
+    try {
+      const { id } = await dispatch(createSurvey()).unwrap();
+      navigate(`/surveys/${id}/owner`);
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.surveys.create, error);
+    }
   };
 
   /**
@@ -119,14 +122,14 @@ const NewSurveyScreen: React.FC = () => {
     </Paper>
   );
 
-  // /**
-  //  * Render building data table for desktop
-  //  */
-  // const renderBuildingDataTable = () => (
-  //   <Paper sx={{ p: 2 }}>
-  //     <Typography>{ strings.generic.notImplemented }</Typography>
-  //   </Paper>
-  // );
+  /**
+   * Render building data table for desktop
+   */
+  const renderBuildingDataTable = () => (
+    <Paper sx={{ p: 2 }}>
+      <Typography>{ strings.generic.notImplemented }</Typography>
+    </Paper>
+  );
 
   /**
    * Renders content
@@ -142,7 +145,7 @@ const NewSurveyScreen: React.FC = () => {
           { renderBuildingList() }
         </Hidden>
         <Hidden lgDown>
-          { renderBuildingList() }
+          { renderBuildingDataTable() }
         </Hidden>
       </>
     );

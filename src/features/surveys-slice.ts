@@ -50,7 +50,7 @@ export const createSurvey = createAsyncThunk<Survey, void, { state: RootState; }
       const { keycloak } = getState().auth;
 
       if (!keycloak?.token) {
-        throw new Error("No token");
+        throw new Error(strings.errorHandling.missingAccessToken);
       }
 
       const survey: Survey = {
@@ -82,7 +82,7 @@ export const fetchSelectedSurvey = createAsyncThunk<Survey, string, { state: Roo
       }
 
       if (!keycloak?.token) {
-        throw new Error("No token");
+        throw new Error(strings.errorHandling.missingAccessToken);
       }
 
       return await Api.getSurveysApi(keycloak.token).findSurvey({ surveyId: surveyId });

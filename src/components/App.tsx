@@ -6,7 +6,6 @@ import NewSurveyScreen from "./screens/new-survey-screen";
 import AdminScreen from "./screens/admin-screen";
 import SurveyScreen from "./screens/survey-screen";
 import ErrorHandler from "./error-handler/error-handler";
-// import Building from "./survey/building";
 
 /**
  * Application component

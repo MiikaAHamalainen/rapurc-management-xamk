@@ -25,17 +25,23 @@ const SurveyScreen: React.FC = () => {
   /**
    * Fetches survey based on URL survey ID
    */
-  const fetchSurvey = () => {
-    surveyId && dispatch(fetchSelectedSurvey(surveyId))
-      .unwrap()
-      .then(_survey => setSurvey(_survey))
-      .catch(error => errorContext.setError(strings.errorHandling.surveys.find, error));
+  const fetchSurvey = async () => {
+    if (!surveyId) {
+      return;
+    }
+
+    try {
+      const selectedSurvey = await dispatch(fetchSelectedSurvey(surveyId)).unwrap();
+      setSurvey(selectedSurvey);
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.surveys.find, error);
+    }
   };
 
   /**
    * Effect for fetching surveys. Triggered when survey ID is changed
    */
-  React.useEffect(fetchSurvey, [ surveyId ]);
+  React.useEffect(() => { fetchSurvey(); }, [ surveyId ]);
 
   if (!survey) {
     return null;
@@ -116,17 +122,16 @@ const SurveyScreen: React.FC = () => {
    * Renders survey status select
    */
   const renderStatusSelect = () => {
-    const { status, id } = survey;
+    const { status } = survey;
 
-    const options = Object.values(SurveyStatus).map(_status =>
-      <MenuItem key={ _status } value={ _status }>
-        { LocalizationUtils.getLocalizedSurveyStatus(_status) }
+    const options = Object.values(SurveyStatus).map(surveyStatus =>
+      <MenuItem key={ surveyStatus } value={ surveyStatus }>
+        { LocalizationUtils.getLocalizedSurveyStatus(surveyStatus) }
       </MenuItem>
     );
 
     return (
       <TextField
-        key={ `SurveyStatus-${id}` }
         color="secondary"
         variant="standard"
         select
