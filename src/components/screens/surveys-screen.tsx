@@ -64,11 +64,13 @@ const SurveysScreen: React.FC = () => {
       </Typography>
       <SearchBar>
         <TextField
+          fullWidth={ isMobile }
           label={ strings.surveysScreen.address }
           size={ isMobile ? "medium" : "small" }
         />
         <ControlsContainer direction="row" spacing={ 2 }>
           <WhiteOutlinedInput
+            fullWidth={ isMobile }
             color="secondary"
             select
             size={ isMobile ? "medium" : "small" }

@@ -79,6 +79,25 @@
     "surveyStatus": {
       "draft": "Incomplete",
       "done": "Ready"
+    },
+    "building": {
+      "title": "Building information",
+      "propertyID": "Property ID",
+      "buildingID": "Building ID",
+      "buildingClass": "Building class",
+      "year": "Construction year",
+      "area": "Area (m²)",
+      "volume": "Volume (m³)",
+      "floors": "Number of floors",
+      "basementFloors": "Basement floors",
+      "foundationMaterial": "Foundation material",
+      "supportingStructure": "Supporting structure",
+      "façadeMaterial": "Façade material",
+      "roofStructure": "Roof structure",
+      "address": "Address",
+      "street": "Street address",
+      "city": "City",
+      "postalCode": "Postal code"
     }
   }
 }

@@ -79,6 +79,25 @@
     "surveyStatus": {
       "draft": "Keskeneräinen",
       "done": "Valmis"
+    },
+    "building": {
+      "title": "Rakennuksen tiedot",
+      "propertyID": "Kiinteistötunnus",
+      "buildingID": "Rakennustunnus",
+      "buildingClass": "Rakennusluokka",
+      "year": "Rakennusvuosi",
+      "area": "Kokonaisala (m²)",
+      "volume": "Rakennustilavuus (m³)",
+      "floors": "Kerrosluku",
+      "basementFloors": "Kellarikerrokset",
+      "foundationMaterial": "Rakennuksen perusta",
+      "supportingStructure": "Kantava rakenne",
+      "façadeMaterial": "Julkisivumateriaali",
+      "roofStructure": "Kattorakenne",
+      "address": "Osoite",
+      "street": "Katuosoite",
+      "city": "Kaupunki",
+      "postalCode": "Postinumero"
     }
   }
 }

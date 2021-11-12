@@ -115,6 +115,25 @@ export interface Localized extends LocalizedStringsMethods {
       draft: string;
       done: string;
     };
+    building: {
+      title: string;
+      propertyID: string;
+      buildingID: string;
+      buildingClass: string;
+      year: string;
+      area: string;
+      volume: string;
+      floors: string;
+      basementFloors: string;
+      foundationMaterial: string;
+      supportingStructure: string;
+      façadeMaterial: string;
+      roofStructure: string;
+      address: string;
+      street: string;
+      city: string;
+      postalCode: string;
+    }
   };
 }
 
