@@ -36,7 +36,7 @@
   "newSurveyScreen": {
     "title": "Uusi kartoitus",
     "description": "Hae kartoituskohdetta osoitteella, kiinteistötunnuksella tai rakennustunnuksella",
-    "address": "Address",
+    "address": "Osoite",
     "propertyId": "Kiinteistötunnus",
     "buildingId": "Rakennustunnus",
     "search": "Hae",
@@ -79,6 +79,17 @@
     "surveyStatus": {
       "draft": "Keskeneräinen",
       "done": "Valmis"
+    },
+    "owner": {
+      "title": "Omistajan tiedot",
+      "name": "Nimi",
+      "tradeName": "Toiminimi",
+      "contactPerson": "Yhteyshenkilö",
+      "firstName": "Etunimi",
+      "surname": "Sukunimi",
+      "occupation": "Ammatti",
+      "phone": "Puhelinnumero",
+      "email": "Sähköpostiosoite"
     }
   }
 }
