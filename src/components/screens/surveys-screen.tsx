@@ -61,8 +61,7 @@ const SurveysScreen: React.FC = () => {
 
       return buildings[0];
     } catch (error) {
-      // TODO localization
-      errorContext.setError(strings.errorHandling.surveys.list, error);
+      errorContext.setError(strings.errorHandling.buildings.list, error);
     }
   };
 
@@ -83,7 +82,7 @@ const SurveysScreen: React.FC = () => {
 
       return owners[0];
     } catch (error) {
-      errorContext.setError(strings.errorHandling.surveys.list, error);
+      errorContext.setError(strings.errorHandling.owners.list, error);
     }
   };
 

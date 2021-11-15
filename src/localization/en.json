@@ -14,6 +14,12 @@
       "find": "Error while finding survey",
       "update": "Error while updating survey",
       "delete": "Error while deleting survey"
+    },
+    "buildings": {
+      "list": "Error while listing locations"
+    },
+    "owners": {
+      "list": "Error while listing owners"
     }
   },
 

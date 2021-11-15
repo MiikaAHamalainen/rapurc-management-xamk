@@ -14,6 +14,12 @@
       "find": "Virhe haettassa kartoitusta",
       "update": "Virhe päivitettäessä kartoitusta",
       "delete": "Virhe poistettaessa karoitusta"
+    },
+    "buildings": {
+      "list": "Virhe listattaessa sijainteja"
+    },
+    "owners": {
+      "list": "Virhe listattaessa omistajia"
     }
   },
 
