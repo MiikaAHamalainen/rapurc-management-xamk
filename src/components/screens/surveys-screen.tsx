@@ -146,11 +146,12 @@ const SurveysScreen: React.FC = () => {
     ];
   
     return (
-      <Paper sx={{ height: 280 }}>
+      <Paper>
         <DataGrid
+          autoHeight
           rows={ surveys }
           columns={ columns }
-          pageSize={ 3 }
+          pageSize={ 10 }
           disableSelectionOnClick
           onRowClick={ onSurveyTableRowClick }
         />
