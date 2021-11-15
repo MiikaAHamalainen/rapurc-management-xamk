@@ -8,12 +8,14 @@ import { ControlsContainer, FilterRoot, NewSurveyButton, SearchBar } from "style
 import theme from "theme";
 import WhiteOutlinedInput from "../../styled/generic/inputs";
 import { fetchSurveys } from "features/surveys-slice";
-import { useAppDispatch } from "app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
-import { Survey } from "generated/client";
-import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { selectKeycloak } from "features/auth-slice";
+import Api from "api";
+import { SurveyWithInfo } from "types";
+import SurveyUtils from "utils/survey";
 
 /**
  * Surveys screen component
@@ -21,10 +23,12 @@ import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 const SurveysScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
-
   const [ filter, setFilter ] = React.useState("showAll");
-  const [ surveys, setSurveys ] = React.useState<Survey[]>([]);
+  const [ addressFilter, setAddressFilter ] = React.useState("");
+  const [ surveysWithInfo, setSurveysWithInfo ] = React.useState<SurveyWithInfo[]>([]);
+  const [ loading, setLoading ] = React.useState(false);
 
   /**
    * Lists surveys
@@ -32,16 +36,82 @@ const SurveysScreen: React.FC = () => {
   const listSurveys = async () => {
     try {
       const allSurveys = await dispatch(fetchSurveys()).unwrap();
-      setSurveys(allSurveys);
+
+      return allSurveys;
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.surveys.list, error);
+    }
+    return [];
+  };
+
+  /**
+   * Lists buildings
+   */
+  const fetchBuilding = async (surveyId?: string) => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      const buildings = await Api.getBuildingsApi(keycloak?.token).listBuildings({
+        surveyId: surveyId
+      });
+
+      return buildings[0];
+    } catch (error) {
+      // TODO localization
+      errorContext.setError(strings.errorHandling.surveys.list, error);
+    }
+  };
+
+  /**
+   * Lists owners
+   */
+  const fetchOwner = async (surveyId?: string) => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      const owners = await Api.getOwnersApi(keycloak?.token).listOwnerInformation({
+        surveyId: surveyId
+      });
+
+      return owners[0];
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.list, error);
     }
   };
 
   /**
+   * Lists surveys
+   */
+  const loadData = async () => {
+    setLoading(true);
+    const surveys = await listSurveys();
+
+    const surveyWithInfoArray: SurveyWithInfo[] = [];
+
+    await Promise.all(
+      await surveys.map(async survey => {
+        const surveyBuilding = await fetchBuilding(survey.id);
+        const surveyOwner = await fetchOwner(survey.id);
+
+        const surveyWithInfoParsed = SurveyUtils.surveyWithInfoParser(survey, surveyBuilding, surveyOwner);
+        surveyWithInfoParsed && surveyWithInfoArray.push(surveyWithInfoParsed);
+      })
+    );
+
+    setSurveysWithInfo(surveyWithInfoArray);
+    setLoading(false);
+  };
+
+  /**
    * Effect for listing surveys
    */
-  React.useEffect(() => { listSurveys(); }, []);
+  React.useEffect(() => {
+    loadData();
+  }, []);
 
   /**
    * Check if viewport is mobile size
@@ -75,6 +145,8 @@ const SurveysScreen: React.FC = () => {
       <SearchBar>
         <TextField
           label={ strings.surveysScreen.address }
+          value={ addressFilter }
+          onChange={ event => setAddressFilter(event.target.value) }
           size={ isMobile ? "medium" : "small" }
         />
         <ControlsContainer direction="row" spacing={ 2 }>
@@ -113,11 +185,11 @@ const SurveysScreen: React.FC = () => {
    * 
    */
   const renderSurveyListItems = () => (
-    surveys.map(survey =>
+    surveysWithInfo.map(surveyWithInfo =>
       <SurveyItem
-        title={ survey.status }
-        subtitle={ moment(survey.startDate).format("DD.MM.YYYY") }
-        onClick={ () => navigate(`/surveys/${survey.id}/owner`) }
+        title={ surveyWithInfo.ownerName || "" }
+        subtitle={ surveyWithInfo.streetAddress || "" }
+        onClick={ () => navigate(`/surveys/${surveyWithInfo.id}/owner`) }
       />
     )
   );
@@ -139,17 +211,38 @@ const SurveysScreen: React.FC = () => {
   const renderSurveyDataTable = () => {
     const columns: GridColDef[] = [
       {
-        field: "status",
-        headerName: "status",
-        width: 450
+        field: "buildingId",
+        headerName: "buildingId",
+        width: 360
+      },
+      {
+        field: "classificationCode",
+        headerName: "classificationCode",
+        width: 360
+      },
+      {
+        field: "ownerName",
+        headerName: "ownerName",
+        width: 360
+      },
+      {
+        field: "city",
+        headerName: "city",
+        width: 360
+      },
+      {
+        field: "streetAddress",
+        headerName: "streetAddress",
+        width: 360
       }
     ];
   
     return (
       <Paper>
         <DataGrid
+          loading={ loading }
           autoHeight
-          rows={ surveys }
+          rows={ surveysWithInfo }
           columns={ columns }
           pageSize={ 10 }
           disableSelectionOnClick

@@ -1,3 +1,5 @@
+import { Survey, OwnerInformation, Building } from "generated/client";
+
 /**
  * Application configuration
  */
@@ -10,6 +12,18 @@ export interface Configuration {
   api: {
     baseUrl: string;
   };
+}
+
+/**
+ * Survey with info
+ */
+export interface SurveyWithInfo {
+  id: string;
+  ownerName?: string;
+  buildingId?: string;
+  classificationCode?: string;
+  streetAddress?: string;
+  city?: string;
 }
 
 /**
