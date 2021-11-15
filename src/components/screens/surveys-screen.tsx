@@ -46,6 +46,8 @@ const SurveysScreen: React.FC = () => {
 
   /**
    * Lists buildings
+   *
+   * @param surveyId survey id
    */
   const fetchBuilding = async (surveyId?: string) => {
     if (!keycloak?.token || !surveyId) {
@@ -66,6 +68,8 @@ const SurveysScreen: React.FC = () => {
 
   /**
    * Lists owners
+   * 
+   * @param surveyId survey id
    */
   const fetchOwner = async (surveyId?: string) => {
     if (!keycloak?.token || !surveyId) {
@@ -84,7 +88,7 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Lists surveys
+   * Load data
    */
   const loadData = async () => {
     setLoading(true);

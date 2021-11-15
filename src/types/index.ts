@@ -1,5 +1,3 @@
-import { Survey, OwnerInformation, Building } from "generated/client";
-
 /**
  * Application configuration
  */
