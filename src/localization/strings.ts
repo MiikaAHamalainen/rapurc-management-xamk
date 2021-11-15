@@ -54,6 +54,13 @@ export interface Localized extends LocalizedStringsMethods {
     showMine: string;
     newSurvey: string;
     filter: string;
+    dataGridColumns: {
+      buildingId: string;
+      classificationCode: string;
+      ownerName: string;
+      city: string;
+      streetAddress: string;
+    }
   };
 
   /**

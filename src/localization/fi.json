@@ -30,7 +30,14 @@
     "showAll": "Näytä kaikki",
     "showMine": "Näytä omat",
     "newSurvey": "Uusi kartoitus",
-    "filter": "Suodata"
+    "filter": "Suodata",
+    "dataGridColumns": {
+      "buildingId": "Rakennustunnus",
+      "classificationCode": "Rakennusluokka",
+      "ownerName": "Omistaja",
+      "city": "Paikkakunta",
+      "streetAddress": "Osoite"
+    }
   },
 
   "newSurveyScreen": {

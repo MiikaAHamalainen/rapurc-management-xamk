@@ -30,7 +30,14 @@
     "showAll": "Show all",
     "showMine": "Show my surveys",
     "newSurvey": "New survey",
-    "filter": "Filter"
+    "filter": "Filter",
+    "dataGridColumns": {
+      "buildingId": "Building id",
+      "classificationCode": "Classification code",
+      "ownerName": "Owner name",
+      "city": "City",
+      "streetAddress": "Street address"
+    }
   },
 
   "newSurveyScreen": {

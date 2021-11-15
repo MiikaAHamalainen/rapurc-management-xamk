@@ -212,27 +212,27 @@ const SurveysScreen: React.FC = () => {
     const columns: GridColDef[] = [
       {
         field: "buildingId",
-        headerName: "buildingId",
+        headerName: strings.surveysScreen.dataGridColumns.buildingId,
         width: 360
       },
       {
         field: "classificationCode",
-        headerName: "classificationCode",
+        headerName: strings.surveysScreen.dataGridColumns.classificationCode,
         width: 360
       },
       {
         field: "ownerName",
-        headerName: "ownerName",
+        headerName: strings.surveysScreen.dataGridColumns.ownerName,
         width: 360
       },
       {
         field: "city",
-        headerName: "city",
+        headerName: strings.surveysScreen.dataGridColumns.city,
         width: 360
       },
       {
         field: "streetAddress",
-        headerName: "streetAddress",
+        headerName: strings.surveysScreen.dataGridColumns.streetAddress,
         width: 360
       }
     ];
