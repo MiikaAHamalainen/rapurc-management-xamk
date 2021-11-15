@@ -13,6 +13,7 @@ import { ErrorContext } from "components/error-handler/error-handler";
 import { Survey } from "generated/client";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 
 /**
  * Surveys screen component
@@ -54,6 +55,15 @@ const SurveysScreen: React.FC = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(event.target.value);
   };
+
+  /**
+   * Select input handler
+   * @param event 
+   */
+  const onSurveyTableRowClick = (params: GridRowParams) => {
+    params.id && navigate(`/surveys/${params.id}/owner`);
+  };
+
   /**
    * Render header content
    */
@@ -126,11 +136,27 @@ const SurveysScreen: React.FC = () => {
   /**
    * Render survey data table for desktop
    */
-  const renderSurveyDataTable = () => (
-    <Paper sx={{ p: 2 }}>
-      <Typography>{ strings.generic.notImplemented }</Typography>
-    </Paper>
-  );
+  const renderSurveyDataTable = () => {
+    const columns: GridColDef[] = [
+      {
+        field: "status",
+        headerName: "status",
+        width: 450
+      }
+    ];
+  
+    return (
+      <Paper sx={{ height: 280 }}>
+        <DataGrid
+          rows={ surveys }
+          columns={ columns }
+          pageSize={ 3 }
+          disableSelectionOnClick
+          onRowClick={ onSurveyTableRowClick }
+        />
+      </Paper>
+    );
+  };
 
   return (
     <StackLayout
