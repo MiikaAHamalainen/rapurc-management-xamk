@@ -9,7 +9,7 @@ export default class SurveyUtils {
   /**
    * Parse survey with information
    */
-  public static surveyWithInfoParser(survey: Survey, building?: Building, ownerInformation?: OwnerInformation) {
+  public static parseToSurveyWithInfo(survey: Survey, building?: Building, ownerInformation?: OwnerInformation) {
     if (!survey.id) {
       return undefined;
     }

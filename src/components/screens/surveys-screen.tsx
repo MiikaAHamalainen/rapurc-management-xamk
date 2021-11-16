@@ -98,7 +98,7 @@ const SurveysScreen: React.FC = () => {
         const surveyBuilding = await fetchBuilding(survey.id);
         const surveyOwner = await fetchOwner(survey.id);
 
-        const surveyWithInfoParsed = SurveyUtils.surveyWithInfoParser(survey, surveyBuilding, surveyOwner);
+        const surveyWithInfoParsed = SurveyUtils.parseToSurveyWithInfo(survey, surveyBuilding, surveyOwner);
         surveyWithInfoParsed && surveyWithInfoArray.push(surveyWithInfoParsed);
       })
     );
