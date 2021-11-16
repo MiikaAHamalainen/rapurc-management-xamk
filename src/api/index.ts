@@ -1,4 +1,4 @@
-import { Configuration, SurveysApi } from "../generated/client";
+import { Configuration, SurveysApi, OwnersApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
@@ -28,5 +28,15 @@ export default class Api {
       }
     });
   }
+
+  /**
+   * Gets initialized owners API
+   *
+   * @param accessToken access token
+   * @returns initialized owners API
+   */
+  public static getOwnersApi = (accessToken: string) => {
+    return new OwnersApi(Api.getConfiguration(accessToken));
+  };
 
 }

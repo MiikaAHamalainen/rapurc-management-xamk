@@ -32,6 +32,9 @@ export interface Localized extends LocalizedStringsMethods {
       update: string;
       delete: string;
     };
+    owner: {
+      create: string;
+    }
   };
 
   /**

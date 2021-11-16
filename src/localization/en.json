@@ -14,6 +14,9 @@
       "find": "Error while finding survey",
       "update": "Error while updating survey",
       "delete": "Error while deleting survey"
+    },
+    "owner": {
+      "create": "Error while creating owner information"
     }
   },
 

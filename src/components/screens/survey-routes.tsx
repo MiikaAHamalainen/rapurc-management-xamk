@@ -4,9 +4,20 @@ import * as React from "react";
 import { Route, Routes } from "react-router-dom";
 
 /**
+ * Component properties
+ */
+interface Props {
+  surveyId?: string;
+}
+
+/**
  * Component for survey routes
  */
-const SurveyRoutes: React.FC = () => {
+const SurveyRoutes: React.FC<Props> = ({ surveyId }) => {
+  if (!surveyId) {
+    return null;
+  }
+
   return (
     <Routes>
       <Route

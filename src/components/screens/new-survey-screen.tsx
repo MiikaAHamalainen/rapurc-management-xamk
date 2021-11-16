@@ -1,14 +1,17 @@
 import { Button, CircularProgress, Hidden, List, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
-import { useAppDispatch } from "app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import SurveyItem from "components/layout-components/survey-item";
 import StackLayout from "components/layouts/stack-layout";
+import { selectKeycloak } from "features/auth-slice";
 import { createSurvey } from "features/surveys-slice";
 import strings from "localization/strings";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateManuallyButton, FilterRoot, SearchContainer } from "styled/screens/new-survey-screen";
 import theme from "theme";
+import Api from "api";
+import { OwnerInformation } from "generated/client";
 
 /**
  * New survey screen component
@@ -16,14 +19,38 @@ import theme from "theme";
 const NewSurveyScreen: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
-
   const [ loading, setLoading ] = React.useState(false);
 
   /**
    * Check if viewport is mobile size
    */
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  /**
+   * Create new owner information
+   * 
+   * @param surveyId survey id
+   */
+  const createOwnerInformation = async (surveyId?: string) => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      const newOwner: OwnerInformation = {
+        surveyId: surveyId,
+        metadata: {}
+      };
+      await Api.getOwnersApi(keycloak.token).createOwnerInformation({
+        surveyId: surveyId,
+        ownerInformation: newOwner
+      });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.owner.create, error);
+    }
+  };
 
   /**
    * Create survey manually
@@ -33,6 +60,7 @@ const NewSurveyScreen: React.FC = () => {
 
     try {
       const { id } = await dispatch(createSurvey()).unwrap();
+      await createOwnerInformation();
       navigate(`/surveys/${id}/owner`);
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.create, error);

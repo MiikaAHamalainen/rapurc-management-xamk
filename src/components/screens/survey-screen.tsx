@@ -154,7 +154,7 @@ const SurveyScreen: React.FC = () => {
       headerControls={ renderStatusSelect() }
       back
     >
-      <SurveyRoutes/>
+      <SurveyRoutes surveyId={ surveyId }/>
     </SidePanelLayout>
   );
 };
