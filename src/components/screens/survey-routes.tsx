@@ -22,7 +22,7 @@ const SurveyRoutes: React.FC<Props> = ({ surveyId }) => {
     <Routes>
       <Route
         path="owner"
-        element={ <Owner/> }
+        element={ <Owner surveyId={ surveyId }/> }
       />
       <Route
         path="building"
