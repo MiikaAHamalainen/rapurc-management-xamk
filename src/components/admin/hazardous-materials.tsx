@@ -5,17 +5,17 @@ import * as React from "react";
 import { MaterialItem, MaterialText } from "../../styled/layout-components/material-item";
 
 /**
- * Component for waste materials dropdown menu editor
+ * Component for hazardous materials dropdown menu editor
  */
-const Waste: React.FC = () => {
+const HazardousMaterials: React.FC = () => {
   /**
-   * Item for waste material
+   * Item for hazardous material
    * 
    * @param name 
    * @param code 
-   * @returns waste material item
+   * @returns hazardous material item
    */
-  const wasteMaterialItem = (name: string, code: number) => (
+  const hazardousMaterialItem = (name: string, code: number) => (
     <MaterialItem>
       <MaterialText primary={ name } secondary={ code }/>
       <ListItemSecondaryAction>
@@ -31,7 +31,7 @@ const Waste: React.FC = () => {
    */
   const renderList = () => (
     <List sx={{ pt: 4 }}>
-      { wasteMaterialItem("Betoni", 1234) }
+      { hazardousMaterialItem("Asbesti", 1234) }
     </List>
   );
 
@@ -39,7 +39,7 @@ const Waste: React.FC = () => {
     <>
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="h2">
-          { strings.adminScreen.navigation.dropdownSettings.wasteMaterials }
+          { strings.adminScreen.navigation.dropdownSettings.hazardousMaterials }
         </Typography>
         <Button color="secondary">
           { strings.generic.addNew }
@@ -50,4 +50,4 @@ const Waste: React.FC = () => {
   );
 };
 
-export default Waste;
+export default HazardousMaterials;

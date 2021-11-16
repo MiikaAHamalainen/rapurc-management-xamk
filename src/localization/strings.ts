@@ -16,6 +16,7 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to generic words
    */
   generic: {
+    addNew: string;
     notImplemented: string;
   };
 

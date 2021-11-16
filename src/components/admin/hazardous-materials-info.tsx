@@ -5,19 +5,19 @@ import * as React from "react";
 import { MaterialItem, MaterialText } from "../../styled/layout-components/material-item";
 
 /**
- * Component for waste materials dropdown menu editor
+ * Component for hazardous material info dropdown menu editor
  */
-const Waste: React.FC = () => {
+const HazardousMaterialsInfo: React.FC = () => {
   /**
-   * Item for waste material
+   * Item for hazardous material info
    * 
    * @param name 
    * @param code 
-   * @returns waste material item
+   * @returns hazardous material info item
    */
-  const wasteMaterialItem = (name: string, code: number) => (
+  const hazardousMaterialInfoItem = (name: string) => (
     <MaterialItem>
-      <MaterialText primary={ name } secondary={ code }/>
+      <MaterialText primary={ name }/>
       <ListItemSecondaryAction>
         <IconButton>
           <Delete/>
@@ -31,7 +31,7 @@ const Waste: React.FC = () => {
    */
   const renderList = () => (
     <List sx={{ pt: 4 }}>
-      { wasteMaterialItem("Betoni", 1234) }
+      { hazardousMaterialInfoItem("Bitumilla käsitelty betoni") }
     </List>
   );
 
@@ -39,7 +39,7 @@ const Waste: React.FC = () => {
     <>
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="h2">
-          { strings.adminScreen.navigation.dropdownSettings.wasteMaterials }
+          { strings.adminScreen.navigation.dropdownSettings.hazardousMaterialsAdditionalInfo }
         </Typography>
         <Button color="secondary">
           { strings.generic.addNew }
@@ -50,4 +50,4 @@ const Waste: React.FC = () => {
   );
 };
 
-export default Waste;
+export default HazardousMaterialsInfo;
