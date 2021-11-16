@@ -140,9 +140,17 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Event handler for survey table row click
+   * Event handler for mobile view delete survey click
    *
-   * @param params row params
+   * @param surveyId survey id
+   */
+  const DeleteSurveyButtonClick = (surveyId: string) => {
+    setSelectedSurveyIds([ surveyId ]);
+    setDeletingSurvey(true);
+  };
+
+  /**
+   * Event handler for delete survey confirm
    */
   const onDeleteSurveyConfirm = async () => {
     try {
@@ -151,6 +159,8 @@ const SurveysScreen: React.FC = () => {
       errorContext.setError(strings.errorHandling.surveys.delete, error);
     }
 
+    loadData();
+    setSelectedSurveyIds([]);
     setDeletingSurvey(false);
   };
 
@@ -211,21 +221,23 @@ const SurveysScreen: React.FC = () => {
             display="flex"
             alignItems="stretch"
           >
-            <SurveyButton
-              disabled={ !selectedSurveyIds.length }
-              variant="contained"
-              color="error"
-              startIcon={ <Delete/> }
-              onClick={ () => setDeletingSurvey(true) }
-            >
-              { strings.generic.delete }
-            </SurveyButton>
+            <Hidden lgDown>
+              <SurveyButton
+                disabled={ !selectedSurveyIds.length }
+                variant="contained"
+                color="error"
+                startIcon={ <Delete/> }
+                onClick={ () => setDeletingSurvey(true) }
+                sx={{ mr: 2 }}
+              >
+                { strings.generic.delete }
+              </SurveyButton>
+            </Hidden>
             <SurveyButton
               variant="contained"
               color="secondary"
               startIcon={ <Add/> }
               onClick={ () => navigate("/new-survey") }
-              sx={{ ml: 2 }}
             >
               { strings.surveysScreen.newSurvey }
             </SurveyButton>
@@ -245,7 +257,17 @@ const SurveysScreen: React.FC = () => {
         title={ surveyWithInfo.ownerName || "" }
         subtitle={ surveyWithInfo.streetAddress || "" }
         onClick={ () => navigate(`/surveys/${surveyWithInfo.id}/owner`) }
-      />
+      >
+        <SurveyButton
+          variant="outlined"
+          color="primary"
+          onClick={ () => DeleteSurveyButtonClick(surveyWithInfo.id) }
+        >
+          <Typography color={ theme.palette.primary.main }>
+            { strings.generic.delete }
+          </Typography>
+        </SurveyButton>
+      </SurveyItem>
     )
   );
 
