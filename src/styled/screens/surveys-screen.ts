@@ -46,7 +46,7 @@ export const ControlsContainer = styled(Stack, {
 /**
  * Styled new survey button
  */
-export const NewSurveyButton = styled(Button, {
+export const SurveyButton = styled(Button, {
   label: "surveys-screen-new-survey-button"
 })(({ theme }) => ({
   [theme.breakpoints.down("md")]: {

@@ -2,7 +2,10 @@
   "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
-    "notImplemented": "Not yet implemented"
+    "notImplemented": "Not yet implemented",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
 
   "errorHandling": {
@@ -43,6 +46,10 @@
       "ownerName": "Owner name",
       "city": "City",
       "streetAddress": "Street address"
+    },
+    "deleteSurveysDialog": {
+      "title": "Delete survey(s)",
+      "text": "Are you sure you want to delete these surveys?"
     }
   },
 

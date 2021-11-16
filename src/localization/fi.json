@@ -2,7 +2,10 @@
   "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
-    "notImplemented": "Ei vielä toteutettu"
+    "notImplemented": "Ei vielä toteutettu",
+    "confirm": "Vahvista",
+    "cancel": "Peruuta",
+    "delete": "Poista"
   },
 
   "errorHandling": {
@@ -43,6 +46,10 @@
       "ownerName": "Omistaja",
       "city": "Paikkakunta",
       "streetAddress": "Osoite"
+    },
+    "deleteSurveysDialog": {
+      "title": "Poista kysely(t)",
+      "text": "Haluatko varmasti poistaa nämä kyselyt?"
     }
   },
 

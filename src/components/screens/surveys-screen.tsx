@@ -1,21 +1,22 @@
-import { Add } from "@mui/icons-material";
-import { Hidden, List, MenuItem, Paper, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Add, Delete } from "@mui/icons-material";
+import { Box, Hidden, List, MenuItem, Paper, TextField, Typography, useMediaQuery } from "@mui/material";
 import SurveyItem from "components/layout-components/survey-item";
 import StackLayout from "components/layouts/stack-layout";
 import strings from "localization/strings";
 import React from "react";
-import { ControlsContainer, FilterRoot, NewSurveyButton, SearchBar } from "styled/screens/surveys-screen";
+import { ControlsContainer, FilterRoot, SurveyButton, SearchBar } from "styled/screens/surveys-screen";
 import theme from "theme";
 import WhiteOutlinedInput from "../../styled/generic/inputs";
-import { fetchSurveys } from "features/surveys-slice";
+import { deleteSurvey, fetchSurveys } from "features/surveys-slice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { useNavigate } from "react-router-dom";
-import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowId, GridRowParams } from "@mui/x-data-grid";
 import { selectKeycloak } from "features/auth-slice";
 import Api from "api";
 import { SurveyWithInfo } from "types";
 import SurveyUtils from "utils/survey";
+import GenericDialog from "components/generic/generic-dialog";
 
 /**
  * Surveys screen component
@@ -29,6 +30,8 @@ const SurveysScreen: React.FC = () => {
   const [ addressFilter, setAddressFilter ] = React.useState("");
   const [ surveysWithInfo, setSurveysWithInfo ] = React.useState<SurveyWithInfo[]>([]);
   const [ loading, setLoading ] = React.useState(false);
+  const [ deletingSurvey, setDeletingSurvey ] = React.useState(false);
+  const [ selectedSurveyIds, setSelectedSurveyIds ] = React.useState<GridRowId[]>([]);
 
   /**
    * Lists surveys
@@ -137,6 +140,41 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
+   * Event handler for survey table row click
+   *
+   * @param params row params
+   */
+  const onDeleteSurveyConfirm = async () => {
+    try {
+      await selectedSurveyIds.map(surveyId => dispatch(deleteSurvey(surveyId.toString())).unwrap());
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.surveys.delete, error);
+    }
+
+    setDeletingSurvey(false);
+  };
+
+  /**
+   * Renders delete survey dialog
+   */
+  const renderDeleteSurveyDialog = () => (
+    <GenericDialog
+      error={ false }
+      open={ deletingSurvey }
+      onClose={ () => setDeletingSurvey(false) }
+      onCancel={ () => setDeletingSurvey(false) }
+      onConfirm={ onDeleteSurveyConfirm }
+      title={ strings.surveysScreen.deleteSurveysDialog.title }
+      positiveButtonText={ strings.generic.confirm }
+      cancelButtonText={ strings.generic.cancel }
+    >
+      <Typography>
+        { strings.surveysScreen.deleteSurveysDialog.text }
+      </Typography>
+    </GenericDialog>
+  );
+
+  /**
    * Render header content
    */
   const renderSurveyListFilter = () => (
@@ -169,14 +207,29 @@ const SurveysScreen: React.FC = () => {
               { strings.surveysScreen.showMine }
             </MenuItem>
           </WhiteOutlinedInput>
-          <NewSurveyButton
-            variant="contained"
-            color="secondary"
-            startIcon={ <Add/> }
-            onClick={ () => navigate("/new-survey") }
+          <Box
+            display="flex"
+            alignItems="stretch"
           >
-            { strings.surveysScreen.newSurvey }
-          </NewSurveyButton>
+            <SurveyButton
+              disabled={ !selectedSurveyIds.length }
+              variant="contained"
+              color="error"
+              startIcon={ <Delete/> }
+              onClick={ () => setDeletingSurvey(true) }
+            >
+              { strings.generic.delete }
+            </SurveyButton>
+            <SurveyButton
+              variant="contained"
+              color="secondary"
+              startIcon={ <Add/> }
+              onClick={ () => navigate("/new-survey") }
+              sx={{ ml: 2 }}
+            >
+              { strings.surveysScreen.newSurvey }
+            </SurveyButton>
+          </Box>
         </ControlsContainer>
       </SearchBar>
     </FilterRoot>
@@ -242,30 +295,35 @@ const SurveysScreen: React.FC = () => {
     return (
       <Paper>
         <DataGrid
-          loading={ loading }
+          checkboxSelection
           autoHeight
+          loading={ loading }
           rows={ surveysWithInfo }
           columns={ columns }
           pageSize={ 10 }
           disableSelectionOnClick
           onRowClick={ onSurveyTableRowClick }
+          onSelectionModelChange={ setSelectedSurveyIds }
         />
       </Paper>
     );
   };
 
   return (
-    <StackLayout
-      title={ strings.surveysScreen.title }
-      headerContent={ renderSurveyListFilter() }
-    >
-      <Hidden lgUp>
-        { renderSurveyList() }
-      </Hidden>
-      <Hidden lgDown>
-        { renderSurveyDataTable() }
-      </Hidden>
-    </StackLayout>
+    <>
+      <StackLayout
+        title={ strings.surveysScreen.title }
+        headerContent={ renderSurveyListFilter() }
+      >
+        <Hidden lgUp>
+          { renderSurveyList() }
+        </Hidden>
+        <Hidden lgDown>
+          { renderSurveyDataTable() }
+        </Hidden>
+      </StackLayout>
+      { renderDeleteSurveyDialog() }
+    </>
   );
 };
 

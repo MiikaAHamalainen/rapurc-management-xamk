@@ -17,6 +17,9 @@ export interface Localized extends LocalizedStringsMethods {
    */
   generic: {
     notImplemented: string;
+    confirm: string;
+    cancel: string;
+    delete: string;
   };
 
   /**
@@ -66,7 +69,11 @@ export interface Localized extends LocalizedStringsMethods {
       ownerName: string;
       city: string;
       streetAddress: string;
-    }
+    };
+    deleteSurveysDialog: {
+      title: string;
+      text: string;
+    };
   };
 
   /**
