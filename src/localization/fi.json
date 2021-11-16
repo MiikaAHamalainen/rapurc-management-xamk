@@ -16,7 +16,8 @@
       "delete": "Virhe poistettaessa karoitusta"
     },
     "owner": {
-      "create": "virhe luotaessa omistajatietoja"
+      "create": "virhe luotaessa omistajatietoja",
+      "update": "Virhe päivitettäessä omistajan tietoja"
     }
   },
 

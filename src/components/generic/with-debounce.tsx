@@ -53,13 +53,19 @@ const WithDebounce: React.FC<Props> = ({
   }, [value]);
 
   /**
+   * Update value with delay
+   */
+  const debouncedOnChange = () => {
+    onChange && timerEvent && onChange(timerEvent);
+    setTimerEvent(undefined);
+  };
+
+  /**
    * Event handler for text field value change
    *
    * @param event react change event
    */
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-
     !debounceTimer && setDebounceTimer(undefined);
 
     const newDebounceTimer = setTimeout(() => debouncedOnChange(), debounceTimeout ?? 500);
@@ -67,15 +73,7 @@ const WithDebounce: React.FC<Props> = ({
     setDebounceTimer(newDebounceTimer);
     event.persist();
     setTimerEvent(event);
-    setInputValue(value);
-  };
-
-  /**
-   * Update value with delay
-   */
-  const debouncedOnChange = () => {
-    onChange && timerEvent && onChange(timerEvent);
-    setTimerEvent(undefined);
+    setInputValue(event.target.value);
   };
 
   return component({

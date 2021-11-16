@@ -41,7 +41,9 @@ const NewSurveyScreen: React.FC = () => {
     try {
       const newOwner: OwnerInformation = {
         surveyId: surveyId,
-        metadata: {}
+        ownerName: "",
+        metadata: {},
+        contactPerson: {}
       };
       await Api.getOwnersApi(keycloak.token).createOwnerInformation({
         surveyId: surveyId,
@@ -60,7 +62,7 @@ const NewSurveyScreen: React.FC = () => {
 
     try {
       const { id } = await dispatch(createSurvey()).unwrap();
-      await createOwnerInformation();
+      await createOwnerInformation(id);
       navigate(`/surveys/${id}/owner`);
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.create, error);

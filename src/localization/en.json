@@ -16,7 +16,8 @@
       "delete": "Error while deleting survey"
     },
     "owner": {
-      "create": "Error while creating owner information"
+      "create": "Error while creating owner information",
+      "update": "Error while updating owner information"
     }
   },
 
