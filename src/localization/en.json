@@ -38,7 +38,7 @@
     "newSurvey": "New survey",
     "filter": "Filter",
     "dataGridColumns": {
-      "buildingId": "Building id",
+      "buildingId": "Building ID",
       "classificationCode": "Classification code",
       "ownerName": "Owner name",
       "city": "City",

@@ -43,7 +43,7 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Lists buildings
+   * Fetches and returns building with given survey ID
    *
    * @param surveyId survey id
    */
@@ -64,7 +64,7 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Lists owners
+      * Fetches and returns owner with given survey ID
    * 
    * @param surveyId survey id
    */
@@ -85,7 +85,7 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Load data
+   * Loads component data
    */
   const loadData = async () => {
     setLoading(true);
@@ -108,7 +108,7 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Effect for listing surveys
+   * Effect that loads component data
    */
   React.useEffect(() => {
     loadData();
@@ -128,8 +128,9 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Select input handler
-   * @param event 
+   * Event handler for survey table row click
+   *
+   * @param params row params
    */
   const onSurveyTableRowClick = (params: GridRowParams) => {
     params.id && navigate(`/surveys/${params.id}/owner`);
