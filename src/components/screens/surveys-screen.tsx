@@ -35,7 +35,7 @@ const SurveysScreen: React.FC = () => {
    */
   const listSurveys = async () => {
     try {
-      const allSurveys = await dispatch(fetchSurveys()).unwrap();
+      return await dispatch(fetchSurveys()).unwrap();
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.list, error);
     }
