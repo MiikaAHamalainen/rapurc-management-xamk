@@ -11,7 +11,7 @@ import { deleteSurvey, fetchSurveys } from "features/surveys-slice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { useNavigate } from "react-router-dom";
-import { DataGrid, GridColDef, GridRowId, GridRowParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import { selectKeycloak } from "features/auth-slice";
 import Api from "api";
 import { SurveyWithInfo } from "types";
@@ -31,7 +31,7 @@ const SurveysScreen: React.FC = () => {
   const [ surveysWithInfo, setSurveysWithInfo ] = React.useState<SurveyWithInfo[]>([]);
   const [ loading, setLoading ] = React.useState(false);
   const [ deletingSurvey, setDeletingSurvey ] = React.useState(false);
-  const [ selectedSurveyIds, setSelectedSurveyIds ] = React.useState<GridRowId[]>([]);
+  const [ selectedSurveyIds, setSelectedSurveyIds ] = React.useState<string[]>([]);
 
   /**
    * Lists surveys
@@ -144,7 +144,7 @@ const SurveysScreen: React.FC = () => {
    *
    * @param surveyId survey id
    */
-  const DeleteSurveyButtonClick = (surveyId: string) => {
+  const deleteSurveyButtonClick = (surveyId: string) => {
     setSelectedSurveyIds([ surveyId ]);
     setDeletingSurvey(true);
   };
@@ -261,7 +261,7 @@ const SurveysScreen: React.FC = () => {
         <SurveyButton
           variant="outlined"
           color="primary"
-          onClick={ () => DeleteSurveyButtonClick(surveyWithInfo.id) }
+          onClick={ () => deleteSurveyButtonClick(surveyWithInfo.id) }
         >
           <Typography color={ theme.palette.primary.main }>
             { strings.generic.delete }
@@ -325,7 +325,7 @@ const SurveysScreen: React.FC = () => {
           pageSize={ 10 }
           disableSelectionOnClick
           onRowClick={ onSurveyTableRowClick }
-          onSelectionModelChange={ setSelectedSurveyIds }
+          onSelectionModelChange={ selectedIds => setSelectedSurveyIds(selectedIds as string[]) }
         />
       </Paper>
     );
