@@ -26,8 +26,6 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * Create new owner information
-   * 
-   * @param surveyId survey id
    */
   const fetchOwnerInformation = async () => {
     if (!keycloak?.token || !surveyId) {
@@ -55,7 +53,6 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
     const { value, name } = target;
 
     if (!keycloak?.token || !ownerInformation?.id) {
-      console.log("no id quitted", ownerInformation);
       return;
     }
 
@@ -105,6 +102,11 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * Renders textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param value value
+   * @param onChange onChange
    */
   const renderWithDebounceTextField = (name: string, label: string, value:string, onChange: React.ChangeEventHandler<HTMLInputElement>) => (
     <WithDebounce
