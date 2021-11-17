@@ -49,7 +49,7 @@
     },
     "deleteSurveysDialog": {
       "title": "Poista kysely(t)",
-      "text": "Haluatko varmasti poistaa nämä kyselyt?"
+      "text": "Haluatko varmasti poistaa valitut kartoitukset?"
     }
   },
 
