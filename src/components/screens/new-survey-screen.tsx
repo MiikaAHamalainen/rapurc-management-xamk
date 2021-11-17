@@ -41,9 +41,7 @@ const NewSurveyScreen: React.FC = () => {
     try {
       const newOwner: OwnerInformation = {
         surveyId: surveyId,
-        ownerName: "",
-        metadata: {},
-        contactPerson: {}
+        metadata: {}
       };
       await Api.getOwnersApi(keycloak.token).createOwnerInformation({
         surveyId: surveyId,
