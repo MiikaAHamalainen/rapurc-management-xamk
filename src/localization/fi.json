@@ -19,7 +19,7 @@
       "delete": "Virhe poistettaessa karoitusta"
     },
     "buildings": {
-      "list": "Virhe listattaessa sijainteja"
+      "list": "Virhe listattaessa rakennuksia"
     },
     "owners": {
       "list": "Virhe listattaessa omistajia"
@@ -48,8 +48,8 @@
       "streetAddress": "Osoite"
     },
     "deleteSurveysDialog": {
-      "title": "Poista kysely(t)",
-      "text": "Haluatko varmasti poistaa nämä kyselyt?"
+      "title": "Poista kartoitus",
+      "text": "Haluatko varmasti poistaa valitut kartoitukset?"
     }
   },
 
