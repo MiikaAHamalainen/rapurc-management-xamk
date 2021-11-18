@@ -19,12 +19,16 @@
       "delete": "Virhe poistettaessa karoitusta"
     },
     "buildings": {
-      "list": "Virhe listattaessa rakennuksia"
+      "list": "Virhe listattaessa rakennuksia",
+      "create": "Error while creating new location",
+      "update": "Error while updating location",
+      "delete": "Error while deleting location"
     },
     "owners": {
       "list": "Virhe listattaessa omistajia",
       "create": "virhe luotaessa omistajatietoja",
-      "update": "Virhe päivitettäessä omistajan tietoja"
+      "update": "Virhe päivitettäessä omistajan tietoja",
+      "delete": "Error while deleting owner information"
     }
   },
 

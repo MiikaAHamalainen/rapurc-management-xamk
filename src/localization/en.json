@@ -19,12 +19,16 @@
       "delete": "Error while deleting survey"
     },
     "buildings": {
-      "list": "Error while listing locations"
+      "list": "Error while listing locations",
+      "create": "Error while creating new location",
+      "update": "Error while updating location",
+      "delete": "Error while deleting location"
     },
     "owners": {
       "list": "Error while listing owners",
       "create": "Error while creating owner information",
-      "update": "Error while updating owner information"
+      "update": "Error while updating owner information",
+      "delete": "Error while deleting owner information"
     }
   },
 

@@ -25,7 +25,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
   const [ ownerInformation, setOwnerInformation ] = React.useState<OwnerInformation | undefined>(undefined);
 
   /**
-   * Create new owner information
+   * Fetch owner information array
    */
   const fetchOwnerInformation = async () => {
     if (!keycloak?.token || !surveyId) {

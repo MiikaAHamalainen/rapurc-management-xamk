@@ -2,11 +2,163 @@ import * as React from "react";
 import { MenuItem, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import strings from "localization/strings";
 import theme from "theme";
+import { useAppSelector } from "app/hooks";
+import { ErrorContext } from "components/error-handler/error-handler";
+import { selectKeycloak } from "features/auth-slice";
+import { Address, Building } from "generated/client";
+import Api from "api";
+import WithDebounce from "components/generic/with-debounce";
+
+/**
+ * Component properties
+ */
+interface Props {
+  surveyId: string;
+}
 
 /**
  * Component for building information
  */
-const Building: React.FC = () => {
+const BuildingView: React.FC<Props> = ({ surveyId }) => {
+  const keycloak = useAppSelector(selectKeycloak);
+  const errorContext = React.useContext(ErrorContext);
+  const [ building, setBuilding ] = React.useState<Building | undefined>(undefined);
+
+  /**
+   * Create new owner information
+   */
+  const fetchBuilding = async () => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      const fetchedBuildings = await Api.getBuildingsApi(keycloak.token).listBuildings({
+        surveyId: surveyId
+      });
+      setBuilding(fetchedBuildings[0]);
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.buildings.create, error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchBuilding();
+  }, []);
+
+  /**
+   * Updates building
+   */
+  const updateBuilding = async (updatedOwnerInformation: Building) => {
+    if (!keycloak?.token || !building?.id) {
+      return;
+    }
+
+    try {
+      Api.getBuildingsApi(keycloak.token).updateBuilding({
+        surveyId: surveyId,
+        buildingId: building.id,
+        building: updatedOwnerInformation
+      });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.buildings.update, error);
+    }
+  };
+
+  /**
+   * Event Handler set survey prop
+   */
+  const onBuildingPropChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    const { value, name } = target;
+
+    if (!keycloak?.token || !building?.id) {
+      return;
+    }
+
+    const updatedBuilding: Building = { ...building, [name]: value };
+    setBuilding(updatedBuilding);
+    updateBuilding(updatedBuilding);
+  };
+
+  /**
+   * Event Handler set survey contact person prop
+   */
+  const onBuildingAddressPropChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    const { value, name } = target;
+
+    if (!keycloak?.token || !building?.id) {
+      return;
+    }
+
+    const updatedBuilding: Building = {
+      ...building
+    };
+
+    if (!building?.address) {
+      const newAddress: Address = {
+        streetAddress: "",
+        city: "",
+        postCode: ""
+      };
+
+      updatedBuilding.address = newAddress;
+    }
+
+    updatedBuilding.address![name as keyof Address] = value;
+    setBuilding(updatedBuilding);
+    updateBuilding(updatedBuilding);
+  };
+
+  /**
+   * Renders textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param value value
+   * @param onChange onChange
+   */
+  const renderWithDebounceTextField = (
+    name: string,
+    label: string,
+    value:string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField { ...props }/>
+      }
+    />
+  );
+
+  /**
+   * Renders textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param value value
+   * @param onChange onChange
+   */
+  const renderWithDebounceNumberTextField = (
+    name: string,
+    label: string,
+    value:number,
+    onChange: React.ChangeEventHandler<HTMLInputElement>
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField type="number" { ...props }/>
+      }
+    />
+  );
+
   /**
    * Check if viewport is mobile size
    */
@@ -17,31 +169,129 @@ const Building: React.FC = () => {
         <Typography variant="h2">
           { strings.survey.building.title }
         </Typography>
-        <TextField label={ strings.survey.building.propertyID }/>
-        <TextField label={ strings.survey.building.buildingID }/>
-        <TextField select label={ strings.survey.building.buildingClass }>
+        {
+          renderWithDebounceTextField(
+            "propertyId",
+            strings.survey.building.propertyID,
+            building?.propertyId || "",
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "buildingId",
+            strings.survey.building.buildingID,
+            building?.buildingId || "",
+            onBuildingPropChange
+          )
+        }
+        <TextField disabled select label={ strings.survey.building.buildingClass }>
           <MenuItem>{ strings.generic.notImplemented }</MenuItem>
         </TextField>
-        <TextField label={ strings.survey.building.year }/>
-        <TextField label={ strings.survey.building.area }/>
-        <TextField label={ strings.survey.building.volume }/>
-        <TextField label={ strings.survey.building.floors }/>
-        <TextField label={ strings.survey.building.basementFloors }/>
-        <TextField label={ strings.survey.building.foundationMaterial }/>
-        <TextField label={ strings.survey.building.supportingStructure }/>
-        <TextField label={ strings.survey.building.façadeMaterial }/>
-        <TextField label={ strings.survey.building.roofStructure }/>
+        {
+          renderWithDebounceNumberTextField(
+            "constructionYear",
+            strings.survey.building.year,
+            building?.constructionYear || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceNumberTextField(
+            "space",
+            strings.survey.building.area,
+            building?.space || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceNumberTextField(
+            "volume",
+            strings.survey.building.volume,
+            building?.volume || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceNumberTextField(
+            "floors",
+            strings.survey.building.floors,
+            building?.floors || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceNumberTextField(
+            "basements",
+            strings.survey.building.basementFloors,
+            building?.basements || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "foundation",
+            strings.survey.building.foundationMaterial,
+            building?.foundation || "",
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "supportingStructure",
+            strings.survey.building.supportingStructure,
+            building?.supportingStructure || "",
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "facadeMaterial",
+            strings.survey.building.façadeMaterial,
+            building?.facadeMaterial || "",
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "roofType",
+            strings.survey.building.roofStructure,
+            building?.roofType || "",
+            onBuildingPropChange
+          )
+        }
       </Stack>
       <Stack spacing={ 2 } sx={{ flex: 1 }}>
         <Typography variant="h3" sx={{ marginBottom: 0.5 }}>
           { strings.survey.building.address }
         </Typography>
-        <TextField label={ strings.survey.building.street }/>
-        <TextField label={ strings.survey.building.city }/>
-        <TextField label={ strings.survey.building.postalCode }/>
+        {
+          renderWithDebounceTextField(
+            "streetAddress",
+            strings.survey.building.street,
+            building?.address?.streetAddress || "",
+            onBuildingAddressPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "city",
+            strings.survey.building.city,
+            building?.address?.city || "",
+            onBuildingAddressPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "postCode",
+            strings.survey.building.postalCode,
+            building?.address?.postCode || "",
+            onBuildingAddressPropChange
+          )
+        }
       </Stack>
     </Stack>
   );
 };
 
-export default Building;
+export default BuildingView;

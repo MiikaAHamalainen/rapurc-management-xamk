@@ -37,11 +37,15 @@ export interface Localized extends LocalizedStringsMethods {
     };
     buildings: {
       list: string;
+      create: string;
+      update: string;
+      delete: string;
     };
     owners: {
       list: string;
       create: string;
       update: string;
+      delete: string;
     };
   };
 
