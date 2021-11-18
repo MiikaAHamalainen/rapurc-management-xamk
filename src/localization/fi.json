@@ -22,7 +22,9 @@
       "list": "Virhe listattaessa rakennuksia"
     },
     "owners": {
-      "list": "Virhe listattaessa omistajia"
+      "list": "Virhe listattaessa omistajia",
+      "create": "virhe luotaessa omistajatietoja",
+      "update": "Virhe päivitettäessä omistajan tietoja"
     }
   },
 
@@ -56,7 +58,7 @@
   "newSurveyScreen": {
     "title": "Uusi kartoitus",
     "description": "Hae kartoituskohdetta osoitteella, kiinteistötunnuksella tai rakennustunnuksella",
-    "address": "Address",
+    "address": "Osoite",
     "propertyId": "Kiinteistötunnus",
     "buildingId": "Rakennustunnus",
     "search": "Hae",
@@ -99,6 +101,17 @@
     "surveyStatus": {
       "draft": "Keskeneräinen",
       "done": "Valmis"
+    },
+    "owner": {
+      "title": "Omistajan tiedot",
+      "name": "Nimi",
+      "tradeName": "Toiminimi",
+      "contactPerson": "Yhteyshenkilö",
+      "firstName": "Etunimi",
+      "surname": "Sukunimi",
+      "occupation": "Ammatti",
+      "phone": "Puhelinnumero",
+      "email": "Sähköpostiosoite"
     }
   }
 }

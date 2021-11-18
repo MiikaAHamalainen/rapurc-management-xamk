@@ -22,7 +22,9 @@
       "list": "Error while listing locations"
     },
     "owners": {
-      "list": "Error while listing owners"
+      "list": "Error while listing owners",
+      "create": "Error while creating owner information",
+      "update": "Error while updating owner information"
     }
   },
 
@@ -99,6 +101,17 @@
     "surveyStatus": {
       "draft": "Incomplete",
       "done": "Ready"
+    },
+    "owner": {
+      "title": "Owner information",
+      "name": "Name",
+      "tradeName": "Trade name",
+      "contactPerson": "Contact person",
+      "firstName": "First name",
+      "surname": "Surname",
+      "occupation": "Occupation",
+      "phone": "Phone",
+      "email": "E-mail address"
     }
   }
 }

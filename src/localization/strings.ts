@@ -40,6 +40,8 @@ export interface Localized extends LocalizedStringsMethods {
     };
     owners: {
       list: string;
+      create: string;
+      update: string;
     };
   };
 
@@ -135,7 +137,18 @@ export interface Localized extends LocalizedStringsMethods {
       draft: string;
       done: string;
     };
-  };
+    owner: {
+      title: string;
+      name: string;
+      tradeName: string;
+      contactPerson: string;
+      firstName: string;
+      surname: string;
+      occupation: string;
+      phone: string;
+      email: string;
+    }
+  }
 }
 
 /**
