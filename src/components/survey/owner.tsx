@@ -47,6 +47,25 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
   }, []);
 
   /**
+   * Updates owner information
+   */
+  const updateOwnerInformation = async (updatedOwnerInformation: OwnerInformation) => {
+    if (!keycloak?.token || !ownerInformation?.id) {
+      return;
+    }
+
+    try {
+      Api.getOwnersApi(keycloak.token).updateOwnerInformation({
+        surveyId: surveyId,
+        ownerId: ownerInformation.id,
+        ownerInformation: updatedOwnerInformation
+      });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.owners.update, error);
+    }
+  };
+
+  /**
    * Event Handler set survey prop
    */
   const onOwnerInfoPropChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
@@ -58,16 +77,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
 
     const updatedOwnerInformation: OwnerInformation = { ...ownerInformation, [name]: value };
     setOwnerInformation(updatedOwnerInformation);
-
-    try {
-      Api.getOwnersApi(keycloak.token).updateOwnerInformation({
-        surveyId: surveyId,
-        ownerId: ownerInformation.id,
-        ownerInformation: updatedOwnerInformation
-      });
-    } catch (error) {
-      errorContext.setError(strings.errorHandling.owners.update, error);
-    }
+    updateOwnerInformation(updatedOwnerInformation);
   };
 
   /**
@@ -88,16 +98,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
       }
     };
     setOwnerInformation(updatedOwnerInformation);
-
-    try {
-      Api.getOwnersApi(keycloak.token).updateOwnerInformation({
-        surveyId: surveyId,
-        ownerId: ownerInformation.id,
-        ownerInformation: updatedOwnerInformation
-      });
-    } catch (error) {
-      errorContext.setError(strings.errorHandling.owners.update, error);
-    }
+    updateOwnerInformation(updatedOwnerInformation);
   };
 
   /**
