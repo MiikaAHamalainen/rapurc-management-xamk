@@ -17,6 +17,9 @@ export interface Localized extends LocalizedStringsMethods {
    */
   generic: {
     notImplemented: string;
+    confirm: string;
+    cancel: string;
+    delete: string;
   };
 
   /**
@@ -31,6 +34,14 @@ export interface Localized extends LocalizedStringsMethods {
       find: string;
       update: string;
       delete: string;
+    };
+    buildings: {
+      list: string;
+    };
+    owners: {
+      list: string;
+      create: string;
+      update: string;
     };
   };
 
@@ -54,6 +65,17 @@ export interface Localized extends LocalizedStringsMethods {
     showMine: string;
     newSurvey: string;
     filter: string;
+    dataGridColumns: {
+      buildingId: string;
+      classificationCode: string;
+      ownerName: string;
+      city: string;
+      streetAddress: string;
+    };
+    deleteSurveysDialog: {
+      title: string;
+      text: string;
+    };
   };
 
   /**
@@ -86,7 +108,7 @@ export interface Localized extends LocalizedStringsMethods {
       hazardous: string;
       attachments: string;
       summary: string;
-    }
+    };
   };
 
   /**
@@ -103,8 +125,8 @@ export interface Localized extends LocalizedStringsMethods {
         postProcessing: string;
         hazardousMaterials: string;
         hazardousMaterialsAdditionalInfo: string;
-      }
-    }
+      };
+    };
   };
 
   /**
@@ -133,7 +155,18 @@ export interface Localized extends LocalizedStringsMethods {
       street: string;
       city: string;
       postalCode: string;
-    }
+    };
+    owner: {
+      title: string;
+      name: string;
+      tradeName: string;
+      contactPerson: string;
+      firstName: string;
+      surname: string;
+      occupation: string;
+      phone: string;
+      email: string;
+    };
   };
 }
 

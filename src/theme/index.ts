@@ -293,6 +293,16 @@ export default createTheme({
         }
       }
     },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: "rgba(0, 0, 0, 0.5)",
+          "&.Mui-checked": {
+            color: palette.primary.main
+          }
+        }
+      }
+    },
     MuiListItemIcon: {
       styleOverrides: {
         root: {

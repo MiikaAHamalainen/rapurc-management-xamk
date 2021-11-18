@@ -1,18 +1,22 @@
-import { Add } from "@mui/icons-material";
-import { Hidden, List, MenuItem, Paper, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Add, Delete } from "@mui/icons-material";
+import { Box, Hidden, List, MenuItem, Paper, TextField, Typography, useMediaQuery } from "@mui/material";
 import SurveyItem from "components/layout-components/survey-item";
 import StackLayout from "components/layouts/stack-layout";
 import strings from "localization/strings";
 import React from "react";
-import { ControlsContainer, FilterRoot, NewSurveyButton, SearchBar } from "styled/screens/surveys-screen";
+import { ControlsContainer, FilterRoot, SurveyButton, SearchBar } from "styled/screens/surveys-screen";
 import theme from "theme";
 import WhiteOutlinedInput from "../../styled/generic/inputs";
-import { fetchSurveys } from "features/surveys-slice";
-import { useAppDispatch } from "app/hooks";
+import { deleteSurvey, fetchSurveys } from "features/surveys-slice";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
-import { Survey } from "generated/client";
-import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { selectKeycloak } from "features/auth-slice";
+import Api from "api";
+import { SurveyWithInfo } from "types";
+import SurveyUtils from "utils/survey";
+import GenericDialog from "components/generic/generic-dialog";
 
 /**
  * Surveys screen component
@@ -20,27 +24,98 @@ import { useNavigate } from "react-router-dom";
 const SurveysScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
-
   const [ filter, setFilter ] = React.useState("showAll");
-  const [ surveys, setSurveys ] = React.useState<Survey[]>([]);
+  const [ addressFilter, setAddressFilter ] = React.useState("");
+  const [ surveysWithInfo, setSurveysWithInfo ] = React.useState<SurveyWithInfo[]>([]);
+  const [ loading, setLoading ] = React.useState(false);
+  const [ deletingSurvey, setDeletingSurvey ] = React.useState(false);
+  const [ selectedSurveyIds, setSelectedSurveyIds ] = React.useState<string[]>([]);
 
   /**
    * Lists surveys
    */
   const listSurveys = async () => {
     try {
-      const allSurveys = await dispatch(fetchSurveys()).unwrap();
-      setSurveys(allSurveys);
+      return await dispatch(fetchSurveys()).unwrap();
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.list, error);
+    }
+    return [];
+  };
+
+  /**
+   * Fetches and returns building with given survey ID
+   *
+   * @param surveyId survey id
+   */
+  const fetchBuilding = async (surveyId?: string) => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      const buildings = await Api.getBuildingsApi(keycloak?.token).listBuildings({
+        surveyId: surveyId
+      });
+
+      return buildings[0];
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.buildings.list, error);
     }
   };
 
   /**
-   * Effect for listing surveys
+      * Fetches and returns owner with given survey ID
+   * 
+   * @param surveyId survey id
    */
-  React.useEffect(() => { listSurveys(); }, []);
+  const fetchOwner = async (surveyId?: string) => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      const owners = await Api.getOwnersApi(keycloak?.token).listOwnerInformation({
+        surveyId: surveyId
+      });
+
+      return owners[0];
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.owners.list, error);
+    }
+  };
+
+  /**
+   * Loads component data
+   */
+  const loadData = async () => {
+    setLoading(true);
+    const surveys = await listSurveys();
+
+    const surveyWithInfoArray: SurveyWithInfo[] = [];
+
+    await Promise.all(
+      await surveys.map(async survey => {
+        const surveyBuilding = await fetchBuilding(survey.id);
+        const surveyOwner = await fetchOwner(survey.id);
+
+        const surveyWithInfoParsed = SurveyUtils.parseToSurveyWithInfo(survey, surveyBuilding, surveyOwner);
+        surveyWithInfoParsed && surveyWithInfoArray.push(surveyWithInfoParsed);
+      })
+    );
+
+    setSurveysWithInfo(surveyWithInfoArray);
+    setLoading(false);
+  };
+
+  /**
+   * Effect that loads component data
+   */
+  React.useEffect(() => {
+    loadData();
+  }, []);
 
   /**
    * Check if viewport is mobile size
@@ -54,6 +129,61 @@ const SurveysScreen: React.FC = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(event.target.value);
   };
+
+  /**
+   * Event handler for survey table row click
+   *
+   * @param params row params
+   */
+  const onSurveyTableRowClick = (params: GridRowParams) => {
+    params.id && navigate(`/surveys/${params.id}/owner`);
+  };
+
+  /**
+   * Event handler for mobile view delete survey click
+   *
+   * @param surveyId survey id
+   */
+  const deleteSurveyButtonClick = (surveyId: string) => {
+    setSelectedSurveyIds([ surveyId ]);
+    setDeletingSurvey(true);
+  };
+
+  /**
+   * Event handler for delete survey confirm
+   */
+  const onDeleteSurveyConfirm = async () => {
+    try {
+      await selectedSurveyIds.map(surveyId => dispatch(deleteSurvey(surveyId.toString())).unwrap());
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.surveys.delete, error);
+    }
+
+    loadData();
+    setSelectedSurveyIds([]);
+    setDeletingSurvey(false);
+  };
+
+  /**
+   * Renders delete survey dialog
+   */
+  const renderDeleteSurveyDialog = () => (
+    <GenericDialog
+      error={ false }
+      open={ deletingSurvey }
+      onClose={ () => setDeletingSurvey(false) }
+      onCancel={ () => setDeletingSurvey(false) }
+      onConfirm={ onDeleteSurveyConfirm }
+      title={ strings.surveysScreen.deleteSurveysDialog.title }
+      positiveButtonText={ strings.generic.confirm }
+      cancelButtonText={ strings.generic.cancel }
+    >
+      <Typography>
+        { strings.surveysScreen.deleteSurveysDialog.text }
+      </Typography>
+    </GenericDialog>
+  );
+
   /**
    * Render header content
    */
@@ -66,6 +196,8 @@ const SurveysScreen: React.FC = () => {
         <TextField
           fullWidth={ isMobile }
           label={ strings.surveysScreen.address }
+          value={ addressFilter }
+          onChange={ event => setAddressFilter(event.target.value) }
           size={ isMobile ? "medium" : "small" }
         />
         <ControlsContainer direction="row" spacing={ 2 }>
@@ -87,14 +219,31 @@ const SurveysScreen: React.FC = () => {
               { strings.surveysScreen.showMine }
             </MenuItem>
           </WhiteOutlinedInput>
-          <NewSurveyButton
-            variant="contained"
-            color="secondary"
-            startIcon={ <Add/> }
-            onClick={ () => navigate("/new-survey") }
+          <Box
+            display="flex"
+            alignItems="stretch"
           >
-            { strings.surveysScreen.newSurvey }
-          </NewSurveyButton>
+            <Hidden lgDown>
+              <SurveyButton
+                disabled={ !selectedSurveyIds.length }
+                variant="contained"
+                color="error"
+                startIcon={ <Delete/> }
+                onClick={ () => setDeletingSurvey(true) }
+                sx={{ mr: 2 }}
+              >
+                { strings.generic.delete }
+              </SurveyButton>
+            </Hidden>
+            <SurveyButton
+              variant="contained"
+              color="secondary"
+              startIcon={ <Add/> }
+              onClick={ () => navigate("/new-survey") }
+            >
+              { strings.surveysScreen.newSurvey }
+            </SurveyButton>
+          </Box>
         </ControlsContainer>
       </SearchBar>
     </FilterRoot>
@@ -105,12 +254,22 @@ const SurveysScreen: React.FC = () => {
    * 
    */
   const renderSurveyListItems = () => (
-    surveys.map(survey =>
+    surveysWithInfo.map(surveyWithInfo =>
       <SurveyItem
-        title={ survey.status }
-        subtitle={ moment(survey.startDate).format("DD.MM.YYYY") }
-        onClick={ () => navigate(`/surveys/${survey.id}/owner`) }
-      />
+        title={ surveyWithInfo.ownerName || "" }
+        subtitle={ surveyWithInfo.streetAddress || "" }
+        onClick={ () => navigate(`/surveys/${surveyWithInfo.id}/owner`) }
+      >
+        <SurveyButton
+          variant="outlined"
+          color="primary"
+          onClick={ () => deleteSurveyButtonClick(surveyWithInfo.id) }
+        >
+          <Typography color={ theme.palette.primary.main }>
+            { strings.generic.delete }
+          </Typography>
+        </SurveyButton>
+      </SurveyItem>
     )
   );
 
@@ -128,24 +287,67 @@ const SurveysScreen: React.FC = () => {
   /**
    * Render survey data table for desktop
    */
-  const renderSurveyDataTable = () => (
-    <Paper sx={{ p: 2 }}>
-      <Typography>{ strings.generic.notImplemented }</Typography>
-    </Paper>
-  );
+  const renderSurveyDataTable = () => {
+    const columns: GridColDef[] = [
+      {
+        field: "buildingId",
+        headerName: strings.surveysScreen.dataGridColumns.buildingId,
+        width: 360
+      },
+      {
+        field: "classificationCode",
+        headerName: strings.surveysScreen.dataGridColumns.classificationCode,
+        width: 360
+      },
+      {
+        field: "ownerName",
+        headerName: strings.surveysScreen.dataGridColumns.ownerName,
+        width: 360
+      },
+      {
+        field: "city",
+        headerName: strings.surveysScreen.dataGridColumns.city,
+        width: 360
+      },
+      {
+        field: "streetAddress",
+        headerName: strings.surveysScreen.dataGridColumns.streetAddress,
+        width: 360
+      }
+    ];
+  
+    return (
+      <Paper>
+        <DataGrid
+          checkboxSelection
+          autoHeight
+          loading={ loading }
+          rows={ surveysWithInfo }
+          columns={ columns }
+          pageSize={ 10 }
+          disableSelectionOnClick
+          onRowClick={ onSurveyTableRowClick }
+          onSelectionModelChange={ selectedIds => setSelectedSurveyIds(selectedIds as string[]) }
+        />
+      </Paper>
+    );
+  };
 
   return (
-    <StackLayout
-      title={ strings.surveysScreen.title }
-      headerContent={ renderSurveyListFilter() }
-    >
-      <Hidden lgUp>
-        { renderSurveyList() }
-      </Hidden>
-      <Hidden lgDown>
-        { renderSurveyDataTable() }
-      </Hidden>
-    </StackLayout>
+    <>
+      <StackLayout
+        title={ strings.surveysScreen.title }
+        headerContent={ renderSurveyListFilter() }
+      >
+        <Hidden lgUp>
+          { renderSurveyList() }
+        </Hidden>
+        <Hidden lgDown>
+          { renderSurveyDataTable() }
+        </Hidden>
+      </StackLayout>
+      { renderDeleteSurveyDialog() }
+    </>
   );
 };
 
