@@ -13,6 +13,18 @@ export interface Configuration {
 }
 
 /**
+ * Survey with info
+ */
+export interface SurveyWithInfo {
+  id: string;
+  ownerName?: string;
+  buildingId?: string;
+  classificationCode?: string;
+  streetAddress?: string;
+  city?: string;
+}
+
+/**
  * Error context type
  */
 export type ErrorContextType = {

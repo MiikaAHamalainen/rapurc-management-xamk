@@ -2,7 +2,10 @@
   "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
-    "notImplemented": "Ei vielä toteutettu"
+    "notImplemented": "Ei vielä toteutettu",
+    "confirm": "Vahvista",
+    "cancel": "Peruuta",
+    "delete": "Poista"
   },
 
   "errorHandling": {
@@ -14,6 +17,12 @@
       "find": "Virhe haettassa kartoitusta",
       "update": "Virhe päivitettäessä kartoitusta",
       "delete": "Virhe poistettaessa karoitusta"
+    },
+    "buildings": {
+      "list": "Virhe listattaessa rakennuksia"
+    },
+    "owners": {
+      "list": "Virhe listattaessa omistajia"
     }
   },
 
@@ -30,7 +39,18 @@
     "showAll": "Näytä kaikki",
     "showMine": "Näytä omat",
     "newSurvey": "Uusi kartoitus",
-    "filter": "Suodata"
+    "filter": "Suodata",
+    "dataGridColumns": {
+      "buildingId": "Rakennustunnus",
+      "classificationCode": "Rakennusluokka",
+      "ownerName": "Omistaja",
+      "city": "Paikkakunta",
+      "streetAddress": "Osoite"
+    },
+    "deleteSurveysDialog": {
+      "title": "Poista kartoitus",
+      "text": "Haluatko varmasti poistaa valitut kartoitukset?"
+    }
   },
 
   "newSurveyScreen": {

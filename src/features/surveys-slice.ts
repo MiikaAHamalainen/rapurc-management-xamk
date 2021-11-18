@@ -115,19 +115,19 @@ export const updateSurvey = createAsyncThunk<Survey, Survey, { state: RootState;
 /**
  * Delete survey async reducer
  */
-export const deleteSurvey = createAsyncThunk<Survey, Survey, { state: RootState; }>(
+export const deleteSurvey = createAsyncThunk<string, string, { state: RootState; }>(
   "surveys/deleteSurvey",
-  async (survey, { getState, rejectWithValue }) => {
+  async (surveyId, { getState, rejectWithValue }) => {
     try {
       const { keycloak } = getState().auth;
 
-      if (!keycloak?.token || !survey.id) {
+      if (!keycloak?.token || !surveyId) {
         throw new Error("No access token or missing survey ID");
       }
 
-      await Api.getSurveysApi(keycloak.token).deleteSurvey({ surveyId: survey.id });
+      await Api.getSurveysApi(keycloak.token).deleteSurvey({ surveyId: surveyId });
 
-      return survey;
+      return surveyId;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -166,7 +166,7 @@ export const surveysSlice = createSlice({
       }
     });
     builder.addCase(deleteSurvey.fulfilled, (state, { payload }) => {
-      state.surveys = state.surveys.filter(surveys => surveys.id !== payload.id);
+      state.surveys = state.surveys.filter(surveys => surveys.id !== payload);
     });
   }
 });

@@ -1,4 +1,4 @@
-import { Configuration, SurveysApi } from "../generated/client";
+import { Configuration, SurveysApi, BuildingsApi, OwnersApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
@@ -6,13 +6,33 @@ import { Configuration, SurveysApi } from "../generated/client";
 export default class Api {
 
   /**
-   * Gets initialized languages API
+   * Gets initialized surveys API
    *
    * @param accessToken access token
-   * @returns initialized languages API
+   * @returns initialized surveys API
    */
   public static getSurveysApi = (accessToken: string) => {
     return new SurveysApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized buildings API
+   *
+   * @param accessToken access token
+   * @returns initialized buildings API
+   */
+  public static getBuildingsApi = (accessToken: string) => {
+    return new BuildingsApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized owners API
+   *
+   * @param accessToken access token
+   * @returns initialized owners API
+   */
+  public static getOwnersApi = (accessToken: string) => {
+    return new OwnersApi(Api.getConfiguration(accessToken));
   };
 
   /**
