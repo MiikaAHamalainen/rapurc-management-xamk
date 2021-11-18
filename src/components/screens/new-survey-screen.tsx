@@ -48,7 +48,7 @@ const NewSurveyScreen: React.FC = () => {
         ownerInformation: newOwner
       });
     } catch (error) {
-      errorContext.setError(strings.errorHandling.owner.create, error);
+      errorContext.setError(strings.errorHandling.owners.create, error);
     }
   };
 

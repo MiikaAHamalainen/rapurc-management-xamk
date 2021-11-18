@@ -38,7 +38,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
       });
       setOwnerInformation(fetchedOwnerInformationArray[0]);
     } catch (error) {
-      errorContext.setError(strings.errorHandling.owner.create, error);
+      errorContext.setError(strings.errorHandling.owners.create, error);
     }
   };
 
@@ -66,7 +66,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
         ownerInformation: updatedOwnerInformation
       });
     } catch (error) {
-      errorContext.setError(strings.errorHandling.owner.update, error);
+      errorContext.setError(strings.errorHandling.owners.update, error);
     }
   };
 
@@ -96,7 +96,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
         ownerInformation: updatedOwnerInformation
       });
     } catch (error) {
-      errorContext.setError(strings.errorHandling.owner.update, error);
+      errorContext.setError(strings.errorHandling.owners.update, error);
     }
   };
 
