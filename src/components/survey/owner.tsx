@@ -109,7 +109,12 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
    * @param value value
    * @param onChange onChange
    */
-  const renderWithDebounceTextField = (name: string, label: string, value:string, onChange: React.ChangeEventHandler<HTMLInputElement>) => (
+  const renderWithDebounceTextField = (
+    name: string,
+    label: string,
+    value:string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>
+  ) => (
     <WithDebounce
       name={ name }
       value={ value }
