@@ -148,13 +148,57 @@ const SurveysScreen: React.FC = () => {
     setSelectedSurveyIds([ surveyId ]);
     setDeletingSurvey(true);
   };
+  
+  /**
+   * Event handler for delete owner
+   */
+  const deleteOwner = async (surveyId?: string) => {
+    const ownerId = surveysWithInfo.find(surveyWithInfo => surveyId === surveyWithInfo.id)?.ownerId;
+
+    if (!surveyId || !keycloak?.token || !ownerId) {
+      return;
+    }
+
+    try {
+      await Api.getOwnersApi(keycloak.token).deleteOwnerInformation({
+        surveyId: surveyId,
+        ownerId: ownerId
+      });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.owners.delete, error);
+    }
+  };
+
+  /**
+   * Event handler for delete building
+   */
+  const deleteBuilding = async (surveyId?: string) => {
+    const buildingId = surveysWithInfo.find(surveyWithInfo => surveyId === surveyWithInfo.id)?.buildingId;
+
+    if (!surveyId || !keycloak?.token || !buildingId) {
+      return;
+    }
+
+    try {
+      await Api.getBuildingsApi(keycloak.token).deleteBuilding({
+        surveyId: surveyId,
+        buildingId: buildingId
+      });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.buildings.delete, error);
+    }
+  };
 
   /**
    * Event handler for delete survey confirm
    */
   const onDeleteSurveyConfirm = async () => {
     try {
-      await selectedSurveyIds.map(surveyId => dispatch(deleteSurvey(surveyId.toString())).unwrap());
+      await selectedSurveyIds.forEach(surveyId => {
+        deleteBuilding(surveyId);
+        deleteOwner(surveyId);
+        dispatch(deleteSurvey(surveyId.toString())).unwrap();
+      });
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.delete, error);
     }

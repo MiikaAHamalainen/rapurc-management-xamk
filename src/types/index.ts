@@ -17,6 +17,7 @@ export interface Configuration {
  */
 export interface SurveyWithInfo {
   id: string;
+  ownerId?: string;
   ownerName?: string;
   buildingId?: string;
   classificationCode?: string;
