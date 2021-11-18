@@ -17,6 +17,9 @@ export interface Localized extends LocalizedStringsMethods {
    */
   generic: {
     notImplemented: string;
+    confirm: string;
+    cancel: string;
+    delete: string;
   };
 
   /**
@@ -32,10 +35,14 @@ export interface Localized extends LocalizedStringsMethods {
       update: string;
       delete: string;
     };
-    owner: {
+    buildings: {
+      list: string;
+    };
+    owners: {
+      list: string;
       create: string;
       update: string;
-    }
+    };
   };
 
   /**
@@ -58,6 +65,17 @@ export interface Localized extends LocalizedStringsMethods {
     showMine: string;
     newSurvey: string;
     filter: string;
+    dataGridColumns: {
+      buildingId: string;
+      classificationCode: string;
+      ownerName: string;
+      city: string;
+      streetAddress: string;
+    };
+    deleteSurveysDialog: {
+      title: string;
+      text: string;
+    };
   };
 
   /**
