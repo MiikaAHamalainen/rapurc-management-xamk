@@ -3,7 +3,10 @@
 
   "generic": {
     "addNew": "Lisää uusi",
-    "notImplemented": "Not yet implemented"
+    "notImplemented": "Not yet implemented",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
 
   "errorHandling": {
@@ -15,6 +18,14 @@
       "find": "Error while finding survey",
       "update": "Error while updating survey",
       "delete": "Error while deleting survey"
+    },
+    "buildings": {
+      "list": "Error while listing locations"
+    },
+    "owners": {
+      "list": "Error while listing owners",
+      "create": "Error while creating owner information",
+      "update": "Error while updating owner information"
     }
   },
 
@@ -31,7 +42,18 @@
     "showAll": "Show all",
     "showMine": "Show my surveys",
     "newSurvey": "New survey",
-    "filter": "Filter"
+    "filter": "Filter",
+    "dataGridColumns": {
+      "buildingId": "Building ID",
+      "classificationCode": "Classification code",
+      "ownerName": "Owner name",
+      "city": "City",
+      "streetAddress": "Street address"
+    },
+    "deleteSurveysDialog": {
+      "title": "Delete survey(s)",
+      "text": "Are you sure you want to delete these surveys?"
+    }
   },
 
   "newSurveyScreen": {
@@ -80,6 +102,17 @@
     "surveyStatus": {
       "draft": "Incomplete",
       "done": "Ready"
+    },
+    "owner": {
+      "title": "Owner information",
+      "name": "Name",
+      "tradeName": "Trade name",
+      "contactPerson": "Contact person",
+      "firstName": "First name",
+      "surname": "Surname",
+      "occupation": "Occupation",
+      "phone": "Phone",
+      "email": "E-mail address"
     }
   }
 }

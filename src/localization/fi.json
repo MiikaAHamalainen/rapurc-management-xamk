@@ -3,7 +3,10 @@
 
   "generic": {
     "addNew": "Lisää uusi",
-    "notImplemented": "Ei vielä toteutettu"
+    "notImplemented": "Ei vielä toteutettu",
+    "confirm": "Vahvista",
+    "cancel": "Peruuta",
+    "delete": "Poista"
   },
 
   "errorHandling": {
@@ -15,6 +18,14 @@
       "find": "Virhe haettassa kartoitusta",
       "update": "Virhe päivitettäessä kartoitusta",
       "delete": "Virhe poistettaessa karoitusta"
+    },
+    "buildings": {
+      "list": "Virhe listattaessa rakennuksia"
+    },
+    "owners": {
+      "list": "Virhe listattaessa omistajia",
+      "create": "virhe luotaessa omistajatietoja",
+      "update": "Virhe päivitettäessä omistajan tietoja"
     }
   },
 
@@ -31,13 +42,24 @@
     "showAll": "Näytä kaikki",
     "showMine": "Näytä omat",
     "newSurvey": "Uusi kartoitus",
-    "filter": "Suodata"
+    "filter": "Suodata",
+    "dataGridColumns": {
+      "buildingId": "Rakennustunnus",
+      "classificationCode": "Rakennusluokka",
+      "ownerName": "Omistaja",
+      "city": "Paikkakunta",
+      "streetAddress": "Osoite"
+    },
+    "deleteSurveysDialog": {
+      "title": "Poista kartoitus",
+      "text": "Haluatko varmasti poistaa valitut kartoitukset?"
+    }
   },
 
   "newSurveyScreen": {
     "title": "Uusi kartoitus",
     "description": "Hae kartoituskohdetta osoitteella, kiinteistötunnuksella tai rakennustunnuksella",
-    "address": "Address",
+    "address": "Osoite",
     "propertyId": "Kiinteistötunnus",
     "buildingId": "Rakennustunnus",
     "search": "Hae",
@@ -80,6 +102,17 @@
     "surveyStatus": {
       "draft": "Keskeneräinen",
       "done": "Valmis"
+    },
+    "owner": {
+      "title": "Omistajan tiedot",
+      "name": "Nimi",
+      "tradeName": "Toiminimi",
+      "contactPerson": "Yhteyshenkilö",
+      "firstName": "Etunimi",
+      "surname": "Sukunimi",
+      "occupation": "Ammatti",
+      "phone": "Puhelinnumero",
+      "email": "Sähköpostiosoite"
     }
   }
 }
