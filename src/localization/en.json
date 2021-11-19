@@ -2,7 +2,7 @@
   "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
-    "addNew": "Lisää uusi",
+    "addNew": "Add new",
     "notImplemented": "Not yet implemented",
     "confirm": "Confirm",
     "cancel": "Cancel",
@@ -26,6 +26,11 @@
       "list": "Error while listing owners",
       "create": "Error while creating owner information",
       "update": "Error while updating owner information"
+    },
+    "materials": {
+      "list": "Error while listing materials and building parts",
+      "create": "Error while creating material or building part",
+      "delete": "Error while deleting material or building part"
     }
   },
 
@@ -95,6 +100,14 @@
         "hazardousMaterials": "Hazardous material category",
         "hazardousMaterialsAdditionalInfo": "Hazardous material additional information"
       }
+    },
+    "addNewReusableMaterialDialog": {
+      "title": "Add new building part or material",
+      "text": "Name of the building part or material:"
+    },
+    "deleteReusableMaterialDialog": {
+      "title": "Delete building part or material",
+      "text": "Are you sure you want to delete building part or material:"
     }
   },
 

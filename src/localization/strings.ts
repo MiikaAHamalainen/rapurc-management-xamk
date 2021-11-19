@@ -44,6 +44,11 @@ export interface Localized extends LocalizedStringsMethods {
       create: string;
       update: string;
     };
+    materials: {
+      list: string;
+      create: string;
+      delete: string;
+    };
   };
 
   /**
@@ -127,6 +132,14 @@ export interface Localized extends LocalizedStringsMethods {
         hazardousMaterials: string;
         hazardousMaterialsAdditionalInfo: string;
       }
+    }
+    addNewReusableMaterialDialog: {
+      title: string;
+      text: string;
+    }
+    deleteReusableMaterialDialog: {
+      title: string;
+      text: string;
     }
   };
 

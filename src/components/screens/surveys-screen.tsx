@@ -67,7 +67,7 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-      * Fetches and returns owner with given survey ID
+   * Fetches and returns owner with given survey ID
    * 
    * @param surveyId survey id
    */
