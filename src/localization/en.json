@@ -112,6 +112,11 @@
       "occupation": "Occupation",
       "phone": "Phone",
       "email": "E-mail address"
+    },
+    "otherStructures": {
+      "title": "Other demolished buildings and structures",
+      "description": "Add buildings and structures that are going to be demolished with the building.",
+      "add": "Add building"
     }
   }
 }

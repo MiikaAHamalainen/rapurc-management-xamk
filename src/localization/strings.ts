@@ -147,6 +147,11 @@ export interface Localized extends LocalizedStringsMethods {
       occupation: string;
       phone: string;
       email: string;
+    },
+    otherStructures: {
+      title: string;
+      description: string;
+      add: string;
     }
   }
 }

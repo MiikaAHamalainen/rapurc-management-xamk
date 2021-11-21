@@ -2,6 +2,7 @@ import Building from "components/survey/building";
 import Owner from "components/survey/owner";
 import * as React from "react";
 import { Route, Routes } from "react-router-dom";
+import OtherStructures from "../survey/other-structures";
 
 /**
  * Component properties
@@ -27,6 +28,10 @@ const SurveyRoutes: React.FC<Props> = ({ surveyId }) => {
       <Route
         path="building"
         element={ <Building/> }
+      />
+      <Route
+        path="otherStructures"
+        element={ <OtherStructures/> }
       />
     </Routes>
   );

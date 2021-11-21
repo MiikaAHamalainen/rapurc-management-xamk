@@ -112,6 +112,11 @@
       "occupation": "Ammatti",
       "phone": "Puhelinnumero",
       "email": "Sähköpostiosoite"
+    },
+    "otherStructures": {
+      "title": "Muut purettavat rakennukset / rakennelmat",
+      "description": "Jos purkamisen yhteydessä puretaan myös muita samaan kiinteistöön kuuluvia rakennuksia tai rakennelmia, lisää ne tähän listaan.",
+      "add": "Lisää rakennus"
     }
   }
 }
