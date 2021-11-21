@@ -147,6 +147,22 @@ export interface Localized extends LocalizedStringsMethods {
       occupation: string;
       phone: string;
       email: string;
+    },
+    info: {
+      title: string;
+      demolitionInfo: string;
+      surveyors: string;
+      demolitionScope: string;
+      startDate: string;
+      endDate: string;
+      addSurveyor: string;
+      firstName: string;
+      surName: string;
+      organisation: string;
+      role: string;
+      phone: string;
+      email: string;
+      reportingDate: string;
     }
   }
 }

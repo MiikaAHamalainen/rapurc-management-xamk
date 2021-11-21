@@ -30,7 +30,7 @@ const SurveyRoutes: React.FC<Props> = ({ surveyId }) => {
         element={ <Building/> }
       />
       <Route
-        path="survey-information"
+        path="info"
         element={ <SurveyInformation/> }
       />
     </Routes>

@@ -112,6 +112,22 @@
       "occupation": "Ammatti",
       "phone": "Puhelinnumero",
       "email": "Sähköpostiosoite"
+    },
+    "info": {
+      "title": "Kartoituksen tiedot",
+      "demolitionInfo": "Purkutiedot",
+      "surveyors": "Kartoittajat",
+      "demolitionScope": "Purkamisen laajuus",
+      "startDate": "Aloitusajankohta",
+      "endDate": "Lopetusajankohta",
+      "addSurveyor": "Lisää kartoittaja",
+      "firstName": "Etunimi",
+      "surName": "Sukunimi",
+      "organisation": "Yritys",
+      "role": "Rooli",
+      "phone": "Puhelin",
+      "email": "Sähköpostiosoite",
+      "reportingDate": "Raportointipäivä"
     }
   }
 }
