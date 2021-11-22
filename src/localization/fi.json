@@ -36,6 +36,16 @@
       "list": "Virhe ladattaessa jatkokäsittelyjä",
       "create": "Virhe luotaessa jatkokäsittelyä",
       "delete": "Virhe poistettaessa jatkokäsittelyä"
+    },
+    "wasteSpecifiers": {
+      "list": "Virhe ladattaessa haitta-ainetarkenteita",
+      "create": "Virhe luotaessa haitta-ainetarkennetta",
+      "delete": "Virhe poistettaessa haitta-ainetarkennetta"
+    },
+    "wasteCategories": {
+      "list": "Virhe ladattaessa haitta-ainekategorioita",
+      "create": "Virhe luotaessa haitta-ainekategoriaa",
+      "delete": "Virhe poistettaessa haitta-ainekategoriaa"
     }
   },
 
@@ -121,7 +131,24 @@
     "deletePostProcessDialog": {
       "title": "Poista jatkokäsittely",
       "text": "Haluatko varmasti poistaa jatkokäsittelyn:"
-    }  
+    },
+    "addNewWasteSpecifierDialog": {
+      "title": "Lisää haitta-ainetarkenne",
+      "text": "Haitta-ainetarkenteen nimi:"
+    },
+    "deleteWasteSpecifierDialog": {
+      "title": "Poista haitta-ainetarkenne",
+      "text": "Haluatko varmasti poistaa haitta-ainetarkenteen:"
+    },
+    "addNewWasteCategoryDialog": {
+      "title": "Lisää haitta-ainekategoria",
+      "text1": "Haitta-ainekategorian nimi:",
+      "text2": "EWC-koodi:"
+    },
+    "deleteWasteCategoryDialog": {
+      "title": "Poista haitta-ainekategoria",
+      "text": "Haluatko varmasti poistaa haitta-ainekategorian:"
+    }
   },
 
   "survey": {

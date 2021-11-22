@@ -54,6 +54,16 @@ export interface Localized extends LocalizedStringsMethods {
       create: string;
       delete: string;
     };
+    wasteSpecifiers: {
+      list: string;
+      create: string;
+      delete: string;
+    };
+    wasteCategories: {
+      list: string;
+      create: string;
+      delete: string;
+    };
   };
 
   /**
@@ -151,6 +161,23 @@ export interface Localized extends LocalizedStringsMethods {
       text: string;
     }
     deletePostProcessDialog: {
+      title: string;
+      text: string;
+    },
+    addNewWasteSpecifierDialog: {
+      title: string;
+      text: string;
+    }
+    deleteWasteSpecifierDialog: {
+      title: string;
+      text: string;
+    },
+    addNewWasteCategoryDialog: {
+      title: string;
+      text1: string;
+      text2: string;
+    }
+    deleteWasteCategoryDialog: {
       title: string;
       text: string;
     }

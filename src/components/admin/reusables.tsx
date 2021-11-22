@@ -38,6 +38,7 @@ const Reusables: React.FC = () => {
       setLoading(false);
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.list, error);
+      setLoading(false);
     }
   };
 
@@ -74,7 +75,7 @@ const Reusables: React.FC = () => {
   /**
    * Event handler delete icon click
    *
-   * @param index material index
+   * @param material material
    */
   const deleteIconClick = (material : ReusableMaterial) => {
     setDeletableMaterial(material);
@@ -103,11 +104,9 @@ const Reusables: React.FC = () => {
   };
 
   /**
-   * Item for reusable material
+   * Items for reusable material
    * 
-   * @param name
-   * @param code 
-   * @returns reusable material item
+   * @returns reusable material items
    */
   const reusableMaterialItems = () => (
     materials.map(material =>

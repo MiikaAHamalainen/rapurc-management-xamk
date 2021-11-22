@@ -36,6 +36,16 @@
       "list": "Error while listing post processings",
       "create": "Error while creating post processing",
       "delete": "Error while deleting post processing"
+    },
+    "wasteSpecifiers": {
+      "list": "Error while listing waste specifiers",
+      "create": "Error while creating waste specifier",
+      "delete": "Error while deleting waste specifier"
+    },
+    "wasteCategories": {
+      "list": "Error while listing waste categories",
+      "create": "Error while creating waste category",
+      "delete": "Error while deleting waste category"
     }
   },
 
@@ -121,7 +131,24 @@
     "deletePostProcessDialog": {
       "title": "Delete post processing",
       "text": "Are you sure you want to delete post process:"
-    } 
+    },
+    "addNewWasteSpecifierDialog": {
+      "title": "Add new waste specifier",
+      "text": "Name of the waste specifier:"
+    },
+    "deleteWasteSpecifierDialog": {
+      "title": "Delete waste specifier",
+      "text": "Are you sure you want to delete waste specifier:"
+    },
+    "addNewWasteCategoryDialog": {
+      "title": "Add new waste category",
+      "text1": "Name of the waste category:",
+      "text2": "EWC-code:"
+    },
+    "deleteWasteCategoryDialog": {
+      "title": "Delete waste category",
+      "text": "Are you sure you want to delete waste category:"
+    }
   },
 
   "survey": {

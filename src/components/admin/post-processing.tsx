@@ -18,8 +18,8 @@ const PostProcessing: React.FC = () => {
   const keycloak = useAppSelector(selectKeycloak);
   const [ addingPostProcessing, setAddingPostProcessing ] = React.useState(false);
   const [ newPostProcessName, setNewPostProcessName ] = React.useState<string>();
-  const [ deletingPostProcess, setdeletingPostProcess ] = React.useState(false);
-  const [ deletablePostProcess, setdeletablePostProcess ] = React.useState<Usage>();
+  const [ deletingPostProcess, setDeletingPostProcess ] = React.useState(false);
+  const [ deletablePostProcess, setDeletablePostProcess ] = React.useState<Usage>();
   const [ postProcesses, setPostProcesses ] = React.useState<Usage[]>([]);
   const [ loading, setLoading ] = React.useState(false);
 
@@ -38,6 +38,7 @@ const PostProcessing: React.FC = () => {
       setLoading(false);
     } catch (error) {
       errorContext.setError(strings.errorHandling.postProcess.list, error);
+      setLoading(false);
     }
   };
 
@@ -77,8 +78,8 @@ const PostProcessing: React.FC = () => {
    * @param index material index
    */
   const deleteIconClick = (material : Usage) => {
-    setdeletablePostProcess(material);
-    setdeletingPostProcess(true);
+    setDeletablePostProcess(material);
+    setDeletingPostProcess(true);
   };
 
   /**
@@ -95,11 +96,11 @@ const PostProcessing: React.FC = () => {
       const newPostProcesses = [ ...postProcesses ];
       newPostProcesses.splice(deletableIndex, 1);
       setPostProcesses(newPostProcesses);
-      setdeletablePostProcess(undefined);
+      setDeletablePostProcess(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.postProcess.delete, error);
     }
-    setdeletingPostProcess(false);
+    setDeletingPostProcess(false);
   };
 
   /**
@@ -152,8 +153,8 @@ const PostProcessing: React.FC = () => {
     <GenericDialog
       error={ false }
       open={ deletingPostProcess }
-      onClose={ () => setdeletingPostProcess(false) }
-      onCancel={ () => setdeletingPostProcess(false) }
+      onClose={ () => setDeletingPostProcess(false) }
+      onCancel={ () => setDeletingPostProcess(false) }
       onConfirm={ onDeletePostProcessConfirm }
       title={ strings.adminScreen.deletePostProcessDialog.title }
       positiveButtonText={ strings.generic.confirm }
