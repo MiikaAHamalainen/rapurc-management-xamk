@@ -46,6 +46,11 @@
       "list": "Virhe ladattaessa haitta-ainekategorioita",
       "create": "Virhe luotaessa haitta-ainekategoriaa",
       "delete": "Virhe poistettaessa haitta-ainekategoriaa"
+    },
+    "wasteMaterials": {
+      "list": "Virhe ladattaessa rakennus- ja purkujätemateriaaleja",
+      "create": "Virhe luotaessa rakennus- tai purkujätemateriaalia",
+      "delete": "Virhe poistettaessa rakennus- tai purkujätemateriaalia"
     }
   },
 
@@ -148,6 +153,15 @@
     "deleteWasteCategoryDialog": {
       "title": "Poista haitta-ainekategoria",
       "text": "Haluatko varmasti poistaa haitta-ainekategorian:"
+    },
+    "addNewWasteMaterialDialog": {
+      "title": "Lisää rakennus- tai purkujätemateriaali",
+      "text1": "Rakennus- tai purkujätemateriaalin nimi:",
+      "text2": "EWC-koodi:"
+    },
+    "deleteWasteMaterialDialog": {
+      "title": "Poista rakennus- tai purkujätemateriaali",
+      "text": "Haluatko varmasti poistaa rakennus- tai purkujätemateriaalin:"
     }
   },
 

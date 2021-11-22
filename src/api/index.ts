@@ -1,4 +1,4 @@
-import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, UsagesApi, WasteSpecifiersApi, WasteCategoryApi } from "../generated/client";
+import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, UsagesApi, WasteSpecifiersApi, WasteCategoryApi, WasteMaterialApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
@@ -6,20 +6,30 @@ import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi
 export default class Api {
 
   /**
-   * Gets initialized usages API
+   * Gets initialized waste material API
    *
    * @param accessToken access token
-   * @returns initialized surveys API
+   * @returns initialized waste material API
+   */
+  public static getWasteMaterialApi = (accessToken: string) => {
+    return new WasteMaterialApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized waste category API
+   *
+   * @param accessToken access token
+   * @returns initialized waste category API
    */
   public static getWasteCategoryApi = (accessToken: string) => {
     return new WasteCategoryApi(Api.getConfiguration(accessToken));
   };
 
   /**
-   * Gets initialized usages API
+   * Gets initialized waste specifiers API
    *
    * @param accessToken access token
-   * @returns initialized surveys API
+   * @returns initialized waste specifiers API
    */
   public static getWasteSpecifiersApi = (accessToken: string) => {
     return new WasteSpecifiersApi(Api.getConfiguration(accessToken));
@@ -29,7 +39,7 @@ export default class Api {
    * Gets initialized usages API
    *
    * @param accessToken access token
-   * @returns initialized surveys API
+   * @returns initialized usages API
    */
   public static getUsagesApi = (accessToken: string) => {
     return new UsagesApi(Api.getConfiguration(accessToken));
@@ -39,7 +49,7 @@ export default class Api {
    * Gets initialized reusable materials API
    *
    * @param accessToken access token
-   * @returns initialized surveys API
+   * @returns initialized reusable materials API
    */
   public static getReusableMaterialApi = (accessToken: string) => {
     return new ReusableMaterialApi(Api.getConfiguration(accessToken));

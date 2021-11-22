@@ -25,7 +25,7 @@ const HazardousMaterials: React.FC = () => {
   const [ loading, setLoading ] = React.useState(false);
 
   /**
-   * Fetches list of reusable materials and building parts
+   * Fetches list of waste categories
    */
   const fetchWasteCategories = async () => {
     setLoading(true);
@@ -77,7 +77,7 @@ const HazardousMaterials: React.FC = () => {
   /**
    * Event handler delete icon click
    *
-   * @param category material
+   * @param category category
    */
   const deleteIconClick = (category : WasteCategory) => {
     setDeletableCategory(category);

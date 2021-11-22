@@ -46,6 +46,11 @@
       "list": "Error while listing waste categories",
       "create": "Error while creating waste category",
       "delete": "Error while deleting waste category"
+    },
+    "wasteMaterials": {
+      "list": "Error while listing waste materials",
+      "create": "Error while creating waste material",
+      "delete": "Error while deleting waste material"
     }
   },
 
@@ -148,6 +153,15 @@
     "deleteWasteCategoryDialog": {
       "title": "Delete waste category",
       "text": "Are you sure you want to delete waste category:"
+    },
+    "addNewWasteMaterialDialog": {
+      "title": "Add new waste material",
+      "text1": "Name of the waste material:",
+      "text2": "EWC-code:"
+    },
+    "deleteWasteMaterialDialog": {
+      "title": "Delete waste material",
+      "text": "Are you sure you want to delete waste material:"
     }
   },
 

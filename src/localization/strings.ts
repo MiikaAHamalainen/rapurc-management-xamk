@@ -64,6 +64,11 @@ export interface Localized extends LocalizedStringsMethods {
       create: string;
       delete: string;
     };
+    wasteMaterials: {
+      list: string;
+      create: string;
+      delete: string;
+    };
   };
 
   /**
@@ -178,6 +183,15 @@ export interface Localized extends LocalizedStringsMethods {
       text2: string;
     }
     deleteWasteCategoryDialog: {
+      title: string;
+      text: string;
+    },
+    addNewWasteMaterialDialog: {
+      title: string;
+      text1: string;
+      text2: string;
+    }
+    deleteWasteMaterialDialog: {
       title: string;
       text: string;
     }
