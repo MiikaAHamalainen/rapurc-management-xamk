@@ -31,6 +31,11 @@
       "list": "Error while listing materials and building parts",
       "create": "Error while creating material or building part",
       "delete": "Error while deleting material or building part"
+    },
+    "postProcess": {
+      "list": "Error while listing post processings",
+      "create": "Error while creating post processing",
+      "delete": "Error while deleting post processing"
     }
   },
 
@@ -108,7 +113,15 @@
     "deleteReusableMaterialDialog": {
       "title": "Delete building part or material",
       "text": "Are you sure you want to delete building part or material:"
-    }
+    },
+    "addNewPostProcessDialog": {
+      "title": "Add new post processing",
+      "text": "Name of the post process:"
+    },
+    "deletePostProcessDialog": {
+      "title": "Delete post processing",
+      "text": "Are you sure you want to delete post process:"
+    } 
   },
 
   "survey": {

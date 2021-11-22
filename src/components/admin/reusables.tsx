@@ -1,5 +1,5 @@
 import { Delete } from "@mui/icons-material";
-import { Button, IconButton, List, ListItemSecondaryAction, Stack, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, IconButton, List, ListItemSecondaryAction, Stack, TextField, Typography } from "@mui/material";
 import GenericDialog from "components/generic/generic-dialog";
 import strings from "localization/strings";
 import * as React from "react";
@@ -16,27 +16,37 @@ import { ReusableMaterial } from "generated/client";
 const Reusables: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const keycloak = useAppSelector(selectKeycloak);
-  const [ addingReusableMaterial, setAddingReusableMaterial ] = React.useState(false);
-  const [ deletingReusableMaterial, setDeletingReusableMaterial ] = React.useState(false);
-  const [ deletableMaterialId, setDeletableMaterialId ] = React.useState<string>();
-  const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
+  const [ addingMaterial, setAddingMaterial ] = React.useState(false);
+  const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
+  const [ deletableMaterial, setDeletableMaterial ] = React.useState<ReusableMaterial>();
+  const [ materials, setMaterials ] = React.useState<ReusableMaterial[]>([]);
   const [ newMaterialName, setNewMaterialName ] = React.useState<string>();
+  const [ loading, setLoading ] = React.useState(false);
 
   /**
    * Fetches list of reusable materials and building parts
    */
   const fetchReusableMaterials = async () => {
+    setLoading(true);
     if (!keycloak?.token) {
       return;
     }
 
     try {
-      const materials = await Api.getReusableMaterialApi(keycloak.token).listReusableMaterials();
-      setReusableMaterials(materials);
+      const fetchedMaterials = await Api.getReusableMaterialApi(keycloak.token).listReusableMaterials();
+      setMaterials(fetchedMaterials);
+      setLoading(false);
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.list, error);
     }
   };
+
+  /**
+   * Effect that loads component data
+   */
+  React.useEffect(() => {
+    fetchReusableMaterials();
+  }, []);
   
   /**
    * Event handler for adding reusable material confirm
@@ -53,12 +63,12 @@ const Reusables: React.FC = () => {
           metadata: {}
         }
       });
-      setReusableMaterials([ ...reusableMaterials, createdReusableMaterial ]);
+      setMaterials([ ...materials, createdReusableMaterial ]);
       setNewMaterialName(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.create, error);
     }
-    setAddingReusableMaterial(false);
+    setAddingMaterial(false);
   };
 
   /**
@@ -66,30 +76,30 @@ const Reusables: React.FC = () => {
    *
    * @param index material index
    */
-  const deleteIconClick = (id: string | undefined) => {
-    setDeletableMaterialId(id);
-    setDeletingReusableMaterial(true);
+  const deleteIconClick = (material : ReusableMaterial) => {
+    setDeletableMaterial(material);
+    setDeletingMaterial(true);
   };
 
   /**
    * Event handler for deleting reusable material confirm
    */
   const onDeleteReusableMaterialConfirm = async () => {
-    if (!keycloak?.token || !deletableMaterialId) {
+    if (!keycloak?.token || !deletableMaterial?.id) {
       return;
     }
 
     try {
-      await Api.getReusableMaterialApi(keycloak.token).deleteReusableMaterial({ reusableMaterialId: deletableMaterialId });
-      const deletableIndex = reusableMaterials.findIndex(material => material.id === deletableMaterialId);
-      const newReusableMaterials = [ ...reusableMaterials ];
+      await Api.getReusableMaterialApi(keycloak.token).deleteReusableMaterial({ reusableMaterialId: deletableMaterial?.id });
+      const deletableIndex = materials.findIndex(material => material.id === deletableMaterial?.id);
+      const newReusableMaterials = [ ...materials ];
       newReusableMaterials.splice(deletableIndex, 1);
-      setReusableMaterials(newReusableMaterials);
-      setDeletableMaterialId(undefined);
+      setMaterials(newReusableMaterials);
+      setDeletableMaterial(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.delete, error);
     }
-    setDeletingReusableMaterial(false);
+    setDeletingMaterial(false);
   };
 
   /**
@@ -99,12 +109,12 @@ const Reusables: React.FC = () => {
    * @param code 
    * @returns reusable material item
    */
-  const reusableMaterialItem = () => (
-    reusableMaterials.map(material =>
+  const reusableMaterialItems = () => (
+    materials.map(material =>
       <MaterialItem key={ material.id }>
         <MaterialText primary={ material.name }/>
         <ListItemSecondaryAction>
-          <IconButton onClick={ () => deleteIconClick(material.id) }>
+          <IconButton onClick={ () => deleteIconClick(material) }>
             <Delete/>
           </IconButton>
         </ListItemSecondaryAction>
@@ -118,9 +128,9 @@ const Reusables: React.FC = () => {
   const renderAddReusableMaterialDialog = () => (
     <GenericDialog
       error={ false }
-      open={ addingReusableMaterial }
-      onClose={ () => setAddingReusableMaterial(false) }
-      onCancel={ () => setAddingReusableMaterial(false) }
+      open={ addingMaterial }
+      onClose={ () => setAddingMaterial(false) }
+      onCancel={ () => setAddingMaterial(false) }
       onConfirm={ onAddReusableMaterialConfirm }
       title={ strings.adminScreen.addNewReusableMaterialDialog.title }
       positiveButtonText={ strings.generic.confirm }
@@ -143,9 +153,9 @@ const Reusables: React.FC = () => {
   const renderDeleteReusableMaterialDialog = () => (
     <GenericDialog
       error={ false }
-      open={ deletingReusableMaterial }
-      onClose={ () => setDeletingReusableMaterial(false) }
-      onCancel={ () => setDeletingReusableMaterial(false) }
+      open={ deletingMaterial }
+      onClose={ () => setDeletingMaterial(false) }
+      onCancel={ () => setDeletingMaterial(false) }
       onConfirm={ onDeleteReusableMaterialConfirm }
       title={ strings.adminScreen.deleteReusableMaterialDialog.title }
       positiveButtonText={ strings.generic.confirm }
@@ -154,8 +164,8 @@ const Reusables: React.FC = () => {
       <Typography>
         { strings.adminScreen.deleteReusableMaterialDialog.text }
       </Typography>
-      <Typography>
-        { deletableMaterialId }
+      <Typography variant="subtitle1">
+        { deletableMaterial?.name }
       </Typography>
     </GenericDialog>
   );
@@ -164,13 +174,13 @@ const Reusables: React.FC = () => {
    * Renders list of materials
    */
   const renderList = () => {
-    if (reusableMaterials.length < 1) {
-      fetchReusableMaterials();
+    if (loading) {
+      return <CircularProgress color="primary" size={ 60 }/>;
     }
 
     return (
       <List sx={{ pt: 4 }}>
-        { reusableMaterialItem() }
+        { reusableMaterialItems() }
       </List>
     );
   };
@@ -183,7 +193,7 @@ const Reusables: React.FC = () => {
         </Typography>
         <Button
           color="secondary"
-          onClick={ () => setAddingReusableMaterial(true) }
+          onClick={ () => setAddingMaterial(true) }
         >
           { strings.generic.addNew }
         </Button>
