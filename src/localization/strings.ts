@@ -70,6 +70,7 @@ export interface Localized extends LocalizedStringsMethods {
     newSurvey: string;
     filter: string;
     dataGridColumns: {
+      status: string;
       buildingId: string;
       classificationCode: string;
       ownerName: string;

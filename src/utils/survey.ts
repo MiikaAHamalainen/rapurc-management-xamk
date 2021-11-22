@@ -16,6 +16,7 @@ export default class SurveyUtils {
 
     const surveyWithInfo: SurveyWithInfo = {
       id: survey.id,
+      status: survey.status,
       ownerId: ownerInformation?.id,
       buildingId: building?.id,
       classificationCode: building?.classificationCode,

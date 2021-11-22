@@ -47,6 +47,7 @@
     "newSurvey": "Uusi kartoitus",
     "filter": "Suodata",
     "dataGridColumns": {
+      "status": "Tila",
       "buildingId": "Rakennustunnus",
       "classificationCode": "Rakennusluokka",
       "ownerName": "Omistaja",
