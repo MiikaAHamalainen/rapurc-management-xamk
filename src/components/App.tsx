@@ -29,7 +29,7 @@ const App: React.FC = () => {
               element={ <SurveyScreen/> }
             />
             <Route
-              path="/admin"
+              path="/admin/*"
               element={ <AdminScreen/> }
             />
             <Route path="/" element={ <SurveysScreen/> }/>

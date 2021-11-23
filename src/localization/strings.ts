@@ -16,6 +16,7 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to generic words
    */
   generic: {
+    addNew: string;
     notImplemented: string;
     confirm: string;
     cancel: string;
@@ -41,6 +42,12 @@ export interface Localized extends LocalizedStringsMethods {
     owners: {
       list: string;
       create: string;
+      update: string;
+    };
+    materials: {
+      list: string;
+      create: string;
+      delete: string;
       update: string;
     };
   };
@@ -126,6 +133,18 @@ export interface Localized extends LocalizedStringsMethods {
         hazardousMaterials: string;
         hazardousMaterialsAdditionalInfo: string;
       }
+    }
+    addNewReusableMaterialDialog: {
+      title: string;
+      text: string;
+    }
+    deleteReusableMaterialDialog: {
+      title: string;
+      text: string;
+    },
+    updateReusableMaterialDialog: {
+      title: string;
+      text: string;
     }
   };
 
