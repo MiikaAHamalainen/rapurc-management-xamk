@@ -6,16 +6,6 @@ import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi
 export default class Api {
 
   /**
-   * Gets initialized waste material API
-   *
-   * @param accessToken access token
-   * @returns initialized waste material API
-   */
-  public static getWasteMaterialApi = (accessToken: string) => {
-    return new WasteMaterialApi(Api.getConfiguration(accessToken));
-  };
-
-  /**
    * Gets initialized waste category API
    *
    * @param accessToken access token
@@ -23,6 +13,16 @@ export default class Api {
    */
   public static getWasteCategoryApi = (accessToken: string) => {
     return new WasteCategoryApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized waste material API
+   *
+   * @param accessToken access token
+   * @returns initialized waste material API
+   */
+  public static getWasteMaterialApi = (accessToken: string) => {
+    return new WasteMaterialApi(Api.getConfiguration(accessToken));
   };
 
   /**

@@ -11,7 +11,7 @@ import { MaterialItem, MaterialText } from "../../styled/layout-components/mater
 import { WasteSpecifier } from "generated/client";
 
 /**
- * Component for hazardius material info dropdown menu editor
+ * Component for hazardous material info dropdown menu editor
  */
 const HazardousMaterialsInfo: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
@@ -24,7 +24,7 @@ const HazardousMaterialsInfo: React.FC = () => {
   const [ loading, setLoading ] = React.useState(false);
 
   /**
-   * Fetches list of hazardius material info
+   * Fetches list of hazardous material info
    */
   const fetchWasteSpecifiers = async () => {
     setLoading(true);

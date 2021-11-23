@@ -59,10 +59,22 @@ const Waste: React.FC = () => {
     }
 
     try {
+      const test = await Api.getWasteCategoryApi(keycloak.token).createWasteCategory({
+        wasteCategory: {
+          ewcCode: "1701",
+          name: "Category name",
+          metadata: {}
+        }
+      });
+
+      if (!test.id) {
+        return;
+      }
+
       const createdWasteMaterial = await Api.getWasteMaterialApi(keycloak.token).createWasteMaterial({
         wasteMaterial: {
           name: newWasteName,
-          wasteCategoryId: newEwcCode,
+          wasteCategoryId: test.id,
           ewcSpecificationCode: newEwcCode.slice(-2),
           metadata: {}
         }

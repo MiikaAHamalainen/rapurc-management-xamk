@@ -30,7 +30,8 @@
     "materials": {
       "list": "Virhe listattaessa materiaaleja ja rakennusosia",
       "create": "Virhe luotaessa materiaalia tai rakennusosaa",
-      "delete": "Virhe poistettaessa materiaalia tai rakennusosaa"
+      "delete": "Virhe poistettaessa materiaalia tai rakennusosaa",
+      "update": "Virhe päivitettäessä materiaalia tai rakennusosaa"
     },
     "postProcess": {
       "list": "Virhe ladattaessa jatkokäsittelyjä",
@@ -128,6 +129,10 @@
     "deleteReusableMaterialDialog": {
       "title": "Poista rakennusosa tai -materiaali",
       "text": "Haluatko varmasti poistaa rakennusosan tai -materiaalin:"
+    },
+    "updateReusableMaterialDialog": {
+      "title": "Päivitä rakennusosa tai -materiaali",
+      "text": "Rakennusosan tai -materiaalin nimi:"
     },
     "addNewPostProcessDialog": {
       "title": "Lisää jatkokäsittely",

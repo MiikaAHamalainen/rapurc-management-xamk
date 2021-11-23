@@ -1,4 +1,4 @@
-import { Delete } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import { Button, CircularProgress, IconButton, List, ListItemSecondaryAction, Stack, TextField, Typography } from "@mui/material";
 import GenericDialog from "components/generic/generic-dialog";
 import strings from "localization/strings";
@@ -19,6 +19,8 @@ const Reusables: React.FC = () => {
   const [ addingMaterial, setAddingMaterial ] = React.useState(false);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
   const [ deletableMaterial, setDeletableMaterial ] = React.useState<ReusableMaterial>();
+  const [ editingMaterial, setEditingMaterial ] = React.useState(false);
+  const [ editableMaterial, setEditableMaterial ] = React.useState<ReusableMaterial>();
   const [ materials, setMaterials ] = React.useState<ReusableMaterial[]>([]);
   const [ newMaterialName, setNewMaterialName ] = React.useState<string>();
   const [ loading, setLoading ] = React.useState(false);
@@ -83,6 +85,16 @@ const Reusables: React.FC = () => {
   };
 
   /**
+   * Event handler edit icon click
+   *
+   * @param material material
+   */
+  const editIconClick = (material : ReusableMaterial) => {
+    setEditableMaterial(material);
+    setEditingMaterial(true);
+  };
+
+  /**
    * Event handler for deleting reusable material confirm
    */
   const onDeleteReusableMaterialConfirm = async () => {
@@ -104,6 +116,29 @@ const Reusables: React.FC = () => {
   };
 
   /**
+   * Event handler for editing reusable material confirm
+   */
+  const onEditReusableMaterialConfirm = async () => {
+    if (!keycloak?.token || !editableMaterial?.id) {
+      return;
+    }
+
+    try {
+      await Api.getReusableMaterialApi(keycloak.token).updateReusableMaterial({
+        reusableMaterialId: editableMaterial.id, reusableMaterial: editableMaterial
+      });
+      const editableIndex = materials.findIndex(material => material.id === editableMaterial?.id);
+      const newReusableMaterials = [ ...materials ];
+      newReusableMaterials[editableIndex] = editableMaterial;
+      setMaterials(newReusableMaterials);
+      setEditableMaterial(undefined);
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.materials.update, error);
+    }
+    setEditingMaterial(false);
+  };
+
+  /**
    * Items for reusable material
    * 
    * @returns reusable material items
@@ -115,6 +150,9 @@ const Reusables: React.FC = () => {
         <ListItemSecondaryAction>
           <IconButton onClick={ () => deleteIconClick(material) }>
             <Delete/>
+          </IconButton>
+          <IconButton onClick={ () => editIconClick(material) }>
+            <Edit/>
           </IconButton>
         </ListItemSecondaryAction>
       </MaterialItem>
@@ -170,6 +208,36 @@ const Reusables: React.FC = () => {
   );
 
   /**
+   * Renders edit reusable dialog
+   */
+  const renderEditReusableMaterialDialog = () => (
+    <GenericDialog
+      error={ false }
+      open={ editingMaterial }
+      onClose={ () => setEditingMaterial(false) }
+      onCancel={ () => setEditingMaterial(false) }
+      onConfirm={ onEditReusableMaterialConfirm }
+      title={ strings.adminScreen.updateReusableMaterialDialog.title }
+      positiveButtonText={ strings.generic.confirm }
+      cancelButtonText={ strings.generic.cancel }
+    >
+      <Typography variant="subtitle1">
+        { strings.adminScreen.updateReusableMaterialDialog.text }
+      </Typography>
+      <TextField
+        value={ editableMaterial?.name }
+        color="secondary"
+        variant="standard"
+        onChange={ event => setEditableMaterial({
+          id: editableMaterial?.id,
+          name: event.target.value,
+          metadata: editableMaterial?.metadata || {}
+        }) }
+      />
+    </GenericDialog>
+  );
+
+  /**
    * Renders list of materials
    */
   const renderList = () => {
@@ -200,6 +268,7 @@ const Reusables: React.FC = () => {
       { renderList() }
       { renderAddReusableMaterialDialog() }
       { renderDeleteReusableMaterialDialog() }
+      { renderEditReusableMaterialDialog() }
     </>
   );
 };

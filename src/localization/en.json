@@ -30,7 +30,8 @@
     "materials": {
       "list": "Error while listing materials and building parts",
       "create": "Error while creating material or building part",
-      "delete": "Error while deleting material or building part"
+      "delete": "Error while deleting material or building part",
+      "update": "Error while updating material or building part"
     },
     "postProcess": {
       "list": "Error while listing post processings",
@@ -128,6 +129,10 @@
     "deleteReusableMaterialDialog": {
       "title": "Delete building part or material",
       "text": "Are you sure you want to delete building part or material:"
+    },
+    "updateReusableMaterialDialog": {
+      "title": "Update building part or material",
+      "text": "Name of the building part or material:"
     },
     "addNewPostProcessDialog": {
       "title": "Add new post processing",

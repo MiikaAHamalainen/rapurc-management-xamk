@@ -48,6 +48,7 @@ export interface Localized extends LocalizedStringsMethods {
       list: string;
       create: string;
       delete: string;
+      update: string;
     };
     postProcess: {
       list: string;
@@ -158,6 +159,10 @@ export interface Localized extends LocalizedStringsMethods {
       text: string;
     }
     deleteReusableMaterialDialog: {
+      title: string;
+      text: string;
+    },
+    updateReusableMaterialDialog: {
       title: string;
       text: string;
     },
