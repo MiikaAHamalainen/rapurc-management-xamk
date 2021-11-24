@@ -48,6 +48,8 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * Updates building
+   *
+   * @param updatedOwnerInformation updated owner information
    */
   const updateBuilding = async (updatedOwnerInformation: Building) => {
     if (!keycloak?.token || !building?.id) {
