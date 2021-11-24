@@ -158,10 +158,10 @@ const Reusables: React.FC = () => {
       <MaterialItem key={ material.id }>
         <MaterialText primary={ material.name }/>
         <ListItemSecondaryAction>
-          <IconButton onClick={ () => deleteIconClick(material) }>
+          <IconButton onClick={ deleteIconClick(material) }>
             <Delete/>
           </IconButton>
-          <IconButton onClick={ () => editIconClick(material) }>
+          <IconButton onClick={ editIconClick(material) }>
             <Edit/>
           </IconButton>
         </ListItemSecondaryAction>
