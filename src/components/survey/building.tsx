@@ -38,7 +38,7 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
       });
 
       if (fetchedBuildings.length !== 1) {
-        throw new Error("Invalid fetched building.");
+        return;
       }
 
       setBuilding(fetchedBuildings[0]);
