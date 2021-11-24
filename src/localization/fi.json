@@ -20,9 +20,9 @@
     },
     "buildings": {
       "list": "Virhe listattaessa rakennuksia",
-      "create": "Error while creating new location",
-      "update": "Error while updating location",
-      "delete": "Error while deleting location"
+      "create": "Virhe luotaessa rakennuksen tietoja",
+      "update": "Virhe päivitettäessä rakennuksen tietoja",
+      "delete": "Virhe poistettaessa rakennuksen tietoja"
     },
     "owners": {
       "list": "Virhe listattaessa omistajia",
