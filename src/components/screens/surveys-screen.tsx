@@ -154,7 +154,9 @@ const SurveysScreen: React.FC = () => {
    */
   const onDeleteSurveyConfirm = async () => {
     try {
-      await selectedSurveyIds.map(surveyId => dispatch(deleteSurvey(surveyId.toString())).unwrap());
+      await selectedSurveyIds.forEach(surveyId => {
+        dispatch(deleteSurvey(surveyId.toString())).unwrap();
+      });
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.delete, error);
     }
@@ -194,6 +196,7 @@ const SurveysScreen: React.FC = () => {
       </Typography>
       <SearchBar>
         <TextField
+          fullWidth={ isMobile }
           label={ strings.surveysScreen.address }
           value={ addressFilter }
           onChange={ event => setAddressFilter(event.target.value) }
@@ -201,6 +204,7 @@ const SurveysScreen: React.FC = () => {
         />
         <ControlsContainer direction="row" spacing={ 2 }>
           <WhiteOutlinedInput
+            fullWidth={ isMobile }
             color="secondary"
             select
             size={ isMobile ? "medium" : "small" }
@@ -287,6 +291,11 @@ const SurveysScreen: React.FC = () => {
    */
   const renderSurveyDataTable = () => {
     const columns: GridColDef[] = [
+      {
+        field: "status",
+        headerName: strings.surveysScreen.dataGridColumns.status,
+        width: 360
+      },
       {
         field: "buildingId",
         headerName: strings.surveysScreen.dataGridColumns.buildingId,

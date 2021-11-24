@@ -21,6 +21,7 @@ export const Root = styled(Box, {
 export const ContentContainer = styled(Stack, {
   label: "side-panel-layout-content-container"
 })(({ theme }) => ({
+  overflow: "hidden",
   backgroundColor: "rgba(209,209,209,0.85)",
   [theme.breakpoints.up("md")]: {
     padding: theme.spacing(2)

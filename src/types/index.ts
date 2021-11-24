@@ -1,3 +1,5 @@
+import { SurveyStatus } from "generated/client";
+
 /**
  * Application configuration
  */
@@ -17,6 +19,8 @@ export interface Configuration {
  */
 export interface SurveyWithInfo {
   id: string;
+  status: SurveyStatus;
+  ownerId?: string;
   ownerName?: string;
   buildingId?: string;
   classificationCode?: string;

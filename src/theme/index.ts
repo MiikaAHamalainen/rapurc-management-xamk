@@ -168,8 +168,8 @@ export default createTheme({
       },
       styleOverrides: {
         root: {
-          [breakpoints.up("sm")]: {
-            maxWidth: 450
+          [breakpoints.up("md")]: {
+            minWidth: 320
           }
         }
       }
@@ -226,12 +226,6 @@ export default createTheme({
         root: {
           borderRadius: 0,
           backgroundColor: palette.background.default,
-          [breakpoints.up("sm")]: {
-            maxWidth: 450
-          },
-          [breakpoints.up("md")]: {
-            maxWidth: 600
-          },
           "&:before": {
             borderBottom: "1px solid rgba(0,0,0,0)"
           }

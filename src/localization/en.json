@@ -19,12 +19,16 @@
       "delete": "Error while deleting survey"
     },
     "buildings": {
-      "list": "Error while listing locations"
+      "list": "Error while listing locations",
+      "create": "Error while creating new location",
+      "update": "Error while updating location",
+      "delete": "Error while deleting location"
     },
     "owners": {
       "list": "Error while listing owners",
       "create": "Error while creating owner information",
-      "update": "Error while updating owner information"
+      "update": "Error while updating owner information",
+      "delete": "Error while deleting owner information"
     }
   },
 
@@ -43,6 +47,7 @@
     "newSurvey": "New survey",
     "filter": "Filter",
     "dataGridColumns": {
+      "status": "Status",
       "buildingId": "Building ID",
       "classificationCode": "Classification code",
       "ownerName": "Owner name",
@@ -101,6 +106,25 @@
     "surveyStatus": {
       "draft": "Incomplete",
       "done": "Ready"
+    },
+    "building": {
+      "title": "Building information",
+      "propertyID": "Property ID",
+      "buildingID": "Building ID",
+      "buildingClass": "Building class",
+      "year": "Construction year",
+      "area": "Area (m²)",
+      "volume": "Volume (m³)",
+      "floors": "Number of floors",
+      "basementFloors": "Basement floors",
+      "foundationMaterial": "Foundation material",
+      "supportingStructure": "Supporting structure",
+      "façadeMaterial": "Façade material",
+      "roofStructure": "Roof structure",
+      "address": "Address",
+      "street": "Street address",
+      "city": "City",
+      "postalCode": "Postal code"
     },
     "owner": {
       "title": "Owner information",
