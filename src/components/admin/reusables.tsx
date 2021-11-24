@@ -86,15 +86,13 @@ const Reusables: React.FC = () => {
     }
 
     try {
-      await Api.getReusableMaterialApi(keycloak.token).deleteReusableMaterial({ reusableMaterialId: deletableMaterial?.id });
-      const deletableIndex = materials.findIndex(material => material.id === deletableMaterial?.id);
-      const newReusableMaterials = [ ...materials ];
-      newReusableMaterials.splice(deletableIndex, 1);
-      setMaterials(newReusableMaterials);
+      await Api.getReusableMaterialApi(keycloak.token).deleteReusableMaterial({ reusableMaterialId: deletableMaterial.id });
+      setMaterials(materials.filter(material => material.id !== deletableMaterial.id));
       setDeletableMaterial(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.delete, error);
     }
+
     setDeletingMaterial(false);
   };
 
