@@ -134,7 +134,7 @@ const Reusables: React.FC = () => {
    *
    * @param material material
    */
-  const editIconClick = (material : ReusableMaterial) => {
+  const editIconClick = (material : ReusableMaterial) => () => {
     setEditableMaterial(material);
     setEditingMaterial(true);
   };
