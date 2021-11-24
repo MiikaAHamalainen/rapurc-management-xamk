@@ -20,12 +20,16 @@
       "delete": "Virhe poistettaessa karoitusta"
     },
     "buildings": {
-      "list": "Virhe listattaessa rakennuksia"
+      "list": "Virhe listattaessa rakennuksia",
+      "create": "Virhe luotaessa rakennuksen tietoja",
+      "update": "Virhe päivitettäessä rakennuksen tietoja",
+      "delete": "Virhe poistettaessa rakennuksen tietoja"
     },
     "owners": {
       "list": "Virhe listattaessa omistajia",
       "create": "virhe luotaessa omistajatietoja",
-      "update": "Virhe päivitettäessä omistajan tietoja"
+      "update": "Virhe päivitettäessä omistajan tietoja",
+      "delete": "Virhe poistettaessa omistajan tietoja"
     },
     "materials": {
       "list": "Virhe listattaessa materiaaleja ja rakennusosia",
@@ -50,6 +54,7 @@
     "newSurvey": "Uusi kartoitus",
     "filter": "Suodata",
     "dataGridColumns": {
+      "status": "Tila",
       "buildingId": "Rakennustunnus",
       "classificationCode": "Rakennusluokka",
       "ownerName": "Omistaja",
@@ -120,6 +125,25 @@
     "surveyStatus": {
       "draft": "Keskeneräinen",
       "done": "Valmis"
+    },
+    "building": {
+      "title": "Rakennuksen tiedot",
+      "propertyID": "Kiinteistötunnus",
+      "buildingID": "Rakennustunnus",
+      "buildingClass": "Rakennusluokka",
+      "year": "Rakennusvuosi",
+      "area": "Kokonaisala (m²)",
+      "volume": "Rakennustilavuus (m³)",
+      "floors": "Kerrosluku",
+      "basementFloors": "Kellarikerrokset",
+      "foundationMaterial": "Rakennuksen perusta",
+      "supportingStructure": "Kantava rakenne",
+      "façadeMaterial": "Julkisivumateriaali",
+      "roofStructure": "Kattorakenne",
+      "address": "Osoite",
+      "street": "Katuosoite",
+      "city": "Kaupunki",
+      "postalCode": "Postinumero"
     },
     "owner": {
       "title": "Omistajan tiedot",

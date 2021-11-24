@@ -38,11 +38,15 @@ export interface Localized extends LocalizedStringsMethods {
     };
     buildings: {
       list: string;
+      create: string;
+      update: string;
+      delete: string;
     };
     owners: {
       list: string;
       create: string;
       update: string;
+      delete: string;
     };
     materials: {
       list: string;
@@ -73,6 +77,7 @@ export interface Localized extends LocalizedStringsMethods {
     newSurvey: string;
     filter: string;
     dataGridColumns: {
+      status: string;
       buildingId: string;
       classificationCode: string;
       ownerName: string;
@@ -115,7 +120,7 @@ export interface Localized extends LocalizedStringsMethods {
       hazardous: string;
       attachments: string;
       summary: string;
-    }
+    };
   };
 
   /**
@@ -156,6 +161,25 @@ export interface Localized extends LocalizedStringsMethods {
       draft: string;
       done: string;
     };
+    building: {
+      title: string;
+      propertyID: string;
+      buildingID: string;
+      buildingClass: string;
+      year: string;
+      area: string;
+      volume: string;
+      floors: string;
+      basementFloors: string;
+      foundationMaterial: string;
+      supportingStructure: string;
+      façadeMaterial: string;
+      roofStructure: string;
+      address: string;
+      street: string;
+      city: string;
+      postalCode: string;
+    };
     owner: {
       title: string;
       name: string;
@@ -166,8 +190,8 @@ export interface Localized extends LocalizedStringsMethods {
       occupation: string;
       phone: string;
       email: string;
-    }
-  }
+    };
+  };
 }
 
 /**

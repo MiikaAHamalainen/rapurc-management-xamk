@@ -56,7 +56,7 @@ const Header: React.FC<Props> = ({
             spacing={ 2 }
           >
             { back &&
-              <IconButton onClick={ () => navigate(-1) }>
+              <IconButton onClick={ () => navigate("/surveys") }>
                 <ArrowBackIosNewSharp htmlColor="#ffffff"/>
               </IconButton>
             }

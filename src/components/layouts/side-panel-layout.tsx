@@ -43,7 +43,7 @@ const SidePanelLayout: React.FC<Props> = ({
         { headerContent }
       </Header>
       <ContentContainer direction="row" spacing={ isMobile ? 0 : 2 }>
-        <Paper sx={{ maxWidth: 340 }}>
+        <Paper sx={{ maxWidth: 340, overflow: "auto" }}>
           { sidePanelContent }
         </Paper>
         <Content>
