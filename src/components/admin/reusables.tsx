@@ -105,17 +105,16 @@ const Reusables: React.FC = () => {
     }
 
     try {
-      await Api.getReusableMaterialApi(keycloak.token).updateReusableMaterial({
+      const updatedMaterial = await Api.getReusableMaterialApi(keycloak.token).updateReusableMaterial({
         reusableMaterialId: editableMaterial.id, reusableMaterial: editableMaterial
       });
-      const editableIndex = materials.findIndex(material => material.id === editableMaterial?.id);
-      const newReusableMaterials = [ ...materials ];
-      newReusableMaterials[editableIndex] = editableMaterial;
-      setMaterials(newReusableMaterials);
+
+      setMaterials(materials.map(material => (material.id === updatedMaterial.id ? updatedMaterial : material)));
       setEditableMaterial(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.update, error);
     }
+
     setEditingMaterial(false);
   };
 
