@@ -29,19 +29,20 @@ const Reusables: React.FC = () => {
    * Fetches list of reusable materials and building parts
    */
   const fetchReusableMaterials = async () => {
-    setLoading(true);
     if (!keycloak?.token) {
       return;
     }
 
+    setLoading(true);
+
     try {
       const fetchedMaterials = await Api.getReusableMaterialApi(keycloak.token).listReusableMaterials();
       setMaterials(fetchedMaterials);
-      setLoading(false);
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.list, error);
-      setLoading(false);
     }
+
+    setLoading(false);
   };
 
   /**
