@@ -73,6 +73,7 @@ const Reusables: React.FC = () => {
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.create, error);
     }
+
     setAddingMaterial(false);
   };
 
