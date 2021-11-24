@@ -28,7 +28,7 @@
       "list": "Virhe listattaessa omistajia",
       "create": "virhe luotaessa omistajatietoja",
       "update": "Virhe päivitettäessä omistajan tietoja",
-      "delete": "Error while deleting owner information"
+      "delete": "Virhe poistettaessa omistajan tietoja"
     }
   },
 
