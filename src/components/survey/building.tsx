@@ -22,7 +22,7 @@ interface Props {
 const BuildingView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
-  const [ building, setBuilding ] = React.useState<Building | undefined>(undefined);
+  const [ building, setBuilding ] = React.useState<Building>();
 
   /**
    * Create new owner information
@@ -36,9 +36,14 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
       const fetchedBuildings = await Api.getBuildingsApi(keycloak.token).listBuildings({
         surveyId: surveyId
       });
+
+      if (fetchedBuildings.length !== 1) {
+        throw new Error("Invalid fetched building.");
+      }
+
       setBuilding(fetchedBuildings[0]);
     } catch (error) {
-      errorContext.setError(strings.errorHandling.buildings.create, error);
+      errorContext.setError(strings.errorHandling.buildings.list, error);
     }
   };
 
@@ -164,139 +169,167 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
   /**
    * Renders building information form
    */
-  const renderBuildingInfoForm = () => (
-    <>
-      <Typography variant="h2">
-        { strings.survey.building.title }
-      </Typography>
-      {
-        renderWithDebounceTextField(
-          "propertyId",
-          strings.survey.building.propertyID,
-          building?.propertyId || "",
-          onBuildingPropChange
-        )
-      }
-      {
-        renderWithDebounceTextField(
-          "buildingId",
-          strings.survey.building.buildingID,
-          building?.buildingId || "",
-          onBuildingPropChange
-        )
-      }
-      <TextField disabled select label={ strings.survey.building.buildingClass }>
-        <MenuItem>{ strings.generic.notImplemented }</MenuItem>
-      </TextField>
-      {
-        renderWithDebounceNumberTextField(
-          "constructionYear",
-          strings.survey.building.year,
-          building?.constructionYear || 0,
-          onBuildingPropChange
-        )
-      }
-      {
-        renderWithDebounceNumberTextField(
-          "space",
-          strings.survey.building.area,
-          building?.space || 0,
-          onBuildingPropChange
-        )
-      }
-      {
-        renderWithDebounceNumberTextField(
-          "volume",
-          strings.survey.building.volume,
-          building?.volume || 0,
-          onBuildingPropChange
-        )
-      }
-      {
-        renderWithDebounceNumberTextField(
-          "floors",
-          strings.survey.building.floors,
-          building?.floors || 0,
-          onBuildingPropChange
-        )
-      }
-      {
-        renderWithDebounceNumberTextField(
-          "basements",
-          strings.survey.building.basementFloors,
-          building?.basements || 0,
-          onBuildingPropChange
-        )
-      }
-      {
-        renderWithDebounceTextField(
-          "foundation",
-          strings.survey.building.foundationMaterial,
-          building?.foundation || "",
-          onBuildingPropChange
-        )
-      }
-      {
-        renderWithDebounceTextField(
-          "supportingStructure",
-          strings.survey.building.supportingStructure,
-          building?.supportingStructure || "",
-          onBuildingPropChange
-        )
-      }
-      {
-        renderWithDebounceTextField(
-          "facadeMaterial",
-          strings.survey.building.façadeMaterial,
-          building?.facadeMaterial || "",
-          onBuildingPropChange
-        )
-      }
-      {
-        renderWithDebounceTextField(
-          "roofType",
-          strings.survey.building.roofStructure,
-          building?.roofType || "",
-          onBuildingPropChange
-        )
-      }
-    </>
-  );
+  const renderBuildingInfoForm = () => {
+    if (!building) {
+      return null;
+    }
+
+    const {
+      propertyId,
+      buildingId,
+      constructionYear,
+      space,
+      volume,
+      floors,
+      basements,
+      foundation,
+      supportingStructure,
+      facadeMaterial,
+      roofType
+    } = building;
+
+    return (
+      <>
+        <Typography variant="h2">
+          { strings.survey.building.title }
+        </Typography>
+        {
+          renderWithDebounceTextField(
+            "propertyId",
+            strings.survey.building.propertyID,
+            propertyId || "",
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "buildingId",
+            strings.survey.building.buildingID,
+            buildingId || "",
+            onBuildingPropChange
+          )
+        }
+        <TextField disabled select label={ strings.survey.building.buildingClass }>
+          <MenuItem>{ strings.generic.notImplemented }</MenuItem>
+        </TextField>
+        {
+          renderWithDebounceNumberTextField(
+            "constructionYear",
+            strings.survey.building.year,
+            constructionYear || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceNumberTextField(
+            "space",
+            strings.survey.building.area,
+            space || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceNumberTextField(
+            "volume",
+            strings.survey.building.volume,
+            volume || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceNumberTextField(
+            "floors",
+            strings.survey.building.floors,
+            floors || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceNumberTextField(
+            "basements",
+            strings.survey.building.basementFloors,
+            basements || 0,
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "foundation",
+            strings.survey.building.foundationMaterial,
+            foundation || "",
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "supportingStructure",
+            strings.survey.building.supportingStructure,
+            supportingStructure || "",
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "facadeMaterial",
+            strings.survey.building.façadeMaterial,
+            facadeMaterial || "",
+            onBuildingPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "roofType",
+            strings.survey.building.roofStructure,
+            roofType || "",
+            onBuildingPropChange
+          )
+        }
+      </>
+    );
+  };
 
   /**
    * Renders address form
    */
-  const renderAddressForm = () => (
-    <>
-      <Typography variant="h3" sx={{ marginBottom: 0.5 }}>
-        { strings.survey.building.address }
-      </Typography>
-      {
-        renderWithDebounceTextField(
-          "streetAddress",
-          strings.survey.building.street,
-          building?.address?.streetAddress || "",
-          onBuildingAddressPropChange
-        )
-      }
-      {
-        renderWithDebounceTextField(
-          "city",
-          strings.survey.building.city,
-          building?.address?.city || "",
-          onBuildingAddressPropChange
-        )
-      }
-      {
-        renderWithDebounceTextField(
-          "postCode",
-          strings.survey.building.postalCode,
-          building?.address?.postCode || "",
-          onBuildingAddressPropChange
-        )
-      }
-    </>
-  );
+  const renderAddressForm = () => {
+    if (!building) {
+      return null;
+    }
+
+    const { address } = building;
+
+    return (
+      <>
+        <Typography variant="h3" sx={{ marginBottom: 0.5 }}>
+          { strings.survey.building.address }
+        </Typography>
+        {
+          renderWithDebounceTextField(
+            "streetAddress",
+            strings.survey.building.street,
+            address?.streetAddress || "",
+            onBuildingAddressPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "city",
+            strings.survey.building.city,
+            address?.city || "",
+            onBuildingAddressPropChange
+          )
+        }
+        {
+          renderWithDebounceTextField(
+            "postCode",
+            strings.survey.building.postalCode,
+            address?.postCode || "",
+            onBuildingAddressPropChange
+          )
+        }
+      </>
+    );
+  };
 
   /**
    * Check if viewport is mobile size
