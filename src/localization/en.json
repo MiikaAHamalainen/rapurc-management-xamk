@@ -29,6 +29,12 @@
       "create": "Error while creating owner information",
       "update": "Error while updating owner information",
       "delete": "Error while deleting owner information"
+    },
+    "reusables": {
+      "list": "Error while listing reusable building parts",
+      "create": "Error while creating reusable building part",
+      "update": "Error while updating reusable building part",
+      "delete": "Error while deleting reusable building part"
     }
   },
 
@@ -136,6 +142,14 @@
       "occupation": "Occupation",
       "phone": "Phone",
       "email": "E-mail address"
+    },
+    "reusables": {
+      "title": "Reusable building parts",
+      "addNewBuildingPart": "Add new building part",
+      "deleteBuildingParts": "Delete building part",
+      "addNewBuildinPartsDialog": {
+        "title": "Add building part"
+      }
     }
   }
 }

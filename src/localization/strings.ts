@@ -47,6 +47,12 @@ export interface Localized extends LocalizedStringsMethods {
       update: string;
       delete: string;
     };
+    reusables: {
+      list: string;
+      create: string;
+      update: string;
+      delete: string;
+    };
   };
 
   /**
@@ -172,6 +178,14 @@ export interface Localized extends LocalizedStringsMethods {
       phone: string;
       email: string;
     };
+    reusables: {
+      title: string;
+      addNewBuildingPart: string;
+      deleteBuildingParts: string;
+      addNewBuildinPartsDialog: {
+        title: string;
+      }
+    }
   };
 }
 
