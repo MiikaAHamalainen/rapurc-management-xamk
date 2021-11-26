@@ -1,4 +1,4 @@
-import { Stack, Button, Typography, TextField, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { Stack, Button, Typography, TextField, Accordion, AccordionSummary, AccordionDetails, Box, List } from "@mui/material";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
@@ -8,6 +8,7 @@ import strings from "localization/strings";
 import * as React from "react";
 import GenericDialog from "components/generic/generic-dialog";
 import WithDebounce from "components/generic/with-debounce";
+import { Add, ExpandMore } from "@mui/icons-material";
 
 /**
  * Component properties
@@ -163,23 +164,26 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       onClose={ () => setCreatingOtherStructure(false) }
       onCancel={ () => setCreatingOtherStructure(false) }
       onConfirm={ onCreateOtherStructureConfirm }
-      // TODO localization
-      title="Other structure"
-      positiveButtonText={ strings.generic.confirm }
+      title={strings.survey.otherStructures.dialog.title }
+      positiveButtonText={ strings.generic.add }
       cancelButtonText={ strings.generic.cancel }
     >
-      <TextField
-        // TODO localization
-        label="name"
-        value={ newOtherStructureName }
-        onChange={ e => setNewOtherStructureName(e.target.value) }
-      />
-      <TextField
-        // TODO localization
-        label="description"
-        value={ newOtherStructureDesc }
-        onChange={ e => setNewOtherStructureDesc(e.target.value) }
-      />
+      <Stack spacing={ 2 }>
+        <TextField
+          label={ strings.survey.otherStructures.dialog.name }
+          color="primary"
+          value={ newOtherStructureName }
+          onChange={ e => setNewOtherStructureName(e.target.value) }
+        />
+        <TextField
+          label={ strings.survey.otherStructures.dialog.description }
+          multiline
+          rows={ 4 }
+          color="primary"
+          value={ newOtherStructureDesc }
+          onChange={ e => setNewOtherStructureDesc(e.target.value) }
+        />
+      </Stack>
     </GenericDialog>
   );
 
@@ -193,13 +197,13 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       onClose={ () => setDeletingOtherStructureId(undefined) }
       onCancel={ () => setDeletingOtherStructureId(undefined) }
       onConfirm={ onDeleteOtherStructureConfirm }
-      // TODO localization
-      title="delete other structure"
-      positiveButtonText={ strings.generic.confirm }
+      title={ strings.survey.otherStructures.dialog.deleteBuilding }
+      positiveButtonText={ strings.generic.delete }
       cancelButtonText={ strings.generic.cancel }
     >
-      {/* TODO localization */}
-      sure to delete?
+      <Typography>
+        { strings.survey.otherStructures.dialog.areYouSure }
+      </Typography>
     </GenericDialog>
   );
 
@@ -235,35 +239,36 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
    * @param index index
    */
   const renderOtherStructure = (otherStructure: OtherStructure, index: number) => (
-    <Accordion key={ index }>
-      <AccordionSummary>
+    <Accordion key={ index } disableGutters>
+      <AccordionSummary expandIcon={ <ExpandMore/> }>
         { otherStructure.name }
       </AccordionSummary>
       <AccordionDetails>
-        {
-          renderWithDebounceTextField(
-            "name",
-            /* TODO localization */
-            "name",
-            otherStructure.name,
-            onBuildingOtherStructurePropChange(index)
-          )
-        }
-        {
-          renderWithDebounceTextField(
-            "description",
-            /* TODO localization */
-            "description",
-            otherStructure.description,
-            onBuildingOtherStructurePropChange(index)
-          )
-        }
-        <Button
-          onClick={ () => setDeletingOtherStructureId(index) }
-        >
-          {/* TODO localization */}
-          delete
-        </Button>
+        <Stack spacing={ 2 }>
+          {
+            renderWithDebounceTextField(
+              "name",
+              strings.survey.otherStructures.dialog.name,
+              otherStructure.name,
+              onBuildingOtherStructurePropChange(index)
+            )
+          }
+          {
+            renderWithDebounceTextField(
+              "description",
+              strings.survey.otherStructures.dialog.description,
+              otherStructure.description,
+              onBuildingOtherStructurePropChange(index)
+            )
+          }
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={ () => setDeletingOtherStructureId(index) }
+          >
+            { strings.generic.delete }
+          </Button>
+        </Stack>
       </AccordionDetails>
     </Accordion>
   );
@@ -274,18 +279,25 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
 
   return (
     <>
-      {/* TODO localization */}
-      <Stack direction="column" spacing={ 2 }>
+      <Stack spacing={ 2 } sx={{ flex: 1 }}>
         <Typography variant="h2">
-          Title
+          { strings.survey.otherStructures.title }
         </Typography>
-        <Typography variant="h3">
-          Jos purkamisen yhteydessä puretaan myös muita samaan kiinteistöön kuuluvia rakennuksia tai rakennelmia, lisää ne tähän listaan.
+        <Typography>
+          { strings.survey.otherStructures.description }
         </Typography>
-        <Button onClick={ () => setCreatingOtherStructure(true) }>
-          new Other structure
-        </Button>
-        { building.otherStructures.map(renderOtherStructure) }
+        <Box>
+          <Button
+            color="secondary"
+            startIcon={<Add/>}
+            onClick={ () => setCreatingOtherStructure(true) }
+          >
+            { strings.survey.otherStructures.add }
+          </Button>
+        </Box>
+        <List>
+          { building.otherStructures.map(renderOtherStructure) }
+        </List>
       </Stack>
       { renderNewOtherStructureDialog() }
       { renderDeleteOtherStructureDialog() }
