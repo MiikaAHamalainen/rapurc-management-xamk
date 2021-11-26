@@ -17,7 +17,7 @@ interface Props {
 }
 
 /**
- * Component for other structure
+ * Component for other structures
  */
 const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
@@ -28,7 +28,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   const [ newOtherStructureDesc, setNewOtherStructureDesc ] = React.useState("");
 
   /**
-   * Create new owner information
+   * Fetch building
    */
   const fetchBuilding = async () => {
     if (!keycloak?.token || !surveyId) {
@@ -76,7 +76,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Updates owner information
+   * Create other structure confirm handler
    */
   const onCreateOtherStructureConfirm = async () => {
     if (!building?.otherStructures) {
@@ -101,7 +101,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Event Handler set survey contact person prop
+   * Event Handler set building other structure prop
    */
   const onBuildingOtherStructurePropChange: (index: number) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (index: number) => ({
     target
@@ -130,7 +130,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Check if viewport is mobile size
+   * Renders new other structure dialog
    */
   const renderNewOtherStructureDialog = () => (
     <GenericDialog
@@ -182,7 +182,10 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
-   * Check if viewport is mobile size
+   * Renders other structure accordion
+   * 
+   * @param otherStructure other structure
+   * @param index index
    */
   const renderOtherStructure = (otherStructure: OtherStructure, index: number) => (
     <Accordion key={ index }>
