@@ -2,6 +2,7 @@
   "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
+    "addNew": "Lisää uusi",
     "notImplemented": "Ei vielä toteutettu",
     "confirm": "Vahvista",
     "cancel": "Peruuta",
@@ -29,6 +30,12 @@
       "create": "virhe luotaessa omistajatietoja",
       "update": "Virhe päivitettäessä omistajan tietoja",
       "delete": "Virhe poistettaessa omistajan tietoja"
+    },
+    "materials": {
+      "list": "Virhe listattaessa materiaaleja ja rakennusosia",
+      "create": "Virhe luotaessa materiaalia tai rakennusosaa",
+      "delete": "Virhe poistettaessa materiaalia tai rakennusosaa",
+      "update": "Virhe päivitettäessä materiaalia tai rakennusosaa"
     }
   },
 
@@ -99,6 +106,18 @@
         "hazardousMaterials": "Haitta-ainekategoria",
         "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne"
       }
+    },
+    "addNewReusableMaterialDialog": {
+      "title": "Lisää rakennusosa tai -materiaali",
+      "text": "Rakennusosan tai -materiaalin nimi:"
+    },
+    "deleteReusableMaterialDialog": {
+      "title": "Poista rakennusosa tai -materiaali",
+      "text": "Haluatko varmasti poistaa rakennusosan tai -materiaalin: {0}"
+    },
+    "updateReusableMaterialDialog": {
+      "title": "Päivitä rakennusosa tai -materiaali",
+      "text": "Rakennusosan tai -materiaalin nimi:"
     }
   },
 

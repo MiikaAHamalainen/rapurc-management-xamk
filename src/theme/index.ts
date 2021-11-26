@@ -310,6 +310,13 @@ export default createTheme({
         }
       }
     },
+    MuiListItemText: {
+      styleOverrides: {
+        secondary: {
+          color: "#999999"
+        }
+      }
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
