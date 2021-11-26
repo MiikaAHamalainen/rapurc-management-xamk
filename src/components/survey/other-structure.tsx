@@ -24,6 +24,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   const errorContext = React.useContext(ErrorContext);
   const [ building, setBuilding ] = React.useState<Building>();
   const [ creatingOtherStructure, setCreatingOtherStructure ] = React.useState(false);
+  const [ deletingOtherStructureId, setDeletingOtherStructureId ] = React.useState<number>();
   const [ newOtherStructureName, setNewOtherStructureName ] = React.useState("");
   const [ newOtherStructureDesc, setNewOtherStructureDesc ] = React.useState("");
 
@@ -73,6 +74,27 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildings.update, error);
     }
+  };
+
+  /**
+   * Create other structure confirm handler
+   */
+  const onDeleteOtherStructureConfirm = async () => {
+    if (!building?.otherStructures || deletingOtherStructureId === undefined) {
+      return;
+    }
+
+    const updatedOtherStructures = building.otherStructures;
+
+    updatedOtherStructures.splice(deletingOtherStructureId, 1);
+
+    const updatedBuilding: Building = {
+      ...building,
+      otherStructures: updatedOtherStructures
+    };
+    await updateBuilding(updatedBuilding);
+
+    setDeletingOtherStructureId(undefined);
   };
 
   /**
@@ -157,6 +179,24 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
+   * Renders new other structure dialog
+   */
+  const renderDeleteOtherStructureDialog = () => (
+    <GenericDialog
+      error={ false }
+      open={ deletingOtherStructureId !== undefined }
+      onClose={ () => setDeletingOtherStructureId(undefined) }
+      onCancel={ () => setDeletingOtherStructureId(undefined) }
+      onConfirm={ onDeleteOtherStructureConfirm }
+      title="delete other structure"
+      positiveButtonText={ strings.generic.confirm }
+      cancelButtonText={ strings.generic.cancel }
+    >
+      sure to delete?
+    </GenericDialog>
+  );
+
+  /**
    * Renders textfield with debounce
    * 
    * @param name name
@@ -209,6 +249,11 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
             onBuildingOtherStructurePropChange(index)
           )
         }
+        <Button
+          onClick={ () => setDeletingOtherStructureId(index) }
+        >
+          delete
+        </Button>
       </AccordionDetails>
     </Accordion>
   );
@@ -232,6 +277,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
         { building.otherStructures.map(renderOtherStructure) }
       </Stack>
       { renderNewOtherStructureDialog() }
+      { renderDeleteOtherStructureDialog() }
     </>
   );
 };
