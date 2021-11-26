@@ -142,9 +142,7 @@ const Reusables: React.FC = () => {
    * Even handler for editable material name change
    */
   const handleEditableNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    if (editableMaterial) {
-      setEditableMaterial({ ...editableMaterial, name: target.value });
-    }
+    editableMaterial && setEditableMaterial({ ...editableMaterial, name: target.value });
   };
 
   /**
