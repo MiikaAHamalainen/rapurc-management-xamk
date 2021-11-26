@@ -37,8 +37,7 @@ const Reusables: React.FC = () => {
     setLoading(true);
 
     try {
-      const fetchedMaterials = await Api.getReusableMaterialApi(keycloak.token).listReusableMaterials();
-      setMaterials(fetchedMaterials);
+      setMaterials(await Api.getReusableMaterialApi(keycloak.token).listReusableMaterials());
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.list, error);
     }
