@@ -16,6 +16,7 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to generic words
    */
   generic: {
+    addNew: string;
     notImplemented: string;
     confirm: string;
     cancel: string;
@@ -52,6 +53,12 @@ export interface Localized extends LocalizedStringsMethods {
       create: string;
       update: string;
       delete: string;
+    },
+    materials: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
     };
   };
 
@@ -136,8 +143,20 @@ export interface Localized extends LocalizedStringsMethods {
         postProcessing: string;
         hazardousMaterials: string;
         hazardousMaterialsAdditionalInfo: string;
-      };
-    };
+      }
+    }
+    addNewReusableMaterialDialog: {
+      title: string;
+      text: string;
+    }
+    deleteReusableMaterialDialog: {
+      title: string;
+      text: string;
+    },
+    updateReusableMaterialDialog: {
+      title: string;
+      text: string;
+    }
   };
 
   /**
