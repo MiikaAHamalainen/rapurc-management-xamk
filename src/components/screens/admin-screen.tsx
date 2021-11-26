@@ -4,6 +4,7 @@ import NavigationItem from "components/layout-components/navigation-item";
 import SidePanelLayout from "components/layouts/side-panel-layout";
 import strings from "localization/strings";
 import React from "react";
+import AdminRoutes from "../admin/admin-routes";
 
 /**
  * Admin screen component
@@ -39,9 +40,7 @@ const AdminScreen: React.FC = () => {
       sidePanelContent={ renderSideNavigation() }
       back
     >
-      <Typography>
-        { strings.generic.notImplemented }
-      </Typography>
+      <AdminRoutes/>
     </SidePanelLayout>
   );
 };
