@@ -113,7 +113,7 @@
     },
     "deleteReusableMaterialDialog": {
       "title": "Poista rakennusosa tai -materiaali",
-      "text": "Haluatko varmasti poistaa rakennusosan tai -materiaalin:"
+      "text": "Haluatko varmasti poistaa rakennusosan tai -materiaalin: {0}"
     },
     "updateReusableMaterialDialog": {
       "title": "Päivitä rakennusosa tai -materiaali",

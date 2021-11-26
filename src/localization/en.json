@@ -113,7 +113,7 @@
     },
     "deleteReusableMaterialDialog": {
       "title": "Delete building part or material",
-      "text": "Are you sure you want to delete building part or material:"
+      "text": "Are you sure you want to delete building part or material: ${0}"
     },
     "updateReusableMaterialDialog": {
       "title": "Update building part or material",

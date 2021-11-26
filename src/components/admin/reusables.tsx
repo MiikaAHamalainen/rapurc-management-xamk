@@ -206,10 +206,7 @@ const Reusables: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.adminScreen.deleteReusableMaterialDialog.text }
-      </Typography>
-      <Typography variant="subtitle1">
-        { deletableMaterial?.name }
+        { strings.formatString(strings.adminScreen.deleteReusableMaterialDialog.text, deletableMaterial ? deletableMaterial.name : "") }
       </Typography>
     </GenericDialog>
   );
