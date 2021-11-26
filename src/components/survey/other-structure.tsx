@@ -77,7 +77,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Create other structure confirm handler
+   * Delete other structure confirm handler
    */
   const onDeleteOtherStructureConfirm = async () => {
     if (!building?.otherStructures || deletingOtherStructureId === undefined) {
@@ -124,6 +124,8 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * Event Handler set building other structure prop
+   * 
+   * @param index index
    */
   const onBuildingOtherStructurePropChange: (index: number) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (index: number) => ({
     target
@@ -161,16 +163,19 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       onClose={ () => setCreatingOtherStructure(false) }
       onCancel={ () => setCreatingOtherStructure(false) }
       onConfirm={ onCreateOtherStructureConfirm }
+      // TODO localization
       title="Other structure"
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
       <TextField
+        // TODO localization
         label="name"
         value={ newOtherStructureName }
         onChange={ e => setNewOtherStructureName(e.target.value) }
       />
       <TextField
+        // TODO localization
         label="description"
         value={ newOtherStructureDesc }
         onChange={ e => setNewOtherStructureDesc(e.target.value) }
@@ -179,7 +184,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
-   * Renders new other structure dialog
+   * Renders delete other structure dialog
    */
   const renderDeleteOtherStructureDialog = () => (
     <GenericDialog
@@ -188,10 +193,12 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       onClose={ () => setDeletingOtherStructureId(undefined) }
       onCancel={ () => setDeletingOtherStructureId(undefined) }
       onConfirm={ onDeleteOtherStructureConfirm }
+      // TODO localization
       title="delete other structure"
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
+      {/* TODO localization */}
       sure to delete?
     </GenericDialog>
   );
@@ -236,6 +243,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
         {
           renderWithDebounceTextField(
             "name",
+            /* TODO localization */
             "name",
             otherStructure.name,
             onBuildingOtherStructurePropChange(index)
@@ -244,6 +252,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
         {
           renderWithDebounceTextField(
             "description",
+            /* TODO localization */
             "description",
             otherStructure.description,
             onBuildingOtherStructurePropChange(index)
@@ -252,6 +261,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
         <Button
           onClick={ () => setDeletingOtherStructureId(index) }
         >
+          {/* TODO localization */}
           delete
         </Button>
       </AccordionDetails>
@@ -264,6 +274,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
 
   return (
     <>
+      {/* TODO localization */}
       <Stack direction="column" spacing={ 2 }>
         <Typography variant="h2">
           Title
