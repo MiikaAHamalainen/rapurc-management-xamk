@@ -167,7 +167,29 @@
       "addNewBuildingPart": "Add new building part",
       "deleteBuildingParts": "Delete building part",
       "addNewBuildinPartsDialog": {
-        "title": "Add building part"
+        "title": "Add building part",
+        "usability": {
+          "excellent": "Excellent",
+          "good": "Good",
+          "poor": "Poor",
+          "notValidated": "Not validated"
+        },
+        "units": {
+          "kg": "Kilograms (kg)",
+          "m2": "Square meters (\u33A1)",
+          "m3": "Cubic meters (\u33A5)",
+          "pcs": "Pieces (pcs)",
+          "rm": "Running meters (jm)",
+          "tn": "Tons (tn)"
+        }
+      },
+      "dataGridColumns": {
+        "material": "Material",
+        "buildingPart": "Building part",
+        "usability": "Usability",
+        "pcs": "Pcs",
+        "amount": "Amount",
+        "description": "Lisätieto"
       }
     }
   }

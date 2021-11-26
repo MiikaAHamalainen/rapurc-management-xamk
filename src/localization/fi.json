@@ -167,7 +167,29 @@
       "addNewBuildingPart": "Lisää uusi rakennusosa",
       "deleteBuildingParts": "Poista rakennusosa",
       "addNewBuildinPartsDialog": {
-        "title": "Lisää rakennusosa"
+        "title": "Lisää rakennusosa",
+        "usability": {
+          "excellent": "Erinomainen",
+          "good": "Hyvä",
+          "poor": "Heikko",
+          "notValidated": "Ei arvioitu"
+        },
+        "units": {
+          "kg": "Kilogrammaa (kg)",
+          "m2": "Neliömetriä (\u33A1)",
+          "m3": "Kuutiometriä (\u33A5)",
+          "pcs": "Kappaletta (kpl)",
+          "rm": "Juoksumetriä (jm)",
+          "tn": "Tonnia (tn)"
+        }
+      },
+      "dataGridColumns": {
+        "material": "Materiaali",
+        "buildingPart": "Rakennusosa",
+        "usability": "Käyttökelpoisuus",
+        "pcs": "Määrä",
+        "amount": "Purkujätemäärä",
+        "description": "Lisätieto"
       }
     }
   }

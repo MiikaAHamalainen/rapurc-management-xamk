@@ -203,6 +203,28 @@ export interface Localized extends LocalizedStringsMethods {
       deleteBuildingParts: string;
       addNewBuildinPartsDialog: {
         title: string;
+        usability: {
+          excellent: string;
+          good: string;
+          poor: string;
+          notValidated: string;
+        },
+        units: {
+          kg: string;
+          m2: string;
+          m3: string;
+          pcs: string;
+          rm: string;
+          tn: string;
+        }
+      },
+      dataGridColumns: {
+        material: string;
+        buildingPart: string;
+        usability: string;
+        pcs: string;
+        amount: string;
+        description: string;
       }
     }
   };
