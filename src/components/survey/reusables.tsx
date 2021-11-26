@@ -258,20 +258,32 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         width: 340,
         editable: editable,
         renderEditCell: (params: GridRenderEditCellParams) => {
-          const { value } = params;
+          const { value, api, id, field } = params;
           return (
-            <TextField
-              sx={{ position: "fixed" }}
-              placeholder="test"
-              multiline
-              rows={ 4 }
-              value={ value }
-            />
+            <div style={{ overflow: "visible !important" }}>
+              <TextField
+                sx={{
+                  zIndex: 1000,
+                  backgroundColor: "#fff",
+                  position: "fixed",
+                  border: `1px solid ${theme.palette.primary.main}`
+                }}
+                placeholder="test"
+                multiline
+                rows={ 4 }
+                value={ value }
+                onChange={ e => api.setEditCellValue({
+                  id: id,
+                  field: field,
+                  value: e.target.value
+                }, e) }
+              />
+            </div>
           );
         }
       }
     ];
-    
+
     return (
       <Paper>
         <WithReusableDataGridDebounce
