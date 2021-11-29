@@ -1,13 +1,13 @@
-import * as React from "react";
 import { MenuItem, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
-import strings from "localization/strings";
-import theme from "theme";
+import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
+import WithDebounce from "components/generic/with-debounce";
 import { selectKeycloak } from "features/auth-slice";
 import { Address, Building } from "generated/client";
-import Api from "api";
-import WithDebounce from "components/generic/with-debounce";
+import strings from "localization/strings";
+import * as React from "react";
+import theme from "theme";
 
 /**
  * Component properties
@@ -152,8 +152,8 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
   const renderWithDebounceNumberTextField = (
     name: string,
     label: string,
-    value:number,
-    onChange: React.ChangeEventHandler<HTMLInputElement>
+    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    value?: number
   ) => (
     <WithDebounce
       name={ name }
@@ -216,40 +216,40 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
           renderWithDebounceNumberTextField(
             "constructionYear",
             strings.survey.building.year,
-            constructionYear || 0,
-            onBuildingPropChange
+            onBuildingPropChange,
+            constructionYear
           )
         }
         {
           renderWithDebounceNumberTextField(
             "space",
             strings.survey.building.area,
-            space || 0,
-            onBuildingPropChange
+            onBuildingPropChange,
+            space
           )
         }
         {
           renderWithDebounceNumberTextField(
             "volume",
             strings.survey.building.volume,
-            volume || 0,
-            onBuildingPropChange
+            onBuildingPropChange,
+            volume
           )
         }
         {
           renderWithDebounceNumberTextField(
             "floors",
             strings.survey.building.floors,
-            floors || 0,
-            onBuildingPropChange
+            onBuildingPropChange,
+            floors
           )
         }
         {
           renderWithDebounceNumberTextField(
             "basements",
             strings.survey.building.basementFloors,
-            basements || 0,
-            onBuildingPropChange
+            onBuildingPropChange,
+            basements
           )
         }
         {
