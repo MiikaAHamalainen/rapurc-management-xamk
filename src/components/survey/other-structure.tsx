@@ -19,6 +19,8 @@ interface Props {
 
 /**
  * Component for other structures
+ *
+ * @param props component properties
  */
 const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
