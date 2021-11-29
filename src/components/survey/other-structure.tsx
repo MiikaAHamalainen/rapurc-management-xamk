@@ -214,7 +214,9 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
     name: string,
     label: string,
     value:string,
-    onChange: React.ChangeEventHandler<HTMLInputElement>
+    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    multiline?: boolean,
+    rows?: number
   ) => (
     <WithDebounce
       name={ name }
@@ -222,7 +224,11 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       label={ label }
       onChange={ onChange }
       component={ props =>
-        <TextField { ...props }/>
+        <TextField
+          multiline={ multiline }
+          rows={ rows }
+          { ...props }
+        />
       }
     />
   );
@@ -253,7 +259,9 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
               "description",
               strings.survey.otherStructures.dialog.description,
               otherStructure.description,
-              onBuildingOtherStructurePropChange(index)
+              onBuildingOtherStructurePropChange(index),
+              true,
+              4
             )
           }
           <Button
