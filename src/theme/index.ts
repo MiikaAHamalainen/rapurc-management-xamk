@@ -30,7 +30,7 @@ export default createTheme({
       secondary: "#ffffff"
     },
     background: {
-      default: "#f7f7f7",
+      default: "#FAFAFA",
       paper: "#ffffff"
     }
   },
@@ -153,10 +153,6 @@ export default createTheme({
             color: "rgba(255,255,255,1)",
             borderColor: "rgba(255,255,255,1)"
           }
-        },
-        focused: {
-          color: "rgba(255,255,255,1)",
-          borderColor: "rgba(255,255,255,1)"
         }
       }
     },
@@ -214,10 +210,6 @@ export default createTheme({
             color: "rgba(255,255,255,1)",
             borderColor: "rgba(255,255,255,1)"
           }
-        },
-        focused: {
-          borderColor: "#fff",
-          color: "#fff"
         }
       }
     },
@@ -228,6 +220,12 @@ export default createTheme({
           backgroundColor: palette.background.default,
           "&:before": {
             borderBottom: "1px solid rgba(0,0,0,0)"
+          },
+          "&:hover": {
+            backgroundColor: "#fff"
+          },
+          "&.Mui-focused": {
+            backgroundColor: "#fff"
           }
         },
         input: {
@@ -278,6 +276,16 @@ export default createTheme({
         },
         containedSecondary: {
           color: "#fff"
+        },
+        textPrimary: {
+          color: "#006F70"
+        },
+        outlinedPrimary: {
+          color: "#006F70",
+          borderWidth: 2,
+          "&:hover": {
+            borderWidth: 2
+          }
         }
       }
     },
@@ -321,6 +329,26 @@ export default createTheme({
       styleOverrides: {
         root: {
           borderRadius: 0
+        }
+      }
+    },
+    MuiDialog: {
+      defaultProps: {
+        fullWidth: true,
+        maxWidth: "md"
+      },
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#FAFAFA"
+        }
+      }
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          fontFamily: "Oswald, sans-serif",
+          fontWeight: 500,
+          fontSize: 24
         }
       }
     }

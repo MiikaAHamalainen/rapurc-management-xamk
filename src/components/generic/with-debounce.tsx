@@ -11,7 +11,7 @@ interface Props {
   name?: string;
   label?: string;
   debounceTimeout?: number;
-  value: string | number;
+  value?: string | number;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -23,7 +23,7 @@ interface DebounceProps {
   disabled?: boolean;
   name?: string;
   label?: string;
-  value: string | number;
+  value?: string | number;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }
