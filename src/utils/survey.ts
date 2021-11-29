@@ -18,7 +18,7 @@ export default class SurveyUtils {
       id: survey.id,
       status: survey.status,
       ownerId: ownerInformation?.id,
-      buildingId: building?.id,
+      buildingId: building?.buildingId,
       classificationCode: building?.classificationCode,
       ownerName: ownerInformation?.ownerName,
       city: building?.address?.city,
