@@ -1,6 +1,6 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Dialog, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
-import { DataGrid, GridRenderEditCellParams, GridColDef } from "@mui/x-data-grid";
+import { Box, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { DataGrid, GridColDef, GridRenderEditCellParams } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
@@ -390,15 +390,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         renderEditCell: (params: GridRenderEditCellParams) => {
           const { value, api, id, field } = params;
           return (
-            <Dialog open={true} style={{ overflow: "visible !important" }}>
+            <GenericDialog
+              error={ false }
+              title="Muokkaa lisätietoa"
+              open={ true }
+              onClose={ () => {} }
+              onCancel={ () => {} }
+              onConfirm={ () => {} }
+              positiveButtonText={ strings.generic.confirm }
+              cancelButtonText={ strings.generic.cancel }
+            >
               <TextField
-                sx={{
-                  zIndex: 1000,
-                  backgroundColor: "#fff",
-                  position: "fixed",
-                  border: `1px solid ${theme.palette.primary.main}`,
-                  maxWidth: 100
-                }}
+                label="Lisätieto"
                 placeholder="Kirjoita lisätieto"
                 multiline
                 rows={ 4 }
@@ -409,7 +412,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
                   value: e.target.value
                 }, e) }
               />
-            </Dialog>
+            </GenericDialog>
           );
         }
       }
