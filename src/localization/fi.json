@@ -2,6 +2,8 @@
   "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
+    "add": "Lisää",
+    "addNew": "Lisää uusi",
     "notImplemented": "Ei vielä toteutettu",
     "confirm": "Vahvista",
     "cancel": "Peruuta",
@@ -19,12 +21,22 @@
       "delete": "Virhe poistettaessa karoitusta"
     },
     "buildings": {
-      "list": "Virhe listattaessa rakennuksia"
+      "list": "Virhe listattaessa rakennuksia",
+      "create": "Virhe luotaessa rakennuksen tietoja",
+      "update": "Virhe päivitettäessä rakennuksen tietoja",
+      "delete": "Virhe poistettaessa rakennuksen tietoja"
     },
     "owners": {
       "list": "Virhe listattaessa omistajia",
       "create": "virhe luotaessa omistajatietoja",
-      "update": "Virhe päivitettäessä omistajan tietoja"
+      "update": "Virhe päivitettäessä omistajan tietoja",
+      "delete": "Virhe poistettaessa omistajan tietoja"
+    },
+    "materials": {
+      "list": "Virhe listattaessa materiaaleja ja rakennusosia",
+      "create": "Virhe luotaessa materiaalia tai rakennusosaa",
+      "delete": "Virhe poistettaessa materiaalia tai rakennusosaa",
+      "update": "Virhe päivitettäessä materiaalia tai rakennusosaa"
     }
   },
 
@@ -43,6 +55,7 @@
     "newSurvey": "Uusi kartoitus",
     "filter": "Suodata",
     "dataGridColumns": {
+      "status": "Tila",
       "buildingId": "Rakennustunnus",
       "classificationCode": "Rakennusluokka",
       "ownerName": "Omistaja",
@@ -94,6 +107,18 @@
         "hazardousMaterials": "Haitta-ainekategoria",
         "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne"
       }
+    },
+    "addNewReusableMaterialDialog": {
+      "title": "Lisää rakennusosa tai -materiaali",
+      "text": "Rakennusosan tai -materiaalin nimi:"
+    },
+    "deleteReusableMaterialDialog": {
+      "title": "Poista rakennusosa tai -materiaali",
+      "text": "Haluatko varmasti poistaa rakennusosan tai -materiaalin: {0}"
+    },
+    "updateReusableMaterialDialog": {
+      "title": "Päivitä rakennusosa tai -materiaali",
+      "text": "Rakennusosan tai -materiaalin nimi:"
     }
   },
 
@@ -101,6 +126,25 @@
     "surveyStatus": {
       "draft": "Keskeneräinen",
       "done": "Valmis"
+    },
+    "building": {
+      "title": "Rakennuksen tiedot",
+      "propertyID": "Kiinteistötunnus",
+      "buildingID": "Rakennustunnus",
+      "buildingClass": "Rakennusluokka",
+      "year": "Rakennusvuosi",
+      "area": "Kokonaisala (m²)",
+      "volume": "Rakennustilavuus (m³)",
+      "floors": "Kerrosluku",
+      "basementFloors": "Kellarikerrokset",
+      "foundationMaterial": "Rakennuksen perusta",
+      "supportingStructure": "Kantava rakenne",
+      "façadeMaterial": "Julkisivumateriaali",
+      "roofStructure": "Kattorakenne",
+      "address": "Osoite",
+      "street": "Katuosoite",
+      "city": "Kaupunki",
+      "postalCode": "Postinumero"
     },
     "owner": {
       "title": "Omistajan tiedot",
@@ -128,6 +172,18 @@
       "phone": "Puhelin",
       "email": "Sähköpostiosoite",
       "reportingDate": "Raportointipäivä"
+    },
+    "otherStructures": {
+      "title": "Muut purettavat rakennukset / rakennelmat",
+      "description": "Jos purkamisen yhteydessä puretaan myös muita samaan kiinteistöön kuuluvia rakennuksia tai rakennelmia, lisää ne tähän listaan.",
+      "add": "Lisää rakennus",
+      "dialog": {
+        "title": "Lisää rakennus / rakennelma",
+        "name": "Rakennus / rakennelma",
+        "description": "Lisätiedot",
+        "deleteBuilding": "Poista rakennus / rakennelma",
+        "areYouSure": "Oletko varma että haluat poistaa rakennuksen / rakennelman?"
+      }
     }
   }
 }

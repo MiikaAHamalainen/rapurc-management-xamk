@@ -22,10 +22,10 @@ interface Props {
 const Owner: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
-  const [ ownerInformation, setOwnerInformation ] = React.useState<OwnerInformation | undefined>(undefined);
+  const [ ownerInformation, setOwnerInformation ] = React.useState<OwnerInformation>();
 
   /**
-   * Create new owner information
+   * Fetch owner information array
    */
   const fetchOwnerInformation = async () => {
     if (!keycloak?.token || !surveyId) {
@@ -36,6 +36,11 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
       const fetchedOwnerInformationArray = await Api.getOwnersApi(keycloak.token).listOwnerInformation({
         surveyId: surveyId
       });
+
+      if (fetchedOwnerInformationArray.length !== 1) {
+        return;
+      }
+
       setOwnerInformation(fetchedOwnerInformationArray[0]);
     } catch (error) {
       errorContext.setError(strings.errorHandling.owners.create, error);
@@ -131,6 +136,15 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
    */
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
+  if (!ownerInformation) {
+    return null;
+  }
+
+  const {
+    ownerName,
+    contactPerson
+  } = ownerInformation;
+
   return (
     <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
       <Stack spacing={ 2 } sx={{ flex: 1 }}>
@@ -141,7 +155,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
           renderWithDebounceTextField(
             "ownerName",
             strings.survey.owner.name,
-            ownerInformation?.ownerName || "",
+            ownerName || "",
             onOwnerInfoPropChange
           )
         }
@@ -155,7 +169,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
           renderWithDebounceTextField(
             "firstName",
             strings.survey.owner.firstName,
-            ownerInformation?.contactPerson?.firstName || "",
+            contactPerson?.firstName || "",
             onOwnerInfoContactPersonPropChange
           )
         }
@@ -163,7 +177,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
           renderWithDebounceTextField(
             "lastName",
             strings.survey.owner.surname,
-            ownerInformation?.contactPerson?.lastName || "",
+            contactPerson?.lastName || "",
             onOwnerInfoContactPersonPropChange
           )
         }
@@ -171,7 +185,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
           renderWithDebounceTextField(
             "profession",
             strings.survey.owner.occupation,
-            ownerInformation?.contactPerson?.profession || "",
+            contactPerson?.profession || "",
             onOwnerInfoContactPersonPropChange
           )
         }
@@ -179,7 +193,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
           renderWithDebounceTextField(
             "phone",
             strings.survey.owner.phone,
-            ownerInformation?.contactPerson?.phone || "",
+            contactPerson?.phone || "",
             onOwnerInfoContactPersonPropChange
           )
         }

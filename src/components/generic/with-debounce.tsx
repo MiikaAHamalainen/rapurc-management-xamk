@@ -11,7 +11,7 @@ interface Props {
   name?: string;
   label?: string;
   debounceTimeout?: number;
-  value: string | number;
+  value?: string | number;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -23,7 +23,7 @@ interface DebounceProps {
   disabled?: boolean;
   name?: string;
   label?: string;
-  value: string | number;
+  value?: string | number;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }
@@ -44,21 +44,12 @@ const WithDebounce: React.FC<Props> = ({
 }) => {
   const [ inputValue, setInputValue ] = React.useState(value);
   const [ debounceTimer, setDebounceTimer ] = React.useState<NodeJS.Timeout | undefined>(undefined);
-  const [ timerEvent, setTimerEvent ] = React.useState<React.ChangeEvent<HTMLInputElement> | undefined>(undefined);
 
   React.useEffect(() => {
     if (value !== inputValue) {
       setInputValue(value);
     }
   }, [value]);
-
-  /**
-   * Update value with delay
-   */
-  const debouncedOnChange = () => {
-    onChange && timerEvent && onChange(timerEvent);
-    setTimerEvent(undefined);
-  };
 
   /**
    * Event handler for text field value change
@@ -68,11 +59,9 @@ const WithDebounce: React.FC<Props> = ({
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     debounceTimer && clearTimeout(debounceTimer);
 
-    const newDebounceTimer = setTimeout(() => debouncedOnChange(), debounceTimeout ?? 500);
+    const newDebounceTimer = setTimeout(() => onChange(event), debounceTimeout ?? 500);
 
     setDebounceTimer(newDebounceTimer);
-    event.persist();
-    setTimerEvent(event);
     setInputValue(event.target.value);
   };
 

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { CreateManuallyButton, FilterRoot, SearchContainer } from "styled/screens/new-survey-screen";
 import theme from "theme";
 import Api from "api";
-import { OwnerInformation } from "generated/client";
+import { Building, OwnerInformation } from "generated/client";
 
 /**
  * New survey screen component
@@ -53,6 +53,30 @@ const NewSurveyScreen: React.FC = () => {
   };
 
   /**
+   * Create new owner information
+   * 
+   * @param surveyId survey id
+   */
+  const createBuilding = async (surveyId?: string) => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      const newBuilding: Building = {
+        surveyId: surveyId,
+        metadata: {}
+      };
+      await Api.getBuildingsApi(keycloak.token).createBuilding({
+        surveyId: surveyId,
+        building: newBuilding
+      });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.buildings.create, error);
+    }
+  };
+
+  /**
    * Create survey manually
    */
   const createSurveyManually = async () => {
@@ -61,6 +85,7 @@ const NewSurveyScreen: React.FC = () => {
     try {
       const { id } = await dispatch(createSurvey()).unwrap();
       await createOwnerInformation(id);
+      await createBuilding(id);
       navigate(`/surveys/${id}/owner`);
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.create, error);
