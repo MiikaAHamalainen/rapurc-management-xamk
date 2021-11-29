@@ -29,7 +29,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   const [ building, setBuilding ] = React.useState<Building>();
   const [ creatingOtherStructure, setCreatingOtherStructure ] = React.useState(false);
   const [ deletingOtherStructureIndex, setDeletingOtherStructureIndex ] = React.useState<number>();
-  const [ newOtherStructure, setNewOtherStructure ] = React.useState({} as OtherStructure);
+  const [ newOtherStructure, setNewOtherStructure ] = React.useState<OtherStructure>({ name: "", description: "" });
 
   /**
    * Fetch building
@@ -111,7 +111,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
     };
 
     await updateBuilding(updatedBuilding);
-    setNewOtherStructure({} as OtherStructure);
+    setNewOtherStructure({ name: "", description: "" });
     setCreatingOtherStructure(false);
   };
 
