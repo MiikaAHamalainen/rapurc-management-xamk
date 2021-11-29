@@ -169,20 +169,16 @@
       "deleteBuildingParts": "Delete building part",
       "addNewBuildinPartsDialog": {
         "title": "Add building part",
-        "usability": {
-          "excellent": "Excellent",
-          "good": "Good",
-          "poor": "Poor",
-          "notValidated": "Not validated"
-        },
-        "units": {
-          "kg": "Kilograms (kg)",
-          "m2": "Square meters (\u33A1)",
-          "m3": "Cubic meters (\u33A5)",
-          "pcs": "Pieces (pcs)",
-          "rm": "Running meters (jm)",
-          "tn": "Tons (tn)"
-        }
+        "buildingPart": "Building part",
+        "buildingPartHelperText": "Give descriptive name to building part",
+        "buildingPartOrMaterial": "Building part or material",
+        "buildingPartOrMaterialHelperText": "Give description to part or material",
+        "usability": "Usability",
+        "usabilityHelperText": "If it's unknown, choose \"Not validated\"",
+        "amount": "Amount",
+        "unit": "Unit",
+        "description": "Description",
+        "descriptionHelperText": "Free description, for example, location in the building."
       },
       "deleteReusableDialog": {
         "title": "Delete reusable building part",
@@ -196,6 +192,20 @@
         "amount": "Amount",
         "description": "Lisätieto",
         "unit": "Unit"
+      },
+      "usability": {
+        "excellent": "Excellent",
+        "good": "Good",
+        "poor": "Poor",
+        "notValidated": "Not validated"
+      },
+      "units": {
+        "kg": "Kilograms (kg)",
+        "m2": "Square meters (\u33A1)",
+        "m3": "Cubic meters (\u33A5)",
+        "pcs": "Pieces (pcs)",
+        "rm": "Running meters (jm)",
+        "tn": "Tons (tn)"
       }
     },
     "otherStructures": {

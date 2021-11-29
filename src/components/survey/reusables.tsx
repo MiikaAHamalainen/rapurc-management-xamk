@@ -33,9 +33,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const [ loading, setLoading ] = React.useState(false);
   const [ editable ] = React.useState(true);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
+  const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
   const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
-  const [ selectedMaterialIds, setSelectedMaterialIds ] = React.useState<string[]>([]);
+  const [ selectedReusableIds, setSelectedReusableIds ] = React.useState<string[]>([]);
   const [ newMaterial, setNewMaterial ] = React.useState<Reusable>({
     componentName: "",
     usability: Usability.NotValidated,
@@ -82,7 +83,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   React.useEffect(() => {
     fetchSurveyReusables();
     fetchReusableMaterials();
-    setSelectedMaterialIds([]);
+    setSelectedReusableIds([]);
   }, []);
 
   /**
@@ -120,7 +121,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * @param updatedReusable updated reusable
    */
   const onMaterialRowChange = async (newReusable: Reusable) => {
-    if (!keycloak?.token || !newReusable.id || !surveyId) {
+    if (!keycloak?.token || !newReusable.id || !surveyId || newReusable.componentName === "") {
       return;
     }
     console.log(newReusable);
@@ -135,18 +136,20 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.update, error);
     }
+    
+    setReusableDescriptionDialogOpen(true); // TODO: Find another way to set description dialog open
   };
 
   /**
    * Event handler for delete survey reusable confirm
    */
   const onDeleteSurveyReusableConfirm = async () => {
-    if (!keycloak?.token || !selectedMaterialIds || !surveyId) {
+    if (!keycloak?.token || !selectedReusableIds || !surveyId) {
       return;
     }
 
     try {
-      selectedMaterialIds.forEach(async materialId => {
+      selectedReusableIds.forEach(async materialId => {
         if (keycloak.token) {
           await Api.getSurveyReusablesApi(keycloak.token).deleteSurveyReusable({
             surveyId: surveyId,
@@ -160,50 +163,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       errorContext.setError(strings.errorHandling.reusables.delete, error);
     }
 
-    setSelectedMaterialIds([]);
+    setSelectedReusableIds([]);
     setDeletingMaterial(false);
-  };
-
-  /**
-   * Even handler for new material id change
-   */
-  const handleNewMaterialIdChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    newMaterial && setNewMaterial({ ...newMaterial, reusableMaterialId: target.value });
-  };
-
-  /**
-   * Even handler for new material usability change
-   */
-  const handleNewMaterialUsabilityChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    newMaterial && setNewMaterial({ ...newMaterial, usability: target.value as Usability });
-  };
-
-  /**
-   * Even handler for new material component name change
-   */
-  const handleNewMaterialComponentNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    newMaterial && setNewMaterial({ ...newMaterial, componentName: target.value });
-  };
-
-  /**
-   * Even handler for new material amount change
-   */
-  const handleNewMaterialAmountChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    newMaterial && setNewMaterial({ ...newMaterial, amount: target.value as unknown as number });
-  };
-
-  /**
-   * Even handler for new material unit change
-   */
-  const handleNewMaterialUnitChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    newMaterial && setNewMaterial({ ...newMaterial, unit: target.value as Unit });
-  };
-
-  /**
-   * Even handler for new material description change
-   */
-  const handleNewMaterialDescriptionChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    newMaterial && setNewMaterial({ ...newMaterial, description: target.value });
   };
 
   /**
@@ -267,63 +228,65 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         <TextField
           fullWidth
           color="primary"
-          variant="standard"
-          placeholder="Rakennusosa"
-          onChange={ handleNewMaterialComponentNameChange }
-          helperText="Anna rakennusosaa kuvaava nimi"
+          label={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPart }
+          onChange={ event => setNewMaterial({ ...newMaterial, componentName: event.target.value }) }
+          helperText={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartHelperText }
         />
-        <Stack direction="row" justifyContent="space-between">
+        <Stack
+          direction={ isMobile ? "column" : "row" }
+          spacing={ 2 }
+        >
           <TextField
-            fullWidth={ isMobile }
+            fullWidth
             select
             color="primary"
-            variant="standard"
-            label="Rakennusosa tai -materiaali"
-            helperText="Anna osaa vastaava tarkenne"
-            onChange={ handleNewMaterialIdChange }
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartOrMaterial }
+            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartOrMaterialHelperText }
+            onChange={ event => setNewMaterial({ ...newMaterial, reusableMaterialId: event.target.value }) }
           >
             { reusableOptions }
           </TextField>
           <TextField
+            fullWidth
             select
             color="primary"
-            variant="standard"
-            label="Käyttökelpoisuus"
-            helperText="Jos ei tiedossa, valitse 'ei arvioitu'"
-            onChange={ handleNewMaterialUsabilityChange }
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.usability }
+            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.usabilityHelperText }
+            onChange={ event => setNewMaterial({ ...newMaterial, usability: event.target.value as Usability }) }
           >
             { usabilityOptions }
           </TextField>
         </Stack>
-        <Stack direction="row" justifyContent="space-between">
+        <Stack
+          direction={ isMobile ? "column" : "row" }
+          spacing={ 2 }
+        >
           <TextField
-            fullWidth={ isMobile }
+            fullWidth
             color="primary"
-            variant="standard"
-            label="Määrä"
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.amount }
             type="number"
-            onChange={ handleNewMaterialAmountChange }
+            onChange={ event => setNewMaterial({ ...newMaterial, amount: event.target.value as unknown as number }) }
           >
             { reusableOptions }
           </TextField>
           <TextField
-            fullWidth={ isMobile }
+            fullWidth
             select
             color="primary"
-            variant="standard"
-            label="Mittayksikkö"
-            onChange={ handleNewMaterialUnitChange }
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.unit }
+            onChange={ event => setNewMaterial({ ...newMaterial, unit: event.target.value as Unit }) }
           >
             { unitOptions }
           </TextField>
         </Stack>
-        <Stack>
+        <Stack spacing={ 2 } marginTop={ 2 }>
           <TextField
             multiline
             rows={ 6 }
-            label="Lisätiedot"
-            onChange={ handleNewMaterialDescriptionChange }
-            helperText="Vapaa kuvaus esim. sijainnista rakennuksessa tms."
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.description }
+            onChange={ event => setNewMaterial({ ...newMaterial, description: event.target.value }) }
+            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.descriptionHelperText }
           />
         </Stack>
       </GenericDialog>
@@ -334,10 +297,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Render survey reusables table for desktop
    */
   const renderSurveyDataTable = () => {
-    const localizedUsability = Object.values(Usability).map(usability => LocalizationUtils.getLocalizedUsability(usability));
-    const localizedUnits = Object.values(Unit).map(unit => LocalizationUtils.getLocalizedUnits(unit));
-    const reusableMaterialsArray = reusableMaterials.map(material => material.name);
-
+    const localizedUsability = Object.values(Usability)
+      .map(usability => { return { label: LocalizationUtils.getLocalizedUsability(usability), value: usability }; });
+    const localizedUnits = Object.values(Unit)
+      .map(unit => { return { label: LocalizationUtils.getLocalizedUnits(unit), value: unit }; });
+    const reusableMaterialsArray = reusableMaterials.map(material => { return { value: material.id, label: material.name }; });
+    console.log(surveyReusables);
     const columns: GridColDef[] = [
       {
         field: "material",
@@ -380,7 +345,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         field: "wasteAmount",
         headerName: strings.survey.reusables.dataGridColumns.wasteAmount,
         width: 340,
-        editable: editable
+        editable: false // Not yet implemented
       },
       {
         field: "description",
@@ -393,10 +358,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             <GenericDialog
               error={ false }
               title="Muokkaa lisätietoa"
-              open={ true }
-              onClose={ () => {} }
-              onCancel={ () => {} }
-              onConfirm={ () => {} }
+              open={ reusableDescriptionDialogOpen }
+              onClose={ () => setReusableDescriptionDialogOpen(false) }
+              onCancel={ () => setReusableDescriptionDialogOpen(false) }
+              onConfirm={ () => setReusableDescriptionDialogOpen(false) }
               positiveButtonText={ strings.generic.confirm }
               cancelButtonText={ strings.generic.cancel }
             >
@@ -426,7 +391,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           onRowChange={ onMaterialRowChange }
           component={ params =>
             <DataGrid
-              onSelectionModelChange={ selectedIds => setSelectedMaterialIds(selectedIds as string[]) }
+              onSelectionModelChange={ selectedIds => setSelectedReusableIds(selectedIds as string[]) }
               checkboxSelection
               autoHeight
               loading={ loading }
@@ -452,7 +417,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         >
           <Hidden lgDown>
             <SurveyButton
-              disabled={ !selectedMaterialIds.length }
+              disabled={ !selectedReusableIds.length }
               variant="contained"
               color="error"
               startIcon={ <Delete/> }

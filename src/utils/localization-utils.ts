@@ -24,10 +24,10 @@ export default class LocalizationUtils {
    * @returns localized string
    */
   public static getLocalizedUsability = (usability: Usability): string => ({
-    [Usability.Excellent]: strings.survey.reusables.addNewBuildinPartsDialog.usability.excellent,
-    [Usability.Good]: strings.survey.reusables.addNewBuildinPartsDialog.usability.good,
-    [Usability.Poor]: strings.survey.reusables.addNewBuildinPartsDialog.usability.poor,
-    [Usability.NotValidated]: strings.survey.reusables.addNewBuildinPartsDialog.usability.notValidated
+    [Usability.Excellent]: strings.survey.reusables.usability.excellent,
+    [Usability.Good]: strings.survey.reusables.usability.good,
+    [Usability.Poor]: strings.survey.reusables.usability.poor,
+    [Usability.NotValidated]: strings.survey.reusables.usability.notValidated
   })[usability];
 
   /**
@@ -37,12 +37,12 @@ export default class LocalizationUtils {
    * @returns localized string
    */
   public static getLocalizedUnits = (unit: Unit): string => ({
-    [Unit.Kg]: strings.survey.reusables.addNewBuildinPartsDialog.units.kg,
-    [Unit.M2]: strings.survey.reusables.addNewBuildinPartsDialog.units.m2,
-    [Unit.M3]: strings.survey.reusables.addNewBuildinPartsDialog.units.m3,
-    [Unit.Pcs]: strings.survey.reusables.addNewBuildinPartsDialog.units.pcs,
-    [Unit.Rm]: strings.survey.reusables.addNewBuildinPartsDialog.units.rm,
-    [Unit.Tn]: strings.survey.reusables.addNewBuildinPartsDialog.units.tn
+    [Unit.Kg]: strings.survey.reusables.units.kg,
+    [Unit.M2]: strings.survey.reusables.units.m2,
+    [Unit.M3]: strings.survey.reusables.units.m3,
+    [Unit.Pcs]: strings.survey.reusables.units.pcs,
+    [Unit.Rm]: strings.survey.reusables.units.rm,
+    [Unit.Tn]: strings.survey.reusables.units.tn
   })[unit];
 
 }

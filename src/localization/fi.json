@@ -169,20 +169,16 @@
       "deleteBuildingParts": "Poista rakennusosa",
       "addNewBuildinPartsDialog": {
         "title": "Lisää rakennusosa",
-        "usability": {
-          "excellent": "Erinomainen",
-          "good": "Hyvä",
-          "poor": "Heikko",
-          "notValidated": "Ei arvioitu"
-        },
-        "units": {
-          "kg": "Kilogrammaa (kg)",
-          "m2": "Neliömetriä (\u33A1)",
-          "m3": "Kuutiometriä (\u33A5)",
-          "pcs": "Kappaletta (kpl)",
-          "rm": "Juoksumetriä (jm)",
-          "tn": "Tonnia (tn)"
-        }
+        "buildingPart": "Rakennusosa",
+        "buildingPartHelperText": "Anna rakennusosaa kuvaava nimi",
+        "buildingPartOrMaterial": "Rakennusosa tai -materiaali",
+        "buildingPartOrMaterialHelperText": "Anna osaa vastaava tarkenne",
+        "usability": "Käyttökelpoisuus",
+        "usabilityHelperText": "Jos ei tiedossa, valitse \"ei arvioitu\"",
+        "amount": "Määrä",
+        "unit": "Mittayksikkö",
+        "description": "Lisätiedot",
+        "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms."
       },
       "deleteReusableDialog": {
         "title": "Poista uudelleenkäytettävä osa",
@@ -196,6 +192,20 @@
         "wasteAmount": "Purkujätemäärä",
         "description": "Lisätieto",
         "unit": "Yksikkö"
+      },
+      "usability": {
+        "excellent": "Erinomainen",
+        "good": "Hyvä",
+        "poor": "Heikko",
+        "notValidated": "Ei arvioitu"
+      },
+      "units": {
+        "kg": "Kilogrammaa (kg)",
+        "m2": "Neliömetriä (\u33A1)",
+        "m3": "Kuutiometriä (\u33A5)",
+        "pcs": "Kappaletta (kpl)",
+        "rm": "Juoksumetriä (jm)",
+        "tn": "Tonnia (tn)"
       }
     },
     "otherStructures": {

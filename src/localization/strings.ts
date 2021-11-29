@@ -204,20 +204,16 @@ export interface Localized extends LocalizedStringsMethods {
       deleteBuildingParts: string;
       addNewBuildinPartsDialog: {
         title: string;
-        usability: {
-          excellent: string;
-          good: string;
-          poor: string;
-          notValidated: string;
-        },
-        units: {
-          kg: string;
-          m2: string;
-          m3: string;
-          pcs: string;
-          rm: string;
-          tn: string;
-        }
+        buildingPart: string;
+        buildingPartHelperText: string;
+        buildingPartOrMaterial: string;
+        buildingPartOrMaterialHelperText: string;
+        usability: string;
+        usabilityHelperText: string;
+        amount: string;
+        unit: string;
+        description: string;
+        descriptionHelperText: string;
       },
       deleteReusableDialog: {
         title: string;
@@ -231,6 +227,20 @@ export interface Localized extends LocalizedStringsMethods {
         amount: string;
         description: string;
         unit: string;
+      },
+      usability: {
+        excellent: string;
+        good: string;
+        poor: string;
+        notValidated: string;
+      },
+      units: {
+        kg: string;
+        m2: string;
+        m3: string;
+        pcs: string;
+        rm: string;
+        tn: string;
       }
     };
     otherStructures: {
