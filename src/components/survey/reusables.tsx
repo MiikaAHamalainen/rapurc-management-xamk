@@ -34,7 +34,13 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const [ editable ] = React.useState(true);
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
   const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
-  const [ selectedSurveyIds ] = React.useState<string[]>([]);
+  const [ selectedMaterialIds, setSelectedMaterialIds ] = React.useState<string[]>([]);
+  const [ newMaterial, setNewMaterial ] = React.useState<Reusable>({
+    componentName: "",
+    usability: Usability.NotValidated,
+    reusableMaterialId: "",
+    metadata: {}
+  });
 
   /**
    * Fetch owner information array
@@ -112,12 +118,28 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param updatedReusable updated reusable
    */
-  const onMachineChange = async (updatedReusable: Reusable) => {
+  const onMaterialRowChange = async (updatedReusable: Reusable) => {
     try {
       console.log(updatedReusable);
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.update, error);
     }
+  };
+
+  /**
+   * Even handler for new material id change
+   */
+  const handleNewMaterialIdChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    newMaterial && setNewMaterial({ ...newMaterial, reusableMaterialId: target.value });
+    console.log(newMaterial);
+  };
+
+  /**
+   * Even handler for new material amount change
+   */
+  const handleNewMaterialUsabilityChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    /* newMaterial && setNewMaterial({ ...newMaterial, usability: Usability[Object.values(Usability).findIndex(usability => usability === target.value)] }); */
+    console.log(target);
   };
 
   /**
@@ -166,7 +188,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           color="primary"
           variant="standard"
           placeholder="Rakennusosa"
-          onChange={ event => console.log(event.target.value) }
+          onChange={ event => setNewMaterial({ ...newMaterial, componentName: event.target.value }) }
           helperText="Anna rakennusosaa kuvaava nimi"
         />
         <Stack direction="row" justifyContent="space-between">
@@ -177,6 +199,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             variant="standard"
             placeholder="Rakennusosa tai -materiaali"
             helperText="Anna osaa vastaava tarkenne"
+            onChange={ handleNewMaterialIdChange }
           >
             { reusableOptions }
           </TextField>
@@ -186,6 +209,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             variant="standard"
             placeholder="Käyttökelpoisuus"
             helperText="Jos ei tiedossa, valitse 'ei arvioitu'"
+            onChange={ handleNewMaterialUsabilityChange }
           >
             { usabilityOptions }
           </TextField>
@@ -289,9 +313,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         <WithReusableDataGridDebounce
           rows={ surveyReusables }
           columns={ columns }
-          onRowChange={ onMachineChange }
+          onRowChange={ onMaterialRowChange }
           component={ params =>
             <DataGrid
+              onSelectionModelChange={ selectedIds => setSelectedMaterialIds(selectedIds as string[]) }
               checkboxSelection
               autoHeight
               loading={ loading }
@@ -317,7 +342,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         >
           <Hidden lgDown>
             <SurveyButton
-              disabled={ !selectedSurveyIds.length }
+              disabled={ !selectedMaterialIds.length }
               variant="contained"
               color="error"
               startIcon={ <Delete/> }
