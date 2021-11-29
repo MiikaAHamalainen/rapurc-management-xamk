@@ -38,7 +38,7 @@ const Owner: React.FC<Props> = ({ surveyId }) => {
       });
 
       if (fetchedOwnerInformationArray.length !== 1) {
-        throw new Error("Invalid fetched owner information.");
+        return;
       }
 
       setOwnerInformation(fetchedOwnerInformationArray[0]);

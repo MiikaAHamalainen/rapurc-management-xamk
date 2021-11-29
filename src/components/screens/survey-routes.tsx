@@ -1,4 +1,5 @@
 import Building from "components/survey/building";
+import OtherStructures from "components/survey/other-structure";
 import Owner from "components/survey/owner";
 import Reusables from "components/survey/reusables";
 import * as React from "react";
@@ -32,6 +33,10 @@ const SurveyRoutes: React.FC<Props> = ({ surveyId }) => {
       <Route
         path="reusables"
         element={ <Reusables surveyId={ surveyId }/> }
+      />
+      <Route
+        path="otherStructures"
+        element={ <OtherStructures surveyId={ surveyId }/> }
       />
     </Routes>
   );

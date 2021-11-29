@@ -2,6 +2,7 @@
   "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
+    "add": "Add",
     "addNew": "Add new",
     "notImplemented": "Not yet implemented",
     "confirm": "Confirm",
@@ -191,6 +192,18 @@
         "amount": "Amount",
         "description": "Lisätieto",
         "unit": "Unit"
+      }
+    },
+    "otherStructures": {
+      "title": "Other demolished buildings and structures",
+      "description": "Add buildings and structures that are going to be demolished with the building.",
+      "add": "Add building",
+      "dialog": {
+        "title": "Add building / structure",
+        "name": "Building / structure",
+        "description": "Additional information",
+        "deleteBuilding": "Delete other building / structure",
+        "areYouSure": "Are you sure you want to delete this building / structure?"
       }
     }
   }

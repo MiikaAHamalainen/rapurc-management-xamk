@@ -1,6 +1,6 @@
-import * as React from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import * as React from "react";
 
 /**
  * Component properties
@@ -68,7 +68,14 @@ const GenericDialog: React.FC<Props> = ({
       <DialogTitle>
         { title }
         <IconButton
+          aria-label="close"
           size="small"
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: theme => theme.palette.grey[500]
+          }}
           onClick={ onCancel }
         >
           <CloseIcon/>
@@ -81,7 +88,8 @@ const GenericDialog: React.FC<Props> = ({
         { cancelButtonText &&
           <Button
             onClick={ onCancel }
-            color="secondary"
+            variant="text"
+            color="primary"
           >
             { cancelButtonText }
           </Button>

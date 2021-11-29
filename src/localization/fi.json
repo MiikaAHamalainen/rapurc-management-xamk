@@ -2,6 +2,7 @@
   "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
+    "add": "Lisää",
     "addNew": "Lisää uusi",
     "notImplemented": "Ei vielä toteutettu",
     "confirm": "Vahvista",
@@ -191,6 +192,18 @@
         "wasteAmount": "Purkujätemäärä",
         "description": "Lisätieto",
         "unit": "Yksikkö"
+      }
+    },
+    "otherStructures": {
+      "title": "Muut purettavat rakennukset / rakennelmat",
+      "description": "Jos purkamisen yhteydessä puretaan myös muita samaan kiinteistöön kuuluvia rakennuksia tai rakennelmia, lisää ne tähän listaan.",
+      "add": "Lisää rakennus",
+      "dialog": {
+        "title": "Lisää rakennus / rakennelma",
+        "name": "Rakennus / rakennelma",
+        "description": "Lisätiedot",
+        "deleteBuilding": "Poista rakennus / rakennelma",
+        "areYouSure": "Oletko varma että haluat poistaa rakennuksen / rakennelman?"
       }
     }
   }
