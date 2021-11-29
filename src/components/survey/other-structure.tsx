@@ -28,7 +28,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   const errorContext = React.useContext(ErrorContext);
   const [ building, setBuilding ] = React.useState<Building>();
   const [ creatingOtherStructure, setCreatingOtherStructure ] = React.useState(false);
-  const [ deletingOtherStructureId, setDeletingOtherStructureId ] = React.useState<number>();
+  const [ deletingOtherStructureIndex, setDeletingOtherStructureIndex ] = React.useState<number>();
   const [ newOtherStructure, setNewOtherStructure ] = React.useState({} as OtherStructure);
 
   /**
@@ -69,11 +69,13 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
     }
 
     try {
-      await Api.getBuildingsApi(keycloak.token).updateBuilding({
+      const fetchedUpdatedBuilding = await Api.getBuildingsApi(keycloak.token).updateBuilding({
         surveyId: surveyId,
         buildingId: building.id,
         building: updatedBuilding
       });
+
+      setBuilding(fetchedUpdatedBuilding);
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildings.update, error);
     }
@@ -83,22 +85,16 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
    * Delete other structure confirm handler
    */
   const onDeleteOtherStructureConfirm = async () => {
-    if (!building?.otherStructures || deletingOtherStructureId === undefined) {
+    if (!building?.otherStructures || deletingOtherStructureIndex === undefined) {
       return;
     }
 
-    const updatedOtherStructures = building.otherStructures;
+    const updatedBuilding = produce(building, draft => {
+      draft.otherStructures?.splice(deletingOtherStructureIndex, 1);
+    });
 
-    updatedOtherStructures.splice(deletingOtherStructureId, 1);
-
-    const updatedBuilding: Building = {
-      ...building,
-      otherStructures: updatedOtherStructures
-    };
-
-    setBuilding(updatedBuilding);
     await updateBuilding(updatedBuilding);
-    setDeletingOtherStructureId(undefined);
+    setDeletingOtherStructureIndex(undefined);
   };
 
   /**
@@ -114,7 +110,6 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       otherStructures: [ ...building.otherStructures, newOtherStructure ]
     };
 
-    setBuilding(updatedBuilding);
     await updateBuilding(updatedBuilding);
     setNewOtherStructure({} as OtherStructure);
     setCreatingOtherStructure(false);
@@ -142,20 +137,13 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
-    const updatedOtherStructure: OtherStructure = {
-      ...building.otherStructures[index],
-      [name]: value
-    };
+    const updatedBuilding = produce(building, draft => {
+      draft.otherStructures!![index] = {
+        ...draft.otherStructures!![index],
+        [name]: value
+      };
+    });
 
-    const updatedOtherStructures = building.otherStructures;
-    updatedOtherStructures[index] = updatedOtherStructure;
-
-    const updatedBuilding: Building = {
-      ...building,
-      otherStructures: updatedOtherStructures
-    };
-
-    setBuilding(updatedBuilding);
     updateBuilding(updatedBuilding);
   };
 
@@ -169,7 +157,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       onClose={ () => setCreatingOtherStructure(false) }
       onCancel={ () => setCreatingOtherStructure(false) }
       onConfirm={ onCreateOtherStructureConfirm }
-      title={strings.survey.otherStructures.dialog.title }
+      title={ strings.survey.otherStructures.dialog.title }
       positiveButtonText={ strings.generic.add }
       cancelButtonText={ strings.generic.cancel }
     >
@@ -200,9 +188,9 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   const renderDeleteOtherStructureDialog = () => (
     <GenericDialog
       error={ false }
-      open={ deletingOtherStructureId !== undefined }
-      onClose={ () => setDeletingOtherStructureId(undefined) }
-      onCancel={ () => setDeletingOtherStructureId(undefined) }
+      open={ deletingOtherStructureIndex !== undefined }
+      onClose={ () => setDeletingOtherStructureIndex(undefined) }
+      onCancel={ () => setDeletingOtherStructureIndex(undefined) }
       onConfirm={ onDeleteOtherStructureConfirm }
       title={ strings.survey.otherStructures.dialog.deleteBuilding }
       positiveButtonText={ strings.generic.delete }
@@ -271,7 +259,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
           <Button
             variant="outlined"
             color="primary"
-            onClick={ () => setDeletingOtherStructureId(index) }
+            onClick={ () => setDeletingOtherStructureIndex(index) }
           >
             { strings.generic.delete }
           </Button>
