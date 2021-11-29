@@ -184,6 +184,10 @@
           "tn": "Tonnia (tn)"
         }
       },
+      "deleteReusableDialog": {
+        "title": "Poista uudelleenkäytettävä osa",
+        "text": "Haluatko varmasti poistaa uudelleenkäytettävät osat?"
+      },
       "dataGridColumns": {
         "material": "Materiaali",
         "buildingPart": "Rakennusosa",

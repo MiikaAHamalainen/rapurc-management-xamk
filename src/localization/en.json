@@ -184,6 +184,10 @@
           "tn": "Tons (tn)"
         }
       },
+      "deleteReusableDialog": {
+        "title": "Delete reusable building part",
+        "text": "Are you sure you want to delete these reusable parts?"
+      },
       "dataGridColumns": {
         "material": "Material",
         "buildingPart": "Building part",

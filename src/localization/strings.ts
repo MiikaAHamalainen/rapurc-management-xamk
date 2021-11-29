@@ -219,6 +219,10 @@ export interface Localized extends LocalizedStringsMethods {
           tn: string;
         }
       },
+      deleteReusableDialog: {
+        title: string;
+        text: string;
+      },
       dataGridColumns: {
         material: string;
         buildingPart: string;

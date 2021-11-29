@@ -1,5 +1,5 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Dialog, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridRenderEditCellParams, GridColDef } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
@@ -32,6 +32,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
   const [ loading, setLoading ] = React.useState(false);
   const [ editable ] = React.useState(true);
+  const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
   const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
   const [ selectedMaterialIds, setSelectedMaterialIds ] = React.useState<string[]>([]);
@@ -54,7 +55,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     try {
       const fetchedReusables = await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: surveyId });
       setSurveyReusables(fetchedReusables);
-      console.log(fetchedReusables);
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.list, error);
     }
@@ -82,6 +82,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   React.useEffect(() => {
     fetchSurveyReusables();
     fetchReusableMaterials();
+    setSelectedMaterialIds([]);
   }, []);
 
   /**
@@ -122,17 +123,45 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     if (!keycloak?.token || !newReusable.id || !surveyId) {
       return;
     }
-
+    console.log(newReusable);
     try {
       const updatedReusable = await Api.getSurveyReusablesApi(keycloak.token).updateSurveyReusable({
         surveyId: surveyId,
         reusableId: newReusable.id,
         reusable: newReusable
       });
-      console.log(updatedReusable);
+
+      setSurveyReusables(surveyReusables.map(reusable => (reusable.id === updatedReusable.id ? updatedReusable : reusable)));
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.update, error);
     }
+  };
+
+  /**
+   * Event handler for delete survey reusable confirm
+   */
+  const onDeleteSurveyReusableConfirm = async () => {
+    if (!keycloak?.token || !selectedMaterialIds || !surveyId) {
+      return;
+    }
+
+    try {
+      selectedMaterialIds.forEach(async materialId => {
+        if (keycloak.token) {
+          await Api.getSurveyReusablesApi(keycloak.token).deleteSurveyReusable({
+            surveyId: surveyId,
+            reusableId: materialId.toString()
+          });
+        }
+
+        fetchSurveyReusables();
+      });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.reusables.delete, error);
+    }
+
+    setSelectedMaterialIds([]);
+    setDeletingMaterial(false);
   };
 
   /**
@@ -183,6 +212,26 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   /**
+   * Renders delete material dialog
+   */
+  const renderDeleteSurveyMaterialDialog = () => (
+    <GenericDialog
+      error={ false }
+      open={ deletingMaterial }
+      onClose={ () => setDeletingMaterial(false) }
+      onCancel={ () => setDeletingMaterial(false) }
+      onConfirm={ onDeleteSurveyReusableConfirm }
+      title={ strings.survey.reusables.deleteReusableDialog.title }
+      positiveButtonText={ strings.generic.confirm }
+      cancelButtonText={ strings.generic.cancel }
+    >
+      <Typography>
+        { strings.survey.reusables.deleteReusableDialog.text }
+      </Typography>
+    </GenericDialog>
+  );
+
+  /**
    * Renders add survey reusable dialog
    */
   const renderAddSurveyReusableDialog = () => {
@@ -215,9 +264,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         positiveButtonText={ strings.generic.confirm }
         cancelButtonText={ strings.generic.cancel }
       >
-        <Typography variant="subtitle1">
-          { strings.survey.reusables.addNewBuildinPartsDialog.title }
-        </Typography>
         <TextField
           fullWidth
           color="primary"
@@ -232,7 +278,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             color="primary"
             variant="standard"
-            placeholder="Rakennusosa tai -materiaali"
+            label="Rakennusosa tai -materiaali"
             helperText="Anna osaa vastaava tarkenne"
             onChange={ handleNewMaterialIdChange }
           >
@@ -242,7 +288,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             color="primary"
             variant="standard"
-            placeholder="Käyttökelpoisuus"
+            label="Käyttökelpoisuus"
             helperText="Jos ei tiedossa, valitse 'ei arvioitu'"
             onChange={ handleNewMaterialUsabilityChange }
           >
@@ -254,7 +300,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             fullWidth={ isMobile }
             color="primary"
             variant="standard"
-            placeholder="Määrä"
+            label="Määrä"
             type="number"
             onChange={ handleNewMaterialAmountChange }
           >
@@ -275,7 +321,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           <TextField
             multiline
             rows={ 6 }
-            placeholder="Lisätiedot"
+            label="Lisätiedot"
             onChange={ handleNewMaterialDescriptionChange }
             helperText="Vapaa kuvaus esim. sijainnista rakennuksessa tms."
           />
@@ -344,13 +390,14 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         renderEditCell: (params: GridRenderEditCellParams) => {
           const { value, api, id, field } = params;
           return (
-            <div style={{ overflow: "visible !important" }}>
+            <Dialog open={true} style={{ overflow: "visible !important" }}>
               <TextField
                 sx={{
                   zIndex: 1000,
                   backgroundColor: "#fff",
                   position: "fixed",
-                  border: `1px solid ${theme.palette.primary.main}`
+                  border: `1px solid ${theme.palette.primary.main}`,
+                  maxWidth: 100
                 }}
                 placeholder="Kirjoita lisätieto"
                 multiline
@@ -362,7 +409,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
                   value: e.target.value
                 }, e) }
               />
-            </div>
+            </Dialog>
           );
         }
       }
@@ -406,7 +453,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
               variant="contained"
               color="error"
               startIcon={ <Delete/> }
-              onClick={ () => console.log("Poista") }
+              onClick={ () => setDeletingMaterial(true) }
               sx={{ mr: 2 }}
             >
               { strings.survey.reusables.deleteBuildingParts }
@@ -423,6 +470,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         </Box>
       </Stack>
       { renderAddSurveyReusableDialog() }
+      { renderDeleteSurveyMaterialDialog() }
       { renderSurveyDataTable() }
     </>
   );
