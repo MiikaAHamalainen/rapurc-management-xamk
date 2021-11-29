@@ -34,7 +34,7 @@
     "reusables": {
       "list": "Virhe listattaessa uudelleenkäytettäviä rakennusosia",
       "create": "Virhe luotaessa uudelleenkäytettävää rakennusosaa",
-      "update": "Virhe päivitettäessä omistajan tietoja",
+      "update": "Virhe päivitettäessä uudelleenkäytettävää rakennusosaa",
       "delete": "Virhe poistettaessa uudelleenkäytettävää rakennusosaa"
     },
     "materials": {
@@ -187,9 +187,10 @@
         "material": "Materiaali",
         "buildingPart": "Rakennusosa",
         "usability": "Käyttökelpoisuus",
-        "pcs": "Määrä",
-        "amount": "Purkujätemäärä",
-        "description": "Lisätieto"
+        "amount": "Määrä",
+        "wasteAmount": "Purkujätemäärä",
+        "description": "Lisätieto",
+        "unit": "Yksikkö"
       }
     }
   }

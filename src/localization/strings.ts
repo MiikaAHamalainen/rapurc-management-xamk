@@ -222,9 +222,10 @@ export interface Localized extends LocalizedStringsMethods {
         material: string;
         buildingPart: string;
         usability: string;
-        pcs: string;
+        wasteAmount: string;
         amount: string;
         description: string;
+        unit: string;
       }
     }
   };

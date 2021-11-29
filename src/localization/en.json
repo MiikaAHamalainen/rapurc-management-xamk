@@ -187,9 +187,10 @@
         "material": "Material",
         "buildingPart": "Building part",
         "usability": "Usability",
-        "pcs": "Pcs",
+        "wasteAmount": "Waste amount",
         "amount": "Amount",
-        "description": "Lisätieto"
+        "description": "Lisätieto",
+        "unit": "Unit"
       }
     }
   }

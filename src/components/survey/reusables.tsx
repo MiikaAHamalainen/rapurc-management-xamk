@@ -96,12 +96,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
         reusable: {
-          componentName: "Testikomponentti",
-          reusableMaterialId: reusableMaterials[0].id || "test",
-          usability: Usability.Good,
-          unit: Unit.M2,
-          description: "Testikuvaus",
-          amount: 10,
+          componentName: newMaterial.componentName,
+          reusableMaterialId: newMaterial.reusableMaterialId,
+          usability: newMaterial.usability,
+          unit: newMaterial.unit,
+          description: newMaterial.description,
+          amount: newMaterial.amount,
           metadata: {}
         }
       });
@@ -118,8 +118,17 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param updatedReusable updated reusable
    */
-  const onMaterialRowChange = async (updatedReusable: Reusable) => {
+  const onMaterialRowChange = async (newReusable: Reusable) => {
+    if (!keycloak?.token || !newReusable.id || !surveyId) {
+      return;
+    }
+
     try {
+      const updatedReusable = await Api.getSurveyReusablesApi(keycloak.token).updateSurveyReusable({
+        surveyId: surveyId,
+        reusableId: newReusable.id,
+        reusable: newReusable
+      });
       console.log(updatedReusable);
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.update, error);
@@ -131,15 +140,41 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const handleNewMaterialIdChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
     newMaterial && setNewMaterial({ ...newMaterial, reusableMaterialId: target.value });
-    console.log(newMaterial);
+  };
+
+  /**
+   * Even handler for new material usability change
+   */
+  const handleNewMaterialUsabilityChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    newMaterial && setNewMaterial({ ...newMaterial, usability: target.value as Usability });
+  };
+
+  /**
+   * Even handler for new material component name change
+   */
+  const handleNewMaterialComponentNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    newMaterial && setNewMaterial({ ...newMaterial, componentName: target.value });
   };
 
   /**
    * Even handler for new material amount change
    */
-  const handleNewMaterialUsabilityChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    /* newMaterial && setNewMaterial({ ...newMaterial, usability: Usability[Object.values(Usability).findIndex(usability => usability === target.value)] }); */
-    console.log(target);
+  const handleNewMaterialAmountChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    newMaterial && setNewMaterial({ ...newMaterial, amount: target.value as unknown as number });
+  };
+
+  /**
+   * Even handler for new material unit change
+   */
+  const handleNewMaterialUnitChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    newMaterial && setNewMaterial({ ...newMaterial, unit: target.value as Unit });
+  };
+
+  /**
+   * Even handler for new material description change
+   */
+  const handleNewMaterialDescriptionChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    newMaterial && setNewMaterial({ ...newMaterial, description: target.value });
   };
 
   /**
@@ -152,7 +187,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const renderAddSurveyReusableDialog = () => {
     const reusableOptions = Object.values(reusableMaterials).map(material =>
-      <MenuItem key={ material.id } value={ material.name }>
+      <MenuItem key={ material.id } value={ material.id }>
         { material.name }
       </MenuItem>
     );
@@ -188,7 +223,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           color="primary"
           variant="standard"
           placeholder="Rakennusosa"
-          onChange={ event => setNewMaterial({ ...newMaterial, componentName: event.target.value }) }
+          onChange={ handleNewMaterialComponentNameChange }
           helperText="Anna rakennusosaa kuvaava nimi"
         />
         <Stack direction="row" justifyContent="space-between">
@@ -220,6 +255,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             color="primary"
             variant="standard"
             placeholder="Määrä"
+            type="number"
+            onChange={ handleNewMaterialAmountChange }
           >
             { reusableOptions }
           </TextField>
@@ -229,9 +266,19 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             color="primary"
             variant="standard"
             label="Mittayksikkö"
+            onChange={ handleNewMaterialUnitChange }
           >
             { unitOptions }
           </TextField>
+        </Stack>
+        <Stack>
+          <TextField
+            multiline
+            rows={ 6 }
+            placeholder="Lisätiedot"
+            onChange={ handleNewMaterialDescriptionChange }
+            helperText="Vapaa kuvaus esim. sijainnista rakennuksessa tms."
+          />
         </Stack>
       </GenericDialog>
     );
@@ -241,14 +288,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Render survey reusables table for desktop
    */
   const renderSurveyDataTable = () => {
-    const localizedUnits = Object.values(Usability).map(usability => LocalizationUtils.getLocalizedUsability(usability));
+    const localizedUsability = Object.values(Usability).map(usability => LocalizationUtils.getLocalizedUsability(usability));
+    const localizedUnits = Object.values(Unit).map(unit => LocalizationUtils.getLocalizedUnits(unit));
+    const reusableMaterialsArray = reusableMaterials.map(material => material.name);
 
     const columns: GridColDef[] = [
       {
         field: "material",
         headerName: strings.survey.reusables.dataGridColumns.material,
         width: 340,
-        editable: editable
+        editable: editable,
+        type: "singleSelect",
+        valueOptions: reusableMaterialsArray
       },
       {
         field: "componentName",
@@ -261,18 +312,27 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         headerName: strings.survey.reusables.dataGridColumns.usability,
         width: 340,
         type: "singleSelect",
-        valueOptions: localizedUnits,
-        editable: editable
-      },
-      {
-        field: "pcs",
-        headerName: strings.survey.reusables.dataGridColumns.pcs,
-        width: 340,
+        valueOptions: localizedUsability,
         editable: editable
       },
       {
         field: "amount",
         headerName: strings.survey.reusables.dataGridColumns.amount,
+        width: 170,
+        type: "number",
+        editable: editable
+      },
+      {
+        field: "unit",
+        headerName: strings.survey.reusables.dataGridColumns.unit,
+        width: 170,
+        type: "singleSelect",
+        valueOptions: localizedUnits,
+        editable: editable
+      },
+      {
+        field: "wasteAmount",
+        headerName: strings.survey.reusables.dataGridColumns.wasteAmount,
         width: 340,
         editable: editable
       },
@@ -292,7 +352,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
                   position: "fixed",
                   border: `1px solid ${theme.palette.primary.main}`
                 }}
-                placeholder="test"
+                placeholder="Kirjoita lisätieto"
                 multiline
                 rows={ 4 }
                 value={ value }
