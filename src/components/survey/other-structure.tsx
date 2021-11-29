@@ -128,7 +128,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param index index
    */
-const onBuildingOtherStructurePropChange = (index: number): React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> => ({ target }) => {
+  const onBuildingOtherStructurePropChange = (index: number): React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> => ({ target }) => {
     const { value, name } = target;
 
     if (!keycloak?.token || !building?.id || !building?.otherStructures) {
