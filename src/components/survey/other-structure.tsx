@@ -8,6 +8,7 @@ import strings from "localization/strings";
 import * as React from "react";
 import GenericDialog from "components/generic/generic-dialog";
 import WithDebounce from "components/generic/with-debounce";
+import produce from "immer";
 
 /**
  * Component properties
@@ -25,8 +26,7 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   const [ building, setBuilding ] = React.useState<Building>();
   const [ creatingOtherStructure, setCreatingOtherStructure ] = React.useState(false);
   const [ deletingOtherStructureId, setDeletingOtherStructureId ] = React.useState<number>();
-  const [ newOtherStructureName, setNewOtherStructureName ] = React.useState("");
-  const [ newOtherStructureDesc, setNewOtherStructureDesc ] = React.useState("");
+  const [ newOtherStructure, setNewOtherStructure ] = React.useState({} as OtherStructure);
 
   /**
    * Fetch building
@@ -58,18 +58,18 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
   /**
    * Updates building
    *
-   * @param updatedOwnerInformation updated owner information
+   * @param updatedBuilding updated building information
    */
-  const updateBuilding = async (updatedOwnerInformation: Building) => {
+  const updateBuilding = async (updatedBuilding: Building) => {
     if (!keycloak?.token || !building?.id) {
       return;
     }
 
     try {
-      Api.getBuildingsApi(keycloak.token).updateBuilding({
+      await Api.getBuildingsApi(keycloak.token).updateBuilding({
         surveyId: surveyId,
         buildingId: building.id,
-        building: updatedOwnerInformation
+        building: updatedBuilding
       });
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildings.update, error);
@@ -92,8 +92,9 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       ...building,
       otherStructures: updatedOtherStructures
     };
-    await updateBuilding(updatedBuilding);
 
+    setBuilding(updatedBuilding);
+    await updateBuilding(updatedBuilding);
     setDeletingOtherStructureId(undefined);
   };
 
@@ -105,21 +106,23 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
-    const newOtherStructure: OtherStructure = {
-      name: newOtherStructureName,
-      description: newOtherStructureDesc
-    };
-
     const updatedBuilding: Building = {
       ...building,
       otherStructures: [ ...building.otherStructures, newOtherStructure ]
     };
-    await updateBuilding(updatedBuilding);
 
-    setNewOtherStructureName("");
-    setNewOtherStructureDesc("");
+    setBuilding(updatedBuilding);
+    await updateBuilding(updatedBuilding);
+    setNewOtherStructure({} as OtherStructure);
     setCreatingOtherStructure(false);
-    fetchBuilding();
+  };
+
+  /**
+   * Event Handler set pending new machine prop
+   */
+  const onNewOtherStructurePropChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    const { value, name } = target;
+    setNewOtherStructure({ ...newOtherStructure, [name]: value });
   };
 
   /**
@@ -171,14 +174,14 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       <TextField
         // TODO localization
         label="name"
-        value={ newOtherStructureName }
-        onChange={ e => setNewOtherStructureName(e.target.value) }
+        value={ newOtherStructure.name }
+        onChange={ onNewOtherStructurePropChange }
       />
       <TextField
         // TODO localization
         label="description"
-        value={ newOtherStructureDesc }
-        onChange={ e => setNewOtherStructureDesc(e.target.value) }
+        value={ newOtherStructure.description }
+        onChange={ onNewOtherStructurePropChange }
       />
     </GenericDialog>
   );
