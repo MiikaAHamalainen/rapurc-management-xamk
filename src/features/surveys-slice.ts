@@ -101,6 +101,7 @@ export const updateSurvey = createAsyncThunk<Survey, Survey, { state: RootState;
     try {
       const { keycloak } = getState().auth;
 
+      console.log("updateSurvey", survey);
       if (!keycloak?.token || !survey.id) {
         throw new Error("No access token or missing survey ID");
       }
