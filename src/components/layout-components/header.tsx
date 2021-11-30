@@ -1,9 +1,10 @@
-import { ArrowBackIosNewSharp, Person } from "@mui/icons-material";
+import { ArrowBackIosNewSharp } from "@mui/icons-material";
 import { Hidden, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import strings from "localization/strings";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { AppTitle, Root } from "styled/layout-components/header";
+import ProfileMenu from "./profile-menu";
 import Navigation from "./top-navigation";
 
 /**
@@ -36,9 +37,7 @@ const Header: React.FC<Props> = ({
           <Hidden smDown>
             <Navigation/>
           </Hidden>
-          <IconButton>
-            <Person htmlColor="#ffffff"/>
-          </IconButton>
+          <ProfileMenu/>
         </Stack>
       </Toolbar>
       <Toolbar>
