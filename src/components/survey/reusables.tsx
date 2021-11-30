@@ -49,6 +49,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const fetchSurveyReusables = async () => {
     setLoading(true);
+
     if (!keycloak?.token || !surveyId) {
       return;
     }
