@@ -299,13 +299,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Render survey reusables table for desktop
    */
   const renderSurveyDataTable = () => {
-    const localizedUsability = Object.values(Usability)
-      .map(usability => {
-        return {
-          label: LocalizationUtils.getLocalizedUsability(usability),
-          value: usability
-        };
-      });
+    const localizedUsability = Object.values(Usability).map(usability => ({
+      label: LocalizationUtils.getLocalizedUsability(usability),
+      value: usability
+    }));
+
     const localizedUnits = Object.values(Unit)
       .map(unit => {
         return {
