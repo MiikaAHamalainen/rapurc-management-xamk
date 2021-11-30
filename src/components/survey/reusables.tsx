@@ -1,6 +1,6 @@
 import { Add, Delete } from "@mui/icons-material";
 import { Box, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
-import { DataGrid, GridColDef, GridRenderEditCellParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams, GridRenderEditCellParams, GridSelectionModel } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
@@ -36,7 +36,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
   const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
-  const [ selectedReusableIds, setSelectedReusableIds ] = React.useState<string[]>([]);
+  const [ selectedReusableIds, setSelectedReusableIds ] = React.useState<GridSelectionModel>();
   const [ newMaterial, setNewMaterial ] = React.useState<Reusable>({
     componentName: "",
     usability: Usability.NotValidated,
@@ -335,7 +335,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         type: "singleSelect",
         valueOptions: localizedUsability,
         editable: editable,
-        renderCell: (params: any) => {
+        renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
             <Typography>{ LocalizationUtils.getLocalizedUsability(formattedValue) }</Typography>
@@ -356,7 +356,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         type: "singleSelect",
         valueOptions: localizedUnits,
         editable: editable,
-        renderCell: (params: any) => {
+        renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
             <Typography>{ LocalizationUtils.getLocalizedUnits(formattedValue) }</Typography>
@@ -412,7 +412,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           onRowChange={ onMaterialRowChange }
           component={ params =>
             <DataGrid
-              onSelectionModelChange={ selectedIds => setSelectedReusableIds(selectedIds as string[]) }
+              onSelectionModelChange={ selectedIds => setSelectedReusableIds(selectedIds) }
               checkboxSelection
               autoHeight
               loading={ loading }
@@ -438,7 +438,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         >
           <Hidden lgDown>
             <SurveyButton
-              disabled={ !selectedReusableIds.length }
+              disabled={ selectedReusableIds && !selectedReusableIds.length }
               variant="contained"
               color="error"
               startIcon={ <Delete/> }
