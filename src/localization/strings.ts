@@ -22,6 +22,7 @@ export interface Localized extends LocalizedStringsMethods {
     confirm: string;
     cancel: string;
     delete: string;
+    logout: string;
   };
 
   /**
