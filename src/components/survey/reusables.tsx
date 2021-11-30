@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import { Add, Delete } from "@mui/icons-material";
 import { Box, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderEditCellParams } from "@mui/x-data-grid";
@@ -124,7 +125,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     if (!keycloak?.token || !newReusable.id || !surveyId || newReusable.componentName === "") {
       return;
     }
-    console.log(newReusable);
+
     try {
       const updatedReusable = await Api.getSurveyReusablesApi(keycloak.token).updateSurveyReusable({
         surveyId: surveyId,
@@ -298,19 +299,29 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const renderSurveyDataTable = () => {
     const localizedUsability = Object.values(Usability)
-      .map(usability => { return { label: LocalizationUtils.getLocalizedUsability(usability), value: usability }; });
+      .map(usability => {
+        return {
+          label: LocalizationUtils.getLocalizedUsability(usability),
+          value: usability
+        };
+      });
     const localizedUnits = Object.values(Unit)
-      .map(unit => { return { label: LocalizationUtils.getLocalizedUnits(unit), value: unit }; });
+      .map(unit => {
+        return {
+          label: LocalizationUtils.getLocalizedUnits(unit),
+          value: unit
+        };
+      });
     const reusableMaterialsArray = reusableMaterials.map(material => { return { value: material.id, label: material.name }; });
-    console.log(surveyReusables);
     const columns: GridColDef[] = [
       {
-        field: "material",
+        field: "reusableMaterialId",
         headerName: strings.survey.reusables.dataGridColumns.material,
         width: 340,
         editable: editable,
         type: "singleSelect",
-        valueOptions: reusableMaterialsArray
+        valueOptions: reusableMaterialsArray,
+        renderCell: (params: any) => <Typography>{ reusableMaterials.find(material => (material.id === params.formattedValue))?.name }</Typography>
       },
       {
         field: "componentName",
@@ -324,7 +335,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         width: 340,
         type: "singleSelect",
         valueOptions: localizedUsability,
-        editable: editable
+        editable: editable,
+        renderCell: (params: any) => <Typography>{ LocalizationUtils.getLocalizedUsability(params.formattedValue) }</Typography>
       },
       {
         field: "amount",
@@ -339,7 +351,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         width: 170,
         type: "singleSelect",
         valueOptions: localizedUnits,
-        editable: editable
+        editable: editable,
+        renderCell: (params: any) => <Typography>{ LocalizationUtils.getLocalizedUnits(params.formattedValue) }</Typography>
       },
       {
         field: "wasteAmount",
