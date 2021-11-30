@@ -1,3 +1,4 @@
+import { AdminPanelSettings } from "@mui/icons-material";
 import { Button, Stack } from "@mui/material";
 import strings from "localization/strings";
 import React from "react";
@@ -29,6 +30,9 @@ const TopNavigation: React.FC = () => {
       <Button
         variant="text"
         onClick={ () => navigate("/admin") }
+        startIcon={
+          <AdminPanelSettings htmlColor="#fff"/>
+        }
       >
         { strings.navigation.admin }
       </Button>
