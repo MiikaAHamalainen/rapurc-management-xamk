@@ -29,6 +29,13 @@ export interface SurveyWithInfo {
 }
 
 /**
+ * Generic dataGrid row
+ */
+export interface GenericDataGridRow {
+  id?: string;
+}
+
+/**
  * Error context type
  */
 export type ErrorContextType = {

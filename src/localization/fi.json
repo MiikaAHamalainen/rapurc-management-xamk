@@ -29,9 +29,15 @@
     },
     "owners": {
       "list": "Virhe listattaessa omistajia",
-      "create": "virhe luotaessa omistajatietoja",
+      "create": "Virhe luotaessa omistajatietoja",
       "update": "Virhe päivitettäessä omistajan tietoja",
       "delete": "Virhe poistettaessa omistajan tietoja"
+    },
+    "reusables": {
+      "list": "Virhe listattaessa uudelleenkäytettäviä rakennusosia",
+      "create": "Virhe luotaessa uudelleenkäytettävää rakennusosaa",
+      "update": "Virhe päivitettäessä uudelleenkäytettävää rakennusosaa",
+      "delete": "Virhe poistettaessa uudelleenkäytettävää rakennusosaa"
     },
     "materials": {
       "list": "Virhe listattaessa materiaaleja ja rakennusosia",
@@ -173,6 +179,52 @@
       "phone": "Puhelin",
       "email": "Sähköpostiosoite",
       "reportingDate": "Raportointipäivä"
+    },
+    "reusables": {
+      "title": "Uudelleenkäytettävät rakennusosat",
+      "addNewBuildingPart": "Lisää uusi rakennusosa",
+      "deleteBuildingParts": "Poista rakennusosa",
+      "addNewBuildingPartsDialog": {
+        "title": "Lisää rakennusosa",
+        "buildingPart": "Rakennusosa",
+        "buildingPartHelperText": "Anna rakennusosaa kuvaava nimi",
+        "buildingPartOrMaterial": "Rakennusosa tai -materiaali",
+        "buildingPartOrMaterialHelperText": "Anna osaa vastaava tarkenne",
+        "usability": "Käyttökelpoisuus",
+        "usabilityHelperText": "Jos ei tiedossa, valitse \"ei arvioitu\"",
+        "amount": "Määrä",
+        "unit": "Mittayksikkö",
+        "description": "Lisätiedot",
+        "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms."
+      },
+      "deleteReusableDialog": {
+        "title": "Poista uudelleenkäytettävä osa",
+        "text": "Haluatko varmasti poistaa uudelleenkäytettävät osat?"
+      },
+      "dataGridColumns": {
+        "material": "Materiaali",
+        "buildingPart": "Rakennusosa",
+        "usability": "Käyttökelpoisuus",
+        "amount": "Määrä",
+        "wasteAmount": "Purkujätemäärä",
+        "description": "Lisätieto",
+        "unit": "Yksikkö",
+        "editDescription": "Muokkaa lisätietoa"
+      },
+      "usability": {
+        "excellent": "Erinomainen",
+        "good": "Hyvä",
+        "poor": "Heikko",
+        "notValidated": "Ei arvioitu"
+      },
+      "units": {
+        "kg": "Kilogrammaa (kg)",
+        "m2": "Neliömetriä (\u33A1)",
+        "m3": "Kuutiometriä (\u33A5)",
+        "pcs": "Kappaletta (kpl)",
+        "rm": "Juoksumetriä (jm)",
+        "tn": "Tonnia (tn)"
+      }
     },
     "otherStructures": {
       "title": "Muut purettavat rakennukset / rakennelmat",

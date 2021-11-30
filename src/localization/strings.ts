@@ -50,6 +50,12 @@ export interface Localized extends LocalizedStringsMethods {
       update: string;
       delete: string;
     };
+    reusables: {
+      list: string;
+      create: string;
+      update: string;
+      delete: string;
+    },
     materials: {
       list: string;
       create: string;
@@ -208,6 +214,52 @@ export interface Localized extends LocalizedStringsMethods {
       phone: string;
       email: string;
       reportingDate: string;
+    };
+    reusables: {
+      title: string;
+      addNewBuildingPart: string;
+      deleteBuildingParts: string;
+      addNewBuildingPartsDialog: {
+        title: string;
+        buildingPart: string;
+        buildingPartHelperText: string;
+        buildingPartOrMaterial: string;
+        buildingPartOrMaterialHelperText: string;
+        usability: string;
+        usabilityHelperText: string;
+        amount: string;
+        unit: string;
+        description: string;
+        descriptionHelperText: string;
+      },
+      deleteReusableDialog: {
+        title: string;
+        text: string;
+      },
+      dataGridColumns: {
+        material: string;
+        buildingPart: string;
+        usability: string;
+        wasteAmount: string;
+        amount: string;
+        description: string;
+        unit: string;
+        editDescription: string;
+      },
+      usability: {
+        excellent: string;
+        good: string;
+        poor: string;
+        notValidated: string;
+      },
+      units: {
+        kg: string;
+        m2: string;
+        m3: string;
+        pcs: string;
+        rm: string;
+        tn: string;
+      }
     };
     otherStructures: {
       title: string;

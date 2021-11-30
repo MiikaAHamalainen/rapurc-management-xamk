@@ -33,6 +33,12 @@
       "update": "Error while updating owner information",
       "delete": "Error while deleting owner information"
     },
+    "reusables": {
+      "list": "Error while listing reusable building parts",
+      "create": "Error while creating reusable building part",
+      "update": "Error while updating reusable building part",
+      "delete": "Error while deleting reusable building part"
+    },
     "materials": {
       "list": "Error while listing materials and building parts",
       "create": "Error while creating material or building part",
@@ -173,6 +179,52 @@
       "phone": "Phone",
       "email": "E-mail",
       "reportingDate": "Reporting date"
+    },
+    "reusables": {
+      "title": "Reusable building parts",
+      "addNewBuildingPart": "Add new building part",
+      "deleteBuildingParts": "Delete building part",
+      "addNewBuildingPartsDialog": {
+        "title": "Add building part",
+        "buildingPart": "Building part",
+        "buildingPartHelperText": "Give descriptive name to building part",
+        "buildingPartOrMaterial": "Building part or material",
+        "buildingPartOrMaterialHelperText": "Give description to part or material",
+        "usability": "Usability",
+        "usabilityHelperText": "If it's unknown, choose \"Not validated\"",
+        "amount": "Amount",
+        "unit": "Unit",
+        "description": "Description",
+        "descriptionHelperText": "Free description, for example, location in the building."
+      },
+      "deleteReusableDialog": {
+        "title": "Delete reusable building part",
+        "text": "Are you sure you want to delete these reusable parts?"
+      },
+      "dataGridColumns": {
+        "material": "Material",
+        "buildingPart": "Building part",
+        "usability": "Usability",
+        "wasteAmount": "Waste amount",
+        "amount": "Amount",
+        "description": "Lisätieto",
+        "unit": "Unit",
+        "editDescription": "Edit description"
+      },
+      "usability": {
+        "excellent": "Excellent",
+        "good": "Good",
+        "poor": "Poor",
+        "notValidated": "Not validated"
+      },
+      "units": {
+        "kg": "Kilograms (kg)",
+        "m2": "Square meters (\u33A1)",
+        "m3": "Cubic meters (\u33A5)",
+        "pcs": "Pieces (pcs)",
+        "rm": "Running meters (jm)",
+        "tn": "Tons (tn)"
+      }
     },
     "otherStructures": {
       "title": "Other demolished buildings and structures",

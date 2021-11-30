@@ -351,6 +351,13 @@ export default createTheme({
           fontSize: 24
         }
       }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          color: "rgba(0, 0, 0, 0.6)"
+        }
+      }
     }
   }
 });
