@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
 import { Add, Delete } from "@mui/icons-material";
 import { Box, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderEditCellParams } from "@mui/x-data-grid";
@@ -336,7 +335,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         type: "singleSelect",
         valueOptions: localizedUsability,
         editable: editable,
-        renderCell: (params: any) => <Typography>{ LocalizationUtils.getLocalizedUsability(params.formattedValue) }</Typography>
+        renderCell: (params: any) => {
+          const { formattedValue } = params;
+          return (
+            <Typography>{ LocalizationUtils.getLocalizedUsability(formattedValue) }</Typography>
+          );
+        }
       },
       {
         field: "amount",
@@ -352,7 +356,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         type: "singleSelect",
         valueOptions: localizedUnits,
         editable: editable,
-        renderCell: (params: any) => <Typography>{ LocalizationUtils.getLocalizedUnits(params.formattedValue) }</Typography>
+        renderCell: (params: any) => {
+          const { formattedValue } = params;
+          return (
+            <Typography>{ LocalizationUtils.getLocalizedUnits(formattedValue) }</Typography>
+          );
+        }
       },
       {
         field: "wasteAmount",
@@ -370,7 +379,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           return (
             <GenericDialog
               error={ false }
-              title="Muokkaa lisätietoa"
+              title={ strings.survey.reusables.dataGridColumns.editDescription }
               open={ reusableDescriptionDialogOpen }
               onClose={ () => setReusableDescriptionDialogOpen(false) }
               onCancel={ () => setReusableDescriptionDialogOpen(false) }
@@ -379,8 +388,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
               cancelButtonText={ strings.generic.cancel }
             >
               <TextField
-                label="Lisätieto"
-                placeholder="Kirjoita lisätieto"
+                label={ strings.survey.reusables.dataGridColumns.description }
                 multiline
                 rows={ 4 }
                 value={ value }

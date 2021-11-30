@@ -191,7 +191,8 @@
         "amount": "Määrä",
         "wasteAmount": "Purkujätemäärä",
         "description": "Lisätieto",
-        "unit": "Yksikkö"
+        "unit": "Yksikkö",
+        "editDescription": "Muokkaa lisätietoa"
       },
       "usability": {
         "excellent": "Erinomainen",

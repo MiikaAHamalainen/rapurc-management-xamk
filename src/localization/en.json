@@ -191,7 +191,8 @@
         "wasteAmount": "Waste amount",
         "amount": "Amount",
         "description": "Lisätieto",
-        "unit": "Unit"
+        "unit": "Unit",
+        "editDescription": "Edit description"
       },
       "usability": {
         "excellent": "Excellent",

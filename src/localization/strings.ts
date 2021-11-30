@@ -227,6 +227,7 @@ export interface Localized extends LocalizedStringsMethods {
         amount: string;
         description: string;
         unit: string;
+        editDescription: string;
       },
       usability: {
         excellent: string;
