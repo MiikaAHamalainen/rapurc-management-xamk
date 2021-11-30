@@ -1,6 +1,6 @@
 import { Add, Delete } from "@mui/icons-material";
 import { Box, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
-import { DataGrid, GridColDef, GridRenderCellParams, GridRenderEditCellParams, GridSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams, GridRenderEditCellParams, GridRowId } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
@@ -36,7 +36,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
   const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
-  const [ selectedReusableIds, setSelectedReusableIds ] = React.useState<GridSelectionModel>();
+  const [ selectedReusableIds, setSelectedReusableIds ] = React.useState<GridRowId[]>([]);
   const [ newMaterial, setNewMaterial ] = React.useState<Reusable>({
     componentName: "",
     usability: Usability.NotValidated,
@@ -150,21 +150,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
-    try {
-      selectedReusableIds.forEach(async materialId => {
-        if (keycloak.token) {
-          await Api.getSurveyReusablesApi(keycloak.token).deleteSurveyReusable({
-            surveyId: surveyId,
-            reusableId: materialId.toString()
-          });
-        }
+    const reusablesApi = Api.getSurveyReusablesApi(keycloak.token);
 
-        fetchSurveyReusables();
-      });
-    } catch (error) {
-      errorContext.setError(strings.errorHandling.reusables.delete, error);
-    }
+    await Promise.all(
+      selectedReusableIds.map(async materialId => {
+        await reusablesApi.deleteSurveyReusable({
+          surveyId: surveyId,
+          reusableId: materialId.toString()
+        });
+      })
+    );
 
+    fetchSurveyReusables();
     setSelectedReusableIds([]);
     setDeletingMaterial(false);
   };
@@ -304,14 +301,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       value: usability
     }));
 
-    const localizedUnits = Object.values(Unit)
-      .map(unit => {
-        return {
-          label: LocalizationUtils.getLocalizedUnits(unit),
-          value: unit
-        };
-      });
-    const reusableMaterialsArray = reusableMaterials.map(material => { return { value: material.id, label: material.name }; });
+    const localizedUnits = Object.values(Unit).map(unit => ({
+      label: LocalizationUtils.getLocalizedUnits(unit),
+      value: unit
+    }));
+    const reusableMaterialsArray = reusableMaterials.map(material => ({ value: material.id, label: material.name }));
     const columns: GridColDef[] = [
       {
         field: "reusableMaterialId",
