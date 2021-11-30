@@ -60,6 +60,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.list, error);
     }
+
     setLoading(false);
   };
 
