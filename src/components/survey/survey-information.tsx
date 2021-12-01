@@ -3,7 +3,7 @@ import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import WithDebounce from "components/generic/with-debounce";
 import { selectSelectedSurvey, updateSurvey } from "features/surveys-slice";
-import { Survey, SurveyType } from "generated/client";
+import { SurveyType } from "generated/client";
 import strings from "localization/strings";
 import React from "react";
 import { useAppDispatch } from "../../app/hooks";
@@ -26,7 +26,7 @@ const SurveyInformation: React.FC = () => {
    * @param name field name
    * @param selectedDate selected date
    */
-  const onSurveyInfoDateChange = (name: string) => (selectedDate: Date | null) => {
+  const onSurveyInfoDateChange = (name: string) => async (selectedDate: Date | null) => {
     if (!selectedSurvey?.id || !selectedDate) {
       return;
     }
@@ -43,7 +43,7 @@ const SurveyInformation: React.FC = () => {
    * 
    * @param event event
    */
-  const onSurveyInfoTypeChange: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+  const onSurveyInfoTypeChange: React.ChangeEventHandler<HTMLInputElement> = async ({ target }) => {
     const { value } = target;
 
     if (!selectedSurvey?.id) {
@@ -56,6 +56,17 @@ const SurveyInformation: React.FC = () => {
       errorContext.setError(strings.errorHandling.surveys.update);
     }
   };
+
+  /**
+   * Renders demolition scope option
+   * 
+   * @param type type
+   */
+  const renderDemolitionScopeOption = (type: SurveyType) => (
+    <MenuItem value={ type }>
+      { LocalizationUtils.getLocalizedDemolitionScope(type) }
+    </MenuItem>
+  );
 
   /**
    * Renders textfield with debounce
@@ -78,13 +89,7 @@ const SurveyInformation: React.FC = () => {
       onChange={ onChange }
       component={ props =>
         <TextField select { ...props }>
-          { Object.values(SurveyType).map(type =>
-            (
-              <MenuItem value={ type }>
-                { LocalizationUtils.getLocalizedDemolitionScope(type) }
-              </MenuItem>
-            ))
-          }
+          { Object.values(SurveyType).map(renderDemolitionScopeOption) }
         </TextField>
       }
     />
