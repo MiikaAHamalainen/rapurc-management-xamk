@@ -2,7 +2,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import { Button, CircularProgress, IconButton, List, ListItemSecondaryAction, Stack, TextField, Typography } from "@mui/material";
 import GenericDialog from "components/generic/generic-dialog";
 import strings from "localization/strings";
-import * as React from "react";
+import React from "react";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { MaterialItem, MaterialText } from "../../styled/layout-components/material-item";
