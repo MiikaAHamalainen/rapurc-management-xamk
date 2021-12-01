@@ -3,7 +3,7 @@ import { selectKeycloak } from "features/auth-slice";
 import * as React from "react";
 
 /**
- * Component props
+ * Component properties
  */
 interface Props {
   userRole: string;
