@@ -44,6 +44,12 @@
       "create": "Error while creating material or building part",
       "delete": "Error while deleting material or building part",
       "update": "Error while updating material or building part"
+    },
+    "buildingTypes": {
+      "list": "Error while listing building types",
+      "create": "Error while creating building type",
+      "delete": "Error while deleting building type",
+      "update": "Error while updating building type"
     }
   },
 
@@ -112,7 +118,8 @@
         "wasteMaterials": "Waste material",
         "postProcessing": "Post processing",
         "hazardousMaterials": "Hazardous material category",
-        "hazardousMaterialsAdditionalInfo": "Hazardous material additional information"
+        "hazardousMaterialsAdditionalInfo": "Hazardous material additional information",
+        "buildingTypes": "Building type"
       }
     },
     "addNewReusableMaterialDialog": {
@@ -126,6 +133,22 @@
     "updateReusableMaterialDialog": {
       "title": "Update building part or material",
       "text": "Name of the building part or material:"
+    },
+    "addNewBuildingTypeDialog": {
+      "title": "Add new building type",
+      "text1": "Name of the building type",
+      "text2": "Code",
+      "text1help": "Building classification name (from Tilastokeskus 2018)",
+      "text2help": "Building classification ID (from Tilastokeskus 2018)"
+    },
+    "deleteBuildingTypeDialog": {
+      "title": "Delete building type",
+      "text": "Are you sure you want to delete building type {0}"
+    },
+    "updateBuildingTypeDialog": {
+      "title": "Update building type",
+      "text1": "Building type",
+      "text2": "Code"
     }
   },
 
@@ -200,7 +223,9 @@
         "amount": "Amount",
         "unit": "Unit",
         "description": "Description",
-        "descriptionHelperText": "Free description, for example, location in the building."
+        "descriptionHelperText": "Free description, for example, location in the building.",
+        "wasteAmount": "Amount as waste (tons)",
+        "wasteAmountHelperText": "Optional"
       },
       "deleteReusableDialog": {
         "title": "Delete reusable building part",

@@ -44,6 +44,12 @@
       "create": "Virhe luotaessa materiaalia tai rakennusosaa",
       "delete": "Virhe poistettaessa materiaalia tai rakennusosaa",
       "update": "Virhe päivitettäessä materiaalia tai rakennusosaa"
+    },
+    "buildingTypes": {
+      "list": "Virhe listattaessa rakennusluokkia",
+      "create": "Virhe luotaessa rakennusluokkaa",
+      "delete": "Virhe poistettaessa rakennusluokkaa",
+      "update": "Virhe päivitettäessä rakennusluokkaa"
     }
   },
 
@@ -112,20 +118,37 @@
         "wasteMaterials": "Rakennus- ja purkujätemateriaali",
         "postProcessing": "Jatkokäsittely",
         "hazardousMaterials": "Haitta-ainekategoria",
-        "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne"
+        "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne",
+        "buildingTypes": "Rakennustyyppi"
       }
     },
     "addNewReusableMaterialDialog": {
       "title": "Lisää rakennusosa tai -materiaali",
-      "text": "Rakennusosan tai -materiaalin nimi:"
+      "text": "Rakennusosan tai -materiaalin nimi"
     },
     "deleteReusableMaterialDialog": {
       "title": "Poista rakennusosa tai -materiaali",
-      "text": "Haluatko varmasti poistaa rakennusosan tai -materiaalin: {0}"
+      "text": "Haluatko varmasti poistaa rakennusosan tai -materiaalin \"{0}\""
     },
     "updateReusableMaterialDialog": {
       "title": "Päivitä rakennusosa tai -materiaali",
-      "text": "Rakennusosan tai -materiaalin nimi:"
+      "text": "Rakennusosan tai -materiaalin nimi"
+    },
+    "addNewBuildingTypeDialog": {
+      "title": "Lisää rakennusluokka",
+      "text1": "Rakennusluokka",
+      "text2": "Rakennusluokan ID",
+      "text1help": "Tilastokeskuksen määrittelemä rakennusluokitus 2018",
+      "text2help": "Anna luokituksen mukainen ID"
+    },
+    "deleteBuildingTypeDialog": {
+      "title": "Poista rakennustyyppi",
+      "text": "Haluatko varmasti poistaa rakennustyypin \"{0}\""
+    },
+    "updateBuildingTypeDialog": {
+      "title": "Päivitä rakennusluokka",
+      "text1": "Rakennusluokka",
+      "text2": "Rakennusluokan ID"
     }
   },
 
@@ -200,7 +223,9 @@
         "amount": "Määrä",
         "unit": "Mittayksikkö",
         "description": "Lisätiedot",
-        "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms."
+        "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms.",
+        "wasteAmount": "Määrä purkujätteenä (tonneina)",
+        "wasteAmountHelperText": "Valinnainen tieto"
       },
       "deleteReusableDialog": {
         "title": "Poista uudelleenkäytettävä osa",

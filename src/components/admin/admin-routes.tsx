@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Route, Routes } from "react-router-dom";
+import BuildingTypes from "./buildingTypes";
 import Reusables from "./reusables";
 
 /**
@@ -11,6 +12,10 @@ const AdminRoutes: React.FC = () => {
       <Route
         path="reusables"
         element={ <Reusables/> }
+      />
+      <Route
+        path="buildingtypes"
+        element={ <BuildingTypes/> }
       />
     </Routes>
   );

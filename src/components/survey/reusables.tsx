@@ -98,7 +98,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       usability,
       unit,
       description,
-      amount
+      amount,
+      amountAsWaste
     } = newMaterial;
 
     if (!keycloak?.token || !surveyId) {
@@ -115,6 +116,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           unit: unit,
           description: description,
           amount: amount,
+          amountAsWaste: amountAsWaste,
           metadata: {}
         }
       });
@@ -266,6 +268,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         <Stack
           direction={ isMobile ? "column" : "row" }
           spacing={ 2 }
+          marginTop={ 2 }
         >
           <TextField
             fullWidth
@@ -293,6 +296,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         <Stack
           direction={ isMobile ? "column" : "row" }
           spacing={ 2 }
+          marginTop={ 2 }
         >
           <TextField
             fullWidth
@@ -324,6 +328,13 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             onChange={ onNewMaterialTextChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.descriptionHelperText }
           />
+          <TextField
+            type="number"
+            name="amountAsWaste"
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmount }
+            onChange={ onNewMaterialNumberChange }
+            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
+          />
         </Stack>
       </GenericDialog>
     );
@@ -337,7 +348,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       label: LocalizationUtils.getLocalizedUsability(usability),
       value: usability
     }));
-
     const localizedUnits = Object.values(Unit).map(unit => ({
       label: LocalizationUtils.getLocalizedUnits(unit),
       value: unit
@@ -381,14 +391,14 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "amount",
         headerName: strings.survey.reusables.dataGridColumns.amount,
-        width: 170,
+        width: 160,
         type: "number",
         editable: editable
       },
       {
         field: "unit",
         headerName: strings.survey.reusables.dataGridColumns.unit,
-        width: 170,
+        width: 200,
         type: "singleSelect",
         valueOptions: localizedUnits,
         editable: editable,
@@ -400,10 +410,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         }
       },
       {
-        field: "wasteAmount",
+        field: "amountAsWaste",
         headerName: strings.survey.reusables.dataGridColumns.wasteAmount,
         width: 340,
-        editable: false // Not yet implemented
+        type: "number",
+        editable: true
       },
       {
         field: "description",

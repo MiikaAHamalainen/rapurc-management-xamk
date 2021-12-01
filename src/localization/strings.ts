@@ -62,6 +62,12 @@ export interface Localized extends LocalizedStringsMethods {
       delete: string;
       update: string;
     };
+    buildingTypes: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
   };
 
   /**
@@ -145,6 +151,7 @@ export interface Localized extends LocalizedStringsMethods {
         postProcessing: string;
         hazardousMaterials: string;
         hazardousMaterialsAdditionalInfo: string;
+        buildingTypes: string;
       };
     };
     addNewReusableMaterialDialog: {
@@ -158,6 +165,22 @@ export interface Localized extends LocalizedStringsMethods {
     updateReusableMaterialDialog: {
       title: string;
       text: string;
+    };
+    addNewBuildingTypeDialog: {
+      title: string;
+      text1: string;
+      text2: string;
+      text1help: string;
+      text2help: string;
+    };
+    deleteBuildingTypeDialog: {
+      title: string;
+      text: string;
+    };
+    updateBuildingTypeDialog: {
+      title: string;
+      text1: string;
+      text2: string;
     };
   };
 
@@ -236,6 +259,8 @@ export interface Localized extends LocalizedStringsMethods {
         unit: string;
         description: string;
         descriptionHelperText: string;
+        wasteAmount: string;
+        wasteAmountHelperText: string;
       },
       deleteReusableDialog: {
         title: string;
