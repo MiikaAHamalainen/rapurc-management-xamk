@@ -50,10 +50,8 @@ const SurveyInformation: React.FC = () => {
       return;
     }
 
-    const updatedSelectedSurvey: Survey = { ...selectedSurvey, type: value as SurveyType };
-
     try {
-      dispatch(updateSurvey(updatedSelectedSurvey)).unwrap();
+      await dispatch(updateSurvey({ ...selectedSurvey, type: value as SurveyType })).unwrap();
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.update);
     }
