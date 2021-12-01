@@ -92,6 +92,15 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Event handler for add reusable confirm
    */
   const onAddReusableConfirm = async () => {
+    const {
+      componentName,
+      reusableMaterialId,
+      usability,
+      unit,
+      description,
+      amount
+    } = newMaterial;
+
     if (!keycloak?.token || !surveyId) {
       return;
     }
@@ -100,12 +109,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
         reusable: {
-          componentName: newMaterial.componentName,
-          reusableMaterialId: newMaterial.reusableMaterialId,
-          usability: newMaterial.usability,
-          unit: newMaterial.unit,
-          description: newMaterial.description,
-          amount: newMaterial.amount,
+          componentName: componentName,
+          reusableMaterialId: reusableMaterialId,
+          usability: usability,
+          unit: unit,
+          description: description,
+          amount: amount,
           metadata: {}
         }
       });
@@ -164,6 +173,28 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     fetchSurveyReusables();
     setSelectedReusableIds([]);
     setDeletingMaterial(false);
+  };
+
+  /**
+   * Event handler for new material string change
+   *
+   * @param event React change event
+   */
+  const onNewMaterialTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = event.target;
+
+    setNewMaterial({ ...newMaterial, [name]: value });
+  };
+
+  /**
+   * Event handler for new material number change
+   *
+   * @param event React change event
+   */
+  const onNewMaterialNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = event.target;
+
+    setNewMaterial({ ...newMaterial, [name]: Number(value) });
   };
 
   /**
@@ -227,9 +258,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         <TextField
           fullWidth
           color="primary"
-          label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPart }
-          onChange={ event => setNewMaterial({ ...newMaterial, componentName: event.target.value }) }
-          helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
+          name="componentName"
+          label={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPart }
+          onChange={ onNewMaterialTextChange }
+          helperText={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartHelperText }
         />
         <Stack
           direction={ isMobile ? "column" : "row" }
@@ -239,9 +271,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             fullWidth
             select
             color="primary"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
-            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterialHelperText }
-            onChange={ event => setNewMaterial({ ...newMaterial, reusableMaterialId: event.target.value }) }
+            name="reusableMaterialId"
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartOrMaterial }
+            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartOrMaterialHelperText }
+            onChange={ onNewMaterialTextChange }
           >
             { reusableOptions }
           </TextField>
@@ -249,9 +282,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             fullWidth
             select
             color="primary"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.usability }
-            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.usabilityHelperText }
-            onChange={ event => setNewMaterial({ ...newMaterial, usability: event.target.value as Usability }) }
+            name="usability"
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.usability }
+            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.usabilityHelperText }
+            onChange={ onNewMaterialTextChange }
           >
             { usabilityOptions }
           </TextField>
@@ -263,18 +297,20 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           <TextField
             fullWidth
             color="primary"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.amount }
+            name="amount"
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.amount }
             type="number"
-            onChange={ event => setNewMaterial({ ...newMaterial, amount: event.target.value as unknown as number }) }
+            onChange={ onNewMaterialNumberChange }
           >
             { reusableOptions }
           </TextField>
           <TextField
             fullWidth
             select
+            name="unit"
             color="primary"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.unit }
-            onChange={ event => setNewMaterial({ ...newMaterial, unit: event.target.value as Unit }) }
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.unit }
+            onChange={ onNewMaterialTextChange }
           >
             { unitOptions }
           </TextField>
@@ -283,9 +319,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           <TextField
             multiline
             rows={ 6 }
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.description }
-            onChange={ event => setNewMaterial({ ...newMaterial, description: event.target.value }) }
-            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.descriptionHelperText }
+            name="description"
+            label={ strings.survey.reusables.addNewBuildinPartsDialog.description }
+            onChange={ onNewMaterialTextChange }
+            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.descriptionHelperText }
           />
         </Stack>
       </GenericDialog>
@@ -314,7 +351,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         editable: editable,
         type: "singleSelect",
         valueOptions: reusableMaterialsArray,
-        renderCell: (params: any) => <Typography>{ reusableMaterials.find(material => (material.id === params.formattedValue))?.name }</Typography>
+        renderCell: (params: GridRenderCellParams) => {
+          const { formattedValue } = params;
+          return (
+            <Typography>{ reusableMaterials.find(material => (material.id === formattedValue))?.name }</Typography>
+          );
+        }
       },
       {
         field: "componentName",
