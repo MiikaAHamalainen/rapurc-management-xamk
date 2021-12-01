@@ -199,11 +199,32 @@ export interface Localized extends LocalizedStringsMethods {
       phone: string;
       email: string;
     };
+    info: {
+      title: string;
+      demolitionInfo: string;
+      surveyors: string;
+      demolitionScope: string;
+      startDate: string;
+      endDate: string;
+      addSurveyor: string;
+      firstName: string;
+      surName: string;
+      organisation: string;
+      role: string;
+      phone: string;
+      email: string;
+      reportingDate: string;
+      demolitionScopes: {
+        renovation: string;
+        partial: string;
+        full: string;
+      };
+    };
     reusables: {
       title: string;
       addNewBuildingPart: string;
       deleteBuildingParts: string;
-      addNewBuildinPartsDialog: {
+      addNewBuildingPartsDialog: {
         title: string;
         buildingPart: string;
         buildingPartHelperText: string;
