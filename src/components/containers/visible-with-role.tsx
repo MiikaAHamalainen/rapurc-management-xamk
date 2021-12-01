@@ -18,11 +18,7 @@ const VisibleWithRole: React.FC<Props> = ({ userRole, children }) => {
   const token = useAppSelector(selectKeycloak)?.tokenParsed;
   const roles = token?.realm_access?.roles;
 
-  if (!roles?.includes(userRole)) {
-    return null;
-  }
-
-  return <>{ children }</>;
+  return roles?.includes(userRole) ? <>{ children }</> : null;
 };
 
 export default VisibleWithRole;
