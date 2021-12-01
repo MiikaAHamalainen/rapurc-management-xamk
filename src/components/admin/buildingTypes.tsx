@@ -114,7 +114,8 @@ const BuildingTypes: React.FC = () => {
 
     try {
       const updatedBuildingType = await Api.getBuildingTypesApi(keycloak.token).updateBuildingType({
-        buildingTypeId: editableBuildingType.id, buildingType: editableBuildingType
+        buildingTypeId: editableBuildingType.id,
+        buildingType: editableBuildingType
       });
 
       setBuildingTypes(buildingTypes.map(buildingType => (buildingType.id === updatedBuildingType.id ? updatedBuildingType : buildingType)));
