@@ -21,6 +21,9 @@ const SurveyInformation: React.FC = () => {
 
   /**
    * Event Handler set survey date
+   * 
+   * @param name field name
+   * @param selectedDate selected date
    */
   const onSurveyInfoDateChange = (name: string) => (selectedDate: Date | null) => {
     if (!selectedSurvey?.id || !selectedDate) {
@@ -38,6 +41,8 @@ const SurveyInformation: React.FC = () => {
 
   /**
    * Event Handler set survey type
+   * 
+   * @param event event
    */
   const onSurveyInfoTypeChange: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
     const { value } = target;
