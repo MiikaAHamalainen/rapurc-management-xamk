@@ -136,17 +136,19 @@
     },
     "addNewBuildingTypeDialog": {
       "title": "Add new building type",
-      "text1": "Name of the building type:",
-      "text2": "Code:"
+      "text1": "Name of the building type",
+      "text2": "Code",
+      "text1help": "Building classification name (from Tilastokeskus 2018)",
+      "text2help": "Building classification ID (from Tilastokeskus 2018)"
     },
     "deleteBuildingTypeDialog": {
       "title": "Delete building type",
-      "text": "Are you sure you want to delete building type: {0}"
+      "text": "Are you sure you want to delete building type {0}"
     },
     "updateBuildingTypeDialog": {
       "title": "Update building type",
-      "text1": "Building type:",
-      "text2": "Code:"
+      "text1": "Building type",
+      "text2": "Code"
     }
   },
 

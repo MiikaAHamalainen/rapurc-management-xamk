@@ -46,10 +46,10 @@
       "update": "Virhe päivitettäessä materiaalia tai rakennusosaa"
     },
     "buildingTypes": {
-      "list": "Virhe listattaessa rakennustyyppejä",
-      "create": "Virhe luotaessa rakennustyyppiä",
-      "delete": "Virhe poistettaessa rakennustyyppiä",
-      "update": "Virhe päivitettäessä rakennustyyppiä"
+      "list": "Virhe listattaessa rakennusluokkia",
+      "create": "Virhe luotaessa rakennusluokkaa",
+      "delete": "Virhe poistettaessa rakennusluokkaa",
+      "update": "Virhe päivitettäessä rakennusluokkaa"
     }
   },
 
@@ -135,18 +135,20 @@
       "text": "Rakennusosan tai -materiaalin nimi:"
     },
     "addNewBuildingTypeDialog": {
-      "title": "Lisää rakennustyyppi",
-      "text1": "Rakennustyypin nimi:",
-      "text2": "Koodi:"
+      "title": "Lisää rakennusluokka",
+      "text1": "Rakennusluokka",
+      "text2": "Rakennusluokan ID",
+      "text1help": "Tilastokeskuksen määrittelemä rakennusluokitus 2018",
+      "text2help": "Anna luokituksen mukainen ID"
     },
     "deleteBuildingTypeDialog": {
       "title": "Poista rakennustyyppi",
       "text": "Haluatko varmasti poistaa rakennustyypin: {0}"
     },
     "updateBuildingTypeDialog": {
-      "title": "Päivitä rakennustyyppi",
-      "text1": "Rakennustyyppi:",
-      "text2": "Koodi:"
+      "title": "Päivitä rakennusluokka",
+      "text1": "Rakennusluokka",
+      "text2": "Rakennusluokan ID"
     }
   },
 

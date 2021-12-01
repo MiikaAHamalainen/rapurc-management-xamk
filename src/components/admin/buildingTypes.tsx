@@ -203,16 +203,20 @@ const BuildingTypes: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <TextField
-        placeholder={ strings.adminScreen.addNewBuildingTypeDialog.text1 }
-        name="name"
-        onChange={ onNewBuildingTypeTextChange }
-      />
-      <TextField
-        placeholder={ strings.adminScreen.addNewBuildingTypeDialog.text2 }
-        name="code"
-        onChange={ onNewBuildingTypeTextChange }
-      />
+      <Stack spacing={ 2 }>
+        <TextField
+          label={ strings.adminScreen.addNewBuildingTypeDialog.text1 }
+          helperText={ strings.adminScreen.addNewBuildingTypeDialog.text1help }
+          name="name"
+          onChange={ onNewBuildingTypeTextChange }
+        />
+        <TextField
+          label={ strings.adminScreen.addNewBuildingTypeDialog.text2 }
+          helperText={ strings.adminScreen.addNewBuildingTypeDialog.text2help }
+          name="code"
+          onChange={ onNewBuildingTypeTextChange }
+        />
+      </Stack>
     </GenericDialog>
   );
 

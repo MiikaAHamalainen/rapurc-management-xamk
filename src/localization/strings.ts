@@ -170,6 +170,8 @@ export interface Localized extends LocalizedStringsMethods {
       title: string;
       text1: string;
       text2: string;
+      text1help: string;
+      text2help: string;
     };
     deleteBuildingTypeDialog: {
       title: string;

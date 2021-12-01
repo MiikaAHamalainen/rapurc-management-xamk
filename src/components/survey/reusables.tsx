@@ -331,9 +331,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           <TextField
             type="number"
             name="amountAsWaste"
-            label={ strings.survey.reusables.addNewBuildinPartsDialog.wasteAmount }
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmount }
             onChange={ onNewMaterialNumberChange }
-            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.wasteAmountHelperText }
+            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
           />
         </Stack>
       </GenericDialog>
