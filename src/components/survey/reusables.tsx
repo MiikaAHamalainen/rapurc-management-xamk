@@ -260,7 +260,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           color="primary"
           name="componentName"
           label={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPart }
-          onChange={ onNewMaterialChange }
+          onChange={ onNewMaterialTextChange }
           helperText={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartHelperText }
         />
         <Stack
@@ -274,7 +274,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             name="reusableMaterialId"
             label={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartOrMaterial }
             helperText={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartOrMaterialHelperText }
-            onChange={ onNewMaterialChange }
+            onChange={ onNewMaterialTextChange }
           >
             { reusableOptions }
           </TextField>
@@ -285,7 +285,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             name="usability"
             label={ strings.survey.reusables.addNewBuildinPartsDialog.usability }
             helperText={ strings.survey.reusables.addNewBuildinPartsDialog.usabilityHelperText }
-            onChange={ onNewMaterialChange }
+            onChange={ onNewMaterialTextChange }
           >
             { usabilityOptions }
           </TextField>
@@ -300,7 +300,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             name="amount"
             label={ strings.survey.reusables.addNewBuildinPartsDialog.amount }
             type="number"
-            onChange={ onNewMaterialChange }
+            onChange={ onNewMaterialNumberChange }
           >
             { reusableOptions }
           </TextField>
@@ -310,7 +310,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             name="unit"
             color="primary"
             label={ strings.survey.reusables.addNewBuildinPartsDialog.unit }
-            onChange={ onNewMaterialChange }
+            onChange={ onNewMaterialTextChange }
           >
             { unitOptions }
           </TextField>
@@ -321,7 +321,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             rows={ 6 }
             name="description"
             label={ strings.survey.reusables.addNewBuildinPartsDialog.description }
-            onChange={ onNewMaterialChange }
+            onChange={ onNewMaterialTextChange }
             helperText={ strings.survey.reusables.addNewBuildinPartsDialog.descriptionHelperText }
           />
         </Stack>
