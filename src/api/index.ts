@@ -1,4 +1,4 @@
-import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi } from "../generated/client";
+import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
@@ -6,6 +6,16 @@ import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi
 export default class Api {
 
   /**
+   * Gets initialized surveyReusables API
+   *
+   * @param accessToken access token
+   * @returns initialized surveys API
+   */
+  public static getSurveyReusablesApi = (accessToken: string) => {
+    return new SurveyReusablesApi(Api.getConfiguration(accessToken));
+  };
+
+  /*
    * Gets initialized reusable materials API
    *
    * @param accessToken access token
