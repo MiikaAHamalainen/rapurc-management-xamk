@@ -6,6 +6,7 @@ import NewSurveyScreen from "./screens/new-survey-screen";
 import AdminScreen from "./screens/admin-screen";
 import SurveyScreen from "./screens/survey-screen";
 import ErrorHandler from "./error-handler/error-handler";
+import VisibleWithRole from "./containers/visible-with-role";
 
 /**
  * Application component
@@ -30,9 +31,16 @@ const App: React.FC = () => {
             />
             <Route
               path="/admin/*"
-              element={ <AdminScreen/> }
+              element={
+                <VisibleWithRole userRole="admin">
+                  <AdminScreen/>
+                </VisibleWithRole>
+              }
             />
-            <Route path="/" element={ <SurveysScreen/> }/>
+            <Route
+              path="/"
+              element={ <SurveysScreen/> }
+            />
           </Routes>
         </Router>
       </AccessTokenRefresh>

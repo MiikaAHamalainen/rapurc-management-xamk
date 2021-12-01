@@ -95,22 +95,26 @@ const SurveyScreen: React.FC = () => {
         title={ strings.surveyScreen.navigation.reusables }
       />
       <NavigationItem
+        disabled
         icon={ <Delete/> }
         to="waste"
         title={ strings.surveyScreen.navigation.waste }
       />
       <NavigationItem
+        disabled
         icon={ <WarningAmber/> }
         to="hazardous"
         title={ strings.surveyScreen.navigation.hazardous }
       />
       <Divider/>
       <NavigationItem
+        disabled
         icon={ <Attachment/> }
         to="attachments"
         title={ strings.surveyScreen.navigation.attachments }
       />
       <NavigationItem
+        disabled
         icon={ <Summarize/> }
         to="summary"
         title={ strings.surveyScreen.navigation.summary }
