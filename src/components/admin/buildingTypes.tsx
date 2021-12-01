@@ -21,7 +21,7 @@ const BuildingTypes: React.FC = () => {
   const [ deletingBuildingType, setDeletingBuildingType ] = React.useState(false);
   const [ editingBuildingType, setEditingBuildingType ] = React.useState(false);
   const [ loading, setLoading ] = React.useState(false);
-  const [ deletableBuildingType, setDeletableBuildingType] = React.useState<BuildingType>();
+  const [ deletableBuildingType, setDeletableBuildingType ] = React.useState<BuildingType>();
   const [ buildingTypes, setBuildingTypes ] = React.useState<BuildingType[]>([]);
   const [ editableBuildingType, setEditableBuildingType ] = React.useState<BuildingType>({
     name: "",
