@@ -44,6 +44,12 @@
       "create": "Virhe luotaessa materiaalia tai rakennusosaa",
       "delete": "Virhe poistettaessa materiaalia tai rakennusosaa",
       "update": "Virhe päivitettäessä materiaalia tai rakennusosaa"
+    },
+    "buildingTypes": {
+      "list": "Virhe listattaessa rakennustyyppejä",
+      "create": "Virhe luotaessa rakennustyyppiä",
+      "delete": "Virhe poistettaessa rakennustyyppiä",
+      "update": "Virhe päivitettäessä rakennustyyppiä"
     }
   },
 
@@ -112,7 +118,8 @@
         "wasteMaterials": "Rakennus- ja purkujätemateriaali",
         "postProcessing": "Jatkokäsittely",
         "hazardousMaterials": "Haitta-ainekategoria",
-        "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne"
+        "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne",
+        "buildingTypes": "Rakennustyyppi"
       }
     },
     "addNewReusableMaterialDialog": {
@@ -126,6 +133,20 @@
     "updateReusableMaterialDialog": {
       "title": "Päivitä rakennusosa tai -materiaali",
       "text": "Rakennusosan tai -materiaalin nimi:"
+    },
+    "addNewBuildingTypeDialog": {
+      "title": "Lisää rakennustyyppi",
+      "text1": "Rakennustyypin nimi:",
+      "text2": "Koodi:"
+    },
+    "deleteBuildingTypeDialog": {
+      "title": "Poista rakennustyyppi",
+      "text": "Haluatko varmasti poistaa rakennustyypin: {0}"
+    },
+    "updateBuildingTypeDialog": {
+      "title": "Päivitä rakennustyyppi",
+      "text1": "Rakennustyyppi:",
+      "text2": "Koodi:"
     }
   },
 
@@ -179,7 +200,9 @@
         "amount": "Määrä",
         "unit": "Mittayksikkö",
         "description": "Lisätiedot",
-        "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms."
+        "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms.",
+        "wasteAmount": "Määrä purkujätteenä (tonneina)",
+        "wasteAmountHelperText": "Valinnainen tieto"
       },
       "deleteReusableDialog": {
         "title": "Poista uudelleenkäytettävä osa",

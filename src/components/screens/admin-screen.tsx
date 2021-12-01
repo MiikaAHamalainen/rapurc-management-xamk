@@ -29,6 +29,7 @@ const AdminScreen: React.FC = () => {
           <NavigationItem title={ dropdownSettings.postProcessing } to="postProcessing"/>
           <NavigationItem title={ dropdownSettings.hazardousMaterials } to="hazardousMaterials"/>
           <NavigationItem title={ dropdownSettings.hazardousMaterialsAdditionalInfo } to="hazardousMaterialsInfo"/>
+          <NavigationItem title={ dropdownSettings.buildingTypes } to="buildingTypes"/>
         </AccordionDetails>
       </Accordion>
     </List>
