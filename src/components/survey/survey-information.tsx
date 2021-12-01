@@ -10,6 +10,7 @@ import { useAppDispatch } from "../../app/hooks";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
+import LocalizationUtils from "utils/localization-utils";
 
 /**
  * Component for survey information
@@ -30,7 +31,10 @@ const SurveyInformation: React.FC = () => {
       return;
     }
 
-    const updatedSelectedSurvey: Survey = { ...selectedSurvey, [name]: selectedDate };
+    const updatedSelectedSurvey: Survey = {
+      ...selectedSurvey,
+      [name]: selectedDate
+    };
 
     try {
       dispatch(updateSurvey(updatedSelectedSurvey)).unwrap();
@@ -66,14 +70,12 @@ const SurveyInformation: React.FC = () => {
    * @param name name
    * @param label label
    * @param value value
-   * @param options options
    * @param onChange onChange
    */
-  const renderWithDebounceSelectTextField = <T extends { [s: string]: string } | ArrayLike<string>>(
+  const renderDemolitionScopeSelect = (
     name: string,
     label: string,
     value: string,
-    options: T,
     onChange: React.ChangeEventHandler<HTMLInputElement>
   ) => (
     <WithDebounce
@@ -83,10 +85,10 @@ const SurveyInformation: React.FC = () => {
       onChange={ onChange }
       component={ props =>
         <TextField select { ...props }>
-          { Object.values(options).map(opt =>
+          { Object.values(SurveyType).map(type =>
             (
-              <MenuItem value={ opt }>
-                { opt }
+              <MenuItem value={ type }>
+                { LocalizationUtils.getLocalizedDemolitionScope(type) }
               </MenuItem>
             ))
           }
@@ -107,16 +109,16 @@ const SurveyInformation: React.FC = () => {
       <Typography variant="h3">
         { strings.survey.info.demolitionInfo }
       </Typography>
-      { renderWithDebounceSelectTextField(
+      { renderDemolitionScopeSelect(
         "type",
         strings.survey.info.demolitionScope,
         selectedSurvey.type as string,
-        SurveyType,
         onSurveyInfoTypeChange
       ) }
       <Stack direction="row" spacing={ 2 }>
         <LocalizationProvider dateAdapter={ AdapterDateFns }>
           <DatePicker
+            views={["year", "month"]}
             label={ strings.survey.info.startDate }
             value={ selectedSurvey.startDate }
             onChange={ onSurveyInfoDateChange("startDate") }
@@ -125,6 +127,7 @@ const SurveyInformation: React.FC = () => {
             }
           />
           <DatePicker
+            views={["year", "month"]}
             label={ strings.survey.info.endDate }
             value={ selectedSurvey.endDate }
             onChange={ onSurveyInfoDateChange("endDate") }

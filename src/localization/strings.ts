@@ -214,6 +214,11 @@ export interface Localized extends LocalizedStringsMethods {
       phone: string;
       email: string;
       reportingDate: string;
+      demolitionScopes: {
+        renovation: string;
+        partial: string;
+        full: string;
+      };
     };
     reusables: {
       title: string;

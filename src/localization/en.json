@@ -178,7 +178,12 @@
       "role": "Role",
       "phone": "Phone",
       "email": "E-mail",
-      "reportingDate": "Reporting date"
+      "reportingDate": "Reporting date",
+      "demolitionScopes": {
+        "renovation": "Renovation demolition",
+        "partial": "Partial demolition",
+        "full": "Full demolition"
+      }
     },
     "reusables": {
       "title": "Reusable building parts",

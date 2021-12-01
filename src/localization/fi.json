@@ -178,7 +178,12 @@
       "role": "Rooli",
       "phone": "Puhelin",
       "email": "Sähköpostiosoite",
-      "reportingDate": "Raportointipäivä"
+      "reportingDate": "Raportointipäivä",
+      "demolitionScopes": {
+        "renovation": "Saneerauspurku",
+        "partial": "Osapurku",
+        "full": "Kokonaispurku"
+      }
     },
     "reusables": {
       "title": "Uudelleenkäytettävät rakennusosat",
