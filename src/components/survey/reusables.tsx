@@ -253,7 +253,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         onClose={ () => setAddingSurveyReusable(false) }
         onCancel={ () => setAddingSurveyReusable(false) }
         onConfirm={ onAddReusableConfirm }
-        title={ strings.survey.reusables.addNewBuildinPartsDialog.title }
+        title={ strings.survey.reusables.addNewBuildingPartsDialog.title }
         positiveButtonText={ strings.generic.confirm }
         cancelButtonText={ strings.generic.cancel }
       >
@@ -261,9 +261,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           fullWidth
           color="primary"
           name="componentName"
-          label={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPart }
+          label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPart }
           onChange={ onNewMaterialTextChange }
-          helperText={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartHelperText }
+          helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
         />
         <Stack
           direction={ isMobile ? "column" : "row" }
@@ -274,8 +274,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             color="primary"
             name="reusableMaterialId"
-            label={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartOrMaterial }
-            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.buildingPartOrMaterialHelperText }
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
+            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterialHelperText }
             onChange={ onNewMaterialTextChange }
           >
             { reusableOptions }
@@ -285,8 +285,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             color="primary"
             name="usability"
-            label={ strings.survey.reusables.addNewBuildinPartsDialog.usability }
-            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.usabilityHelperText }
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.usability }
+            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.usabilityHelperText }
             onChange={ onNewMaterialTextChange }
           >
             { usabilityOptions }
@@ -300,7 +300,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             fullWidth
             color="primary"
             name="amount"
-            label={ strings.survey.reusables.addNewBuildinPartsDialog.amount }
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.amount }
             type="number"
             onChange={ onNewMaterialNumberChange }
           >
@@ -311,7 +311,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             name="unit"
             color="primary"
-            label={ strings.survey.reusables.addNewBuildinPartsDialog.unit }
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.unit }
             onChange={ onNewMaterialTextChange }
           >
             { unitOptions }
@@ -322,9 +322,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             multiline
             rows={ 6 }
             name="description"
-            label={ strings.survey.reusables.addNewBuildinPartsDialog.description }
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.description }
             onChange={ onNewMaterialTextChange }
-            helperText={ strings.survey.reusables.addNewBuildinPartsDialog.descriptionHelperText }
+            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.descriptionHelperText }
           />
         </Stack>
         <Stack spacing={ 2 } marginTop={ 2 }>

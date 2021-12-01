@@ -185,11 +185,32 @@
       "phone": "Phone",
       "email": "E-mail address"
     },
+    "info": {
+      "title": "Survey information",
+      "demolitionInfo": "Demolition information",
+      "surveyors": "Surveyors",
+      "demolitionScope": "Demolition scope",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "addSurveyor": "Add surveyor",
+      "firstName": "First name",
+      "surName": "Surname",
+      "organisation": "Organisation",
+      "role": "Role",
+      "phone": "Phone",
+      "email": "E-mail",
+      "reportingDate": "Reporting date",
+      "demolitionScopes": {
+        "renovation": "Renovation demolition",
+        "partial": "Partial demolition",
+        "full": "Full demolition"
+      }
+    },
     "reusables": {
       "title": "Reusable building parts",
       "addNewBuildingPart": "Add new building part",
       "deleteBuildingParts": "Delete building part",
-      "addNewBuildinPartsDialog": {
+      "addNewBuildingPartsDialog": {
         "title": "Add building part",
         "buildingPart": "Building part",
         "buildingPartHelperText": "Give descriptive name to building part",

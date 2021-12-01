@@ -185,11 +185,32 @@
       "phone": "Puhelinnumero",
       "email": "Sähköpostiosoite"
     },
+    "info": {
+      "title": "Kartoituksen tiedot",
+      "demolitionInfo": "Purkutiedot",
+      "surveyors": "Kartoittajat",
+      "demolitionScope": "Purkamisen laajuus",
+      "startDate": "Aloitusajankohta",
+      "endDate": "Lopetusajankohta",
+      "addSurveyor": "Lisää kartoittaja",
+      "firstName": "Etunimi",
+      "surName": "Sukunimi",
+      "organisation": "Yritys",
+      "role": "Rooli",
+      "phone": "Puhelin",
+      "email": "Sähköpostiosoite",
+      "reportingDate": "Raportointipäivä",
+      "demolitionScopes": {
+        "renovation": "Saneerauspurku",
+        "partial": "Osapurku",
+        "full": "Kokonaispurku"
+      }
+    },
     "reusables": {
       "title": "Uudelleenkäytettävät rakennusosat",
       "addNewBuildingPart": "Lisää uusi rakennusosa",
       "deleteBuildingParts": "Poista rakennusosa",
-      "addNewBuildinPartsDialog": {
+      "addNewBuildingPartsDialog": {
         "title": "Lisää rakennusosa",
         "buildingPart": "Rakennusosa",
         "buildingPartHelperText": "Anna rakennusosaa kuvaava nimi",

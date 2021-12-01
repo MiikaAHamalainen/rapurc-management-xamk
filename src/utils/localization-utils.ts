@@ -1,4 +1,4 @@
-import { SurveyStatus, Unit, Usability } from "generated/client";
+import { SurveyStatus, SurveyType, Unit, Usability } from "generated/client";
 import strings from "localization/strings";
 
 /**
@@ -44,5 +44,17 @@ export default class LocalizationUtils {
     [Unit.Rm]: strings.survey.reusables.units.rm,
     [Unit.Tn]: strings.survey.reusables.units.tn
   })[unit];
+
+  /**
+   * Gets localized demolition scope string
+   *
+   * @param scope demolition scope
+   * @returns localized string
+   */
+  public static getLocalizedDemolitionScope = (scope: SurveyType): string => ({
+    [SurveyType.Demolition]: strings.survey.info.demolitionScopes.full,
+    [SurveyType.PartialDemolition]: strings.survey.info.demolitionScopes.partial,
+    [SurveyType.Renovation]: strings.survey.info.demolitionScopes.renovation
+  })[scope];
 
 }
