@@ -32,9 +32,7 @@ const TopNavigation: React.FC = () => {
         <Button
           variant="text"
           onClick={ () => navigate("/admin") }
-          startIcon={
-            <AdminPanelSettings htmlColor="#fff"/>
-          }
+          startIcon={ <AdminPanelSettings htmlColor="#fff"/> }
         >
           { strings.navigation.admin }
         </Button>
