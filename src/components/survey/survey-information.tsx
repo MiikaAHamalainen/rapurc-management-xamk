@@ -5,7 +5,7 @@ import WithDebounce from "components/generic/with-debounce";
 import { selectSelectedSurvey, updateSurvey } from "features/surveys-slice";
 import { Survey, SurveyType } from "generated/client";
 import strings from "localization/strings";
-import * as React from "react";
+import React from "react";
 import { useAppDispatch } from "../../app/hooks";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
