@@ -131,7 +131,7 @@ const BuildingTypes: React.FC = () => {
    *
    * @param buildingType building type
    */
-  const deleteIconClick = (buildingType : BuildingType) => () => {
+  const deleteIconClick = (buildingType: BuildingType) => () => {
     setDeletableBuildingType(buildingType);
     setDeletingBuildingType(true);
   };
