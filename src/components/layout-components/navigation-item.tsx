@@ -8,6 +8,7 @@ import { useResolvedPath, useMatch, useNavigate } from "react-router-dom";
  * Component properties
  */
 interface Props {
+  disabled?: boolean;
   icon?: React.ReactNode;
   title: string;
   to: string;
@@ -19,6 +20,7 @@ interface Props {
  * @param props component properties
  */
 const NavigationItem: React.FC<Props> = ({
+  disabled,
   icon,
   title,
   to
@@ -34,6 +36,7 @@ const NavigationItem: React.FC<Props> = ({
 
   return (
     <NavigationButton
+      disabled={ disabled }
       selected={ match !== null }
       onClick={ () => navigate(to) }
     >
