@@ -141,7 +141,7 @@ const BuildingTypes: React.FC = () => {
    *
    * @param buildingType material
    */
-  const editIconClick = (buildingType : BuildingType) => () => {
+  const editIconClick = (buildingType: BuildingType) => () => {
     setEditableBuildingType(buildingType);
     setEditingBuildingType(true);
   };
