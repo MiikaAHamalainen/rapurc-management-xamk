@@ -1,5 +1,6 @@
 import { AdminPanelSettings } from "@mui/icons-material";
 import { Button, Stack } from "@mui/material";
+import VisibleWithRole from "components/containers/visible-with-role";
 import strings from "localization/strings";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -27,15 +28,17 @@ const TopNavigation: React.FC = () => {
       >
         { strings.navigation.newSurvey }
       </Button>
-      <Button
-        variant="text"
-        onClick={ () => navigate("/admin") }
-        startIcon={
-          <AdminPanelSettings htmlColor="#fff"/>
-        }
-      >
-        { strings.navigation.admin }
-      </Button>
+      <VisibleWithRole userRole="admin">
+        <Button
+          variant="text"
+          onClick={ () => navigate("/admin") }
+          startIcon={
+            <AdminPanelSettings htmlColor="#fff"/>
+          }
+        >
+          { strings.navigation.admin }
+        </Button>
+      </VisibleWithRole>
     </Stack>
   );
 };
