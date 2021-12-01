@@ -20,7 +20,7 @@ export const Root = styled(Box, {
 export const Content = styled(Box, {
   label: "stack-layout-content"
 })(({ theme }) => ({
-  backgroundColor: "rgba(209,209,209,0.8)",
+  backgroundColor: "rgba(0,158,158,0.85)",
   color: "#fff",
   display: "flex",
   flexDirection: "column",

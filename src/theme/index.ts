@@ -30,7 +30,7 @@ export default createTheme({
       secondary: "#ffffff"
     },
     background: {
-      default: "#f7f7f7",
+      default: "#FAFAFA",
       paper: "#ffffff"
     }
   },
@@ -153,10 +153,6 @@ export default createTheme({
             color: "rgba(255,255,255,1)",
             borderColor: "rgba(255,255,255,1)"
           }
-        },
-        focused: {
-          color: "rgba(255,255,255,1)",
-          borderColor: "rgba(255,255,255,1)"
         }
       }
     },
@@ -168,8 +164,8 @@ export default createTheme({
       },
       styleOverrides: {
         root: {
-          [breakpoints.up("sm")]: {
-            maxWidth: 450
+          [breakpoints.up("md")]: {
+            minWidth: 320
           }
         }
       }
@@ -192,7 +188,15 @@ export default createTheme({
           borderColor: "rgba(255,255,255,0.8)",
           "&.Mui-focused": {
             color: "rgba(255,255,255,1)",
-            borderColor: "rgba(255,255,255,1)"
+            borderColor: "rgba(255,255,255,1)",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255,255,255,1)"
+            }
+          },
+          "&:hover:not(.Mui-disabled)": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255,255,255,1)"
+            }
           }
         },
         input: {
@@ -206,10 +210,6 @@ export default createTheme({
             color: "rgba(255,255,255,1)",
             borderColor: "rgba(255,255,255,1)"
           }
-        },
-        focused: {
-          borderColor: "#fff",
-          color: "#fff"
         }
       }
     },
@@ -218,12 +218,40 @@ export default createTheme({
         root: {
           borderRadius: 0,
           backgroundColor: palette.background.default,
-          [breakpoints.up("sm")]: {
-            maxWidth: 450
+          "&:before": {
+            borderBottom: "1px solid rgba(0,0,0,0)"
+          },
+          "&:hover": {
+            backgroundColor: "#fff"
+          },
+          "&.Mui-focused": {
+            backgroundColor: "#fff"
           }
         },
         input: {
           backgroundColor: palette.background.default
+        }
+      }
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        colorSecondary: {
+          "& .MuiSelect-select, .MuiSelect-icon": {
+            color: "#ffffff"
+          },
+          "&.MuiInputBase-root": {
+            "&:before": {
+              borderBottom: "1px solid rgba(255,255,255,0.5)"
+            },
+            "&:after": {
+              borderBottom: "2px solid #ffffff"
+            },
+            "&:hover:not(.Mui-disabled)": {
+              "&:before": {
+                borderBottom: "2px solid rgba(255,255,255,0.8)"
+              }
+            }
+          }
         }
       }
     },
@@ -248,6 +276,16 @@ export default createTheme({
         },
         containedSecondary: {
           color: "#fff"
+        },
+        textPrimary: {
+          color: "#006F70"
+        },
+        outlinedPrimary: {
+          color: "#006F70",
+          borderWidth: 2,
+          "&:hover": {
+            borderWidth: 2
+          }
         }
       }
     },
@@ -263,6 +301,16 @@ export default createTheme({
         }
       }
     },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: "rgba(0, 0, 0, 0.5)",
+          "&.Mui-checked": {
+            color: palette.primary.main
+          }
+        }
+      }
+    },
     MuiListItemIcon: {
       styleOverrides: {
         root: {
@@ -270,10 +318,44 @@ export default createTheme({
         }
       }
     },
+    MuiListItemText: {
+      styleOverrides: {
+        secondary: {
+          color: "#999999"
+        }
+      }
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
           borderRadius: 0
+        }
+      }
+    },
+    MuiDialog: {
+      defaultProps: {
+        fullWidth: true,
+        maxWidth: "md"
+      },
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#FAFAFA"
+        }
+      }
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          fontFamily: "Oswald, sans-serif",
+          fontWeight: 500,
+          fontSize: 24
+        }
+      }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          color: "rgba(0, 0, 0, 0.6)"
         }
       }
     }

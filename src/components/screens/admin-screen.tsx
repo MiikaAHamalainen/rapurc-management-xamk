@@ -4,6 +4,7 @@ import NavigationItem from "components/layout-components/navigation-item";
 import SidePanelLayout from "components/layouts/side-panel-layout";
 import strings from "localization/strings";
 import React from "react";
+import AdminRoutes from "../admin/admin-routes";
 
 /**
  * Admin screen component
@@ -23,11 +24,12 @@ const AdminScreen: React.FC = () => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <NavigationItem title={ dropdownSettings.reusableMaterials } selected/>
-          <NavigationItem title={ dropdownSettings.wasteMaterials }/>
-          <NavigationItem title={ dropdownSettings.postProcessing }/>
-          <NavigationItem title={ dropdownSettings.hazardousMaterials }/>
-          <NavigationItem title={ dropdownSettings.hazardousMaterialsAdditionalInfo }/>
+          <NavigationItem title={ dropdownSettings.buildingTypes } to="buildingTypes"/>
+          <NavigationItem title={ dropdownSettings.reusableMaterials } to="reusables"/>
+          <NavigationItem disabled title={ dropdownSettings.wasteMaterials } to="waste"/>
+          <NavigationItem disabled title={ dropdownSettings.postProcessing } to="postProcessing"/>
+          <NavigationItem disabled title={ dropdownSettings.hazardousMaterials } to="hazardousMaterials"/>
+          <NavigationItem disabled title={ dropdownSettings.hazardousMaterialsAdditionalInfo } to="hazardousMaterialsInfo"/>
         </AccordionDetails>
       </Accordion>
     </List>
@@ -39,9 +41,7 @@ const AdminScreen: React.FC = () => {
       sidePanelContent={ renderSideNavigation() }
       back
     >
-      <Typography>
-        { strings.generic.notImplemented }
-      </Typography>
+      <AdminRoutes/>
     </SidePanelLayout>
   );
 };

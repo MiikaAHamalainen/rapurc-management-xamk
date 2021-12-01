@@ -2,11 +2,55 @@
   "appTitle": "PURKUKARTOITUS.FI",
 
   "generic": {
-    "notImplemented": "Not yet implemented"
+    "add": "Add",
+    "addNew": "Add new",
+    "notImplemented": "Not yet implemented",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "logout": "Log out"
   },
 
   "errorHandling": {
-    "title": "Error"
+    "title": "Error",
+    "missingAccessToken": "Missing access token",
+    "surveys": {
+      "list": "Error while listing surveys",
+      "create": "Error while creating new survey",
+      "find": "Error while finding survey",
+      "update": "Error while updating survey",
+      "delete": "Error while deleting survey"
+    },
+    "buildings": {
+      "list": "Error while listing locations",
+      "create": "Error while creating new location",
+      "update": "Error while updating location",
+      "delete": "Error while deleting location"
+    },
+    "owners": {
+      "list": "Error while listing owners",
+      "create": "Error while creating owner information",
+      "update": "Error while updating owner information",
+      "delete": "Error while deleting owner information"
+    },
+    "reusables": {
+      "list": "Error while listing reusable building parts",
+      "create": "Error while creating reusable building part",
+      "update": "Error while updating reusable building part",
+      "delete": "Error while deleting reusable building part"
+    },
+    "materials": {
+      "list": "Error while listing materials and building parts",
+      "create": "Error while creating material or building part",
+      "delete": "Error while deleting material or building part",
+      "update": "Error while updating material or building part"
+    },
+    "buildingTypes": {
+      "list": "Error while listing building types",
+      "create": "Error while creating building type",
+      "delete": "Error while deleting building type",
+      "update": "Error while updating building type"
+    }
   },
 
   "navigation": {
@@ -22,7 +66,19 @@
     "showAll": "Show all",
     "showMine": "Show my surveys",
     "newSurvey": "New survey",
-    "filter": "Filter"
+    "filter": "Filter",
+    "dataGridColumns": {
+      "status": "Status",
+      "buildingId": "Building ID",
+      "classificationCode": "Classification code",
+      "ownerName": "Owner name",
+      "city": "City",
+      "streetAddress": "Street address"
+    },
+    "deleteSurveysDialog": {
+      "title": "Delete survey(s)",
+      "text": "Are you sure you want to delete these surveys?"
+    }
   },
 
   "newSurveyScreen": {
@@ -39,17 +95,15 @@
   "surveyScreen": {
     "title": "Survey",
     "status": "Status",
-    "ready": "Ready",
-    "incomplete": "Incomplete",
     "navigation": {
       "owner": "Owner details",
       "building": "Building information",
-      "others": "Other demolished structures",
-      "survey": "Survey information",
+      "otherStructures": "Other demolished structures",
+      "info": "Survey information",
       "reusables": "Reusable materials",
       "waste": "Waste materials",
       "hazardous": "Hazardous materials",
-      "attatchments": "Attatchments",
+      "attachments": "Attachments",
       "summary": "Summary"
     }
   },
@@ -64,7 +118,154 @@
         "wasteMaterials": "Waste material",
         "postProcessing": "Post processing",
         "hazardousMaterials": "Hazardous material category",
-        "hazardousMaterialsAdditionalInfo": "Hazardous material additional information"
+        "hazardousMaterialsAdditionalInfo": "Hazardous material additional information",
+        "buildingTypes": "Building type"
+      }
+    },
+    "addNewReusableMaterialDialog": {
+      "title": "Add new building part or material",
+      "text": "Name of the building part or material:"
+    },
+    "deleteReusableMaterialDialog": {
+      "title": "Delete building part or material",
+      "text": "Are you sure you want to delete building part or material: ${0}"
+    },
+    "updateReusableMaterialDialog": {
+      "title": "Update building part or material",
+      "text": "Name of the building part or material:"
+    },
+    "addNewBuildingTypeDialog": {
+      "title": "Add new building type",
+      "text1": "Name of the building type",
+      "text2": "Code",
+      "text1help": "Building classification name (from Tilastokeskus 2018)",
+      "text2help": "Building classification ID (from Tilastokeskus 2018)"
+    },
+    "deleteBuildingTypeDialog": {
+      "title": "Delete building type",
+      "text": "Are you sure you want to delete building type {0}"
+    },
+    "updateBuildingTypeDialog": {
+      "title": "Update building type",
+      "text1": "Building type",
+      "text2": "Code"
+    }
+  },
+
+  "survey": {
+    "surveyStatus": {
+      "draft": "Incomplete",
+      "done": "Ready"
+    },
+    "building": {
+      "title": "Building information",
+      "propertyID": "Property ID",
+      "buildingID": "Building ID",
+      "buildingClass": "Building class",
+      "year": "Construction year",
+      "area": "Area (m²)",
+      "volume": "Volume (m³)",
+      "floors": "Number of floors",
+      "basementFloors": "Basement floors",
+      "foundationMaterial": "Foundation material",
+      "supportingStructure": "Supporting structure",
+      "façadeMaterial": "Façade material",
+      "roofStructure": "Roof structure",
+      "address": "Address",
+      "street": "Street address",
+      "city": "City",
+      "postalCode": "Postal code"
+    },
+    "owner": {
+      "title": "Owner information",
+      "name": "Name",
+      "tradeName": "Trade name",
+      "contactPerson": "Contact person",
+      "firstName": "First name",
+      "surname": "Surname",
+      "occupation": "Occupation",
+      "phone": "Phone",
+      "email": "E-mail address"
+    },
+    "info": {
+      "title": "Survey information",
+      "demolitionInfo": "Demolition information",
+      "surveyors": "Surveyors",
+      "demolitionScope": "Demolition scope",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "addSurveyor": "Add surveyor",
+      "firstName": "First name",
+      "surName": "Surname",
+      "organisation": "Organisation",
+      "role": "Role",
+      "phone": "Phone",
+      "email": "E-mail",
+      "reportingDate": "Reporting date",
+      "demolitionScopes": {
+        "renovation": "Renovation demolition",
+        "partial": "Partial demolition",
+        "full": "Full demolition"
+      }
+    },
+    "reusables": {
+      "title": "Reusable building parts",
+      "addNewBuildingPart": "Add new building part",
+      "deleteBuildingParts": "Delete building part",
+      "addNewBuildingPartsDialog": {
+        "title": "Add building part",
+        "buildingPart": "Building part",
+        "buildingPartHelperText": "Give descriptive name to building part",
+        "buildingPartOrMaterial": "Building part or material",
+        "buildingPartOrMaterialHelperText": "Give description to part or material",
+        "usability": "Usability",
+        "usabilityHelperText": "If it's unknown, choose \"Not validated\"",
+        "amount": "Amount",
+        "unit": "Unit",
+        "description": "Description",
+        "descriptionHelperText": "Free description, for example, location in the building.",
+        "wasteAmount": "Amount as waste (tons)",
+        "wasteAmountHelperText": "Optional"
+      },
+      "deleteReusableDialog": {
+        "title": "Delete reusable building part",
+        "text": "Are you sure you want to delete these reusable parts?"
+      },
+      "dataGridColumns": {
+        "material": "Material",
+        "buildingPart": "Building part",
+        "usability": "Usability",
+        "wasteAmount": "Waste amount",
+        "amount": "Amount",
+        "description": "Lisätieto",
+        "unit": "Unit",
+        "editDescription": "Edit description"
+      },
+      "usability": {
+        "excellent": "Excellent",
+        "good": "Good",
+        "poor": "Poor",
+        "notValidated": "Not validated"
+      },
+      "units": {
+        "kg": "Kilograms (kg)",
+        "m2": "Square meters (\u33A1)",
+        "m3": "Cubic meters (\u33A5)",
+        "pcs": "Pieces (pcs)",
+        "rm": "Running meters (jm)",
+        "tn": "Tons (tn)"
+      }
+    },
+    "otherStructures": {
+      "title": "Other demolished buildings and structures",
+      "description": "Add buildings and structures that are going to be demolished with the building.",
+      "add": "Add building",
+      "dialog": {
+        "title": "Add building / structure",
+        "name": "Building / structure",
+        "description": "Additional information",
+        "deleteBuilding": "Delete other building / structure",
+        "areYouSure": "Are you sure you want to delete this building / structure?"
       }
     }
   }

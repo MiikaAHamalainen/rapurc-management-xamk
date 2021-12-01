@@ -2,15 +2,16 @@ import React from "react";
 import { ListItemText, useMediaQuery } from "@mui/material";
 import { NavigationButtonIcon, NavigationButton } from "styled/layout-components/navigation-item";
 import theme from "theme";
+import { useResolvedPath, useMatch, useNavigate } from "react-router-dom";
 
 /**
  * Component properties
  */
 interface Props {
+  disabled?: boolean;
   icon?: React.ReactNode;
   title: string;
-  selected?: boolean;
-  onClick?: () => void;
+  to: string;
 }
 
 /**
@@ -19,11 +20,15 @@ interface Props {
  * @param props component properties
  */
 const NavigationItem: React.FC<Props> = ({
+  disabled,
   icon,
   title,
-  selected,
-  onClick
+  to
 }) => {
+  const navigate = useNavigate();
+  const resolved = useResolvedPath(to);
+  const match = useMatch({ path: resolved.pathname, end: true });
+
   /**
    * Check if viewport is mobile size
    */
@@ -31,8 +36,9 @@ const NavigationItem: React.FC<Props> = ({
 
   return (
     <NavigationButton
-      selected={ selected }
-      onClick={ onClick }
+      disabled={ disabled }
+      selected={ match !== null }
+      onClick={ () => navigate(to) }
     >
       { icon &&
         <NavigationButtonIcon>

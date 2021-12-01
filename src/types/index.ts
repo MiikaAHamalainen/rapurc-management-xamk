@@ -1,3 +1,5 @@
+import { SurveyStatus } from "generated/client";
+
 /**
  * Application configuration
  */
@@ -10,6 +12,27 @@ export interface Configuration {
   api: {
     baseUrl: string;
   };
+}
+
+/**
+ * Survey with info
+ */
+export interface SurveyWithInfo {
+  id: string;
+  status: SurveyStatus;
+  ownerId?: string;
+  ownerName?: string;
+  buildingId?: string;
+  classificationCode?: string;
+  streetAddress?: string;
+  city?: string;
+}
+
+/**
+ * Generic dataGrid row
+ */
+export interface GenericDataGridRow {
+  id?: string;
 }
 
 /**

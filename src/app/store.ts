@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth-slice";
+import surveysReducer from "../features/surveys-slice";
 
 /**
  * Initialized Redux store
  */
 export const store = configureStore({
   reducer: {
-    auth: authReducer
+    auth: authReducer,
+    surveys: surveysReducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })
 });
