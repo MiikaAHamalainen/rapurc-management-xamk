@@ -176,26 +176,25 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Event handler for new material change
-   * @param event event
+   * Event handler for new material string change
+   *
+   * @param event React change event
    */
-  const onNewMaterialChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNewMaterialTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
-    switch (name) {
-      case "usability":
-        setNewMaterial({ ...newMaterial, [name]: value as Usability });
-        break;
-      case "unit":
-        setNewMaterial({ ...newMaterial, [name]: value as Unit });
-        break;
-      case "amount":
-        setNewMaterial({ ...newMaterial, [name]: Number(value) });
-        break;
-      default:
-        setNewMaterial({ ...newMaterial, [name]: value });
-        break;
-    }
+    setNewMaterial({ ...newMaterial, [name]: value });
+  };
+
+  /**
+   * Event handler for new material number change
+   *
+   * @param event React change event
+   */
+  const onNewMaterialNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = event.target;
+
+    setNewMaterial({ ...newMaterial, [name]: Number(value) });
   };
 
   /**
