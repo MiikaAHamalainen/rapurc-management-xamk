@@ -180,7 +180,7 @@ const Reusables: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <TextField
-        placeholder={ strings.adminScreen.addNewReusableMaterialDialog.text }
+        label={ strings.adminScreen.addNewReusableMaterialDialog.text }
         onChange={ event => setNewMaterialName(event.target.value) }
       />
     </GenericDialog>
@@ -220,13 +220,9 @@ const Reusables: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <Typography variant="subtitle1">
-        { strings.adminScreen.updateReusableMaterialDialog.text }
-      </Typography>
       <TextField
+        label={ strings.adminScreen.updateReusableMaterialDialog.text }
         value={ editableMaterial?.name }
-        color="secondary"
-        variant="standard"
         onChange={ handleEditableNameChange }
       />
     </GenericDialog>

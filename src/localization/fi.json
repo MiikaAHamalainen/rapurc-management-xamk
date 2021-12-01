@@ -124,15 +124,15 @@
     },
     "addNewReusableMaterialDialog": {
       "title": "Lisää rakennusosa tai -materiaali",
-      "text": "Rakennusosan tai -materiaalin nimi:"
+      "text": "Rakennusosan tai -materiaalin nimi"
     },
     "deleteReusableMaterialDialog": {
       "title": "Poista rakennusosa tai -materiaali",
-      "text": "Haluatko varmasti poistaa rakennusosan tai -materiaalin: {0}"
+      "text": "Haluatko varmasti poistaa rakennusosan tai -materiaalin \"{0}\""
     },
     "updateReusableMaterialDialog": {
       "title": "Päivitä rakennusosa tai -materiaali",
-      "text": "Rakennusosan tai -materiaalin nimi:"
+      "text": "Rakennusosan tai -materiaalin nimi"
     },
     "addNewBuildingTypeDialog": {
       "title": "Lisää rakennusluokka",
@@ -143,7 +143,7 @@
     },
     "deleteBuildingTypeDialog": {
       "title": "Poista rakennustyyppi",
-      "text": "Haluatko varmasti poistaa rakennustyypin: {0}"
+      "text": "Haluatko varmasti poistaa rakennustyypin \"{0}\""
     },
     "updateBuildingTypeDialog": {
       "title": "Päivitä rakennusluokka",
