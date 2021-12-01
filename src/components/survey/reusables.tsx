@@ -268,6 +268,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         <Stack
           direction={ isMobile ? "column" : "row" }
           spacing={ 2 }
+          marginTop={ 2 }
         >
           <TextField
             fullWidth
@@ -295,6 +296,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         <Stack
           direction={ isMobile ? "column" : "row" }
           spacing={ 2 }
+          marginTop={ 2 }
         >
           <TextField
             fullWidth
@@ -326,8 +328,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             onChange={ onNewMaterialTextChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.descriptionHelperText }
           />
-        </Stack>
-        <Stack spacing={ 2 } marginTop={ 2 }>
           <TextField
             type="number"
             name="amountAsWaste"
