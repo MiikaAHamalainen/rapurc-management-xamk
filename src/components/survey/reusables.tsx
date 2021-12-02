@@ -1,11 +1,13 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams, GridRenderEditCellParams, GridRowId } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import GenericDialog from "components/generic/generic-dialog";
 import WithDataGridDebounceFactory from "components/generic/with-data-grid-debounce";
+import WithDebounce from "components/generic/with-debounce";
+import SurveyItem from "components/layout-components/survey-item";
 import { selectKeycloak } from "features/auth-slice";
 import { Reusable, ReusableMaterial, Unit, Usability } from "generated/client";
 import strings from "localization/strings";
@@ -142,6 +144,33 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
+   * Event Handler set material prop
+   * 
+   * @param reusable reusable
+   */
+  const onMaterialPropChange: (reusable: Reusable) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
+  = (reusable: Reusable) => ({ target }) => {
+    const { value, name } = target;
+
+    const updatedReusable: Reusable = { ...reusable, [name]: value };
+    onMaterialRowChange(updatedReusable);
+  };
+
+  /**
+    * Event handler for mobile view delete survey click
+    *
+    * @param surveyId survey id
+    */
+  const deleteMaterialButtonClick = (surveyorId?: string) => {
+    if (!surveyorId) {
+      return;
+    }
+
+    setDeletingMaterial(true);
+    setSelectedReusableIds([ surveyorId ]);
+  };
+
+  /**
    * Event handler for delete survey reusable confirm
    */
   const onDeleteSurveyReusableConfirm = async () => {
@@ -195,6 +224,123 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Check if viewport is mobile size
    */
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+
+  /**
+   * Renders textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param value value
+   * @param onChange onChange
+   */
+  const renderWithDebounceTextField = (
+    name: string,
+    label: string,
+    value: string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField sx={{ mb: 1 }} { ...props }/>
+      }
+    />
+  );
+
+  /**
+   * Renders multiline textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param value value
+   * @param onChange onChange
+   */
+  const renderWithDebounceMultilineTextField = (
+    name: string,
+    label: string,
+    value: string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField
+          multiline
+          rows={ 4 }
+          sx={{ mb: 1 }}
+          { ...props }
+        />
+      }
+    />
+  );
+
+  /**
+   * Renders number textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param onChange onChange
+   * @param value value
+   */
+  const renderWithDebounceNumberTextField = (
+    name: string,
+    label: string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    value?: number
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField
+          type="number"
+          sx={{ mb: 1 }}
+          { ...props }
+        />
+      }
+    />
+  );
+
+  /**
+   * Renders select textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param options options
+   * @param onChange onChange
+   * @param value value
+   */
+  const renderWithDebounceSelectTextField = (
+    name: string,
+    label: string,
+    options: React.ReactNode[],
+    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    value?: string,
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField
+          select
+          sx={{ mb: 1 }}
+          { ...props }
+        >
+          { options }
+        </TextField>
+      }
+    />
+  );
 
   /**
    * Renders delete material dialog
@@ -336,6 +482,110 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
+   * Render material list item
+   * 
+   */
+  const renderMaterialListItems = () => {
+    const materialOptions = reusableMaterials.map(material => (
+      <MenuItem value={ material.id }>
+        { material.name }
+      </MenuItem>
+    ));
+    const usabilityOptions = Object.values(Usability).map(usability => (
+      <MenuItem value={ usability }>
+        { LocalizationUtils.getLocalizedUsability(usability) }
+      </MenuItem>
+    ));
+    const UnitOptions = Object.values(Unit).map(unit => (
+      <MenuItem value={ unit }>
+        { LocalizationUtils.getLocalizedUnits(unit) }
+      </MenuItem>
+    ));
+
+    return (
+      surveyReusables.map(reusable =>
+        <SurveyItem
+          title={ reusable.componentName }
+          subtitle={ `${reusable.amount} ${reusable.unit ? LocalizationUtils.getLocalizedUnits(reusable.unit) : ""}` }
+        >
+          { renderWithDebounceSelectTextField(
+            "reusableMaterialId",
+            strings.survey.reusables.dataGridColumns.material,
+            materialOptions,
+            onMaterialPropChange(reusable),
+            reusable.reusableMaterialId
+          )
+          }
+          { renderWithDebounceTextField(
+            "componentName",
+            strings.survey.reusables.dataGridColumns.buildingPart,
+            reusable.componentName,
+            onMaterialPropChange(reusable)
+          )
+          }
+          { renderWithDebounceSelectTextField(
+            "usability",
+            strings.survey.reusables.dataGridColumns.usability,
+            usabilityOptions,
+            onMaterialPropChange(reusable),
+            reusable.usability,
+          )
+          }
+          { renderWithDebounceNumberTextField(
+            "amount",
+            strings.survey.reusables.dataGridColumns.amount,
+            onMaterialPropChange(reusable),
+            reusable.amount,
+          )
+          }
+          { renderWithDebounceSelectTextField(
+            "unit",
+            strings.survey.reusables.dataGridColumns.unit,
+            UnitOptions,
+            onMaterialPropChange(reusable),
+            reusable.unit,
+          )
+          }
+          { renderWithDebounceNumberTextField(
+            "amountAsWaste",
+            strings.survey.reusables.dataGridColumns.amount,
+            onMaterialPropChange(reusable),
+            reusable.amountAsWaste
+          )
+          }
+          { renderWithDebounceMultilineTextField(
+            "description",
+            strings.survey.reusables.dataGridColumns.description,
+            reusable.description || "",
+            onMaterialPropChange(reusable),
+          )
+          }
+          <SurveyButton
+            variant="outlined"
+            color="primary"
+            onClick={ () => deleteMaterialButtonClick(reusable.id) }
+          >
+            <Typography color={ theme.palette.primary.main }>
+              { strings.generic.delete }
+            </Typography>
+          </SurveyButton>
+        </SurveyItem>
+      )
+    );
+  };
+
+  /**
+   * Render surveyor list
+   */
+  const renderMaterialList = () => (
+    <Paper>
+      <List>
+        { renderMaterialListItems() }
+      </List>
+    </Paper>
+  );
+
+  /**
    * Render survey reusables table for desktop
    */
   const renderSurveyDataTable = () => {
@@ -472,7 +722,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     <>
       <Stack
         spacing={ 2 }
-        direction={ isMobile ? "column" : "row" }
+        direction="row"
         justifyContent="space-between"
         marginBottom={ 2 }
       >
@@ -505,9 +755,14 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           </SurveyButton>
         </Box>
       </Stack>
+      <Hidden lgUp>
+        { renderMaterialList() }
+      </Hidden>
+      <Hidden lgDown>
+        { renderSurveyDataTable() }
+      </Hidden>
       { renderAddSurveyReusableDialog() }
       { renderDeleteSurveyMaterialDialog() }
-      { renderSurveyDataTable() }
     </>
   );
 };

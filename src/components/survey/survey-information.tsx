@@ -1,4 +1,4 @@
-import { Stack, TextField, Typography, MenuItem, Paper, Box, Hidden, useMediaQuery } from "@mui/material";
+import { Stack, TextField, Typography, MenuItem, Paper, Box, Hidden, useMediaQuery, List } from "@mui/material";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import WithDebounce from "components/generic/with-debounce";
@@ -19,6 +19,7 @@ import { Delete, Add } from "@mui/icons-material";
 import { SurveyButton } from "styled/screens/surveys-screen";
 import GenericDialog from "components/generic/generic-dialog";
 import theme from "theme";
+import SurveyItem from "components/layout-components/survey-item";
 
 const WithSurveyDataGridDebounce = WithDataGridDebounceFactory<Surveyor>();
 
@@ -130,6 +131,31 @@ const SurveyInformation: React.FC = () => {
   };
 
   /**
+   * Event Handler set surveyor prop
+   */
+  const onSurveyorPropChange: (surveyor: Surveyor) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
+  = (surveyor: Surveyor) => ({ target }) => {
+    const { value, name } = target;
+
+    const updatedSurveyor: Surveyor = { ...surveyor, [name]: value };
+    onSurveyorRowChange(updatedSurveyor);
+  };
+
+  /**
+   * Event handler for mobile view delete survey click
+   *
+   * @param surveyId survey id
+   */
+  const deleteSurveyorButtonClick = (surveyorId?: string) => {
+    if (!surveyorId) {
+      return;
+    }
+
+    setDeletingSurveyor(true);
+    setSelectedSurveyorIds([ surveyorId ]);
+  };
+
+  /**
    * Event handler for delete surveyor confirm
    */
   const onDeleteSurveyorConfirm = async () => {
@@ -198,6 +224,31 @@ const SurveyInformation: React.FC = () => {
   };
 
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+
+  /**
+   * Renders textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param value value
+   * @param onChange onChange
+   */
+  const renderWithDebounceTextField = (
+    name: string,
+    label: string,
+    value:string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField sx={{ mb: 1 }} { ...props }/>
+      }
+    />
+  );
 
   /**
    * Renders demolition scope option
@@ -303,6 +354,82 @@ const SurveyInformation: React.FC = () => {
         </SurveyButton>
       </Box>
     </>
+  );
+
+  /**
+   * Render surveyor list item
+   * 
+   */
+  const renderSurveyorListItems = () => (
+    surveyors.map(surveyor =>
+      <SurveyItem
+        title={ `${surveyor.firstName} ${surveyor.lastName}` }
+        subtitle={ surveyor.role || "" }
+      >
+        { renderWithDebounceTextField(
+          "role",
+          strings.survey.info.dataGridColumns.role,
+          surveyor.role || "",
+          onSurveyorPropChange(surveyor)
+        )
+        }
+        { renderWithDebounceTextField(
+          "firstName",
+          strings.survey.info.dataGridColumns.firstName,
+          surveyor.firstName,
+          onSurveyorPropChange(surveyor)
+        )
+        }
+        { renderWithDebounceTextField(
+          "lastName",
+          strings.survey.info.dataGridColumns.lastName,
+          surveyor.lastName || "",
+          onSurveyorPropChange(surveyor)
+        )
+        }
+        { renderWithDebounceTextField(
+          "company",
+          strings.survey.info.dataGridColumns.company,
+          surveyor.company,
+          onSurveyorPropChange(surveyor)
+        )
+        }
+        { renderWithDebounceTextField(
+          "email",
+          strings.survey.info.dataGridColumns.email,
+          surveyor.email || "",
+          onSurveyorPropChange(surveyor)
+        )
+        }
+        { renderWithDebounceTextField(
+          "phone",
+          strings.survey.info.dataGridColumns.phone,
+          surveyor.phone,
+          onSurveyorPropChange(surveyor)
+        )
+        }
+        <SurveyButton
+          variant="outlined"
+          color="primary"
+          onClick={ () => deleteSurveyorButtonClick(surveyor.id) }
+        >
+          <Typography color={ theme.palette.primary.main }>
+            { strings.generic.delete }
+          </Typography>
+        </SurveyButton>
+      </SurveyItem>
+    )
+  );
+
+  /**
+   * Render surveyor list
+   */
+  const renderSurveyorList = () => (
+    <Paper>
+      <List>
+        { renderSurveyorListItems() }
+      </List>
+    </Paper>
   );
 
   /**
@@ -496,12 +623,17 @@ const SurveyInformation: React.FC = () => {
       <Stack
         spacing={ 2 }
         marginTop={ 2 }
-        direction={ isMobile ? "column" : "row" }
+        direction="row"
         justifyContent="space-between"
       >
         { renderSurveyorHeader() }
       </Stack>
-      { renderSurveyorDataTable() }
+      <Hidden lgUp>
+        { renderSurveyorList() }
+      </Hidden>
+      <Hidden lgDown>
+        { renderSurveyorDataTable() }
+      </Hidden>
       { renderDeleteSurveyorDialog() }
       { renderAddSurveyorDialog() }
     </Stack>
