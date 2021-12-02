@@ -53,10 +53,10 @@
       "update": "Virhe päivitettäessä rakennusluokkaa"
     },
     "surveyors": {
-      "list": "Virhe katsastajaa listattaessa",
-      "create": "Virhe luotaessa mittaajaa",
-      "delete": "Virhe katsastajaa poistettaessa",
-      "update": "Virhe katsastajaa päivitettäessä"
+      "list": "Virhe kartoittajaa listattaessa",
+      "create": "Virhe luotaessa kartoittajaa",
+      "delete": "Virhe kartoittajaa poistettaessa",
+      "update": "Virhe kartoittajaa päivitettäessä"
     }
   },
 
@@ -221,8 +221,8 @@
         "title": "Lisää katsastaja"
       },
       "deleteSurveyorDialog": {
-        "title": "Poista mittaaja",
-        "text": "Haluatko varmasti poistaa nämä mittaajat??"
+        "title": "Poista kartoittaja",
+        "text": "Haluatko varmasti poistaa nämä kartoittajat?"
       }
     },
     "reusables": {

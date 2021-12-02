@@ -148,13 +148,14 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param reusable reusable
    */
-  const onMaterialPropChange: (reusable: Reusable) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
-  = (reusable: Reusable) => ({ target }) => {
-    const { value, name } = target;
+  const onMaterialPropChange: (reusable: Reusable) =>
+  React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (reusable: Reusable) =>
+    ({ target }) => {
+      const { value, name } = target;
 
-    const updatedReusable: Reusable = { ...reusable, [name]: value };
-    onMaterialRowChange(updatedReusable);
-  };
+      const updatedReusable: Reusable = { ...reusable, [name]: value };
+      onMaterialRowChange(updatedReusable);
+    };
 
   /**
     * Event handler for mobile view delete survey click
@@ -483,7 +484,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * Render material list item
-   * 
    */
   const renderMaterialListItems = () => {
     const materialOptions = reusableMaterials.map(material => (

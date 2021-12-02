@@ -133,13 +133,14 @@ const SurveyInformation: React.FC = () => {
   /**
    * Event Handler set surveyor prop
    */
-  const onSurveyorPropChange: (surveyor: Surveyor) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
-  = (surveyor: Surveyor) => ({ target }) => {
-    const { value, name } = target;
+  const onSurveyorPropChange: (surveyor: Surveyor) =>
+  React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (surveyor: Surveyor) =>
+    ({ target }) => {
+      const { value, name } = target;
 
-    const updatedSurveyor: Surveyor = { ...surveyor, [name]: value };
-    onSurveyorRowChange(updatedSurveyor);
-  };
+      const updatedSurveyor: Surveyor = { ...surveyor, [name]: value };
+      onSurveyorRowChange(updatedSurveyor);
+    };
 
   /**
    * Event handler for mobile view delete survey click
@@ -303,7 +304,7 @@ const SurveyInformation: React.FC = () => {
           label={ strings.survey.info.startDate }
           value={ selectedSurvey.startDate }
           onChange={ onSurveyInfoDateChange("startDate") }
-          renderInput={params =>
+          renderInput={ params =>
             <TextField label={ strings.survey.info.startDate } { ...params }/>
           }
         />
@@ -312,7 +313,7 @@ const SurveyInformation: React.FC = () => {
           label={ strings.survey.info.endDate }
           value={ selectedSurvey.endDate }
           onChange={ onSurveyInfoDateChange("endDate") }
-          renderInput={params =>
+          renderInput={ params =>
             <TextField label={ strings.survey.info.startDate } { ...params }/>
           }
         />
@@ -358,7 +359,6 @@ const SurveyInformation: React.FC = () => {
 
   /**
    * Render surveyor list item
-   * 
    */
   const renderSurveyorListItems = () => (
     surveyors.map(surveyor =>
