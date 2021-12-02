@@ -304,7 +304,7 @@ const SurveyInformation: React.FC = () => {
           label={ strings.survey.info.startDate }
           value={ selectedSurvey.startDate }
           onChange={ onSurveyInfoDateChange("startDate") }
-          renderInput={params =>
+          renderInput={ params =>
             <TextField label={ strings.survey.info.startDate } { ...params }/>
           }
         />
