@@ -228,7 +228,7 @@
         "reportDate": "Raportointipäivä"
       },
       "deleteSurveyorDialog": {
-        "title": "Poista mittaaja",
+        "title": "Poista kartoittaja",
         "text": "Haluatko varmasti poistaa nämä kartoittajat?"
       }
     },
