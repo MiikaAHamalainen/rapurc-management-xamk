@@ -218,14 +218,7 @@
         "reportDate": "Reporting date"
       },
       "addNewSurveyorDialog": {
-        "title": "Add surveyor",
-        "firstName": "First name",
-        "lastName": "Surname",
-        "company": "Organization",
-        "role": "Role",
-        "phone": "Phone",
-        "email": "E-mail",
-        "reportDate": "Reporting date"
+        "title": "Add surveyor"
       },
       "deleteSurveyorDialog": {
         "title": "Delete surveyor",
@@ -238,17 +231,11 @@
       "deleteBuildingParts": "Delete building part",
       "addNewBuildingPartsDialog": {
         "title": "Add building part",
-        "buildingPart": "Building part",
         "buildingPartHelperText": "Give descriptive name to building part",
         "buildingPartOrMaterial": "Building part or material",
         "buildingPartOrMaterialHelperText": "Give description to part or material",
-        "usability": "Usability",
         "usabilityHelperText": "If it's unknown, choose \"Not validated\"",
-        "amount": "Amount",
-        "unit": "Unit",
-        "description": "Description",
         "descriptionHelperText": "Free description, for example, location in the building.",
-        "wasteAmount": "Amount as waste (tons)",
         "wasteAmountHelperText": "Optional"
       },
       "deleteReusableDialog": {

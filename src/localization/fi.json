@@ -218,14 +218,7 @@
         "reportDate": "Raportointipäivä"
       },
       "addNewSurveyorDialog": {
-        "title": "Lisää katsastaja",
-        "firstName": "Etunimi",
-        "lastName": "Sukunimi",
-        "company": "Yritys",
-        "role": "Rooli",
-        "phone": "Puhelin",
-        "email": "Sähköpostiosoite",
-        "reportDate": "Raportointipäivä"
+        "title": "Lisää katsastaja"
       },
       "deleteSurveyorDialog": {
         "title": "Poista mittaaja",
@@ -238,17 +231,11 @@
       "deleteBuildingParts": "Poista rakennusosa",
       "addNewBuildingPartsDialog": {
         "title": "Lisää rakennusosa",
-        "buildingPart": "Rakennusosa",
         "buildingPartHelperText": "Anna rakennusosaa kuvaava nimi",
         "buildingPartOrMaterial": "Rakennusosa tai -materiaali",
         "buildingPartOrMaterialHelperText": "Anna osaa vastaava tarkenne",
-        "usability": "Käyttökelpoisuus",
         "usabilityHelperText": "Jos ei tiedossa, valitse \"ei arvioitu\"",
-        "amount": "Määrä",
-        "unit": "Mittayksikkö",
-        "description": "Lisätiedot",
         "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms.",
-        "wasteAmount": "Määrä purkujätteenä (tonneina)",
         "wasteAmountHelperText": "Valinnainen tieto"
       },
       "deleteReusableDialog": {

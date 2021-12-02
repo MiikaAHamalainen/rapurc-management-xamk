@@ -254,12 +254,6 @@ export interface Localized extends LocalizedStringsMethods {
       };
       addNewSurveyorDialog: {
         title: string;
-        role: string;
-        firstName: string;
-        lastName: string;
-        company: string;
-        phone: string;
-        email: string;
       };
       deleteSurveyorDialog: {
         title: string;
@@ -272,17 +266,11 @@ export interface Localized extends LocalizedStringsMethods {
       deleteBuildingParts: string;
       addNewBuildingPartsDialog: {
         title: string;
-        buildingPart: string;
         buildingPartHelperText: string;
         buildingPartOrMaterial: string;
         buildingPartOrMaterialHelperText: string;
-        usability: string;
         usabilityHelperText: string;
-        amount: string;
-        unit: string;
-        description: string;
         descriptionHelperText: string;
-        wasteAmount: string;
         wasteAmountHelperText: string;
       };
       deleteReusableDialog: {
