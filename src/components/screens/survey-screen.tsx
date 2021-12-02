@@ -95,7 +95,6 @@ const SurveyScreen: React.FC = () => {
         title={ strings.surveyScreen.navigation.reusables }
       />
       <NavigationItem
-        disabled
         icon={ <Delete/> }
         to="waste"
         title={ strings.surveyScreen.navigation.waste }

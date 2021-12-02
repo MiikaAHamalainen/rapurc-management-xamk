@@ -28,7 +28,7 @@ interface Props {
 /**
  * Component for reusable materials and building parts
  */
-const Reusables: React.FC<Props> = ({ surveyId }) => {
+const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
@@ -387,7 +387,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     return (
       <GenericDialog
         error={ false }
-        disabled={ !newMaterial.componentName || !newMaterial.reusableMaterialId }
         open={ addingSurveyReusable }
         onClose={ () => setAddingSurveyReusable(false) }
         onCancel={ () => setAddingSurveyReusable(false) }
@@ -768,4 +767,4 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   );
 };
 
-export default Reusables;
+export default WasteMaterial;
