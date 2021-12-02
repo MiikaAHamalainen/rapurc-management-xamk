@@ -9,14 +9,14 @@ import WithDataGridDebounceFactory from "components/generic/with-data-grid-debou
 import WithDebounce from "components/generic/with-debounce";
 import SurveyItem from "components/layout-components/survey-item";
 import { selectKeycloak } from "features/auth-slice";
-import { Reusable, ReusableMaterial, Unit, Usability } from "generated/client";
+import { Reusable, ReusableMaterial, Unit, Usability, Usage, Waste, WasteMaterial } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
 import { SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
 import LocalizationUtils from "utils/localization-utils";
 
-const WithReusableDataGridDebounce = WithDataGridDebounceFactory<Reusable>();
+const WithWasteDataGridDebounce = WithDataGridDebounceFactory<Waste>();
 
 /**
  * Component properties
@@ -31,25 +31,25 @@ interface Props {
 const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
-  const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
   const [ loading, setLoading ] = React.useState(false);
-  const [ editable ] = React.useState(true);
-  const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
+  const [ addingWaste, setAddingWaste ] = React.useState(false);
+  const [ deletingWaste, setDeletingWaste ] = React.useState(false);
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
-  const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
-  const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
+  const [ wastes, setWastes ] = React.useState<Waste[]>([]);
+  const [ wasteMaterial, setWasteMaterial ] = React.useState<WasteMaterial[]>([]);
+  const [ usages, setUsages ] = React.useState<Usage[]>([]);
   const [ selectedReusableIds, setSelectedReusableIds ] = React.useState<GridRowId[]>([]);
-  const [ newMaterial, setNewMaterial ] = React.useState<Reusable>({
-    componentName: "",
-    usability: Usability.NotValidated,
-    reusableMaterialId: "",
+  const [ newWaste, setNewWaste ] = React.useState<Waste>({
+    wasteMaterialId: "",
+    usageId: "",
+    amount:0,
     metadata: {}
   });
 
   /**
-   * Fetch owner information array
+   * Fetch waste array
    */
-  const fetchSurveyReusables = async () => {
+  const fetchWastes = async () => {
     if (!keycloak?.token || !surveyId) {
       return;
     }
@@ -57,26 +57,42 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
     setLoading(true);
 
     try {
-      const fetchedReusables = await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: surveyId });
-      setSurveyReusables(fetchedReusables);
+      setWastes(await Api.getWastesApi(keycloak.token).listSurveyWastes({ surveyId: surveyId }));
     } catch (error) {
+      // TODO localization
       errorContext.setError(strings.errorHandling.reusables.list, error);
     }
-
     setLoading(false);
   };
 
   /**
-   * Fetches list of reusable materials and building parts
+   * Fetches waste material array
    */
-  const fetchReusableMaterials = async () => {
+  const fetchWastesMaterials = async () => {
     if (!keycloak?.token) {
       return;
     }
 
     try {
-      setReusableMaterials(await Api.getReusableMaterialApi(keycloak.token).listReusableMaterials());
+      setWasteMaterial(await Api.getWasteMaterialApi(keycloak.token).listWasteMaterials());
     } catch (error) {
+      // TODO localization
+      errorContext.setError(strings.errorHandling.materials.list, error);
+    }
+  };
+
+  /**
+   * Fetches usage array
+   */
+  const fetchUsages = async () => {
+    if (!keycloak?.token) {
+      return;
+    }
+
+    try {
+      setUsages(await Api.getUsageApi(keycloak.token).listUsages());
+    } catch (error) {
+      // TODO localization
       errorContext.setError(strings.errorHandling.materials.list, error);
     }
   };
@@ -85,45 +101,46 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
    * Effect that loads component data
    */
   React.useEffect(() => {
-    fetchSurveyReusables();
-    fetchReusableMaterials();
-    setSelectedReusableIds([]);
+    fetchWastes();
+    fetchWastesMaterials();
+    fetchUsages();
   }, []);
 
   /**
    * Event handler for add reusable confirm
    */
-  const onAddReusableConfirm = async () => {
+  const onAddWasteConfirm = async () => {
     if (!keycloak?.token || !surveyId) {
       return;
     }
 
     try {
-      const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
+      const createWaste = await Api.getWastesApi(keycloak.token).createSurveyWaste({
         surveyId: surveyId,
-        reusable: newMaterial
+        waste: newWaste
       });
 
-      setSurveyReusables([ ...surveyReusables, createdReusable ]);
-      setNewMaterial({
-        componentName: "",
-        usability: Usability.NotValidated,
-        reusableMaterialId: "",
+      setWastes([ ...wastes, createWaste ]);
+      setNewWaste({
+        wasteMaterialId: "",
+        usageId: "",
+        amount:0,
         metadata: {}
       });
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.create, error);
     }
 
-    setAddingSurveyReusable(false);
+    setAddingWaste(false);
   };
 
+  // TODO from here
   /**
    * Reusable change handler
    * 
    * @param updatedReusable updated reusable
    */
-  const onMaterialRowChange = async (newReusable: Reusable) => {
+  const onMaterialRowChange = async (updatedWaste: Waste) => {
     if (!keycloak?.token || !newReusable.id || !surveyId || newReusable.componentName === "") {
       return;
     }
