@@ -130,7 +130,7 @@ const Waste: React.FC = () => {
         wasteMaterial: editableWasteMaterial
       });
 
-      setWasteMaterials(wasteMaterials.map(wasteMaterial => (wasteMaterial.id === editableWasteMaterial.id ? updatedWasteMaterial : wasteMaterial)));
+      setWasteMaterials(wasteMaterials.map(wasteMaterial => wasteMaterial.id === editableWasteMaterial.id ? updatedWasteMaterial : wasteMaterial));
       setEditableWasteMaterial(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildingTypes.update, error);
