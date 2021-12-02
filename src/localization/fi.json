@@ -158,7 +158,7 @@
     },
     "addNewPostProcessDialog": {
       "title": "Lisää jatkokäsittely",
-      "text": "Jatkokäsittelyn nimi:"
+      "text": "Jatkokäsittelyn nimi"
     },
     "deletePostProcessDialog": {
       "title": "Poista jatkokäsittely",
