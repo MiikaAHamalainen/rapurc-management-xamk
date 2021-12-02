@@ -19,7 +19,7 @@ const AdminRoutes: React.FC = () => {
         element={ <BuildingTypes/> }
       />
       <Route
-        path="postprocessing"
+        path="postProcessing"
         element={ <PostProcessing/> }
       />
     </Routes>
