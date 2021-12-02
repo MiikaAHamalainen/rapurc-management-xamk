@@ -112,6 +112,7 @@ const Waste: React.FC = () => {
     } catch (error) {
       errorContext.setError(strings.errorHandling.wasteMaterials.delete, error);
     }
+
     setDeletingWaste(false);
   };
 
