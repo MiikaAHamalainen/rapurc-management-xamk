@@ -195,17 +195,19 @@
       "startDate": "Start date",
       "endDate": "End date",
       "addSurveyor": "Add surveyor",
-      "firstName": "First name",
-      "surName": "Surname",
-      "organisation": "Organisation",
-      "role": "Role",
-      "phone": "Phone",
-      "email": "E-mail",
-      "reportingDate": "Reporting date",
       "demolitionScopes": {
         "renovation": "Renovation demolition",
         "partial": "Partial demolition",
         "full": "Full demolition"
+      },
+      "dataGridColumns": {
+        "firstName": "First name",
+        "lastName": "Surname",
+        "company": "Organization",
+        "role": "Role",
+        "phone": "Phone",
+        "email": "E-mail",
+        "reportDate": "Reporting date"
       }
     },
     "reusables": {

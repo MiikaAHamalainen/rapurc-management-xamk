@@ -195,17 +195,19 @@
       "startDate": "Aloitusajankohta",
       "endDate": "Lopetusajankohta",
       "addSurveyor": "Lisää kartoittaja",
-      "firstName": "Etunimi",
-      "surName": "Sukunimi",
-      "organisation": "Yritys",
-      "role": "Rooli",
-      "phone": "Puhelin",
-      "email": "Sähköpostiosoite",
-      "reportingDate": "Raportointipäivä",
       "demolitionScopes": {
         "renovation": "Saneerauspurku",
         "partial": "Osapurku",
         "full": "Kokonaispurku"
+      },
+      "dataGridColumns": {
+        "firstName": "Etunimi",
+        "lastName": "Sukunimi",
+        "company": "Yritys",
+        "role": "Rooli",
+        "phone": "Puhelin",
+        "email": "Sähköpostiosoite",
+        "reportDate": "Raportointipäivä"
       }
     },
     "reusables": {

@@ -48,11 +48,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Fetch owner information array
    */
   const fetchSurveyReusables = async () => {
-    setLoading(true);
 
     if (!keycloak?.token || !surveyId) {
       return;
     }
+
+    setLoading(true);
 
     try {
       const fetchedReusables = await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: surveyId });
