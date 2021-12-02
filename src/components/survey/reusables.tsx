@@ -44,8 +44,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     metadata: {}
   });
 
-  // TODO clear the new material after creating
-
   /**
    * Fetch owner information array
    */
@@ -94,16 +92,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Event handler for add reusable confirm
    */
   const onAddReusableConfirm = async () => {
-    const {
-      componentName,
-      reusableMaterialId,
-      usability,
-      unit,
-      description,
-      amount,
-      amountAsWaste
-    } = newMaterial;
-
     if (!keycloak?.token || !surveyId) {
       return;
     }
@@ -111,18 +99,16 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     try {
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
-        reusable: {
-          componentName: componentName,
-          reusableMaterialId: reusableMaterialId,
-          usability: usability,
-          unit: unit,
-          description: description,
-          amount: amount,
-          amountAsWaste: amountAsWaste,
-          metadata: {}
-        }
+        reusable: newMaterial
       });
+
       setSurveyReusables([ ...surveyReusables, createdReusable ]);
+      setNewMaterial({
+        componentName: "",
+        usability: Usability.NotValidated,
+        reusableMaterialId: "",
+        metadata: {}
+      });
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.create, error);
     }
@@ -165,16 +151,19 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
     const reusablesApi = Api.getSurveyReusablesApi(keycloak.token);
 
-    await Promise.all(
-      selectedReusableIds.map(async materialId => {
-        await reusablesApi.deleteSurveyReusable({
-          surveyId: surveyId,
-          reusableId: materialId.toString()
-        });
-      })
-    );
+    try {
+      await Promise.all(
+        selectedReusableIds.map(async materialId => {
+          await reusablesApi.deleteSurveyReusable({
+            surveyId: surveyId,
+            reusableId: materialId.toString()
+          });
+        })
+      );
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.reusables.delete, error);
+    }
 
-    // TODO error
     fetchSurveyReusables();
     setSelectedReusableIds([]);
     setDeletingMaterial(false);
@@ -266,7 +255,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           name="componentName"
           label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPart }
           onChange={ onNewMaterialTextChange }
-          // TODO all the textfield value
           value={ newMaterial.componentName }
           helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
         />
@@ -330,6 +318,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             rows={ 6 }
             name="description"
             label={ strings.survey.reusables.addNewBuildingPartsDialog.description }
+            value={ newMaterial.description }
             onChange={ onNewMaterialTextChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.descriptionHelperText }
           />
@@ -337,6 +326,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             type="number"
             name="amountAsWaste"
             label={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmount }
+            value={ newMaterial.amountAsWaste }
             onChange={ onNewMaterialNumberChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
           />

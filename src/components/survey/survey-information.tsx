@@ -182,17 +182,18 @@ const SurveyInformation: React.FC = () => {
         surveyId: selectedSurvey.id,
         surveyor: newSurveyor
       });
+
       setSurveyors([ ...surveyors, createdSurveyor ]);
+      setNewSurveyor({
+        firstName: "",
+        lastName: "",
+        company: "",
+        phone: ""
+      });
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveyors.create, error);
     }
 
-    setNewSurveyor({
-      firstName: "",
-      lastName: "",
-      company: "",
-      phone: ""
-    });
     setAddingSurveyor(false);
   };
 
