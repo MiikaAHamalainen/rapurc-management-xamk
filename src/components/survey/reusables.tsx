@@ -266,7 +266,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           name="componentName"
           label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPart }
           onChange={ onNewMaterialTextChange }
-          // TODO value
+          // TODO all the textfield value
           value={ newMaterial.componentName }
           helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
         />

@@ -43,7 +43,7 @@ const SurveyInformation: React.FC = () => {
   });
 
   /**
-   * Fetch owner information array
+   * Fetch surveyor array
    */
   const fetchSurveyors = async () => {
     if (!keycloak?.token || !selectedSurvey?.id) {
@@ -56,7 +56,7 @@ const SurveyInformation: React.FC = () => {
       const fetchedSurveyors = await Api.getSurveyorsApi(keycloak.token).listSurveyors({ surveyId: selectedSurvey.id });
       setSurveyors(fetchedSurveyors);
     } catch (error) {
-      errorContext.setError(strings.errorHandling.reusables.list, error);
+      errorContext.setError(strings.errorHandling.surveyors.list, error);
     }
 
     setLoading(false);
@@ -107,7 +107,7 @@ const SurveyInformation: React.FC = () => {
   };
 
   /**
-   * Reusable change handler
+   * Surveyor change handler
    * 
    * @param updatedReusable updated reusable
    */
@@ -123,15 +123,14 @@ const SurveyInformation: React.FC = () => {
         surveyor: surveyor
       });
 
-      // TODO ERROR handling 
       setSurveyors(surveyors.map(surveyorData => (surveyorData.id === updatedSurveyor.id ? updatedSurveyor : surveyorData)));
     } catch (error) {
-      errorContext.setError(strings.errorHandling.reusables.update, error);
+      errorContext.setError(strings.errorHandling.surveyors.update, error);
     }
   };
 
   /**
-   * Event handler for delete survey reusable confirm
+   * Event handler for delete surveyor confirm
    */
   const onDeleteSurveyorConfirm = async () => {
     if (!keycloak?.token || !selectedSurvey?.id || !selectedSurveyorIds.length) {
@@ -154,13 +153,13 @@ const SurveyInformation: React.FC = () => {
       fetchSurveyors();
       setSelectedSurveyorIds([]);
     } catch (error) {
-      errorContext.setError("TODO", error);
+      errorContext.setError(strings.errorHandling.surveyors.delete, error);
     }
     setDeletingSurveyor(false);
   };
 
   /**
-   * Event handler for new material string change
+   * Event handler for new surveyor string change
    *
    * @param event React change event
    */
@@ -171,7 +170,7 @@ const SurveyInformation: React.FC = () => {
   };
 
   /**
-   * Event handler for add reusable confirm
+   * Event handler for add surveyor confirm
    */
   const onAddSurveyorConfirm = async () => {
     if (!keycloak?.token || !selectedSurvey?.id) {
@@ -185,7 +184,7 @@ const SurveyInformation: React.FC = () => {
       });
       setSurveyors([ ...surveyors, createdSurveyor ]);
     } catch (error) {
-      errorContext.setError("TODO", error);
+      errorContext.setError(strings.errorHandling.surveyors.create, error);
     }
 
     setNewSurveyor({
@@ -238,7 +237,7 @@ const SurveyInformation: React.FC = () => {
   );
 
   /**
-   * Render survey reusables table for desktop
+   * Render surveyor table for desktop
    */
   const renderSurveyorDataTable = () => {
     const columns: GridColDef[] = [
@@ -300,7 +299,7 @@ const SurveyInformation: React.FC = () => {
               checkboxSelection
               autoHeight
               loading={ loading }
-              pageSize={ 10 }
+              pageSize={ 5 }
               disableSelectionOnClick
               { ...params }
             />
@@ -311,7 +310,7 @@ const SurveyInformation: React.FC = () => {
   };
 
   /**
-   * Renders delete material dialog
+   * Renders delete surveyor dialog
    */
   const renderDeleteSurveyorDialog = () => (
     <GenericDialog
@@ -320,18 +319,18 @@ const SurveyInformation: React.FC = () => {
       onClose={ () => setDeletingSurveyor(false) }
       onCancel={ () => setDeletingSurveyor(false) }
       onConfirm={ onDeleteSurveyorConfirm }
-      title="TODO delete"
+      title={ strings.survey.info.deleteReusableDialog.title }
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.survey.reusables.deleteReusableDialog.text }
+        { strings.survey.info.deleteReusableDialog.text }
       </Typography>
     </GenericDialog>
   );
 
   /**
-   * Renders add survey reusable dialog
+   * Renders add surveyor dialog
    */
   const renderAddSurveyorDialog = () => (
     <GenericDialog
@@ -340,7 +339,7 @@ const SurveyInformation: React.FC = () => {
       onClose={ () => setAddingSurveyor(false) }
       onCancel={ () => setAddingSurveyor(false) }
       onConfirm={ onAddSurveyorConfirm }
-      title="TODO"
+      title={ strings.survey.info.addNewSurveyorDialog.title }
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
@@ -348,10 +347,9 @@ const SurveyInformation: React.FC = () => {
         fullWidth
         color="primary"
         name="role"
-        label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPart }
+        label={ strings.survey.info.addNewSurveyorDialog.role }
         value={ newSurveyor.role }
         onChange={ onNewSurveyorChange }
-        helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
       />
       <Stack
         direction={ isMobile ? "column" : "row" }
@@ -362,8 +360,7 @@ const SurveyInformation: React.FC = () => {
           fullWidth
           color="primary"
           name="firstName"
-          label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
-          helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterialHelperText }
+          label={ strings.survey.info.addNewSurveyorDialog.firstName }
           value={ newSurveyor.firstName }
           onChange={ onNewSurveyorChange }
         />
@@ -371,33 +368,35 @@ const SurveyInformation: React.FC = () => {
           fullWidth
           color="primary"
           name="lastName"
-          label={ strings.survey.reusables.addNewBuildingPartsDialog.usability }
-          helperText={ strings.survey.reusables.addNewBuildingPartsDialog.usabilityHelperText }
+          label={ strings.survey.info.addNewSurveyorDialog.lastName }
           value={ newSurveyor.lastName }
           onChange={ onNewSurveyorChange }
         />
       </Stack>
       <TextField
+        sx={{ mt: 2 }}
         fullWidth
         color="primary"
         name="company"
-        label={ strings.survey.reusables.addNewBuildingPartsDialog.amount }
+        label={ strings.survey.info.addNewSurveyorDialog.company }
         value={ newSurveyor.company }
         onChange={ onNewSurveyorChange }
       />
       <TextField
         fullWidth
+        sx={{ mt: 2 }}
         name="email"
         color="primary"
-        label={ strings.survey.reusables.addNewBuildingPartsDialog.unit }
+        label={ strings.survey.info.addNewSurveyorDialog.email }
         value={ newSurveyor.email }
         onChange={ onNewSurveyorChange }
       />
       <TextField
         fullWidth
-        name="email"
+        sx={{ mt: 2 }}
+        name="phone"
         color="primary"
-        label={ strings.survey.reusables.addNewBuildingPartsDialog.unit }
+        label={ strings.survey.info.addNewSurveyorDialog.phone }
         value={ newSurveyor.phone }
         onChange={ onNewSurveyorChange }
       />

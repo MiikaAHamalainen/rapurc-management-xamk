@@ -68,6 +68,12 @@ export interface Localized extends LocalizedStringsMethods {
       delete: string;
       update: string;
     };
+    surveyors: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
   };
 
   /**
@@ -243,6 +249,19 @@ export interface Localized extends LocalizedStringsMethods {
         phone: string;
         email: string;
         reportDate: string;
+      };
+      addNewSurveyorDialog: {
+        title: string;
+        role: string;
+        firstName: string;
+        lastName: string;
+        company: string;
+        phone: string;
+        email: string;
+      };
+      deleteReusableDialog: {
+        title: string;
+        text: string;
       };
     };
     reusables: {

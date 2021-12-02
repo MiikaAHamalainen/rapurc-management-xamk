@@ -50,6 +50,12 @@
       "create": "Error while creating building type",
       "delete": "Error while deleting building type",
       "update": "Error while updating building type"
+    },
+    "surveyors": {
+      "list": "Error while listing surveyor",
+      "create": "Error while creating surveyor",
+      "delete": "Error while deleting surveyor",
+      "update": "Error while updating surveyor"
     }
   },
 
@@ -208,6 +214,20 @@
         "phone": "Phone",
         "email": "E-mail",
         "reportDate": "Reporting date"
+      },
+      "addNewSurveyorDialog": {
+        "title": "Add surveyor",
+        "firstName": "First name",
+        "lastName": "Surname",
+        "company": "Organization",
+        "role": "Role",
+        "phone": "Phone",
+        "email": "E-mail",
+        "reportDate": "Reporting date"
+      },
+      "deleteReusableDialog": {
+        "title": "Delete surveyor",
+        "text": "Are you sure you want to delete these surveyors?"
       }
     },
     "reusables": {
