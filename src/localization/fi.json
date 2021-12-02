@@ -53,10 +53,10 @@
       "update": "Virhe päivitettäessä rakennusluokkaa"
     },
     "surveyors": {
-      "list": "Virhe katsastajaa listattaessa",
-      "create": "Virhe luotaessa mittaajaa",
-      "delete": "Virhe katsastajaa poistettaessa",
-      "update": "Virhe katsastajaa päivitettäessä"
+      "list": "Virhe kartoittajaa listattaessa",
+      "create": "Virhe luotaessa kartoittajaa",
+      "delete": "Virhe kartoittajaa poistettaessa",
+      "update": "Virhe kartoittajaa päivitettäessä"
     }
   },
 
