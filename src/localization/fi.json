@@ -218,7 +218,7 @@
         "reportDate": "Raportointipäivä"
       },
       "addNewSurveyorDialog": {
-        "title": "Lisää katsastaja",
+        "title": "Lisää kartoittaja",
         "firstName": "Etunimi",
         "lastName": "Sukunimi",
         "company": "Yritys",
