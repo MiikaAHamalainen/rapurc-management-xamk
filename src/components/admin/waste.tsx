@@ -268,7 +268,6 @@ const Waste: React.FC = () => {
             />
           </Stack>
         </Stack>
-        
       </Stack>
     </GenericDialog>
   );
