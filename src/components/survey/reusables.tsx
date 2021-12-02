@@ -148,8 +148,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param reusable reusable
    */
-  const onMaterialPropChange: (reusable: Reusable) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
-  = (reusable: Reusable) => ({ target }) => {
+  const onMaterialPropChange: (reusable: Reusable) =>
+  React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (reusable: Reusable) =>
+  ({ target }) => {
     const { value, name } = target;
 
     const updatedReusable: Reusable = { ...reusable, [name]: value };
