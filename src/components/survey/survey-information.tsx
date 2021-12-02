@@ -133,13 +133,14 @@ const SurveyInformation: React.FC = () => {
   /**
    * Event Handler set surveyor prop
    */
-  const onSurveyorPropChange: (surveyor: Surveyor) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
-  = (surveyor: Surveyor) => ({ target }) => {
-    const { value, name } = target;
+  const onSurveyorPropChange: (surveyor: Surveyor) =>
+  React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (surveyor: Surveyor) =>
+    ({ target }) => {
+      const { value, name } = target;
 
-    const updatedSurveyor: Surveyor = { ...surveyor, [name]: value };
-    onSurveyorRowChange(updatedSurveyor);
-  };
+      const updatedSurveyor: Surveyor = { ...surveyor, [name]: value };
+      onSurveyorRowChange(updatedSurveyor);
+    };
 
   /**
    * Event handler for mobile view delete survey click
@@ -303,7 +304,7 @@ const SurveyInformation: React.FC = () => {
           label={ strings.survey.info.startDate }
           value={ selectedSurvey.startDate }
           onChange={ onSurveyInfoDateChange("startDate") }
-          renderInput={params =>
+          renderInput={ params =>
             <TextField label={ strings.survey.info.startDate } { ...params }/>
           }
         />
@@ -312,7 +313,7 @@ const SurveyInformation: React.FC = () => {
           label={ strings.survey.info.endDate }
           value={ selectedSurvey.endDate }
           onChange={ onSurveyInfoDateChange("endDate") }
-          renderInput={params =>
+          renderInput={ params =>
             <TextField label={ strings.survey.info.startDate } { ...params }/>
           }
         />
@@ -358,7 +359,6 @@ const SurveyInformation: React.FC = () => {
 
   /**
    * Render surveyor list item
-   * 
    */
   const renderSurveyorListItems = () => (
     surveyors.map(surveyor =>
@@ -541,7 +541,7 @@ const SurveyInformation: React.FC = () => {
         fullWidth
         color="primary"
         name="role"
-        label={ strings.survey.info.addNewSurveyorDialog.role }
+        label={ strings.survey.info.dataGridColumns.role }
         value={ newSurveyor.role }
         onChange={ onNewSurveyorChange }
       />
@@ -554,7 +554,7 @@ const SurveyInformation: React.FC = () => {
           fullWidth
           color="primary"
           name="firstName"
-          label={ strings.survey.info.addNewSurveyorDialog.firstName }
+          label={ strings.survey.info.dataGridColumns.firstName }
           value={ newSurveyor.firstName }
           onChange={ onNewSurveyorChange }
         />
@@ -562,7 +562,7 @@ const SurveyInformation: React.FC = () => {
           fullWidth
           color="primary"
           name="lastName"
-          label={ strings.survey.info.addNewSurveyorDialog.lastName }
+          label={ strings.survey.info.dataGridColumns.lastName }
           value={ newSurveyor.lastName }
           onChange={ onNewSurveyorChange }
         />
@@ -572,7 +572,7 @@ const SurveyInformation: React.FC = () => {
         fullWidth
         color="primary"
         name="company"
-        label={ strings.survey.info.addNewSurveyorDialog.company }
+        label={ strings.survey.info.dataGridColumns.company }
         value={ newSurveyor.company }
         onChange={ onNewSurveyorChange }
       />
@@ -581,7 +581,7 @@ const SurveyInformation: React.FC = () => {
         sx={{ mt: 2 }}
         name="email"
         color="primary"
-        label={ strings.survey.info.addNewSurveyorDialog.email }
+        label={ strings.survey.info.dataGridColumns.email }
         value={ newSurveyor.email }
         onChange={ onNewSurveyorChange }
       />
@@ -590,7 +590,7 @@ const SurveyInformation: React.FC = () => {
         sx={{ mt: 2 }}
         name="phone"
         color="primary"
-        label={ strings.survey.info.addNewSurveyorDialog.phone }
+        label={ strings.survey.info.dataGridColumns.phone }
         value={ newSurveyor.phone }
         onChange={ onNewSurveyorChange }
       />
