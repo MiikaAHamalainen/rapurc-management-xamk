@@ -133,7 +133,7 @@ const PostProcessing: React.FC = () => {
    *
    * @param postProcess post process
    */
-  const editIconClick = (postProcess : Usage) => () => {
+  const editIconClick = (postProcess: Usage) => () => {
     setEditablePostProcess(postProcess);
     setEditingPostProcess(true);
   };
