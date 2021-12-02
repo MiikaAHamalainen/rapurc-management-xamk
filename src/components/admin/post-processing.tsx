@@ -105,7 +105,8 @@ const PostProcessing: React.FC = () => {
 
     try {
       const updatedPostProcess = await Api.getUsagesApi(keycloak.token).updateUsage({
-        usageId: editablePostProcess.id, usage: editablePostProcess
+        usageId: editablePostProcess.id,
+        usage: editablePostProcess
       });
 
       setPostProcesses(postProcesses.map(postProcess => (postProcess.id === updatedPostProcess.id ? updatedPostProcess : postProcess)));
