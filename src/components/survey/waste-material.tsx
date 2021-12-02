@@ -9,12 +9,11 @@ import WithDataGridDebounceFactory from "components/generic/with-data-grid-debou
 import WithDebounce from "components/generic/with-debounce";
 import SurveyItem from "components/layout-components/survey-item";
 import { selectKeycloak } from "features/auth-slice";
-import { Reusable, ReusableMaterial, Unit, Usability, Usage, Waste, WasteMaterial } from "generated/client";
+import { Usage, Waste, WasteMaterial } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
 import { SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
-import LocalizationUtils from "utils/localization-utils";
 
 const WithWasteDataGridDebounce = WithDataGridDebounceFactory<Waste>();
 
@@ -28,21 +27,21 @@ interface Props {
 /**
  * Component for reusable materials and building parts
  */
-const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
+const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const [ loading, setLoading ] = React.useState(false);
   const [ addingWaste, setAddingWaste ] = React.useState(false);
   const [ deletingWaste, setDeletingWaste ] = React.useState(false);
-  const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
+  const [ wasteDescriptionDialogOpen, setWasteDescriptionDialogOpen ] = React.useState(true);
   const [ wastes, setWastes ] = React.useState<Waste[]>([]);
-  const [ wasteMaterial, setWasteMaterial ] = React.useState<WasteMaterial[]>([]);
+  const [ wasteMaterials, setWasteMaterials ] = React.useState<WasteMaterial[]>([]);
   const [ usages, setUsages ] = React.useState<Usage[]>([]);
-  const [ selectedReusableIds, setSelectedReusableIds ] = React.useState<GridRowId[]>([]);
+  const [ selectedWasteIds, setSelectedWasteIds ] = React.useState<GridRowId[]>([]);
   const [ newWaste, setNewWaste ] = React.useState<Waste>({
     wasteMaterialId: "",
     usageId: "",
-    amount:0,
+    amount: 0,
     metadata: {}
   });
 
@@ -74,7 +73,7 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
     }
 
     try {
-      setWasteMaterial(await Api.getWasteMaterialApi(keycloak.token).listWasteMaterials());
+      setWasteMaterials(await Api.getWasteMaterialApi(keycloak.token).listWasteMaterials());
     } catch (error) {
       // TODO localization
       errorContext.setError(strings.errorHandling.materials.list, error);
@@ -124,7 +123,7 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
       setNewWaste({
         wasteMaterialId: "",
         usageId: "",
-        amount:0,
+        amount: 0,
         metadata: {}
       });
     } catch (error) {
@@ -140,24 +139,24 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param updatedReusable updated reusable
    */
-  const onMaterialRowChange = async (updatedWaste: Waste) => {
-    if (!keycloak?.token || !newReusable.id || !surveyId || newReusable.componentName === "") {
+  const onWasteRowChange = async (updatedWaste: Waste) => {
+    if (!keycloak?.token || !updatedWaste.id || !surveyId) {
       return;
     }
 
     try {
-      const updatedReusable = await Api.getSurveyReusablesApi(keycloak.token).updateSurveyReusable({
+      const fetchedUpdatedMaterial = await Api.getWastesApi(keycloak.token).updateSurveyWaste({
         surveyId: surveyId,
-        reusableId: newReusable.id,
-        reusable: newReusable
+        wasteId: updatedWaste.id,
+        waste: updatedWaste
       });
 
-      setSurveyReusables(surveyReusables.map(reusable => (reusable.id === updatedReusable.id ? updatedReusable : reusable)));
+      setWastes(wastes.map(waste => (waste.id === fetchedUpdatedMaterial.id ? fetchedUpdatedMaterial : waste)));
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.update, error);
     }
-    
-    setReusableDescriptionDialogOpen(true); // TODO: Find another way to set description dialog open
+
+    setWasteDescriptionDialogOpen(true); // TODO: Find another way to set description dialog open
   };
 
   /**
@@ -165,12 +164,12 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param reusable reusable
    */
-  const onMaterialPropChange: (reusable: Reusable) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
-  = (reusable: Reusable) => ({ target }) => {
+  const onWastePropChange: (waste: Waste) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> =
+  (waste: Waste) => ({ target }) => {
     const { value, name } = target;
 
-    const updatedReusable: Reusable = { ...reusable, [name]: value };
-    onMaterialRowChange(updatedReusable);
+    const updatedWaste: Waste = { ...waste, [name]: value };
+    onWasteRowChange(updatedWaste);
   };
 
   /**
@@ -178,31 +177,31 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
     *
     * @param surveyId survey id
     */
-  const deleteMaterialButtonClick = (surveyorId?: string) => {
-    if (!surveyorId) {
+  const deleteWasteButtonClick = (wasteId?: string) => {
+    if (!wasteId) {
       return;
     }
 
-    setDeletingMaterial(true);
-    setSelectedReusableIds([ surveyorId ]);
+    setDeletingWaste(true);
+    setSelectedWasteIds([ wasteId ]);
   };
 
   /**
    * Event handler for delete survey reusable confirm
    */
-  const onDeleteSurveyReusableConfirm = async () => {
-    if (!keycloak?.token || !selectedReusableIds || !surveyId) {
+  const onDeleteWasteReusableConfirm = async () => {
+    if (!keycloak?.token || !selectedWasteIds || !surveyId) {
       return;
     }
 
-    const reusablesApi = Api.getSurveyReusablesApi(keycloak.token);
+    const wasteApi = Api.getWastesApi(keycloak.token);
 
     try {
       await Promise.all(
-        selectedReusableIds.map(async materialId => {
-          await reusablesApi.deleteSurveyReusable({
+        selectedWasteIds.map(async wasteId => {
+          await wasteApi.deleteSurveyWaste({
             surveyId: surveyId,
-            reusableId: materialId.toString()
+            wasteId: wasteId.toString()
           });
         })
       );
@@ -210,9 +209,9 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
       errorContext.setError(strings.errorHandling.reusables.delete, error);
     }
 
-    fetchSurveyReusables();
-    setSelectedReusableIds([]);
-    setDeletingMaterial(false);
+    fetchWastes();
+    setSelectedWasteIds([]);
+    setDeletingWaste(false);
   };
 
   /**
@@ -220,10 +219,10 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
    *
    * @param event React change event
    */
-  const onNewMaterialTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNewWasteTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
-    setNewMaterial({ ...newMaterial, [name]: value });
+    setNewWaste({ ...newWaste, [name]: value });
   };
 
   /**
@@ -231,41 +230,16 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
    *
    * @param event React change event
    */
-  const onNewMaterialNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNewWasteNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
-    setNewMaterial({ ...newMaterial, [name]: Number(value) });
+    setNewWaste({ ...newWaste, [name]: Number(value) });
   };
 
   /**
    * Check if viewport is mobile size
    */
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
-
-  /**
-   * Renders textfield with debounce
-   * 
-   * @param name name
-   * @param label label
-   * @param value value
-   * @param onChange onChange
-   */
-  const renderWithDebounceTextField = (
-    name: string,
-    label: string,
-    value: string,
-    onChange: React.ChangeEventHandler<HTMLInputElement>
-  ) => (
-    <WithDebounce
-      name={ name }
-      value={ value }
-      label={ label }
-      onChange={ onChange }
-      component={ props =>
-        <TextField sx={{ mb: 1 }} { ...props }/>
-      }
-    />
-  );
 
   /**
    * Renders multiline textfield with debounce
@@ -362,13 +336,13 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
   /**
    * Renders delete material dialog
    */
-  const renderDeleteSurveyMaterialDialog = () => (
+  const renderDeleteWasteDialog = () => (
     <GenericDialog
       error={ false }
-      open={ deletingMaterial }
-      onClose={ () => setDeletingMaterial(false) }
-      onCancel={ () => setDeletingMaterial(false) }
-      onConfirm={ onDeleteSurveyReusableConfirm }
+      open={ deletingWaste }
+      onClose={ () => setDeletingWaste(false) }
+      onCancel={ () => setDeletingWaste(false) }
+      onConfirm={ onDeleteWasteReusableConfirm }
       title={ strings.survey.reusables.deleteReusableDialog.title }
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
@@ -382,45 +356,31 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
   /**
    * Renders add survey reusable dialog
    */
-  const renderAddSurveyReusableDialog = () => {
-    const reusableOptions = Object.values(reusableMaterials).map(material =>
-      <MenuItem key={ material.id } value={ material.id }>
-        { material.name }
+  const renderAddWasteDialog = () => {
+    const wasteMaterialOptions = wasteMaterials.map(wasteMaterial =>
+      <MenuItem value={ wasteMaterial.id }>
+        { wasteMaterial.name }
       </MenuItem>
     );
 
-    const usabilityOptions = Object.values(Usability).map(usability =>
-      <MenuItem key={ usability } value={ usability }>
-        { LocalizationUtils.getLocalizedUsability(usability) }
-      </MenuItem>
-    );
-
-    const unitOptions = Object.values(Unit).map(unit =>
-      <MenuItem key={ unit } value={ unit }>
-        { LocalizationUtils.getLocalizedUnits(unit) }
+    const usageOptions = usages.map(usage =>
+      <MenuItem value={ usage.id }>
+        { usage.name }
       </MenuItem>
     );
 
     return (
       <GenericDialog
         error={ false }
-        open={ addingSurveyReusable }
-        onClose={ () => setAddingSurveyReusable(false) }
-        onCancel={ () => setAddingSurveyReusable(false) }
-        onConfirm={ onAddReusableConfirm }
+        disabled={ !newWaste.wasteMaterialId || !newWaste.usageId }
+        open={ addingWaste }
+        onClose={ () => setAddingWaste(false) }
+        onCancel={ () => setAddingWaste(false) }
+        onConfirm={ onAddWasteConfirm }
         title={ strings.survey.reusables.addNewBuildingPartsDialog.title }
         positiveButtonText={ strings.generic.confirm }
         cancelButtonText={ strings.generic.cancel }
       >
-        <TextField
-          fullWidth
-          color="primary"
-          name="componentName"
-          label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPart }
-          onChange={ onNewMaterialTextChange }
-          value={ newMaterial.componentName }
-          helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
-        />
         <Stack
           direction={ isMobile ? "column" : "row" }
           spacing={ 2 }
@@ -430,24 +390,19 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
             fullWidth
             select
             color="primary"
-            name="reusableMaterialId"
+            value={ newWaste.wasteMaterialId }
+            name="wasteMaterialId"
             label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
-            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterialHelperText }
-            onChange={ onNewMaterialTextChange }
+            onChange={ onNewWasteTextChange }
           >
-            { reusableOptions }
+            { wasteMaterialOptions }
           </TextField>
           <TextField
-            fullWidth
-            select
+            disabled
+            value={ wasteMaterials.find(wasteMaterial => wasteMaterial.id === newWaste.wasteMaterialId)?.ewcSpecificationCode || "" }
             color="primary"
-            name="usability"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.usability }
-            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.usabilityHelperText }
-            onChange={ onNewMaterialTextChange }
-          >
-            { usabilityOptions }
-          </TextField>
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
+          />
         </Stack>
         <Stack
           direction={ isMobile ? "column" : "row" }
@@ -456,42 +411,32 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
         >
           <TextField
             fullWidth
+            select
             color="primary"
-            name="amount"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.amount }
-            type="number"
-            onChange={ onNewMaterialNumberChange }
+            name="usageId"
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
+            value={ newWaste.usageId }
+            onChange={ onNewWasteTextChange }
           >
-            { reusableOptions }
+            { usageOptions }
           </TextField>
           <TextField
-            fullWidth
-            select
-            name="unit"
+            name="amount"
+            type="number"
             color="primary"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.unit }
-            onChange={ onNewMaterialTextChange }
-          >
-            { unitOptions }
-          </TextField>
+            value={ newWaste.amount }
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
+            onChange={ onNewWasteNumberChange }
+          />
         </Stack>
         <Stack spacing={ 2 } marginTop={ 2 }>
           <TextField
             multiline
             rows={ 6 }
             name="description"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.description }
-            value={ newMaterial.description }
-            onChange={ onNewMaterialTextChange }
-            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.descriptionHelperText }
-          />
-          <TextField
-            type="number"
-            name="amountAsWaste"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmount }
-            value={ newMaterial.amountAsWaste }
-            onChange={ onNewMaterialNumberChange }
-            helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
+            label={ strings.survey.reusables.dataGridColumns.description }
+            value={ newWaste.description }
+            onChange={ onNewWasteTextChange }
           />
         </Stack>
       </GenericDialog>
@@ -502,85 +447,66 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
    * Render material list item
    * 
    */
-  const renderMaterialListItems = () => {
-    const materialOptions = reusableMaterials.map(material => (
-      <MenuItem value={ material.id }>
-        { material.name }
+  const renderWasteListItems = () => {
+    const wasteMaterialOptions = wasteMaterials.map(wasteMaterial =>
+      <MenuItem value={ wasteMaterial.id }>
+        { wasteMaterial.name }
       </MenuItem>
-    ));
-    const usabilityOptions = Object.values(Usability).map(usability => (
-      <MenuItem value={ usability }>
-        { LocalizationUtils.getLocalizedUsability(usability) }
+    );
+
+    const usageOptions = usages.map(usage =>
+      <MenuItem value={ usage.id }>
+        { usage.name }
       </MenuItem>
-    ));
-    const UnitOptions = Object.values(Unit).map(unit => (
-      <MenuItem value={ unit }>
-        { LocalizationUtils.getLocalizedUnits(unit) }
-      </MenuItem>
-    ));
+    );
 
     return (
-      surveyReusables.map(reusable =>
+      wastes.map(waste =>
         <SurveyItem
-          title={ reusable.componentName }
-          subtitle={ `${reusable.amount} ${reusable.unit ? LocalizationUtils.getLocalizedUnits(reusable.unit) : ""}` }
+          title={ wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.name || "" }
+          subtitle={ `${waste.amount} t` }
         >
           { renderWithDebounceSelectTextField(
-            "reusableMaterialId",
+            "wasteMaterialId",
             strings.survey.reusables.dataGridColumns.material,
-            materialOptions,
-            onMaterialPropChange(reusable),
-            reusable.reusableMaterialId
+            wasteMaterialOptions,
+            onWastePropChange(waste),
+            waste.wasteMaterialId
           )
           }
-          { renderWithDebounceTextField(
-            "componentName",
-            strings.survey.reusables.dataGridColumns.buildingPart,
-            reusable.componentName,
-            onMaterialPropChange(reusable)
-          )
-          }
+          <TextField
+            disabled
+            color="primary"
+            sx={{ mb: 1 }}
+            value={ wasteMaterials.find(wasteMaterial => waste.wasteMaterialId === wasteMaterial.id)?.ewcSpecificationCode }
+            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
+          />
           { renderWithDebounceSelectTextField(
-            "usability",
+            "usageId",
             strings.survey.reusables.dataGridColumns.usability,
-            usabilityOptions,
-            onMaterialPropChange(reusable),
-            reusable.usability,
+            usageOptions,
+            onWastePropChange(waste),
+            waste.usageId,
           )
           }
           { renderWithDebounceNumberTextField(
             "amount",
             strings.survey.reusables.dataGridColumns.amount,
-            onMaterialPropChange(reusable),
-            reusable.amount,
-          )
-          }
-          { renderWithDebounceSelectTextField(
-            "unit",
-            strings.survey.reusables.dataGridColumns.unit,
-            UnitOptions,
-            onMaterialPropChange(reusable),
-            reusable.unit,
-          )
-          }
-          { renderWithDebounceNumberTextField(
-            "amountAsWaste",
-            strings.survey.reusables.dataGridColumns.amount,
-            onMaterialPropChange(reusable),
-            reusable.amountAsWaste
+            onWastePropChange(waste),
+            waste.amount,
           )
           }
           { renderWithDebounceMultilineTextField(
             "description",
             strings.survey.reusables.dataGridColumns.description,
-            reusable.description || "",
-            onMaterialPropChange(reusable),
+            waste.description || "",
+            onWastePropChange(waste),
           )
           }
           <SurveyButton
             variant="outlined"
             color="primary"
-            onClick={ () => deleteMaterialButtonClick(reusable.id) }
+            onClick={ () => deleteWasteButtonClick(waste.id) }
           >
             <Typography color={ theme.palette.primary.main }>
               { strings.generic.delete }
@@ -594,87 +520,59 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
   /**
    * Render surveyor list
    */
-  const renderMaterialList = () => (
-    <Paper>
-      <List>
-        { renderMaterialListItems() }
-      </List>
-    </Paper>
+  const renderWasteList = () => (
+    <List>
+      { renderWasteListItems() }
+    </List>
   );
 
   /**
    * Render survey reusables table for desktop
    */
-  const renderSurveyDataTable = () => {
-    const localizedUsability = Object.values(Usability).map(usability => ({
-      label: LocalizationUtils.getLocalizedUsability(usability),
-      value: usability
+  const renderWasteDataTable = () => {
+    const wasteMaterialOptions = wasteMaterials.map(wasteMaterial => ({
+      label: wasteMaterial.name,
+      value: wasteMaterial.id
     }));
-    const localizedUnits = Object.values(Unit).map(unit => ({
-      label: LocalizationUtils.getLocalizedUnits(unit),
-      value: unit
+
+    const usageOptions = usages.map(usage => ({
+      label: usage.name,
+      value: usage.id
     }));
-    const reusableMaterialsArray = reusableMaterials.map(material => ({ value: material.id, label: material.name }));
+
     const columns: GridColDef[] = [
       {
-        field: "reusableMaterialId",
-        headerName: strings.survey.reusables.dataGridColumns.material,
-        width: 340,
-        editable: editable,
+        field: "wasteMaterialId",
+        headerName: strings.survey.reusables.dataGridColumns.amount,
+        width: 250,
         type: "singleSelect",
-        valueOptions: reusableMaterialsArray,
+        editable: true,
+        valueOptions: wasteMaterialOptions,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography>{ reusableMaterials.find(material => (material.id === formattedValue))?.name }</Typography>
+            <Typography>{ wasteMaterials.find(wasteMaterial => (wasteMaterial.id === formattedValue))?.name }</Typography>
           );
         }
       },
       {
-        field: "componentName",
-        headerName: strings.survey.reusables.dataGridColumns.buildingPart,
-        width: 340,
-        editable: editable
-      },
-      {
-        field: "usability",
-        headerName: strings.survey.reusables.dataGridColumns.usability,
-        width: 340,
+        field: "usageId",
+        headerName: strings.survey.reusables.dataGridColumns.amount,
+        width: 250,
         type: "singleSelect",
-        valueOptions: localizedUsability,
-        editable: editable,
+        editable: true,
+        valueOptions: usageOptions,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography>{ LocalizationUtils.getLocalizedUsability(formattedValue) }</Typography>
+            <Typography>{ usages.find(usage => (usage.id === formattedValue))?.name }</Typography>
           );
         }
       },
       {
         field: "amount",
         headerName: strings.survey.reusables.dataGridColumns.amount,
-        width: 160,
-        type: "number",
-        editable: editable
-      },
-      {
-        field: "unit",
-        headerName: strings.survey.reusables.dataGridColumns.unit,
-        width: 200,
-        type: "singleSelect",
-        valueOptions: localizedUnits,
-        editable: editable,
-        renderCell: (params: GridRenderCellParams) => {
-          const { formattedValue } = params;
-          return (
-            <Typography>{ LocalizationUtils.getLocalizedUnits(formattedValue) }</Typography>
-          );
-        }
-      },
-      {
-        field: "amountAsWaste",
-        headerName: strings.survey.reusables.dataGridColumns.wasteAmount,
-        width: 340,
+        width: 250,
         type: "number",
         editable: true
       },
@@ -682,17 +580,17 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
         field: "description",
         headerName: strings.survey.reusables.dataGridColumns.description,
         width: 340,
-        editable: editable,
+        editable: true,
         renderEditCell: (params: GridRenderEditCellParams) => {
           const { value, api, id, field } = params;
           return (
             <GenericDialog
               error={ false }
               title={ strings.survey.reusables.dataGridColumns.editDescription }
-              open={ reusableDescriptionDialogOpen }
-              onClose={ () => setReusableDescriptionDialogOpen(false) }
-              onCancel={ () => setReusableDescriptionDialogOpen(false) }
-              onConfirm={ () => setReusableDescriptionDialogOpen(false) }
+              open={ wasteDescriptionDialogOpen }
+              onClose={ () => setWasteDescriptionDialogOpen(false) }
+              onCancel={ () => setWasteDescriptionDialogOpen(false) }
+              onConfirm={ () => setWasteDescriptionDialogOpen(false) }
               positiveButtonText={ strings.generic.confirm }
               cancelButtonText={ strings.generic.cancel }
             >
@@ -715,13 +613,13 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
 
     return (
       <Paper>
-        <WithReusableDataGridDebounce
-          rows={ surveyReusables }
+        <WithWasteDataGridDebounce
+          rows={ wastes }
           columns={ columns }
-          onRowChange={ onMaterialRowChange }
+          onRowChange={ onWasteRowChange }
           component={ params =>
             <DataGrid
-              onSelectionModelChange={ selectedIds => setSelectedReusableIds(selectedIds) }
+              onSelectionModelChange={ selectedIds => setSelectedWasteIds(selectedIds) }
               checkboxSelection
               autoHeight
               loading={ loading }
@@ -752,11 +650,11 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
         >
           <Hidden lgDown>
             <SurveyButton
-              disabled={ selectedReusableIds && !selectedReusableIds.length }
+              disabled={ selectedWasteIds && !selectedWasteIds.length }
               variant="contained"
               color="error"
               startIcon={ <Delete/> }
-              onClick={ () => setDeletingMaterial(true) }
+              onClick={ () => setDeletingWaste(true) }
               sx={{ mr: 2 }}
             >
               { strings.survey.reusables.deleteBuildingParts }
@@ -766,22 +664,22 @@ const WasteMaterial: React.FC<Props> = ({ surveyId }) => {
             variant="contained"
             color="secondary"
             startIcon={ <Add/> }
-            onClick={ () => setAddingSurveyReusable(true) }
+            onClick={ () => setAddingWaste(true) }
           >
             { strings.survey.reusables.addNewBuildingPart }
           </SurveyButton>
         </Box>
       </Stack>
       <Hidden lgUp>
-        { renderMaterialList() }
+        { renderWasteList() }
       </Hidden>
       <Hidden lgDown>
-        { renderSurveyDataTable() }
+        { renderWasteDataTable() }
       </Hidden>
-      { renderAddSurveyReusableDialog() }
-      { renderDeleteSurveyMaterialDialog() }
+      { renderAddWasteDialog() }
+      { renderDeleteWasteDialog() }
     </>
   );
 };
 
-export default WasteMaterial;
+export default WasteMaterialView;

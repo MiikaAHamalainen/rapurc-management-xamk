@@ -85,7 +85,7 @@ export default class Api {
     return new SurveyWastesApi(Api.getConfiguration(accessToken));
   };
 
-      /**
+  /**
    * Gets initialized waste material API
    *
    * @param accessToken access token

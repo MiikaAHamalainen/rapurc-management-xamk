@@ -416,6 +416,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             color="primary"
             name="reusableMaterialId"
+            value={ newMaterial.reusableMaterialId }
             label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterialHelperText }
             onChange={ onNewMaterialTextChange }
@@ -427,6 +428,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             color="primary"
             name="usability"
+            value={ newMaterial.usability }
             label={ strings.survey.reusables.dataGridColumns.usability }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.usabilityHelperText }
             onChange={ onNewMaterialTextChange }
@@ -443,6 +445,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             fullWidth
             color="primary"
             name="amount"
+            value={ newMaterial.reusableMaterialId }
             label={ strings.survey.reusables.dataGridColumns.amount }
             type="number"
             onChange={ onNewMaterialNumberChange }
@@ -454,6 +457,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             name="unit"
             color="primary"
+            value={ newMaterial.unit }
             label={ strings.survey.reusables.dataGridColumns.unit }
             onChange={ onNewMaterialTextChange }
           >
@@ -579,11 +583,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Render surveyor list
    */
   const renderMaterialList = () => (
-    <Paper>
-      <List>
-        { renderMaterialListItems() }
-      </List>
-    </Paper>
+    <List>
+      { renderMaterialListItems() }
+    </List>
   );
 
   /**
