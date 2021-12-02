@@ -123,7 +123,7 @@ const PostProcessing: React.FC = () => {
    *
    * @param postProcess post process
    */
-  const deleteIconClick = (postProcess : Usage) => {
+  const deleteIconClick = (postProcess: Usage) => {
     setDeletablePostProcess(postProcess);
     setDeletingPostProcess(true);
   };
