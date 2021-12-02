@@ -200,7 +200,8 @@
       "demolitionScope": "Purkamisen laajuus",
       "startDate": "Aloitusajankohta",
       "endDate": "Lopetusajankohta",
-      "addSurveyor": "Lisää kartoittaja",
+      "addSurveyor": "Lisää uusi kartoittaja",
+      "deleteSurveyor": "Poista mittaaja",
       "demolitionScopes": {
         "renovation": "Saneerauspurku",
         "partial": "Osapurku",

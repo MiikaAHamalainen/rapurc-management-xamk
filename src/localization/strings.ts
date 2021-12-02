@@ -236,6 +236,7 @@ export interface Localized extends LocalizedStringsMethods {
       startDate: string;
       endDate: string;
       addSurveyor: string;
+      deleteSurveyor: string;
       demolitionScopes: {
         renovation: string;
         partial: string;

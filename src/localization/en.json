@@ -200,7 +200,8 @@
       "demolitionScope": "Demolition scope",
       "startDate": "Start date",
       "endDate": "End date",
-      "addSurveyor": "Add surveyor",
+      "addSurveyor": "Add new surveyor",
+      "deleteSurveyor": "Delete surveyor",
       "demolitionScopes": {
         "renovation": "Renovation demolition",
         "partial": "Partial demolition",

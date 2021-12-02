@@ -470,7 +470,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
   return (
     <>
-      <Stack direction={ isMobile ? "column" : "row" } justifyContent="space-between" marginBottom={ 2 }>
+      <Stack
+        spacing={ 2 }
+        direction={ isMobile ? "column" : "row" }
+        justifyContent="space-between"
+        marginBottom={ 2 }
+      >
         <Typography variant="h2">
           { strings.survey.reusables.title }
         </Typography>

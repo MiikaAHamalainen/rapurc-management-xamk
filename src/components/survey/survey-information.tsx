@@ -238,6 +238,74 @@ const SurveyInformation: React.FC = () => {
   );
 
   /**
+   * Renders date pickers
+   */
+  const renderDatePickers = () => {
+    if (!selectedSurvey) {
+      return null;
+    }
+
+    return (
+      <LocalizationProvider dateAdapter={ AdapterDateFns }>
+        <DatePicker
+          views={["year", "month"]}
+          label={ strings.survey.info.startDate }
+          value={ selectedSurvey.startDate }
+          onChange={ onSurveyInfoDateChange("startDate") }
+          renderInput={params =>
+            <TextField label={ strings.survey.info.startDate } { ...params }/>
+          }
+        />
+        <DatePicker
+          views={["year", "month"]}
+          label={ strings.survey.info.endDate }
+          value={ selectedSurvey.endDate }
+          onChange={ onSurveyInfoDateChange("endDate") }
+          renderInput={params =>
+            <TextField label={ strings.survey.info.startDate } { ...params }/>
+          }
+        />
+      </LocalizationProvider>
+    );
+  };
+
+  /**
+   * Renders surveyor data grid header
+   */
+  const renderSurveyorHeader = () => (
+    <>
+      <Typography variant="h3">
+        { strings.survey.info.surveyors }
+      </Typography>
+      <Box
+        display="flex"
+        alignItems="stretch"
+      >
+        <Hidden lgDown>
+          <SurveyButton
+            disabled={ selectedSurveyorIds && !selectedSurveyorIds.length }
+            variant="contained"
+            color="error"
+            startIcon={ <Delete/> }
+            onClick={ () => setDeletingSurveyor(true) }
+            sx={{ mr: 2 }}
+          >
+            { strings.survey.info.deleteSurveyor }
+          </SurveyButton>
+        </Hidden>
+        <SurveyButton
+          variant="contained"
+          color="secondary"
+          startIcon={ <Add/> }
+          onClick={ () => setAddingSurveyor(true) }
+        >
+          { strings.survey.info.addSurveyor }
+        </SurveyButton>
+      </Box>
+    </>
+  );
+
+  /**
    * Render surveyor table for desktop
    */
   const renderSurveyorDataTable = () => {
@@ -422,57 +490,16 @@ const SurveyInformation: React.FC = () => {
         selectedSurvey.type as string,
         onSurveyInfoTypeChange
       ) }
-      <Stack direction="row" spacing={ 2 }>
-        <LocalizationProvider dateAdapter={ AdapterDateFns }>
-          <DatePicker
-            views={["year", "month"]}
-            label={ strings.survey.info.startDate }
-            value={ selectedSurvey.startDate }
-            onChange={ onSurveyInfoDateChange("startDate") }
-            renderInput={params =>
-              <TextField label={ strings.survey.info.startDate } { ...params }/>
-            }
-          />
-          <DatePicker
-            views={["year", "month"]}
-            label={ strings.survey.info.endDate }
-            value={ selectedSurvey.endDate }
-            onChange={ onSurveyInfoDateChange("endDate") }
-            renderInput={params =>
-              <TextField label={ strings.survey.info.startDate } { ...params }/>
-            }
-          />
-        </LocalizationProvider>
+      <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
+        { renderDatePickers() }
       </Stack>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h3">
-          { strings.survey.info.surveyors }
-        </Typography>
-        <Box
-          display="flex"
-          alignItems="stretch"
-        >
-          <Hidden lgDown>
-            <SurveyButton
-              disabled={ selectedSurveyorIds && !selectedSurveyorIds.length }
-              variant="contained"
-              color="error"
-              startIcon={ <Delete/> }
-              onClick={ () => setDeletingSurveyor(true) }
-              sx={{ mr: 2 }}
-            >
-              { strings.survey.reusables.deleteBuildingParts }
-            </SurveyButton>
-          </Hidden>
-          <SurveyButton
-            variant="contained"
-            color="secondary"
-            startIcon={ <Add/> }
-            onClick={ () => setAddingSurveyor(true) }
-          >
-            { strings.survey.reusables.addNewBuildingPart }
-          </SurveyButton>
-        </Box>
+      <Stack
+        spacing={ 2 }
+        marginTop={ 2 }
+        direction={ isMobile ? "column" : "row" }
+        justifyContent="space-between"
+      >
+        { renderSurveyorHeader() }
       </Stack>
       { renderSurveyorDataTable() }
       { renderDeleteSurveyorDialog() }
