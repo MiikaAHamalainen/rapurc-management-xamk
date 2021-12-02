@@ -93,6 +93,7 @@ const Waste: React.FC = () => {
     } catch (error) {
       errorContext.setError(strings.errorHandling.wasteMaterials.create, error);
     }
+
     setAddingWaste(false);
   };
 
