@@ -484,7 +484,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * Render material list item
-   * 
    */
   const renderMaterialListItems = () => {
     const materialOptions = reusableMaterials.map(material => (
