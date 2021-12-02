@@ -48,7 +48,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Fetch owner information array
    */
   const fetchSurveyReusables = async () => {
-
     if (!keycloak?.token || !surveyId) {
       return;
     }
