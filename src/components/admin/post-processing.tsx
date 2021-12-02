@@ -72,6 +72,7 @@ const PostProcessing: React.FC = () => {
     } catch (error) {
       errorContext.setError(strings.errorHandling.postProcess.create, error);
     }
+
     setAddingPostProcessing(false);
   };
 
