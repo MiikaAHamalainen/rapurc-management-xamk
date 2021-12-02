@@ -260,7 +260,7 @@ export interface Localized extends LocalizedStringsMethods {
         phone: string;
         email: string;
       };
-      deleteReusableDialog: {
+      deleteSurveyorDialog: {
         title: string;
         text: string;
       };

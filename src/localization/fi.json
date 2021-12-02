@@ -226,7 +226,7 @@
         "email": "Sähköpostiosoite",
         "reportDate": "Raportointipäivä"
       },
-      "deleteReusableDialog": {
+      "deleteSurveyorDialog": {
         "title": "Poista mittaaja",
         "text": "Haluatko varmasti poistaa nämä mittaajat??"
       }

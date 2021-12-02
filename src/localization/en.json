@@ -226,7 +226,7 @@
         "email": "E-mail",
         "reportDate": "Reporting date"
       },
-      "deleteReusableDialog": {
+      "deleteSurveyorDialog": {
         "title": "Delete surveyor",
         "text": "Are you sure you want to delete these surveyors?"
       }

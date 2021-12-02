@@ -109,7 +109,7 @@ const SurveyInformation: React.FC = () => {
   /**
    * Surveyor change handler
    * 
-   * @param updatedReusable updated reusable
+   * @param surveyor updated surveyor
    */
   const onSurveyorRowChange = async (surveyor: Surveyor) => {
     if (!keycloak?.token || !selectedSurvey?.id || !surveyor.id) {
@@ -388,12 +388,12 @@ const SurveyInformation: React.FC = () => {
       onClose={ () => setDeletingSurveyor(false) }
       onCancel={ () => setDeletingSurveyor(false) }
       onConfirm={ onDeleteSurveyorConfirm }
-      title={ strings.survey.info.deleteReusableDialog.title }
+      title={ strings.survey.info.deleteSurveyorDialog.title }
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.survey.info.deleteReusableDialog.text }
+        { strings.survey.info.deleteSurveyorDialog.text }
       </Typography>
     </GenericDialog>
   );
