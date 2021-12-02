@@ -124,7 +124,7 @@ const SurveyInformation: React.FC = () => {
         surveyor: surveyor
       });
 
-      setSurveyors(surveyors.map(surveyorData => (surveyorData.id === updatedSurveyor.id ? updatedSurveyor : surveyorData)));
+      setSurveyors(surveyors.map(surveyorData => surveyorData.id === updatedSurveyor.id ? updatedSurveyor : surveyorData));
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveyors.update, error);
     }
