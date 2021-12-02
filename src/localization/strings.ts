@@ -23,6 +23,7 @@ export interface Localized extends LocalizedStringsMethods {
     cancel: string;
     delete: string;
     logout: string;
+    open: string;
   };
 
   /**

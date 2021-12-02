@@ -425,11 +425,9 @@ const SurveyInformation: React.FC = () => {
    * Render surveyor list
    */
   const renderSurveyorList = () => (
-    <Paper>
-      <List>
-        { renderSurveyorListItems() }
-      </List>
-    </Paper>
+    <List>
+      { renderSurveyorListItems() }
+    </List>
   );
 
   /**

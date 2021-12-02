@@ -1,17 +1,16 @@
-import { Button, CircularProgress, Hidden, List, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Button, CircularProgress, Hidden, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import Api from "api";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
-import SurveyItem from "components/layout-components/survey-item";
 import StackLayout from "components/layouts/stack-layout";
 import { selectKeycloak } from "features/auth-slice";
 import { createSurvey } from "features/surveys-slice";
+import { Building, OwnerInformation } from "generated/client";
 import strings from "localization/strings";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateManuallyButton, FilterRoot, SearchContainer } from "styled/screens/new-survey-screen";
 import theme from "theme";
-import Api from "api";
-import { Building, OwnerInformation } from "generated/client";
 
 /**
  * New survey screen component
@@ -154,24 +153,11 @@ const NewSurveyScreen: React.FC = () => {
   );
 
   /**
-   * Render building item
-   */
-  const renderBuildingItem = () => (
-    <SurveyItem
-      title="Otsikko"
-      subtitle="Alaotsikko"
-      onClick={ () => navigate("/survey") }
-    />
-  );
-
-  /**
    * Render building list
    */
   const renderBuildingList = () => (
-    <Paper>
-      <List>
-        { renderBuildingItem() }
-      </List>
+    <Paper sx={{ p: 2 }}>
+      <Typography>{ strings.generic.notImplemented }</Typography>
     </Paper>
   );
 

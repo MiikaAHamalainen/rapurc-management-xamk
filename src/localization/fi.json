@@ -8,7 +8,8 @@
     "confirm": "Vahvista",
     "cancel": "Peruuta",
     "delete": "Poista",
-    "logout": "Kirjaudu ulos"
+    "logout": "Kirjaudu ulos",
+    "open": "Avaa"
   },
 
   "errorHandling": {
@@ -200,8 +201,8 @@
       "demolitionScope": "Purkamisen laajuus",
       "startDate": "Aloitusajankohta",
       "endDate": "Lopetusajankohta",
-      "addSurveyor": "Lisää uusi kartoittaja",
-      "deleteSurveyor": "Poista mittaaja",
+      "addSurveyor": "Lisää uusi",
+      "deleteSurveyor": "Poista kartoittaja",
       "demolitionScopes": {
         "renovation": "Saneerauspurku",
         "partial": "Osapurku",

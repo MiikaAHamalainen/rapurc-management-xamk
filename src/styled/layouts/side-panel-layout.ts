@@ -40,5 +40,8 @@ export const Content = styled(Paper, {
   flex: 1,
   width: "100%",
   overflow: "auto",
-  padding: theme.spacing(4)
+  padding: theme.spacing(2),
+  [theme.breakpoints.up("md")]: {
+    padding: theme.spacing(4)
+  }
 }));
