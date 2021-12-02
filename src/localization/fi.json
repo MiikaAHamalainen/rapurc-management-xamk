@@ -158,7 +158,7 @@
     "addNewWasteMaterialDialog": {
       "title": "Lisää rakennus- tai purkujätemateriaali",
       "text1": "Rakennus- tai purkujätemateriaalin nimi",
-      "text2": "EWC-koodin loppuosa",
+      "text2": "EWC-koodin kaksi viimeistä merkkiä",
       "text3": "Jätekategoria"
     },
     "deleteWasteMaterialDialog": {
