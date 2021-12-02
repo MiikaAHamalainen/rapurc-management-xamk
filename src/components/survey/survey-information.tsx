@@ -133,8 +133,9 @@ const SurveyInformation: React.FC = () => {
   /**
    * Event Handler set surveyor prop
    */
-  const onSurveyorPropChange: (surveyor: Surveyor) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
-  = (surveyor: Surveyor) => ({ target }) => {
+  const onSurveyorPropChange: (surveyor: Surveyor) =>
+  React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (surveyor: Surveyor) =>
+  ({ target }) => {
     const { value, name } = target;
 
     const updatedSurveyor: Surveyor = { ...surveyor, [name]: value };
