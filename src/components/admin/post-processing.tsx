@@ -179,7 +179,7 @@ const PostProcessing: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <TextField
-        placeholder={ strings.adminScreen.addNewPostProcessDialog.text }
+        label={ strings.adminScreen.addNewPostProcessDialog.text }
         onChange={ event => setNewPostProcessName(event.target.value) }
       />
     </GenericDialog>
