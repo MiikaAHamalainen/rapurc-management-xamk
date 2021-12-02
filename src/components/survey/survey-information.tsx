@@ -359,7 +359,6 @@ const SurveyInformation: React.FC = () => {
 
   /**
    * Render surveyor list item
-   * 
    */
   const renderSurveyorListItems = () => (
     surveyors.map(surveyor =>
