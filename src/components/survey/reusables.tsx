@@ -44,6 +44,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     metadata: {}
   });
 
+  // TODO clear the new material after creating
+
   /**
    * Fetch owner information array
    */
@@ -172,6 +174,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       })
     );
 
+    // TODO error
     fetchSurveyReusables();
     setSelectedReusableIds([]);
     setDeletingMaterial(false);
@@ -263,6 +266,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           name="componentName"
           label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPart }
           onChange={ onNewMaterialTextChange }
+          // TODO value
+          value={ newMaterial.componentName }
           helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
         />
         <Stack

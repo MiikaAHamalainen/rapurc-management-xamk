@@ -1,4 +1,4 @@
-import { Stack, TextField, Typography, MenuItem, Paper } from "@mui/material";
+import { Stack, TextField, Typography, MenuItem, Paper, Box, Hidden, useMediaQuery } from "@mui/material";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import WithDebounce from "components/generic/with-debounce";
@@ -13,8 +13,12 @@ import DatePicker from "@mui/lab/DatePicker";
 import LocalizationUtils from "utils/localization-utils";
 import WithDataGridDebounceFactory from "components/generic/with-data-grid-debounce";
 import { selectKeycloak } from "features/auth-slice";
-import { GridColDef, DataGrid } from "@mui/x-data-grid";
+import { GridColDef, DataGrid, GridRowId } from "@mui/x-data-grid";
 import Api from "api";
+import { Delete, Add } from "@mui/icons-material";
+import { SurveyButton } from "styled/screens/surveys-screen";
+import GenericDialog from "components/generic/generic-dialog";
+import theme from "theme";
 
 const WithSurveyDataGridDebounce = WithDataGridDebounceFactory<Surveyor>();
 
@@ -28,6 +32,15 @@ const SurveyInformation: React.FC = () => {
   const dispatch = useAppDispatch();
   const [ surveyors, setSurveyors ] = React.useState<Surveyor[]>([]);
   const [ loading, setLoading ] = React.useState(false);
+  const [ selectedSurveyorIds, setSelectedSurveyorIds ] = React.useState<GridRowId[]>([]);
+  const [ deletingSurveyor, setDeletingSurveyor ] = React.useState(false);
+  const [ addingSurveyor, setAddingSurveyor ] = React.useState(false);
+  const [ newSurveyor, setNewSurveyor ] = React.useState<Surveyor>({
+    firstName: "",
+    lastName: "",
+    company: "",
+    phone: ""
+  });
 
   /**
    * Fetch owner information array
@@ -118,6 +131,75 @@ const SurveyInformation: React.FC = () => {
   };
 
   /**
+   * Event handler for delete survey reusable confirm
+   */
+  const onDeleteSurveyorConfirm = async () => {
+    if (!keycloak?.token || !selectedSurvey?.id || !selectedSurveyorIds.length) {
+      return;
+    }
+
+    const surveyorsApi = Api.getSurveyorsApi(keycloak.token);
+    const surveyId = selectedSurvey?.id;
+
+    try {
+      await Promise.all(
+        selectedSurveyorIds.map(async surveyorId => {
+          await surveyorsApi.deleteSurveyor({
+            surveyId: surveyId,
+            surveyorId: surveyorId.toString()
+          });
+        })
+      );
+  
+      fetchSurveyors();
+      setSelectedSurveyorIds([]);
+    } catch (error) {
+      errorContext.setError("TODO", error);
+    }
+    setDeletingSurveyor(false);
+  };
+
+  /**
+   * Event handler for new material string change
+   *
+   * @param event React change event
+   */
+  const onNewSurveyorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = event.target;
+
+    setNewSurveyor({ ...newSurveyor, [name]: value });
+  };
+
+  /**
+   * Event handler for add reusable confirm
+   */
+  const onAddSurveyorConfirm = async () => {
+    if (!keycloak?.token || !selectedSurvey?.id) {
+      return;
+    }
+
+    try {
+      const createdSurveyor = await Api.getSurveyorsApi(keycloak.token).createSurveyor({
+        surveyId: selectedSurvey.id,
+        surveyor: newSurveyor
+      });
+      setSurveyors([ ...surveyors, createdSurveyor ]);
+    } catch (error) {
+      errorContext.setError("TODO", error);
+    }
+
+    setNewSurveyor({
+      firstName: "",
+      lastName: "",
+      company: "",
+      phone: ""
+    });
+    setAddingSurveyor(false);
+  };
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+
+  /**
    * Renders demolition scope option
    * 
    * @param type type
@@ -163,26 +245,26 @@ const SurveyInformation: React.FC = () => {
       {
         field: "firstName",
         headerName: strings.survey.info.dataGridColumns.firstName,
-        width: 340,
+        width: 200,
         editable: true
       },
       {
         field: "lastName",
         headerName: strings.survey.info.dataGridColumns.lastName,
-        width: 340,
+        width: 200,
         editable: true
       },
       {
         field: "company",
         headerName: strings.survey.info.dataGridColumns.company,
-        width: 340,
+        width: 200,
         type: "singleSelect",
         editable: true
       },
       {
         field: "role",
         headerName: strings.survey.info.dataGridColumns.role,
-        width: 160,
+        width: 200,
         editable: true
       },
       {
@@ -194,13 +276,13 @@ const SurveyInformation: React.FC = () => {
       {
         field: "email",
         headerName: strings.survey.info.dataGridColumns.email,
-        width: 340,
+        width: 200,
         editable: true
       },
       {
         field: "reportDate",
         headerName: strings.survey.info.dataGridColumns.reportDate,
-        width: 340,
+        width: 200,
         type: "date",
         editable: true
       }
@@ -214,7 +296,7 @@ const SurveyInformation: React.FC = () => {
           onRowChange={ onSurveyorRowChange }
           component={ params =>
             <DataGrid
-              // onSelectionModelChange={ selectedIds => setSelectedReusableIds(selectedIds) }
+              onSelectionModelChange={ selectedIds => setSelectedSurveyorIds(selectedIds) }
               checkboxSelection
               autoHeight
               loading={ loading }
@@ -227,6 +309,100 @@ const SurveyInformation: React.FC = () => {
       </Paper>
     );
   };
+
+  /**
+   * Renders delete material dialog
+   */
+  const renderDeleteSurveyorDialog = () => (
+    <GenericDialog
+      error={ false }
+      open={ deletingSurveyor }
+      onClose={ () => setDeletingSurveyor(false) }
+      onCancel={ () => setDeletingSurveyor(false) }
+      onConfirm={ onDeleteSurveyorConfirm }
+      title="TODO delete"
+      positiveButtonText={ strings.generic.confirm }
+      cancelButtonText={ strings.generic.cancel }
+    >
+      <Typography>
+        { strings.survey.reusables.deleteReusableDialog.text }
+      </Typography>
+    </GenericDialog>
+  );
+
+  /**
+   * Renders add survey reusable dialog
+   */
+  const renderAddSurveyorDialog = () => (
+    <GenericDialog
+      error={ false }
+      open={ addingSurveyor }
+      onClose={ () => setAddingSurveyor(false) }
+      onCancel={ () => setAddingSurveyor(false) }
+      onConfirm={ onAddSurveyorConfirm }
+      title="TODO"
+      positiveButtonText={ strings.generic.confirm }
+      cancelButtonText={ strings.generic.cancel }
+    >
+      <TextField
+        fullWidth
+        color="primary"
+        name="role"
+        label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPart }
+        value={ newSurveyor.role }
+        onChange={ onNewSurveyorChange }
+        helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
+      />
+      <Stack
+        direction={ isMobile ? "column" : "row" }
+        spacing={ 2 }
+        marginTop={ 2 }
+      >
+        <TextField
+          fullWidth
+          color="primary"
+          name="firstName"
+          label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
+          helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterialHelperText }
+          value={ newSurveyor.firstName }
+          onChange={ onNewSurveyorChange }
+        />
+        <TextField
+          fullWidth
+          color="primary"
+          name="lastName"
+          label={ strings.survey.reusables.addNewBuildingPartsDialog.usability }
+          helperText={ strings.survey.reusables.addNewBuildingPartsDialog.usabilityHelperText }
+          value={ newSurveyor.lastName }
+          onChange={ onNewSurveyorChange }
+        />
+      </Stack>
+      <TextField
+        fullWidth
+        color="primary"
+        name="company"
+        label={ strings.survey.reusables.addNewBuildingPartsDialog.amount }
+        value={ newSurveyor.company }
+        onChange={ onNewSurveyorChange }
+      />
+      <TextField
+        fullWidth
+        name="email"
+        color="primary"
+        label={ strings.survey.reusables.addNewBuildingPartsDialog.unit }
+        value={ newSurveyor.email }
+        onChange={ onNewSurveyorChange }
+      />
+      <TextField
+        fullWidth
+        name="email"
+        color="primary"
+        label={ strings.survey.reusables.addNewBuildingPartsDialog.unit }
+        value={ newSurveyor.phone }
+        onChange={ onNewSurveyorChange }
+      />
+    </GenericDialog>
+  );
 
   if (!selectedSurvey) {
     return null;
@@ -268,10 +444,39 @@ const SurveyInformation: React.FC = () => {
           />
         </LocalizationProvider>
       </Stack>
-      <Typography variant="h3">
-        { strings.survey.info.surveyors }
-      </Typography>
+      <Stack direction="row" justifyContent="space-between">
+        <Typography variant="h3">
+          { strings.survey.info.surveyors }
+        </Typography>
+        <Box
+          display="flex"
+          alignItems="stretch"
+        >
+          <Hidden lgDown>
+            <SurveyButton
+              disabled={ selectedSurveyorIds && !selectedSurveyorIds.length }
+              variant="contained"
+              color="error"
+              startIcon={ <Delete/> }
+              onClick={ () => setDeletingSurveyor(true) }
+              sx={{ mr: 2 }}
+            >
+              { strings.survey.reusables.deleteBuildingParts }
+            </SurveyButton>
+          </Hidden>
+          <SurveyButton
+            variant="contained"
+            color="secondary"
+            startIcon={ <Add/> }
+            onClick={ () => setAddingSurveyor(true) }
+          >
+            { strings.survey.reusables.addNewBuildingPart }
+          </SurveyButton>
+        </Box>
+      </Stack>
       { renderSurveyorDataTable() }
+      { renderDeleteSurveyorDialog() }
+      { renderAddSurveyorDialog() }
     </Stack>
   );
 };
