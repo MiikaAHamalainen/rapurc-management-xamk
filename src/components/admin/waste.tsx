@@ -350,6 +350,7 @@ const Waste: React.FC = () => {
     if (loading) {
       return <CircularProgress color="primary" size={ 60 }/>;
     }
+
     return (
       <List sx={{ pt: 4 }}>
         { wasteMaterialItems() }
