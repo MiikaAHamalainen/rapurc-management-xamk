@@ -109,7 +109,7 @@ const PostProcessing: React.FC = () => {
         usage: editablePostProcess
       });
 
-      setPostProcesses(postProcesses.map(postProcess => (postProcess.id === updatedPostProcess.id ? updatedPostProcess : postProcess)));
+      setPostProcesses(postProcesses.map(postProcess => postProcess.id === updatedPostProcess.id ? updatedPostProcess : postProcess));
       setEditablePostProcess(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.update, error);
