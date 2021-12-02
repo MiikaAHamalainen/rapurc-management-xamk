@@ -50,6 +50,11 @@
       "create": "Virhe luotaessa rakennusluokkaa",
       "delete": "Virhe poistettaessa rakennusluokkaa",
       "update": "Virhe päivitettäessä rakennusluokkaa"
+    },
+    "wasteMaterials": {
+      "list": "Virhe ladattaessa rakennus- ja purkujätemateriaaleja",
+      "create": "Virhe luotaessa rakennus- tai purkujätemateriaalia",
+      "delete": "Virhe poistettaessa rakennus- tai purkujätemateriaalia"
     }
   },
 
@@ -119,7 +124,7 @@
         "postProcessing": "Jatkokäsittely",
         "hazardousMaterials": "Haitta-ainekategoria",
         "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne",
-        "buildingTypes": "Rakennustyyppi"
+        "buildingTypes": "Rakennusluokka"
       }
     },
     "addNewReusableMaterialDialog": {
@@ -149,6 +154,19 @@
       "title": "Päivitä rakennusluokka",
       "text1": "Rakennusluokka",
       "text2": "Rakennusluokan ID"
+    },
+    "addNewWasteMaterialDialog": {
+      "title": "Lisää rakennus- tai purkujätemateriaali",
+      "text1": "Rakennus- tai purkujätemateriaalin nimi",
+      "text2": "EWC-koodin loppuosa",
+      "text3": "Jätekategoria"
+    },
+    "deleteWasteMaterialDialog": {
+      "title": "Poista rakennus- tai purkujätemateriaali",
+      "text": "Haluatko varmasti poistaa rakennus- tai purkujätemateriaalin \"{0}\""
+    },
+    "updateWasteMaterialDialog": {
+      "title": "Päivitä rakennus- tai purkujätemateriaali"
     }
   },
 

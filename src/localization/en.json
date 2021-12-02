@@ -50,6 +50,11 @@
       "create": "Error while creating building type",
       "delete": "Error while deleting building type",
       "update": "Error while updating building type"
+    },
+    "wasteMaterials": {
+      "list": "Error while listing waste materials",
+      "create": "Error while creating waste material",
+      "delete": "Error while deleting waste material"
     }
   },
 
@@ -119,7 +124,7 @@
         "postProcessing": "Post processing",
         "hazardousMaterials": "Hazardous material category",
         "hazardousMaterialsAdditionalInfo": "Hazardous material additional information",
-        "buildingTypes": "Building type"
+        "buildingTypes": "Building class"
       }
     },
     "addNewReusableMaterialDialog": {
@@ -149,6 +154,19 @@
       "title": "Update building type",
       "text1": "Building type",
       "text2": "Code"
+    },
+    "addNewWasteMaterialDialog": {
+      "title": "Add new waste material",
+      "text1": "Name of the waste material",
+      "text2": "EWC-code last part",
+      "text3": "Waste category"
+    },
+    "deleteWasteMaterialDialog": {
+      "title": "Delete waste material",
+      "text": "Are you sure you want to delete waste material \"{0}\""
+    },
+    "updateWasteMaterialDialog": {
+      "title": "Update building or waste material"
     }
   },
 

@@ -1,9 +1,29 @@
-import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi } from "../generated/client";
+import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi, WasteMaterialApi, WasteCategoryApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
  */
 export default class Api {
+
+  /**
+   * Gets initialized waste category API
+   *
+   * @param accessToken access token
+   * @returns initialized waste category API
+   */
+  public static getWasteCategoryApi = (accessToken: string) => {
+    return new WasteCategoryApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized waste material API
+   *
+   * @param accessToken access token
+   * @returns initialized waste material API
+   */
+  public static getWasteMaterialApi = (accessToken: string) => {
+    return new WasteMaterialApi(Api.getConfiguration(accessToken));
+  };
   
   /**
    * Gets initialized building types API
