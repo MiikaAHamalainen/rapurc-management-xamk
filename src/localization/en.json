@@ -158,7 +158,7 @@
     "addNewWasteMaterialDialog": {
       "title": "Add new waste material",
       "text1": "Name of the waste material",
-      "text2": "EWC-code last part",
+      "text2": "Last two characters of EWC-code",
       "text3": "Waste category"
     },
     "deleteWasteMaterialDialog": {
