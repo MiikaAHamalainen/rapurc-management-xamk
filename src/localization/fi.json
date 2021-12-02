@@ -50,6 +50,12 @@
       "create": "Virhe luotaessa rakennusluokkaa",
       "delete": "Virhe poistettaessa rakennusluokkaa",
       "update": "Virhe päivitettäessä rakennusluokkaa"
+    },
+    "postProcess": {
+      "list": "Virhe ladattaessa jatkokäsittelyjä",
+      "create": "Virhe luotaessa jatkokäsittelyä",
+      "delete": "Virhe poistettaessa jatkokäsittelyä",
+      "update": "Virhe päivitettäessä jatkokäsittelyä"
     }
   },
 
@@ -149,6 +155,18 @@
       "title": "Päivitä rakennusluokka",
       "text1": "Rakennusluokka",
       "text2": "Rakennusluokan ID"
+    },
+    "addNewPostProcessDialog": {
+      "title": "Lisää jatkokäsittely",
+      "text": "Jatkokäsittelyn nimi:"
+    },
+    "deletePostProcessDialog": {
+      "title": "Poista jatkokäsittely",
+      "text": "Haluatko varmasti poistaa jatkokäsittelyn: \"{0}\""
+    },
+    "updatePostProcessDialog": {
+      "title": "Päivitä jatkokäsittely",
+      "text": "Jatkokäsittely"
     }
   },
 
