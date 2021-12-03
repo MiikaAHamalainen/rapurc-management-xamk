@@ -25,7 +25,7 @@ interface Props {
 }
 
 /**
- * Component for reusable materials and building parts
+ * Component for waste material materials
  */
 const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
@@ -58,8 +58,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
     try {
       setWastes(await Api.getWastesApi(keycloak.token).listSurveyWastes({ surveyId: surveyId }));
     } catch (error) {
-      // TODO localization
-      errorContext.setError(strings.errorHandling.reusables.list, error);
+      errorContext.setError(strings.errorHandling.waste.list, error);
     }
     setLoading(false);
   };
@@ -75,8 +74,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
     try {
       setWasteMaterials(await Api.getWasteMaterialApi(keycloak.token).listWasteMaterials());
     } catch (error) {
-      // TODO localization
-      errorContext.setError(strings.errorHandling.materials.list, error);
+      errorContext.setError(strings.errorHandling.wasteMaterial.list, error);
     }
   };
 
@@ -91,8 +89,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
     try {
       setUsages(await Api.getUsageApi(keycloak.token).listUsages());
     } catch (error) {
-      // TODO localization
-      errorContext.setError(strings.errorHandling.materials.list, error);
+      errorContext.setError(strings.errorHandling.postProcess.list, error);
     }
   };
 
@@ -106,7 +103,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   }, []);
 
   /**
-   * Event handler for add reusable confirm
+   * Event handler for add waste confirm
    */
   const onAddWasteConfirm = async () => {
     if (!keycloak?.token || !surveyId) {
@@ -127,17 +124,16 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         metadata: {}
       });
     } catch (error) {
-      errorContext.setError(strings.errorHandling.reusables.create, error);
+      errorContext.setError(strings.errorHandling.waste.create, error);
     }
 
     setAddingWaste(false);
   };
 
-  // TODO from here
   /**
-   * Reusable change handler
+   * Waste change handler
    * 
-   * @param updatedReusable updated reusable
+   * @param updatedWaste updated waste
    */
   const onWasteRowChange = async (updatedWaste: Waste) => {
     if (!keycloak?.token || !updatedWaste.id || !surveyId) {
@@ -153,16 +149,16 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
 
       setWastes(wastes.map(waste => (waste.id === fetchedUpdatedMaterial.id ? fetchedUpdatedMaterial : waste)));
     } catch (error) {
-      errorContext.setError(strings.errorHandling.reusables.update, error);
+      errorContext.setError(strings.errorHandling.waste.update, error);
     }
 
     setWasteDescriptionDialogOpen(true); // TODO: Find another way to set description dialog open
   };
 
   /**
-   * Event Handler set material prop
+   * Event Handler set waste prop
    * 
-   * @param reusable reusable
+   * @param waste waste
    */
   const onWastePropChange: (waste: Waste) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> =
   (waste: Waste) => ({ target }) => {
@@ -173,9 +169,9 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-    * Event handler for mobile view delete survey click
+    * Event handler for mobile view delete waste click
     *
-    * @param surveyId survey id
+    * @param wasteId waste id
     */
   const deleteWasteButtonClick = (wasteId?: string) => {
     if (!wasteId) {
@@ -187,9 +183,9 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Event handler for delete survey reusable confirm
+   * Event handler for delete waste confirm
    */
-  const onDeleteWasteReusableConfirm = async () => {
+  const onDeleteWasteConfirm = async () => {
     if (!keycloak?.token || !selectedWasteIds || !surveyId) {
       return;
     }
@@ -206,7 +202,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         })
       );
     } catch (error) {
-      errorContext.setError(strings.errorHandling.reusables.delete, error);
+      errorContext.setError(strings.errorHandling.waste.delete, error);
     }
 
     fetchWastes();
@@ -215,7 +211,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Event handler for new material string change
+   * Event handler for new waste string change
    *
    * @param event React change event
    */
@@ -226,7 +222,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Event handler for new material number change
+   * Event handler for new waste number change
    *
    * @param event React change event
    */
@@ -342,19 +338,19 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
       open={ deletingWaste }
       onClose={ () => setDeletingWaste(false) }
       onCancel={ () => setDeletingWaste(false) }
-      onConfirm={ onDeleteWasteReusableConfirm }
-      title={ strings.survey.reusables.deleteReusableDialog.title }
+      onConfirm={ onDeleteWasteConfirm }
+      title={ strings.survey.wasteMaterial.deleteWasteDialog.title }
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.survey.reusables.deleteReusableDialog.text }
+        { strings.survey.wasteMaterial.deleteWasteDialog.text }
       </Typography>
     </GenericDialog>
   );
 
   /**
-   * Renders add survey reusable dialog
+   * Renders add waste dialog
    */
   const renderAddWasteDialog = () => {
     const wasteMaterialOptions = wasteMaterials.map(wasteMaterial =>
@@ -377,7 +373,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         onClose={ () => setAddingWaste(false) }
         onCancel={ () => setAddingWaste(false) }
         onConfirm={ onAddWasteConfirm }
-        title={ strings.survey.reusables.addNewBuildingPartsDialog.title }
+        title={ strings.survey.wasteMaterial.addNewWasteDialog.title }
         positiveButtonText={ strings.generic.confirm }
         cancelButtonText={ strings.generic.cancel }
       >
@@ -392,7 +388,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             color="primary"
             value={ newWaste.wasteMaterialId }
             name="wasteMaterialId"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
+            label={ strings.survey.wasteMaterial.dataGridColumns.material }
             onChange={ onNewWasteTextChange }
           >
             { wasteMaterialOptions }
@@ -401,7 +397,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             disabled
             value={ wasteMaterials.find(wasteMaterial => wasteMaterial.id === newWaste.wasteMaterialId)?.ewcSpecificationCode || "" }
             color="primary"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
+            label={ strings.survey.wasteMaterial.dataGridColumns.wasteCode }
           />
         </Stack>
         <Stack
@@ -414,7 +410,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             select
             color="primary"
             name="usageId"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
+            label={ strings.survey.wasteMaterial.dataGridColumns.usage }
             value={ newWaste.usageId }
             onChange={ onNewWasteTextChange }
           >
@@ -425,7 +421,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             type="number"
             color="primary"
             value={ newWaste.amount }
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
+            label={ strings.survey.wasteMaterial.dataGridColumns.amount }
             onChange={ onNewWasteNumberChange }
           />
         </Stack>
@@ -434,7 +430,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             multiline
             rows={ 6 }
             name="description"
-            label={ strings.survey.reusables.dataGridColumns.description }
+            label={ strings.survey.wasteMaterial.dataGridColumns.description }
             value={ newWaste.description }
             onChange={ onNewWasteTextChange }
           />
@@ -444,8 +440,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Render material list item
-   * 
+   * Render waste list item
    */
   const renderWasteListItems = () => {
     const wasteMaterialOptions = wasteMaterials.map(wasteMaterial =>
@@ -468,7 +463,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         >
           { renderWithDebounceSelectTextField(
             "wasteMaterialId",
-            strings.survey.reusables.dataGridColumns.material,
+            strings.survey.wasteMaterial.dataGridColumns.material,
             wasteMaterialOptions,
             onWastePropChange(waste),
             waste.wasteMaterialId
@@ -479,11 +474,11 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             color="primary"
             sx={{ mb: 1 }}
             value={ wasteMaterials.find(wasteMaterial => waste.wasteMaterialId === wasteMaterial.id)?.ewcSpecificationCode }
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
+            label={ strings.survey.wasteMaterial.dataGridColumns.wasteCode }
           />
           { renderWithDebounceSelectTextField(
             "usageId",
-            strings.survey.reusables.dataGridColumns.usability,
+            strings.survey.wasteMaterial.dataGridColumns.usage,
             usageOptions,
             onWastePropChange(waste),
             waste.usageId,
@@ -491,14 +486,14 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
           }
           { renderWithDebounceNumberTextField(
             "amount",
-            strings.survey.reusables.dataGridColumns.amount,
+            strings.survey.wasteMaterial.dataGridColumns.amount,
             onWastePropChange(waste),
             waste.amount,
           )
           }
           { renderWithDebounceMultilineTextField(
             "description",
-            strings.survey.reusables.dataGridColumns.description,
+            strings.survey.wasteMaterial.dataGridColumns.description,
             waste.description || "",
             onWastePropChange(waste),
           )
@@ -518,7 +513,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Render surveyor list
+   * Render waste list
    */
   const renderWasteList = () => (
     <List>
@@ -527,7 +522,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
-   * Render survey reusables table for desktop
+   * Render survey waste table for desktop
    */
   const renderWasteDataTable = () => {
     const wasteMaterialOptions = wasteMaterials.map(wasteMaterial => ({
@@ -543,8 +538,8 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
     const columns: GridColDef[] = [
       {
         field: "wasteMaterialId",
-        headerName: strings.survey.reusables.dataGridColumns.amount,
-        width: 250,
+        headerName: strings.survey.wasteMaterial.dataGridColumns.material,
+        width: 280,
         type: "singleSelect",
         editable: true,
         valueOptions: wasteMaterialOptions,
@@ -557,8 +552,8 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
       },
       {
         field: "usageId",
-        headerName: strings.survey.reusables.dataGridColumns.amount,
-        width: 250,
+        headerName: strings.survey.wasteMaterial.dataGridColumns.usage,
+        width: 280,
         type: "singleSelect",
         editable: true,
         valueOptions: usageOptions,
@@ -571,22 +566,22 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
       },
       {
         field: "amount",
-        headerName: strings.survey.reusables.dataGridColumns.amount,
-        width: 250,
+        headerName: strings.survey.wasteMaterial.dataGridColumns.amount,
+        width: 280,
         type: "number",
         editable: true
       },
       {
         field: "description",
-        headerName: strings.survey.reusables.dataGridColumns.description,
-        width: 340,
+        headerName: strings.survey.wasteMaterial.dataGridColumns.description,
+        width: 400,
         editable: true,
         renderEditCell: (params: GridRenderEditCellParams) => {
           const { value, api, id, field } = params;
           return (
             <GenericDialog
               error={ false }
-              title={ strings.survey.reusables.dataGridColumns.editDescription }
+              title={ strings.survey.wasteMaterial.dataGridColumns.editDescription }
               open={ wasteDescriptionDialogOpen }
               onClose={ () => setWasteDescriptionDialogOpen(false) }
               onCancel={ () => setWasteDescriptionDialogOpen(false) }
@@ -595,7 +590,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
               cancelButtonText={ strings.generic.cancel }
             >
               <TextField
-                label={ strings.survey.reusables.dataGridColumns.description }
+                label={ strings.survey.wasteMaterial.dataGridColumns.description }
                 multiline
                 rows={ 4 }
                 value={ value }
@@ -642,7 +637,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         marginBottom={ 2 }
       >
         <Typography variant="h2">
-          { strings.survey.reusables.title }
+          { strings.survey.wasteMaterial.title }
         </Typography>
         <Box
           display="flex"
@@ -657,7 +652,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
               onClick={ () => setDeletingWaste(true) }
               sx={{ mr: 2 }}
             >
-              { strings.survey.reusables.deleteBuildingParts }
+              { strings.survey.wasteMaterial.deleteWaste }
             </SurveyButton>
           </Hidden>
           <SurveyButton
@@ -666,7 +661,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             startIcon={ <Add/> }
             onClick={ () => setAddingWaste(true) }
           >
-            { strings.survey.reusables.addNewBuildingPart }
+            { strings.survey.wasteMaterial.addNewWaste }
           </SurveyButton>
         </Box>
       </Stack>

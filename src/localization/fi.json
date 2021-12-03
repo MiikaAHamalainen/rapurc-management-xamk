@@ -58,6 +58,18 @@
       "delete": "Virhe kartoittajaa poistettaessa",
       "update": "Virhe kartoittajaa päivitettäessä"
     },
+    "waste": {
+      "list": "Virhe jäteluettelossa",
+      "create": "Virhe luotaessa jätettä",
+      "delete": "Virhe poistettaessa jätettä",
+      "update": "Virhe jätettä päivitettäessä"
+    },
+    "wasteMaterial": {
+      "list": "Virhe kartoittajaa listattaessa",
+      "create": "Virhe luotaessa kartoittajaa",
+      "delete": "Virhe kartoittajaa poistettaessa",
+      "update": "Virhe kartoittajaa päivitettäessä"
+    },
     "postProcess": {
       "list": "Virhe ladattaessa jatkokäsittelyjä",
       "create": "Virhe luotaessa jatkokäsittelyä",
@@ -283,6 +295,26 @@
         "pcs": "Kappaletta (kpl)",
         "rm": "Juoksumetriä (jm)",
         "tn": "Tonnia (tn)"
+      }
+    },
+    "wasteMaterial": {
+      "title": "Waste material",
+      "addNewWaste": "Add new waste",
+      "deleteWaste": "Delete waste",
+      "addNewWasteDialog": {
+        "title": "Add waste"
+      },
+      "deleteWasteDialog": {
+        "title": "Delete waste",
+        "text": "Are you sure you want to delete waste"
+      },
+      "dataGridColumns": {
+        "material": "Material",
+        "wasteCode": "Waste code",
+        "usage": "Usage",
+        "amount": "Amount",
+        "description": "Description",
+        "editDescription": "Muokkaa lisätietoa"
       }
     },
     "otherStructures": {

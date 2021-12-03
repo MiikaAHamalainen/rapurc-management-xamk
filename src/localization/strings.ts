@@ -75,6 +75,18 @@ export interface Localized extends LocalizedStringsMethods {
       delete: string;
       update: string;
     };
+    waste: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
+    wasteMaterial: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
     postProcess: {
       list: string;
       create: string;
@@ -318,6 +330,26 @@ export interface Localized extends LocalizedStringsMethods {
         pcs: string;
         rm: string;
         tn: string;
+      };
+    };
+    wasteMaterial: {
+      title: string;
+      addNewWaste: string;
+      deleteWaste: string;
+      addNewWasteDialog: {
+        title: string;
+      };
+      deleteWasteDialog: {
+        title: string;
+        text: string;
+      };
+      dataGridColumns: {
+        material: string;
+        wasteCode: string;
+        usage: string;
+        amount: string;
+        description: string;
+        editDescription: string;
       };
     };
     otherStructures: {
