@@ -42,15 +42,11 @@ const Waste: React.FC = () => {
       return;
     }
 
-    setLoading(true);
-
     try {
       setWasteMaterials(await Api.getWasteMaterialApi(keycloak.token).listWasteMaterials());
     } catch (error) {
       errorContext.setError(strings.errorHandling.wasteMaterials.list, error);
     }
-
-    setLoading(false);
   };
 
   /**
@@ -69,11 +65,20 @@ const Waste: React.FC = () => {
   };
 
   /**
+   * Fetches data
+   */
+  const loadData = async () => {
+    setLoading(true);
+    await fetchWasteMaterials();
+    await fetchWasteCategories();
+    setLoading(false);
+  };
+
+  /**
    * Effect that loads component data
    */
   React.useEffect(() => {
-    fetchWasteMaterials();
-    fetchWasteCategories();
+    loadData();
   }, []);
 
   /**
