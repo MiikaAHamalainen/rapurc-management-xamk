@@ -298,22 +298,22 @@
       }
     },
     "wasteMaterial": {
-      "title": "Waste material",
-      "addNewWaste": "Add new waste",
-      "deleteWaste": "Delete waste",
+      "title": "Purkujätemateriaalit",
+      "addNewWaste": "Lisää materiaali",
+      "deleteWaste": "Poista materiaali",
       "addNewWasteDialog": {
-        "title": "Add waste"
+        "title": "Lisää purkujätemateriaali"
       },
       "deleteWasteDialog": {
-        "title": "Delete waste",
-        "text": "Are you sure you want to delete waste"
+        "title": "Poista purkujätemateriaali",
+        "text": "Oletko varma että haluat poistaa tämän materiaalin?"
       },
       "dataGridColumns": {
-        "material": "Material",
-        "wasteCode": "Waste code",
-        "usage": "Usage",
-        "amount": "Amount",
-        "description": "Description",
+        "material": "Materiaali",
+        "wasteCode": "Jätekoodi",
+        "usage": "Jatkokäsittely",
+        "amount": "Määrä",
+        "description": "Lisätieto",
         "editDescription": "Muokkaa lisätietoa"
       }
     },
