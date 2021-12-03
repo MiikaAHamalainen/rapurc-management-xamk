@@ -8,7 +8,8 @@
     "confirm": "Vahvista",
     "cancel": "Peruuta",
     "delete": "Poista",
-    "logout": "Kirjaudu ulos"
+    "logout": "Kirjaudu ulos",
+    "open": "Avaa"
   },
 
   "errorHandling": {
@@ -50,6 +51,12 @@
       "create": "Virhe luotaessa rakennusluokkaa",
       "delete": "Virhe poistettaessa rakennusluokkaa",
       "update": "Virhe päivitettäessä rakennusluokkaa"
+    },
+    "surveyors": {
+      "list": "Virhe kartoittajaa listattaessa",
+      "create": "Virhe luotaessa kartoittajaa",
+      "delete": "Virhe kartoittajaa poistettaessa",
+      "update": "Virhe kartoittajaa päivitettäessä"
     },
     "postProcess": {
       "list": "Virhe ladattaessa jatkokäsittelyjä",
@@ -212,18 +219,28 @@
       "demolitionScope": "Purkamisen laajuus",
       "startDate": "Aloitusajankohta",
       "endDate": "Lopetusajankohta",
-      "addSurveyor": "Lisää kartoittaja",
-      "firstName": "Etunimi",
-      "surName": "Sukunimi",
-      "organisation": "Yritys",
-      "role": "Rooli",
-      "phone": "Puhelin",
-      "email": "Sähköpostiosoite",
-      "reportingDate": "Raportointipäivä",
+      "addSurveyor": "Lisää uusi",
+      "deleteSurveyor": "Poista kartoittaja",
       "demolitionScopes": {
         "renovation": "Saneerauspurku",
         "partial": "Osapurku",
         "full": "Kokonaispurku"
+      },
+      "dataGridColumns": {
+        "firstName": "Etunimi",
+        "lastName": "Sukunimi",
+        "company": "Yritys",
+        "role": "Rooli",
+        "phone": "Puhelin",
+        "email": "Sähköpostiosoite",
+        "reportDate": "Raportointipäivä"
+      },
+      "addNewSurveyorDialog": {
+        "title": "Lisää katsastaja"
+      },
+      "deleteSurveyorDialog": {
+        "title": "Poista kartoittaja",
+        "text": "Haluatko varmasti poistaa nämä kartoittajat?"
       }
     },
     "reusables": {
@@ -232,17 +249,11 @@
       "deleteBuildingParts": "Poista rakennusosa",
       "addNewBuildingPartsDialog": {
         "title": "Lisää rakennusosa",
-        "buildingPart": "Rakennusosa",
         "buildingPartHelperText": "Anna rakennusosaa kuvaava nimi",
         "buildingPartOrMaterial": "Rakennusosa tai -materiaali",
         "buildingPartOrMaterialHelperText": "Anna osaa vastaava tarkenne",
-        "usability": "Käyttökelpoisuus",
         "usabilityHelperText": "Jos ei tiedossa, valitse \"ei arvioitu\"",
-        "amount": "Määrä",
-        "unit": "Mittayksikkö",
-        "description": "Lisätiedot",
         "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms.",
-        "wasteAmount": "Määrä purkujätteenä (tonneina)",
         "wasteAmountHelperText": "Valinnainen tieto"
       },
       "deleteReusableDialog": {

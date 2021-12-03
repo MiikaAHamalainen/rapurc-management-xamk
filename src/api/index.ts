@@ -1,4 +1,4 @@
-import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi, UsagesApi } from "../generated/client";
+import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi, SurveyorsApi, UsagesApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
@@ -73,6 +73,16 @@ export default class Api {
    */
   public static getOwnersApi = (accessToken: string) => {
     return new OwnersApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized surveyors API
+   *
+   * @param accessToken access token
+   * @returns initialized surveyors API
+   */
+  public static getSurveyorsApi = (accessToken: string) => {
+    return new SurveyorsApi(Api.getConfiguration(accessToken));
   };
 
   /**
