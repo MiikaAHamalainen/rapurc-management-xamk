@@ -81,8 +81,6 @@ const SurveyInformation: React.FC = () => {
       return;
     }
 
-    console.log("selectedDate", selectedDate);
-
     try {
       await dispatch(updateSurvey({ ...selectedSurvey, [name]: selectedDate })).unwrap();
     } catch (error) {
