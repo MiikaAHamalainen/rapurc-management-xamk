@@ -27,7 +27,7 @@ const AdminScreen: React.FC = () => {
           <NavigationItem title={ dropdownSettings.buildingTypes } to="buildingTypes"/>
           <NavigationItem title={ dropdownSettings.reusableMaterials } to="reusables"/>
           <NavigationItem disabled title={ dropdownSettings.wasteMaterials } to="waste"/>
-          <NavigationItem disabled title={ dropdownSettings.postProcessing } to="postProcessing"/>
+          <NavigationItem title={ dropdownSettings.postProcessing } to="postProcessing"/>
           <NavigationItem disabled title={ dropdownSettings.hazardousMaterials } to="hazardousMaterials"/>
           <NavigationItem disabled title={ dropdownSettings.hazardousMaterialsAdditionalInfo } to="hazardousMaterialsInfo"/>
         </AccordionDetails>

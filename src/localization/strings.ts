@@ -75,6 +75,12 @@ export interface Localized extends LocalizedStringsMethods {
       delete: string;
       update: string;
     };
+    postProcess: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
   };
 
   /**
@@ -189,6 +195,18 @@ export interface Localized extends LocalizedStringsMethods {
       text1: string;
       text2: string;
     };
+    addNewPostProcessDialog: {
+      title: string;
+      text: string;
+    }
+    deletePostProcessDialog: {
+      title: string;
+      text: string;
+    },
+    updatePostProcessDialog: {
+      title: string;
+      text: string;
+    },
   };
 
   /**

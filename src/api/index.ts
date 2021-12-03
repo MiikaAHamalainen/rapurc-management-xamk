@@ -4,6 +4,16 @@ import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi
  * Utility class for loading api with predefined configuration
  */
 export default class Api {
+
+  /**
+   * Gets initialized usages API
+   *
+   * @param accessToken access token
+   * @returns initialized usages API
+   */
+  public static getUsagesApi = (accessToken: string) => {
+    return new UsagesApi(Api.getConfiguration(accessToken));
+  };
   
   /**
    * Gets initialized building types API
