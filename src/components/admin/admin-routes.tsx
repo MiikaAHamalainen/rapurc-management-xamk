@@ -2,6 +2,7 @@ import * as React from "react";
 import { Route, Routes } from "react-router-dom";
 import BuildingTypes from "./buildingTypes";
 import Reusables from "./reusables";
+import WasteCategories from "./waste-categories";
 
 /**
  * Component for admin routes
@@ -16,6 +17,10 @@ const AdminRoutes: React.FC = () => {
       <Route
         path="buildingtypes"
         element={ <BuildingTypes/> }
+      />
+      <Route
+        path="wastecategories"
+        element={ <WasteCategories/> }
       />
     </Routes>
   );

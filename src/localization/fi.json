@@ -50,6 +50,12 @@
       "create": "Virhe luotaessa rakennusluokkaa",
       "delete": "Virhe poistettaessa rakennusluokkaa",
       "update": "Virhe päivitettäessä rakennusluokkaa"
+    },
+    "wasteCategories": {
+      "list": "Virhe listattaessa jätekategorioita",
+      "create": "Virhe luotaessa jätekategoriaa",
+      "delete": "Virhe poistettaessa jätekategoriaa",
+      "update": "Virhe päivitettäessä jätekategoriaa"
     }
   },
 
@@ -116,6 +122,7 @@
         "title": "Alasvetovalikot",
         "reusableMaterials": "Rakennusosa- tai materiaali",
         "wasteMaterials": "Rakennus- ja purkujätemateriaali",
+        "wasteCategories": "Jätekategoria",
         "postProcessing": "Jatkokäsittely",
         "hazardousMaterials": "Haitta-ainekategoria",
         "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne",
@@ -149,6 +156,20 @@
       "title": "Päivitä rakennusluokka",
       "text1": "Rakennusluokka",
       "text2": "Rakennusluokan ID"
+    },
+    "addNewWasteCategoryDialog": {
+      "title": "Lisää jätekategoria",
+      "text1": "Jätekategorian nimi",
+      "text2": "EWC-koodi"
+    },
+    "deleteWasteCategoryDialog": {
+      "title": "Poista jätekategoria",
+      "text": "Haluatko varmasti poistaa jätekategorian \"{0}\""
+    },
+    "updateWasteCategoryDialog": {
+      "title": "Päivitä jätekategoria",
+      "text1": "Jätekategoria",
+      "text2": "EWC-koodi"
     }
   },
 
