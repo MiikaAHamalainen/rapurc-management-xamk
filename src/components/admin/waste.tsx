@@ -187,11 +187,11 @@ const Waste: React.FC = () => {
   const onEditableWasteMaterialChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
     const { value, name } = target;
 
-    if (!value || !name || !editableWasteMaterial) {
+    if (!name || !editableWasteMaterial) {
       return;
     }
 
-    setEditableWasteMaterial({ ...editableWasteMaterial, [name]: value });
+    setEditableWasteMaterial({ ...editableWasteMaterial, [name]: value || "" });
   };
 
   /**
@@ -298,9 +298,9 @@ const Waste: React.FC = () => {
   );
 
   /**
-   * Renders edit reusable dialog
+   * Renders edit waste material dialog
    */
-  const renderEditBuildingTypeDialog = () => (
+  const renderEditWasteMaterialDialog = () => (
     <GenericDialog
       error={ false }
       open={ editingWasteMaterial }
@@ -379,7 +379,7 @@ const Waste: React.FC = () => {
       { renderList() }
       { renderAddWasteDialog() }
       { renderDeleteWasteDialog() }
-      { renderEditBuildingTypeDialog() }
+      { renderEditWasteMaterialDialog() }
     </>
   );
 };
