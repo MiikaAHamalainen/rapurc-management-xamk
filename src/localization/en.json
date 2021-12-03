@@ -50,6 +50,12 @@
       "create": "Error while creating building type",
       "delete": "Error while deleting building type",
       "update": "Error while updating building type"
+    },
+    "postProcess": {
+      "list": "Error while listing post processings",
+      "create": "Error while creating post processing",
+      "delete": "Error while deleting post processing",
+      "update": "Error while updating post process"
     }
   },
 
@@ -128,7 +134,7 @@
     },
     "deleteReusableMaterialDialog": {
       "title": "Delete building part or material",
-      "text": "Are you sure you want to delete building part or material: ${0}"
+      "text": "Are you sure you want to delete building part or material: \"{0}\""
     },
     "updateReusableMaterialDialog": {
       "title": "Update building part or material",
@@ -143,12 +149,24 @@
     },
     "deleteBuildingTypeDialog": {
       "title": "Delete building type",
-      "text": "Are you sure you want to delete building type {0}"
+      "text": "Are you sure you want to delete building type \"{0}\""
     },
     "updateBuildingTypeDialog": {
       "title": "Update building type",
       "text1": "Building type",
       "text2": "Code"
+    },
+    "addNewPostProcessDialog": {
+      "title": "Add new post processing",
+      "text": "Name of the post process:"
+    },
+    "deletePostProcessDialog": {
+      "title": "Delete post processing",
+      "text": "Are you sure you want to delete post process: \"{0}\""
+    },
+    "updatePostProcessDialog": {
+      "title": "Update post process",
+      "text": "Post process"
     }
   },
 
