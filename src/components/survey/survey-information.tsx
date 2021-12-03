@@ -77,9 +77,11 @@ const SurveyInformation: React.FC = () => {
    * @param selectedDate selected date
    */
   const onSurveyInfoDateChange = (name: string) => async (selectedDate: Date | null) => {
-    if (!selectedSurvey?.id || !selectedDate) {
+    if (!selectedSurvey?.id || !selectedDate || Number.isNaN(selectedDate.getTime())) {
       return;
     }
+
+    console.log("selectedDate", selectedDate);
 
     try {
       await dispatch(updateSurvey({ ...selectedSurvey, [name]: selectedDate })).unwrap();
@@ -302,7 +304,7 @@ const SurveyInformation: React.FC = () => {
         <DatePicker
           views={["year", "month"]}
           label={ strings.survey.info.startDate }
-          value={ selectedSurvey.startDate }
+          value={ (selectedSurvey.startDate) }
           onChange={ onSurveyInfoDateChange("startDate") }
           renderInput={ params =>
             <TextField label={ strings.survey.info.startDate } { ...params }/>
