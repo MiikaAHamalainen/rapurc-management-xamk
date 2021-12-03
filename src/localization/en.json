@@ -8,7 +8,8 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "delete": "Delete",
-    "logout": "Log out"
+    "logout": "Log out",
+    "open": "Open"
   },
 
   "errorHandling": {
@@ -55,6 +56,18 @@
       "list": "Error while listing waste materials",
       "create": "Error while creating waste material",
       "delete": "Error while deleting waste material"
+    },
+    "surveyors": {
+      "list": "Error while listing surveyor",
+      "create": "Error while creating surveyor",
+      "delete": "Error while deleting surveyor",
+      "update": "Error while updating surveyor"
+    },
+    "postProcess": {
+      "list": "Error while listing post processings",
+      "create": "Error while creating post processing",
+      "delete": "Error while deleting post processing",
+      "update": "Error while updating post process"
     }
   },
 
@@ -133,7 +146,7 @@
     },
     "deleteReusableMaterialDialog": {
       "title": "Delete building part or material",
-      "text": "Are you sure you want to delete building part or material: ${0}"
+      "text": "Are you sure you want to delete building part or material: \"{0}\""
     },
     "updateReusableMaterialDialog": {
       "title": "Update building part or material",
@@ -148,7 +161,7 @@
     },
     "deleteBuildingTypeDialog": {
       "title": "Delete building type",
-      "text": "Are you sure you want to delete building type {0}"
+      "text": "Are you sure you want to delete building type \"{0}\""
     },
     "updateBuildingTypeDialog": {
       "title": "Update building type",
@@ -167,6 +180,18 @@
     },
     "updateWasteMaterialDialog": {
       "title": "Update building or waste material"
+    },
+    "addNewPostProcessDialog": {
+      "title": "Add new post processing",
+      "text": "Name of the post process:"
+    },
+    "deletePostProcessDialog": {
+      "title": "Delete post processing",
+      "text": "Are you sure you want to delete post process: \"{0}\""
+    },
+    "updatePostProcessDialog": {
+      "title": "Update post process",
+      "text": "Post process"
     }
   },
 
@@ -212,18 +237,28 @@
       "demolitionScope": "Demolition scope",
       "startDate": "Start date",
       "endDate": "End date",
-      "addSurveyor": "Add surveyor",
-      "firstName": "First name",
-      "surName": "Surname",
-      "organisation": "Organisation",
-      "role": "Role",
-      "phone": "Phone",
-      "email": "E-mail",
-      "reportingDate": "Reporting date",
+      "addSurveyor": "Add new surveyor",
+      "deleteSurveyor": "Delete surveyor",
       "demolitionScopes": {
         "renovation": "Renovation demolition",
         "partial": "Partial demolition",
         "full": "Full demolition"
+      },
+      "dataGridColumns": {
+        "firstName": "First name",
+        "lastName": "Surname",
+        "company": "Organization",
+        "role": "Role",
+        "phone": "Phone",
+        "email": "E-mail",
+        "reportDate": "Reporting date"
+      },
+      "addNewSurveyorDialog": {
+        "title": "Add surveyor"
+      },
+      "deleteSurveyorDialog": {
+        "title": "Delete surveyor",
+        "text": "Are you sure you want to delete these surveyors?"
       }
     },
     "reusables": {
@@ -232,17 +267,11 @@
       "deleteBuildingParts": "Delete building part",
       "addNewBuildingPartsDialog": {
         "title": "Add building part",
-        "buildingPart": "Building part",
         "buildingPartHelperText": "Give descriptive name to building part",
         "buildingPartOrMaterial": "Building part or material",
         "buildingPartOrMaterialHelperText": "Give description to part or material",
-        "usability": "Usability",
         "usabilityHelperText": "If it's unknown, choose \"Not validated\"",
-        "amount": "Amount",
-        "unit": "Unit",
-        "description": "Description",
         "descriptionHelperText": "Free description, for example, location in the building.",
-        "wasteAmount": "Amount as waste (tons)",
         "wasteAmountHelperText": "Optional"
       },
       "deleteReusableDialog": {

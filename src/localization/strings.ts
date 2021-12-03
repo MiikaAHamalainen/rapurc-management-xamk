@@ -23,6 +23,7 @@ export interface Localized extends LocalizedStringsMethods {
     cancel: string;
     delete: string;
     logout: string;
+    open: string;
   };
 
   /**
@@ -73,6 +74,18 @@ export interface Localized extends LocalizedStringsMethods {
       create: string;
       delete: string;
     }
+    surveyors: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
+    postProcess: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
   };
 
   /**
@@ -200,6 +213,18 @@ export interface Localized extends LocalizedStringsMethods {
     updateWasteMaterialDialog: {
       title: string;
     }
+    addNewPostProcessDialog: {
+      title: string;
+      text: string;
+    }
+    deletePostProcessDialog: {
+      title: string;
+      text: string;
+    },
+    updatePostProcessDialog: {
+      title: string;
+      text: string;
+    },
   };
 
   /**
@@ -248,17 +273,27 @@ export interface Localized extends LocalizedStringsMethods {
       startDate: string;
       endDate: string;
       addSurveyor: string;
-      firstName: string;
-      surName: string;
-      organisation: string;
-      role: string;
-      phone: string;
-      email: string;
-      reportingDate: string;
+      deleteSurveyor: string;
       demolitionScopes: {
         renovation: string;
         partial: string;
         full: string;
+      };
+      dataGridColumns: {
+        firstName: string;
+        lastName: string;
+        company: string;
+        role: string;
+        phone: string;
+        email: string;
+        reportDate: string;
+      };
+      addNewSurveyorDialog: {
+        title: string;
+      };
+      deleteSurveyorDialog: {
+        title: string;
+        text: string;
       };
     };
     reusables: {
@@ -267,23 +302,17 @@ export interface Localized extends LocalizedStringsMethods {
       deleteBuildingParts: string;
       addNewBuildingPartsDialog: {
         title: string;
-        buildingPart: string;
         buildingPartHelperText: string;
         buildingPartOrMaterial: string;
         buildingPartOrMaterialHelperText: string;
-        usability: string;
         usabilityHelperText: string;
-        amount: string;
-        unit: string;
-        description: string;
         descriptionHelperText: string;
-        wasteAmount: string;
         wasteAmountHelperText: string;
-      },
+      };
       deleteReusableDialog: {
         title: string;
         text: string;
-      },
+      };
       dataGridColumns: {
         material: string;
         buildingPart: string;
@@ -293,13 +322,13 @@ export interface Localized extends LocalizedStringsMethods {
         description: string;
         unit: string;
         editDescription: string;
-      },
+      };
       usability: {
         excellent: string;
         good: string;
         poor: string;
         notValidated: string;
-      },
+      };
       units: {
         kg: string;
         m2: string;
@@ -307,7 +336,7 @@ export interface Localized extends LocalizedStringsMethods {
         pcs: string;
         rm: string;
         tn: string;
-      }
+      };
     };
     otherStructures: {
       title: string;
