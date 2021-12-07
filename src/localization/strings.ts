@@ -69,6 +69,12 @@ export interface Localized extends LocalizedStringsMethods {
       delete: string;
       update: string;
     };
+    wasteCategories: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    }
     wasteMaterials: {
       list: string;
       create: string;
@@ -166,6 +172,7 @@ export interface Localized extends LocalizedStringsMethods {
         title: string;
         reusableMaterials: string;
         wasteMaterials: string;
+        wasteCategories: string;
         postProcessing: string;
         hazardousMaterials: string;
         hazardousMaterialsAdditionalInfo: string;
@@ -196,6 +203,20 @@ export interface Localized extends LocalizedStringsMethods {
       text: string;
     };
     updateBuildingTypeDialog: {
+      title: string;
+      text1: string;
+      text2: string;
+    };
+    addNewWasteCategoryDialog: {
+      title: string;
+      text1: string;
+      text2: string;
+    };
+    deleteWasteCategoryDialog: {
+      title: string;
+      text: string;
+    };
+    updateWasteCategoryDialog: {
       title: string;
       text1: string;
       text2: string;

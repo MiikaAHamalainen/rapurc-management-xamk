@@ -52,6 +52,12 @@
       "delete": "Error while deleting building type",
       "update": "Error while updating building type"
     },
+    "wasteCategories": {
+      "list": "Error while listing waste categories",
+      "create": "Error while creating waste category",
+      "delete": "Error while deleting waste category",
+      "update": "Error while updating waste category"
+    },
     "wasteMaterials": {
       "list": "Error while listing waste materials",
       "create": "Error while creating waste material",
@@ -134,6 +140,7 @@
         "title": "Dropdown menus",
         "reusableMaterials": "Building part or material",
         "wasteMaterials": "Waste material",
+        "wasteCategories": "Waste category",
         "postProcessing": "Post processing",
         "hazardousMaterials": "Hazardous material category",
         "hazardousMaterialsAdditionalInfo": "Hazardous material additional information",
@@ -167,6 +174,20 @@
       "title": "Update building type",
       "text1": "Building type",
       "text2": "Code"
+    },
+    "addNewWasteCategoryDialog": {
+      "title": "Add waste category",
+      "text1": "Name",
+      "text2": "EWC code"
+    },
+    "deleteWasteCategoryDialog": {
+      "title": "Delete waste category",
+      "text": "Are you sure you want to delete \"{0}\""
+    },
+    "updateWasteCategoryDialog": {
+      "title": "Update waste category",
+      "text1": "Waste category",
+      "text2": "EWC code"
     },
     "addNewWasteMaterialDialog": {
       "title": "Add new waste material",
