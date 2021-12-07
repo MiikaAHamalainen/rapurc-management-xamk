@@ -64,10 +64,10 @@
       "update": "Virhe kartoittajaa päivitettäessä"
     },
     "waste": {
-      "list": "Virhe jäteluettelossa",
-      "create": "Virhe luotaessa jätettä",
-      "delete": "Virhe poistettaessa jätettä",
-      "update": "Virhe jätettä päivitettäessä"
+      "list": "Virhe purkujäteluettelossa",
+      "create": "Virhe purkujätteen luonnissa",
+      "delete": "Virhe poistettaessa purkujätettä",
+      "update": "Virhe purkujätteen päivityksessä"
     },
     "wasteMaterial": {
       "list": "Virhe kartoittajaa listattaessa",
