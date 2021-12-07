@@ -69,6 +69,18 @@
       "delete": "Error while deleting surveyor",
       "update": "Error while updating surveyor"
     },
+    "waste": {
+      "list": "Error while listing waste",
+      "create": "Error while creating waste",
+      "delete": "Error while deleting waste",
+      "update": "Error while updating waste"
+    },
+    "wasteMaterial": {
+      "list": "Error while listing waste material",
+      "create": "Error while creating waste material",
+      "delete": "Error while deleting waste material",
+      "update": "Error while updating waste material"
+    },
     "postProcess": {
       "list": "Error while listing post processings",
       "create": "Error while creating post processing",
@@ -305,7 +317,7 @@
         "usability": "Usability",
         "wasteAmount": "Waste amount",
         "amount": "Amount",
-        "description": "Lisätieto",
+        "description": "Description",
         "unit": "Unit",
         "editDescription": "Edit description"
       },
@@ -322,6 +334,26 @@
         "pcs": "Pieces (pcs)",
         "rm": "Running meters (jm)",
         "tn": "Tons (tn)"
+      }
+    },
+    "wasteMaterial": {
+      "title": "Waste material",
+      "addNewWaste": "Add new waste",
+      "deleteWaste": "Delete waste",
+      "addNewWasteDialog": {
+        "title": "Add waste"
+      },
+      "deleteWasteDialog": {
+        "title": "Delete waste",
+        "text": "Are you sure you want to delete waste"
+      },
+      "dataGridColumns": {
+        "material": "Material",
+        "wasteCode": "Waste code",
+        "usage": "Usage",
+        "amount": "Amount",
+        "description": "Description",
+        "editDescription": "Edit description"
       }
     },
     "otherStructures": {
