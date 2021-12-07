@@ -462,13 +462,14 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
           title={ wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.name || "" }
           subtitle={ `${waste.amount} t` }
         >
-          { renderWithDebounceSelectTextField(
-            "wasteMaterialId",
-            strings.survey.wasteMaterial.dataGridColumns.material,
-            wasteMaterialOptions,
-            onWastePropChange(waste),
-            waste.wasteMaterialId
-          )
+          {
+            renderWithDebounceSelectTextField(
+              "wasteMaterialId",
+              strings.survey.wasteMaterial.dataGridColumns.material,
+              wasteMaterialOptions,
+              onWastePropChange(waste),
+              waste.wasteMaterialId
+            )
           }
           <TextField
             disabled
