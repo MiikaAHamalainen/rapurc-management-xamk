@@ -216,7 +216,8 @@ const Waste: React.FC = () => {
   );
 
   /**
-   * 
+   * Renders waste category items
+   *
    * @returns waste category items
    */
   const wasteCategoryItems = () => (
