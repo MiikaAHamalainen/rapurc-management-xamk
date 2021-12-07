@@ -9,7 +9,6 @@ import SurveyTitle from "../../styled/layout-components/survey-item";
 interface Props {
   title: string;
   subtitle: string;
-  onClick(): void;
 }
 
 /**
@@ -20,14 +19,13 @@ interface Props {
 const SurveyItem: React.FC<Props> = ({
   title,
   subtitle,
-  onClick,
   children
 }) => (
   <Accordion disableGutters>
     <AccordionSummary expandIcon={ <ExpandMore/> }>
-      <SurveyTitle onClick={ onClick }>
+      <SurveyTitle>
         <Typography>{ title }</Typography>
-        <Typography>{ subtitle }</Typography>
+        <Typography variant="h5" >{ subtitle }</Typography>
       </SurveyTitle>
     </AccordionSummary>
     <AccordionDetails>

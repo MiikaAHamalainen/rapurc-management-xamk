@@ -1,9 +1,39 @@
-import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi } from "../generated/client";
+import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi, SurveyorsApi, SurveyWastesApi, UsagesApi, WasteMaterialApi, WasteCategoryApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
  */
 export default class Api {
+
+  /**
+   * Gets initialized waste category API
+   *
+   * @param accessToken access token
+   * @returns initialized waste category API
+   */
+  public static getWasteCategoryApi = (accessToken: string) => {
+    return new WasteCategoryApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized waste material API
+   *
+   * @param accessToken access token
+   * @returns initialized waste material API
+   */
+  public static getWasteMaterialApi = (accessToken: string) => {
+    return new WasteMaterialApi(Api.getConfiguration(accessToken));
+  };
+
+  /*
+   * Gets initialized usages API
+   *
+   * @param accessToken access token
+   * @returns initialized usages API
+   */
+  public static getUsagesApi = (accessToken: string) => {
+    return new UsagesApi(Api.getConfiguration(accessToken));
+  };
   
   /**
    * Gets initialized building types API
@@ -63,6 +93,36 @@ export default class Api {
    */
   public static getOwnersApi = (accessToken: string) => {
     return new OwnersApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized surveyors API
+   *
+   * @param accessToken access token
+   * @returns initialized surveyors API
+   */
+  public static getSurveyorsApi = (accessToken: string) => {
+    return new SurveyorsApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized wastes API
+   *
+   * @param accessToken access token
+   * @returns initialized wastes API
+   */
+  public static getWastesApi = (accessToken: string) => {
+    return new SurveyWastesApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized usages API
+   *
+   * @param accessToken access token
+   * @returns initialized usages API
+   */
+  public static getUsageApi = (accessToken: string) => {
+    return new UsagesApi(Api.getConfiguration(accessToken));
   };
 
   /**

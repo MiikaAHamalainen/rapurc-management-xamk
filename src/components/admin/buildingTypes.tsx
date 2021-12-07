@@ -10,6 +10,12 @@ import { selectKeycloak } from "features/auth-slice";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { BuildingType } from "generated/client";
 
+const initialNewBuildingTypeState: BuildingType = {
+  code: "",
+  name: "",
+  metadata: {}
+};
+
 /**
  * Component for reusable materials dropdown menu editor
  */
@@ -23,16 +29,8 @@ const BuildingTypes: React.FC = () => {
   const [ loading, setLoading ] = React.useState(false);
   const [ deletableBuildingType, setDeletableBuildingType ] = React.useState<BuildingType>();
   const [ buildingTypes, setBuildingTypes ] = React.useState<BuildingType[]>([]);
-  const [ editableBuildingType, setEditableBuildingType ] = React.useState<BuildingType>({
-    name: "",
-    code: "",
-    metadata: {}
-  });
-  const [ newBuildingType, setNewBuildingType ] = React.useState<BuildingType>({
-    name: "",
-    code: "",
-    metadata: {}
-  });
+  const [ editableBuildingType, setEditableBuildingType ] = React.useState<BuildingType>();
+  const [ newBuildingType, setNewBuildingType ] = React.useState<BuildingType>(initialNewBuildingTypeState);
 
   /**
    * Fetches list of building types
@@ -64,20 +62,16 @@ const BuildingTypes: React.FC = () => {
    * Event handler for adding building type confirm
    */
   const onAddBuildingTypeConfirm = async () => {
-    const { name, code } = newBuildingType;
-    if (!keycloak?.token) {
+    if (!keycloak?.token || !newBuildingType) {
       return;
     }
 
     try {
       const createdBuildingType = await Api.getBuildingTypesApi(keycloak.token).createBuildingType({
-        buildingType: {
-          name: name,
-          code: code,
-          metadata: {}
-        }
+        buildingType: newBuildingType
       });
       setBuildingTypes([ ...buildingTypes, createdBuildingType ]);
+      setNewBuildingType(initialNewBuildingTypeState);
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildingTypes.create, error);
     }
@@ -119,6 +113,7 @@ const BuildingTypes: React.FC = () => {
       });
 
       setBuildingTypes(buildingTypes.map(buildingType => (buildingType.id === updatedBuildingType.id ? updatedBuildingType : buildingType)));
+      setEditableBuildingType(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildingTypes.update, error);
     }
@@ -139,7 +134,7 @@ const BuildingTypes: React.FC = () => {
   /**
    * Event handler edit icon click
    *
-   * @param buildingType material
+   * @param buildingType building type
    */
   const editIconClick = (buildingType: BuildingType) => () => {
     setEditableBuildingType(buildingType);
@@ -151,8 +146,12 @@ const BuildingTypes: React.FC = () => {
    *
    * @param event React change event
    */
-  const onEditableBuildingTypeTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
+  const onEditableBuildingTypeTextChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
+    const { value, name } = target;
+
+    if (!value || !name || !editableBuildingType) {
+      return;
+    }
 
     setEditableBuildingType({ ...editableBuildingType, [name]: value });
   };
@@ -162,8 +161,12 @@ const BuildingTypes: React.FC = () => {
    *
    * @param event React change event
    */
-  const onNewBuildingTypeTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
+  const onNewBuildingTypeTextChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = ({ target }) => {
+    const { value, name } = target;
+
+    if (!value || !name || !newBuildingType) {
+      return;
+    }
 
     setNewBuildingType({ ...newBuildingType, [name]: value });
   };
@@ -259,7 +262,7 @@ const BuildingTypes: React.FC = () => {
           <TextField
             fullWidth
             value={ editableBuildingType?.name }
-            placeholder={ strings.adminScreen.updateBuildingTypeDialog.text1 }
+            label={ strings.adminScreen.updateBuildingTypeDialog.text1 }
             name="name"
             onChange={ onEditableBuildingTypeTextChange }
           />
@@ -268,7 +271,7 @@ const BuildingTypes: React.FC = () => {
           <TextField
             fullWidth
             value={ editableBuildingType?.code }
-            placeholder={ strings.adminScreen.updateBuildingTypeDialog.text2 }
+            label={ strings.adminScreen.updateBuildingTypeDialog.text2 }
             name="code"
             onChange={ onEditableBuildingTypeTextChange }
           />

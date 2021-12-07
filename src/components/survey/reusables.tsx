@@ -1,11 +1,13 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Hidden, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams, GridRenderEditCellParams, GridRowId } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import GenericDialog from "components/generic/generic-dialog";
 import WithDataGridDebounceFactory from "components/generic/with-data-grid-debounce";
+import WithDebounce from "components/generic/with-debounce";
+import SurveyItem from "components/layout-components/survey-item";
 import { selectKeycloak } from "features/auth-slice";
 import { Reusable, ReusableMaterial, Unit, Usability } from "generated/client";
 import strings from "localization/strings";
@@ -31,7 +33,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const errorContext = React.useContext(ErrorContext);
   const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
   const [ loading, setLoading ] = React.useState(false);
-  const [ editable ] = React.useState(true);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
@@ -48,11 +49,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Fetch owner information array
    */
   const fetchSurveyReusables = async () => {
-    setLoading(true);
-
     if (!keycloak?.token || !surveyId) {
       return;
     }
+
+    setLoading(true);
 
     try {
       const fetchedReusables = await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: surveyId });
@@ -92,16 +93,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Event handler for add reusable confirm
    */
   const onAddReusableConfirm = async () => {
-    const {
-      componentName,
-      reusableMaterialId,
-      usability,
-      unit,
-      description,
-      amount,
-      amountAsWaste
-    } = newMaterial;
-
     if (!keycloak?.token || !surveyId) {
       return;
     }
@@ -109,18 +100,16 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     try {
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
-        reusable: {
-          componentName: componentName,
-          reusableMaterialId: reusableMaterialId,
-          usability: usability,
-          unit: unit,
-          description: description,
-          amount: amount,
-          amountAsWaste: amountAsWaste,
-          metadata: {}
-        }
+        reusable: newMaterial
       });
+
       setSurveyReusables([ ...surveyReusables, createdReusable ]);
+      setNewMaterial({
+        componentName: "",
+        usability: Usability.NotValidated,
+        reusableMaterialId: "",
+        metadata: {}
+      });
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.create, error);
     }
@@ -154,6 +143,34 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
+   * Event Handler set material prop
+   * 
+   * @param reusable reusable
+   */
+  const onMaterialPropChange: (reusable: Reusable) =>
+  React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (reusable: Reusable) =>
+    ({ target }) => {
+      const { value, name } = target;
+
+      const updatedReusable: Reusable = { ...reusable, [name]: value };
+      onMaterialRowChange(updatedReusable);
+    };
+
+  /**
+    * Event handler for mobile view delete survey click
+    *
+    * @param surveyId survey id
+    */
+  const deleteMaterialButtonClick = (surveyorId?: string) => {
+    if (!surveyorId) {
+      return;
+    }
+
+    setDeletingMaterial(true);
+    setSelectedReusableIds([ surveyorId ]);
+  };
+
+  /**
    * Event handler for delete survey reusable confirm
    */
   const onDeleteSurveyReusableConfirm = async () => {
@@ -163,14 +180,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
     const reusablesApi = Api.getSurveyReusablesApi(keycloak.token);
 
-    await Promise.all(
-      selectedReusableIds.map(async materialId => {
-        await reusablesApi.deleteSurveyReusable({
-          surveyId: surveyId,
-          reusableId: materialId.toString()
-        });
-      })
-    );
+    try {
+      await Promise.all(
+        selectedReusableIds.map(async materialId => {
+          await reusablesApi.deleteSurveyReusable({
+            surveyId: surveyId,
+            reusableId: materialId.toString()
+          });
+        })
+      );
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.reusables.delete, error);
+    }
 
     fetchSurveyReusables();
     setSelectedReusableIds([]);
@@ -203,6 +224,123 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Check if viewport is mobile size
    */
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+
+  /**
+   * Renders textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param value value
+   * @param onChange onChange
+   */
+  const renderWithDebounceTextField = (
+    name: string,
+    label: string,
+    value: string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField sx={{ mb: 1 }} { ...props }/>
+      }
+    />
+  );
+
+  /**
+   * Renders multiline textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param value value
+   * @param onChange onChange
+   */
+  const renderWithDebounceMultilineTextField = (
+    name: string,
+    label: string,
+    value: string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField
+          multiline
+          rows={ 4 }
+          sx={{ mb: 1 }}
+          { ...props }
+        />
+      }
+    />
+  );
+
+  /**
+   * Renders number textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param onChange onChange
+   * @param value value
+   */
+  const renderWithDebounceNumberTextField = (
+    name: string,
+    label: string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    value?: number
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField
+          type="number"
+          sx={{ mb: 1 }}
+          { ...props }
+        />
+      }
+    />
+  );
+
+  /**
+   * Renders select textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param options options
+   * @param onChange onChange
+   * @param value value
+   */
+  const renderWithDebounceSelectTextField = (
+    name: string,
+    label: string,
+    options: React.ReactNode[],
+    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    value?: string,
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField
+          select
+          sx={{ mb: 1 }}
+          { ...props }
+        >
+          { options }
+        </TextField>
+      }
+    />
+  );
 
   /**
    * Renders delete material dialog
@@ -249,6 +387,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     return (
       <GenericDialog
         error={ false }
+        disabled={ !newMaterial.componentName || !newMaterial.reusableMaterialId }
         open={ addingSurveyReusable }
         onClose={ () => setAddingSurveyReusable(false) }
         onCancel={ () => setAddingSurveyReusable(false) }
@@ -261,8 +400,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           fullWidth
           color="primary"
           name="componentName"
-          label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPart }
+          label={ strings.survey.reusables.dataGridColumns.buildingPart }
           onChange={ onNewMaterialTextChange }
+          value={ newMaterial.componentName }
           helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
         />
         <Stack
@@ -275,6 +415,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             color="primary"
             name="reusableMaterialId"
+            value={ newMaterial.reusableMaterialId }
             label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterialHelperText }
             onChange={ onNewMaterialTextChange }
@@ -286,7 +427,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             color="primary"
             name="usability"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.usability }
+            value={ newMaterial.usability }
+            label={ strings.survey.reusables.dataGridColumns.usability }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.usabilityHelperText }
             onChange={ onNewMaterialTextChange }
           >
@@ -302,7 +444,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             fullWidth
             color="primary"
             name="amount"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.amount }
+            value={ newMaterial.reusableMaterialId }
+            label={ strings.survey.reusables.dataGridColumns.amount }
             type="number"
             onChange={ onNewMaterialNumberChange }
           >
@@ -313,7 +456,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             select
             name="unit"
             color="primary"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.unit }
+            value={ newMaterial.unit }
+            label={ strings.survey.reusables.dataGridColumns.unit }
             onChange={ onNewMaterialTextChange }
           >
             { unitOptions }
@@ -324,14 +468,16 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             multiline
             rows={ 6 }
             name="description"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.description }
+            label={ strings.survey.reusables.dataGridColumns.description }
+            value={ newMaterial.description }
             onChange={ onNewMaterialTextChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.descriptionHelperText }
           />
           <TextField
             type="number"
             name="amountAsWaste"
-            label={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmount }
+            label={ strings.survey.reusables.dataGridColumns.wasteAmount }
+            value={ newMaterial.amountAsWaste }
             onChange={ onNewMaterialNumberChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
           />
@@ -339,6 +485,107 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       </GenericDialog>
     );
   };
+
+  /**
+   * Render material list item
+   */
+  const renderMaterialListItems = () => {
+    const materialOptions = reusableMaterials.map(material => (
+      <MenuItem value={ material.id }>
+        { material.name }
+      </MenuItem>
+    ));
+    const usabilityOptions = Object.values(Usability).map(usability => (
+      <MenuItem value={ usability }>
+        { LocalizationUtils.getLocalizedUsability(usability) }
+      </MenuItem>
+    ));
+    const UnitOptions = Object.values(Unit).map(unit => (
+      <MenuItem value={ unit }>
+        { LocalizationUtils.getLocalizedUnits(unit) }
+      </MenuItem>
+    ));
+
+    return (
+      surveyReusables.map(reusable =>
+        <SurveyItem
+          title={ reusable.componentName }
+          subtitle={ `${reusable.amount} ${reusable.unit ? LocalizationUtils.getLocalizedUnits(reusable.unit) : ""}` }
+        >
+          { renderWithDebounceSelectTextField(
+            "reusableMaterialId",
+            strings.survey.reusables.dataGridColumns.material,
+            materialOptions,
+            onMaterialPropChange(reusable),
+            reusable.reusableMaterialId
+          )
+          }
+          { renderWithDebounceTextField(
+            "componentName",
+            strings.survey.reusables.dataGridColumns.buildingPart,
+            reusable.componentName,
+            onMaterialPropChange(reusable)
+          )
+          }
+          { renderWithDebounceSelectTextField(
+            "usability",
+            strings.survey.reusables.dataGridColumns.usability,
+            usabilityOptions,
+            onMaterialPropChange(reusable),
+            reusable.usability,
+          )
+          }
+          { renderWithDebounceNumberTextField(
+            "amount",
+            strings.survey.reusables.dataGridColumns.amount,
+            onMaterialPropChange(reusable),
+            reusable.amount,
+          )
+          }
+          { renderWithDebounceSelectTextField(
+            "unit",
+            strings.survey.reusables.dataGridColumns.unit,
+            UnitOptions,
+            onMaterialPropChange(reusable),
+            reusable.unit,
+          )
+          }
+          { renderWithDebounceNumberTextField(
+            "amountAsWaste",
+            strings.survey.reusables.dataGridColumns.amount,
+            onMaterialPropChange(reusable),
+            reusable.amountAsWaste
+          )
+          }
+          { renderWithDebounceMultilineTextField(
+            "description",
+            strings.survey.reusables.dataGridColumns.description,
+            reusable.description || "",
+            onMaterialPropChange(reusable),
+          )
+          }
+          <SurveyButton
+            variant="outlined"
+            color="primary"
+            onClick={ () => deleteMaterialButtonClick(reusable.id) }
+          >
+            <Typography color={ theme.palette.primary.main }>
+              { strings.generic.delete }
+            </Typography>
+          </SurveyButton>
+        </SurveyItem>
+      )
+    );
+  };
+
+  /**
+   * Render surveyor list
+   */
+  const renderMaterialList = () => (
+    <List>
+      { renderMaterialListItems() }
+    </List>
+  );
 
   /**
    * Render survey reusables table for desktop
@@ -358,7 +605,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         field: "reusableMaterialId",
         headerName: strings.survey.reusables.dataGridColumns.material,
         width: 340,
-        editable: editable,
+        editable: true,
         type: "singleSelect",
         valueOptions: reusableMaterialsArray,
         renderCell: (params: GridRenderCellParams) => {
@@ -372,7 +619,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         field: "componentName",
         headerName: strings.survey.reusables.dataGridColumns.buildingPart,
         width: 340,
-        editable: editable
+        editable: true
       },
       {
         field: "usability",
@@ -380,7 +627,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         width: 340,
         type: "singleSelect",
         valueOptions: localizedUsability,
-        editable: editable,
+        editable: true,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
@@ -393,7 +640,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         headerName: strings.survey.reusables.dataGridColumns.amount,
         width: 160,
         type: "number",
-        editable: editable
+        editable: true
       },
       {
         field: "unit",
@@ -401,7 +648,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         width: 200,
         type: "singleSelect",
         valueOptions: localizedUnits,
-        editable: editable,
+        editable: true,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
@@ -420,7 +667,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         field: "description",
         headerName: strings.survey.reusables.dataGridColumns.description,
         width: 340,
-        editable: editable,
+        editable: true,
         renderEditCell: (params: GridRenderEditCellParams) => {
           const { value, api, id, field } = params;
           return (
@@ -475,7 +722,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
   return (
     <>
-      <Stack direction={ isMobile ? "column" : "row" } justifyContent="space-between" marginBottom={ 2 }>
+      <Stack
+        spacing={ 2 }
+        direction="row"
+        justifyContent="space-between"
+        marginBottom={ 2 }
+      >
         <Typography variant="h2">
           { strings.survey.reusables.title }
         </Typography>
@@ -505,9 +757,14 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           </SurveyButton>
         </Box>
       </Stack>
+      <Hidden lgUp>
+        { renderMaterialList() }
+      </Hidden>
+      <Hidden lgDown>
+        { renderSurveyDataTable() }
+      </Hidden>
       { renderAddSurveyReusableDialog() }
       { renderDeleteSurveyMaterialDialog() }
-      { renderSurveyDataTable() }
     </>
   );
 };

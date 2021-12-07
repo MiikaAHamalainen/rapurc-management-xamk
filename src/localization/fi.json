@@ -8,7 +8,8 @@
     "confirm": "Vahvista",
     "cancel": "Peruuta",
     "delete": "Poista",
-    "logout": "Kirjaudu ulos"
+    "logout": "Kirjaudu ulos",
+    "open": "Avaa"
   },
 
   "errorHandling": {
@@ -50,6 +51,41 @@
       "create": "Virhe luotaessa rakennusluokkaa",
       "delete": "Virhe poistettaessa rakennusluokkaa",
       "update": "Virhe päivitettäessä rakennusluokkaa"
+    },
+    "wasteCategories": {
+      "list": "Virhe listattaessa jätekategorioita",
+      "create": "Virhe luotaessa jätekategoriaa",
+      "delete": "Virhe poistettaessa jätekategoriaa",
+      "update": "Virhe päivitettäessä jätekategoriaa"
+    },
+    "wasteMaterials": {
+      "list": "Virhe ladattaessa rakennus- ja purkujätemateriaaleja",
+      "create": "Virhe luotaessa rakennus- tai purkujätemateriaalia",
+      "delete": "Virhe poistettaessa rakennus- tai purkujätemateriaalia"
+    },
+    "surveyors": {
+      "list": "Virhe kartoittajaa listattaessa",
+      "create": "Virhe luotaessa kartoittajaa",
+      "delete": "Virhe kartoittajaa poistettaessa",
+      "update": "Virhe kartoittajaa päivitettäessä"
+    },
+    "waste": {
+      "list": "Virhe purkujäteluettelossa",
+      "create": "Virhe purkujätteen luonnissa",
+      "delete": "Virhe poistettaessa purkujätettä",
+      "update": "Virhe purkujätteen päivityksessä"
+    },
+    "wasteMaterial": {
+      "list": "Virhe kartoittajaa listattaessa",
+      "create": "Virhe luotaessa kartoittajaa",
+      "delete": "Virhe kartoittajaa poistettaessa",
+      "update": "Virhe kartoittajaa päivitettäessä"
+    },
+    "postProcess": {
+      "list": "Virhe ladattaessa jatkokäsittelyjä",
+      "create": "Virhe luotaessa jatkokäsittelyä",
+      "delete": "Virhe poistettaessa jatkokäsittelyä",
+      "update": "Virhe päivitettäessä jatkokäsittelyä"
     }
   },
 
@@ -116,10 +152,11 @@
         "title": "Alasvetovalikot",
         "reusableMaterials": "Rakennusosa- tai materiaali",
         "wasteMaterials": "Rakennus- ja purkujätemateriaali",
+        "wasteCategories": "Jätekategoria",
         "postProcessing": "Jatkokäsittely",
         "hazardousMaterials": "Haitta-ainekategoria",
         "hazardousMaterialsAdditionalInfo": "Haitta-ainetarkenne",
-        "buildingTypes": "Rakennustyyppi"
+        "buildingTypes": "Rakennusluokka"
       }
     },
     "addNewReusableMaterialDialog": {
@@ -149,6 +186,45 @@
       "title": "Päivitä rakennusluokka",
       "text1": "Rakennusluokka",
       "text2": "Rakennusluokan ID"
+    },
+    "addNewWasteCategoryDialog": {
+      "title": "Lisää jätekategoria",
+      "text1": "Jätekategorian nimi",
+      "text2": "EWC-koodi"
+    },
+    "deleteWasteCategoryDialog": {
+      "title": "Poista jätekategoria",
+      "text": "Haluatko varmasti poistaa jätekategorian \"{0}\""
+    },
+    "updateWasteCategoryDialog": {
+      "title": "Päivitä jätekategoria",
+      "text1": "Jätekategoria",
+      "text2": "EWC-koodi"
+    },
+    "addNewWasteMaterialDialog": {
+      "title": "Lisää rakennus- tai purkujätemateriaali",
+      "text1": "Rakennus- tai purkujätemateriaalin nimi",
+      "text2": "EWC-koodin kaksi viimeistä merkkiä",
+      "text3": "Jätekategoria"
+    },
+    "deleteWasteMaterialDialog": {
+      "title": "Poista rakennus- tai purkujätemateriaali",
+      "text": "Haluatko varmasti poistaa rakennus- tai purkujätemateriaalin \"{0}\""
+    },
+    "updateWasteMaterialDialog": {
+      "title": "Päivitä rakennus- tai purkujätemateriaali"
+    },
+    "addNewPostProcessDialog": {
+      "title": "Lisää jatkokäsittely",
+      "text": "Jatkokäsittelyn nimi"
+    },
+    "deletePostProcessDialog": {
+      "title": "Poista jatkokäsittely",
+      "text": "Haluatko varmasti poistaa jatkokäsittelyn: \"{0}\""
+    },
+    "updatePostProcessDialog": {
+      "title": "Päivitä jatkokäsittely",
+      "text": "Jatkokäsittely"
     }
   },
 
@@ -194,18 +270,28 @@
       "demolitionScope": "Purkamisen laajuus",
       "startDate": "Aloitusajankohta",
       "endDate": "Lopetusajankohta",
-      "addSurveyor": "Lisää kartoittaja",
-      "firstName": "Etunimi",
-      "surName": "Sukunimi",
-      "organisation": "Yritys",
-      "role": "Rooli",
-      "phone": "Puhelin",
-      "email": "Sähköpostiosoite",
-      "reportingDate": "Raportointipäivä",
+      "addSurveyor": "Lisää uusi",
+      "deleteSurveyor": "Poista kartoittaja",
       "demolitionScopes": {
         "renovation": "Saneerauspurku",
         "partial": "Osapurku",
         "full": "Kokonaispurku"
+      },
+      "dataGridColumns": {
+        "firstName": "Etunimi",
+        "lastName": "Sukunimi",
+        "company": "Yritys",
+        "role": "Rooli",
+        "phone": "Puhelin",
+        "email": "Sähköpostiosoite",
+        "reportDate": "Raportointipäivä"
+      },
+      "addNewSurveyorDialog": {
+        "title": "Lisää katsastaja"
+      },
+      "deleteSurveyorDialog": {
+        "title": "Poista kartoittaja",
+        "text": "Haluatko varmasti poistaa nämä kartoittajat?"
       }
     },
     "reusables": {
@@ -214,17 +300,11 @@
       "deleteBuildingParts": "Poista rakennusosa",
       "addNewBuildingPartsDialog": {
         "title": "Lisää rakennusosa",
-        "buildingPart": "Rakennusosa",
         "buildingPartHelperText": "Anna rakennusosaa kuvaava nimi",
         "buildingPartOrMaterial": "Rakennusosa tai -materiaali",
         "buildingPartOrMaterialHelperText": "Anna osaa vastaava tarkenne",
-        "usability": "Käyttökelpoisuus",
         "usabilityHelperText": "Jos ei tiedossa, valitse \"ei arvioitu\"",
-        "amount": "Määrä",
-        "unit": "Mittayksikkö",
-        "description": "Lisätiedot",
         "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms.",
-        "wasteAmount": "Määrä purkujätteenä (tonneina)",
         "wasteAmountHelperText": "Valinnainen tieto"
       },
       "deleteReusableDialog": {
@@ -254,6 +334,26 @@
         "pcs": "Kappaletta (kpl)",
         "rm": "Juoksumetriä (jm)",
         "tn": "Tonnia (tn)"
+      }
+    },
+    "wasteMaterial": {
+      "title": "Purkujätemateriaalit",
+      "addNewWaste": "Lisää materiaali",
+      "deleteWaste": "Poista materiaali",
+      "addNewWasteDialog": {
+        "title": "Lisää purkujätemateriaali"
+      },
+      "deleteWasteDialog": {
+        "title": "Poista purkujätemateriaali",
+        "text": "Oletko varma että haluat poistaa tämän materiaalin?"
+      },
+      "dataGridColumns": {
+        "material": "Materiaali",
+        "wasteCode": "Jätekoodi",
+        "usage": "Jatkokäsittely",
+        "amount": "Määrä",
+        "description": "Lisätieto",
+        "editDescription": "Muokkaa lisätietoa"
       }
     },
     "otherStructures": {
