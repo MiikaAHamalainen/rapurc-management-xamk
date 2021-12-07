@@ -1,22 +1,22 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Hidden, List, MenuItem, Paper, TextField, Typography, useMediaQuery } from "@mui/material";
-import SurveyItem from "components/layout-components/survey-item";
-import StackLayout from "components/layouts/stack-layout";
-import strings from "localization/strings";
-import React from "react";
-import { ControlsContainer, FilterRoot, SurveyButton, SearchBar } from "styled/screens/surveys-screen";
-import theme from "theme";
-import WhiteOutlinedInput from "../../styled/generic/inputs";
-import { deleteSurvey, fetchSurveys } from "features/surveys-slice";
+import { Box, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import Api from "api";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
-import { useNavigate } from "react-router-dom";
-import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import GenericDialog from "components/generic/generic-dialog";
+import SurveyItem from "components/layout-components/survey-item";
+import StackLayout from "components/layouts/stack-layout";
 import { selectKeycloak } from "features/auth-slice";
-import Api from "api";
+import { deleteSurvey, fetchSurveys } from "features/surveys-slice";
+import strings from "localization/strings";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { ControlsContainer, FilterRoot, SearchBar, SurveyButton } from "styled/screens/surveys-screen";
+import theme from "theme";
 import { SurveyWithInfo } from "types";
 import SurveyUtils from "utils/survey";
-import GenericDialog from "components/generic/generic-dialog";
+import WhiteOutlinedInput from "../../styled/generic/inputs";
 
 /**
  * Surveys screen component
@@ -260,17 +260,22 @@ const SurveysScreen: React.FC = () => {
       <SurveyItem
         title={ surveyWithInfo.ownerName || "" }
         subtitle={ surveyWithInfo.streetAddress || "" }
-        onClick={ () => navigate(`/surveys/${surveyWithInfo.id}/owner`) }
       >
-        <SurveyButton
-          variant="outlined"
-          color="primary"
-          onClick={ () => deleteSurveyButtonClick(surveyWithInfo.id) }
-        >
-          <Typography color={ theme.palette.primary.main }>
+        <Stack spacing={ 2 } direction="row">
+          <SurveyButton
+            color="primary"
+            onClick={ () => navigate(`/surveys/${surveyWithInfo.id}/owner`) }
+          >
+            { strings.generic.open }
+          </SurveyButton>
+          <SurveyButton
+            variant="outlined"
+            color="primary"
+            onClick={ () => deleteSurveyButtonClick(surveyWithInfo.id) }
+          >
             { strings.generic.delete }
-          </Typography>
-        </SurveyButton>
+          </SurveyButton>
+        </Stack>
       </SurveyItem>
     )
   );
@@ -279,11 +284,9 @@ const SurveysScreen: React.FC = () => {
    * Render survey list
    */
   const renderSurveyList = () => (
-    <Paper>
-      <List>
-        { renderSurveyListItems() }
-      </List>
-    </Paper>
+    <List>
+      { renderSurveyListItems() }
+    </List>
   );
 
   /**
