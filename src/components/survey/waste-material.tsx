@@ -446,9 +446,9 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Render waste list item
+   * Render waste list
    */
-  const renderWasteListItems = () => {
+  const renderWasteList = () => {
     const wasteMaterialOptions = wasteMaterials.map(wasteMaterial =>
       <MenuItem value={ wasteMaterial.id }>
         { wasteMaterial.name }
@@ -462,74 +462,69 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
     );
 
     return (
-      wastes.map(waste =>
-        <SurveyItem
-          title={ wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.name || "" }
-          subtitle={ `${waste.amount} t` }
-        >
-          {
-            renderWithDebounceSelectTextField(
-              "wasteMaterialId",
-              strings.survey.wasteMaterial.dataGridColumns.material,
-              wasteMaterialOptions,
-              onWastePropChange(waste),
-              waste.wasteMaterialId
-            )
-          }
-          <TextField
-            disabled
-            color="primary"
-            sx={{ mb: 1 }}
-            value={ wasteMaterials.find(wasteMaterial => waste.wasteMaterialId === wasteMaterial.id)?.ewcSpecificationCode }
-            label={ strings.survey.wasteMaterial.dataGridColumns.wasteCode }
-          />
-          {
-            renderWithDebounceSelectTextField(
-              "usageId",
-              strings.survey.wasteMaterial.dataGridColumns.usage,
-              usageOptions,
-              onWastePropChange(waste),
-              waste.usageId,
-            )
-          }
-          {
-            renderWithDebounceNumberTextField(
-              "amount",
-              strings.survey.wasteMaterial.dataGridColumns.amount,
-              onWastePropChange(waste),
-              waste.amount,
-            )
-          }
-          {
-            renderWithDebounceMultilineTextField(
-              "description",
-              strings.survey.wasteMaterial.dataGridColumns.description,
-              waste.description || "",
-              onWastePropChange(waste),
-            )
-          }
-          <SurveyButton
-            variant="outlined"
-            color="primary"
-            onClick={ () => deleteWasteButtonClick(waste.id) }
-          >
-            <Typography color={ theme.palette.primary.main }>
-              { strings.generic.delete }
-            </Typography>
-          </SurveyButton>
-        </SurveyItem>
-      )
+      <List>
+        {
+          wastes.map(waste =>
+            <SurveyItem
+              title={ wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.name || "" }
+              subtitle={ `${waste.amount} t` }
+            >
+              {
+                renderWithDebounceSelectTextField(
+                  "wasteMaterialId",
+                  strings.survey.wasteMaterial.dataGridColumns.material,
+                  wasteMaterialOptions,
+                  onWastePropChange(waste),
+                  waste.wasteMaterialId
+                )
+              }
+              <TextField
+                disabled
+                color="primary"
+                sx={{ mb: 1 }}
+                value={ wasteMaterials.find(wasteMaterial => waste.wasteMaterialId === wasteMaterial.id)?.ewcSpecificationCode }
+                label={ strings.survey.wasteMaterial.dataGridColumns.wasteCode }
+              />
+              {
+                renderWithDebounceSelectTextField(
+                  "usageId",
+                  strings.survey.wasteMaterial.dataGridColumns.usage,
+                  usageOptions,
+                  onWastePropChange(waste),
+                  waste.usageId,
+                )
+              }
+              {
+                renderWithDebounceNumberTextField(
+                  "amount",
+                  strings.survey.wasteMaterial.dataGridColumns.amount,
+                  onWastePropChange(waste),
+                  waste.amount,
+                )
+              }
+              {
+                renderWithDebounceMultilineTextField(
+                  "description",
+                  strings.survey.wasteMaterial.dataGridColumns.description,
+                  waste.description || "",
+                  onWastePropChange(waste),
+                )
+              }
+              <SurveyButton
+                variant="outlined"
+                color="primary"
+                onClick={ () => deleteWasteButtonClick(waste.id) }
+              >
+                <Typography color={ theme.palette.primary.main }>
+                  { strings.generic.delete }
+                </Typography>
+              </SurveyButton>
+            </SurveyItem>
+          )
+        }
+      </List>
     );
   };
-
-  /**
-   * Render waste list
-   */
-  const renderWasteList = () => (
-    <List>
-      { renderWasteListItems() }
-    </List>
-  );
 
   /**
    * Render survey waste table for desktop
