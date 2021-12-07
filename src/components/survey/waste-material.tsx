@@ -60,6 +60,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
     } catch (error) {
       errorContext.setError(strings.errorHandling.waste.list, error);
     }
+
     setLoading(false);
   };
 
