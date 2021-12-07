@@ -69,6 +69,11 @@ export interface Localized extends LocalizedStringsMethods {
       delete: string;
       update: string;
     };
+    wasteMaterials: {
+      list: string;
+      create: string;
+      delete: string;
+    }
     surveyors: {
       list: string;
       create: string;
@@ -195,6 +200,19 @@ export interface Localized extends LocalizedStringsMethods {
       text1: string;
       text2: string;
     };
+    addNewWasteMaterialDialog: {
+      title: string;
+      text1: string;
+      text2: string;
+      text3: string;
+    }
+    deleteWasteMaterialDialog: {
+      title: string;
+      text: string;
+    }
+    updateWasteMaterialDialog: {
+      title: string;
+    }
     addNewPostProcessDialog: {
       title: string;
       text: string;
