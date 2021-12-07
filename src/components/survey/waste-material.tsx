@@ -53,15 +53,11 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
-    setLoading(true);
-
     try {
       setWastes(await Api.getWastesApi(keycloak.token).listSurveyWastes({ surveyId: surveyId }));
     } catch (error) {
       errorContext.setError(strings.errorHandling.waste.list, error);
     }
-
-    setLoading(false);
   };
 
   /**
@@ -95,12 +91,21 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
+   * Loads data
+   */
+  const loadData = async () => {
+    setLoading(true);
+    await fetchWastes();
+    await fetchWastesMaterials();
+    await fetchUsages();
+    setLoading(false);
+  };
+
+  /**
    * Effect that loads component data
    */
   React.useEffect(() => {
-    fetchWastes();
-    fetchWastesMaterials();
-    fetchUsages();
+    loadData();
   }, []);
 
   /**
@@ -478,27 +483,30 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             value={ wasteMaterials.find(wasteMaterial => waste.wasteMaterialId === wasteMaterial.id)?.ewcSpecificationCode }
             label={ strings.survey.wasteMaterial.dataGridColumns.wasteCode }
           />
-          { renderWithDebounceSelectTextField(
-            "usageId",
-            strings.survey.wasteMaterial.dataGridColumns.usage,
-            usageOptions,
-            onWastePropChange(waste),
-            waste.usageId,
-          )
+          {
+            renderWithDebounceSelectTextField(
+              "usageId",
+              strings.survey.wasteMaterial.dataGridColumns.usage,
+              usageOptions,
+              onWastePropChange(waste),
+              waste.usageId,
+            )
           }
-          { renderWithDebounceNumberTextField(
-            "amount",
-            strings.survey.wasteMaterial.dataGridColumns.amount,
-            onWastePropChange(waste),
-            waste.amount,
-          )
+          {
+            renderWithDebounceNumberTextField(
+              "amount",
+              strings.survey.wasteMaterial.dataGridColumns.amount,
+              onWastePropChange(waste),
+              waste.amount,
+            )
           }
-          { renderWithDebounceMultilineTextField(
-            "description",
-            strings.survey.wasteMaterial.dataGridColumns.description,
-            waste.description || "",
-            onWastePropChange(waste),
-          )
+          {
+            renderWithDebounceMultilineTextField(
+              "description",
+              strings.survey.wasteMaterial.dataGridColumns.description,
+              waste.description || "",
+              onWastePropChange(waste),
+            )
           }
           <SurveyButton
             variant="outlined"
