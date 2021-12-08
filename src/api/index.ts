@@ -1,4 +1,4 @@
-import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi, SurveyorsApi, SurveyWastesApi, UsagesApi, WasteMaterialApi, WasteCategoryApi } from "../generated/client";
+import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi, SurveyorsApi, SurveyWastesApi, UsagesApi, WasteMaterialApi, WasteCategoryApi, WasteSpecifiersApi, HazardousMaterialApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
@@ -116,6 +116,16 @@ export default class Api {
   };
 
   /**
+   * Gets initialized waste specifiers API
+   *
+   * @param accessToken access token
+   * @returns initialized waste specifiers API
+   */
+  public static getWasteSpecifiersApi = (accessToken: string) => {
+    return new WasteSpecifiersApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
    * Gets initialized usages API
    *
    * @param accessToken access token
@@ -123,6 +133,16 @@ export default class Api {
    */
   public static getUsageApi = (accessToken: string) => {
     return new UsagesApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized hazardous material API
+   *
+   * @param accessToken access token
+   * @returns initialized hazardous materialsAPI
+   */
+  public static getHazardousMaterialApi = (accessToken: string) => {
+    return new HazardousMaterialApi(Api.getConfiguration(accessToken));
   };
 
   /**

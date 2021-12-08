@@ -1,5 +1,5 @@
 import { Delete, Edit } from "@mui/icons-material";
-import { Button, CircularProgress, IconButton, List, ListItemSecondaryAction, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, List, ListItemSecondaryAction, Stack, TextField, Typography } from "@mui/material";
 import GenericDialog from "components/generic/generic-dialog";
 import strings from "localization/strings";
 import * as React from "react";
@@ -233,7 +233,16 @@ const Reusables: React.FC = () => {
    */
   const renderList = () => {
     if (loading) {
-      return <CircularProgress color="primary" size={ 60 }/>;
+      return (
+        <Box
+          display="flex"
+          flex={ 1 }
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="primary" size={ 60 }/>
+        </Box>
+      );
     }
 
     return (
