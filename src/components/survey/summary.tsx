@@ -1,5 +1,5 @@
 import { Print } from "@mui/icons-material";
-import { Box, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, CircularProgress, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
@@ -186,13 +186,13 @@ const SummaryView: React.FC = () => {
    */
   const fetchData = async () => {
     setLoading(true);
-    fetchBuilding();
-    fetchOwnerInformation();
-    fetchSurveyReusables();
-    fetchReusableMaterials();
-    fetchWastes();
-    fetchWastesMaterials();
-    fetchSurveyors();
+    await fetchBuilding();
+    await fetchOwnerInformation();
+    await fetchSurveyReusables();
+    await fetchReusableMaterials();
+    await fetchWastes();
+    await fetchWastesMaterials();
+    await fetchSurveyors();
     setLoading(false);
   };
 
@@ -375,7 +375,7 @@ const SummaryView: React.FC = () => {
         padding={ 2 }
       >
         <Typography variant="h3">
-          { strings.survey.info.title }
+          { strings.survey.info.surveyors }
         </Typography>
         <Stack
           direction={ isMobile ? "column" : "row" }
@@ -393,7 +393,12 @@ const SummaryView: React.FC = () => {
     );
   };
 
-  // TODO loader
+  /**
+   * Renders list of materials
+   */
+  if (loading) {
+    return <CircularProgress color="primary" size={ 60 }/>;
+  }
 
   return (
     <>
