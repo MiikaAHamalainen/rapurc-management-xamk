@@ -74,12 +74,17 @@ export interface Localized extends LocalizedStringsMethods {
       create: string;
       delete: string;
       update: string;
-    }
+    };
     wasteMaterials: {
       list: string;
       create: string;
       delete: string;
-    }
+    };
+    hazardousMaterials: {
+      list: string;
+      create: string;
+      delete: string;
+    };
     surveyors: {
       list: string;
       create: string;
@@ -99,6 +104,12 @@ export interface Localized extends LocalizedStringsMethods {
       update: string;
     };
     postProcess: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
+    wasteSpecifiers: {
       list: string;
       create: string;
       delete: string;
@@ -238,26 +249,51 @@ export interface Localized extends LocalizedStringsMethods {
       text1: string;
       text2: string;
       text3: string;
-    }
+    };
     deleteWasteMaterialDialog: {
       title: string;
       text: string;
-    }
+    };
     updateWasteMaterialDialog: {
       title: string;
-    }
+    };
     addNewPostProcessDialog: {
       title: string;
       text: string;
-    }
+    };
     deletePostProcessDialog: {
       title: string;
       text: string;
-    },
+    };
     updatePostProcessDialog: {
       title: string;
       text: string;
-    },
+    };
+    addNewWasteSpecifierDialog: {
+      title: string;
+      text: string;
+    };
+    deleteWasteSpecifierDialog: {
+      title: string;
+      text: string;
+    };
+    updateWasteSpecifierDialog: {
+      title: string;
+      text: string;
+    };
+    addNewHazardousMaterialDialog: {
+      title: string;
+      text1: string;
+      text2: string;
+      text3: string;
+    };
+    deleteHazardousMaterialDialog: {
+      title: string;
+      text: string;
+    };
+    updateHazardousMaterialDialog: {
+      title: string;
+    };
   };
 
   /**
