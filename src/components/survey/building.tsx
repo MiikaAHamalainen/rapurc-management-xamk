@@ -57,9 +57,7 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
     }
 
     try {
-      const fetchedBuildingTypes = await Api.getBuildingTypesApi(keycloak.token).listBuildingTypes();
-
-      setBuildingTypes(fetchedBuildingTypes);
+      setBuildingTypes(await Api.getBuildingTypesApi(keycloak.token).listBuildingTypes());
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildingTypes.list, error);
     }
