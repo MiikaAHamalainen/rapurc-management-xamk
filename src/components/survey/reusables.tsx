@@ -444,13 +444,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             fullWidth
             color="primary"
             name="amount"
-            value={ newMaterial.reusableMaterialId }
+            value={ newMaterial.amount }
             label={ strings.survey.reusables.dataGridColumns.amount }
             type="number"
             onChange={ onNewMaterialNumberChange }
-          >
-            { reusableOptions }
-          </TextField>
+          />
           <TextField
             fullWidth
             select
