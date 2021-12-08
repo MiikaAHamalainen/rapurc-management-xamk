@@ -141,8 +141,8 @@ const HazardousMaterials: React.FC = () => {
         hazardousMaterial: editableHazardousMaterial
       });
 
-      // eslint-disable-next-line max-len
-      setHazardousMaterials(hazardousMaterials.map(hazardousMaterial => (hazardousMaterial.id === editableHazardousMaterial.id ? updatedHazardousMaterial : hazardousMaterial)));
+      const hazardousMaterialsList = hazardousMaterials.map(hazardousMaterial => (hazardousMaterial.id === editableHazardousMaterial.id ? updatedHazardousMaterial : hazardousMaterial));
+      setHazardousMaterials(hazardousMaterialsList);
       setEditableHazardousMaterial(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildingTypes.update, error);
