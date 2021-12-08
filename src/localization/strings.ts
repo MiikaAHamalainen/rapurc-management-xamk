@@ -403,6 +403,10 @@ export interface Localized extends LocalizedStringsMethods {
         areYouSure: string;
       }
     };
+    summary: {
+      title: string;
+      print: string;
+    };
   };
 }
 

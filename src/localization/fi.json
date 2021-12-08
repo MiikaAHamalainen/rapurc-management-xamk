@@ -367,6 +367,10 @@
         "deleteBuilding": "Poista rakennus / rakennelma",
         "areYouSure": "Oletko varma että haluat poistaa rakennuksen / rakennelman?"
       }
+    },
+    "summary": {
+      "title": "Yhteenveto",
+      "print": "Tulosta"
     }
   }
 }

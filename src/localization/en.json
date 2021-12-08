@@ -367,6 +367,10 @@
         "deleteBuilding": "Delete other building / structure",
         "areYouSure": "Are you sure you want to delete this building / structure?"
       }
+    },
+    "summary": {
+      "title": "Summary",
+      "print": "Print"
     }
   }
 }
