@@ -108,8 +108,8 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
         wasteSpecifierId: editableHazardousWasteSpecifier.id, wasteSpecifier: editableHazardousWasteSpecifier
       });
 
-      // eslint-disable-next-line max-len
-      setHazardousWasteSpecifiers(hazardousWasteSpecifiers.map(wasteSpecifier => (wasteSpecifier.id === updatedHazardousWasteSpecifier.id ? updatedHazardousWasteSpecifier : wasteSpecifier)));
+      const hazardousWasteSpecifierList = hazardousWasteSpecifiers.map(wasteSpecifier => (wasteSpecifier.id === updatedHazardousWasteSpecifier.id ? updatedHazardousWasteSpecifier : wasteSpecifier));
+      setHazardousWasteSpecifiers(hazardousWasteSpecifierList);
       setEditableHazardousWasteSpecifier(undefined);
     } catch (error) {
       errorContext.setError(strings.errorHandling.wasteSpecifiers.update, error);
