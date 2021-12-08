@@ -156,7 +156,7 @@ const HazardousMaterials: React.FC = () => {
    *
    * @param hazardousMaterial hazardous material
    */
-  const deleteIconClick = (hazardousMaterial : HazardousMaterial) => {
+  const deleteIconClick = (hazardousMaterial: HazardousMaterial) => {
     setDeletableHazardousMaterial(hazardousMaterial);
     setDeletingHazardousMaterial(true);
   };
