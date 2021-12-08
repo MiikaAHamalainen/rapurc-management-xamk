@@ -1,5 +1,5 @@
 import { Delete, Edit } from "@mui/icons-material";
-import { Button, CircularProgress, IconButton, List, ListItemSecondaryAction, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, List, ListItemSecondaryAction, Stack, TextField, Typography } from "@mui/material";
 import strings from "localization/strings";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
@@ -126,7 +126,7 @@ const WasteCategories: React.FC = () => {
    *
    * @param wasteCategory waste category
    */
-  const deleteIconClick = (wasteCategory : WasteCategory) => {
+  const deleteIconClick = (wasteCategory: WasteCategory) => {
     setDeletableWasteCategory(wasteCategory);
     setDeletingWasteCategory(true);
   };
@@ -206,23 +206,19 @@ const WasteCategories: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <Stack>
-        <Stack marginBottom={ 2 }>
-          <TextField
-            name="name"
-            label={ strings.adminScreen.addNewWasteCategoryDialog.text1 }
-            onChange={ onNewWasteCategoryChange }
-          >
-            { wasteCategoryItems() }
-          </TextField>
-        </Stack>
-        <Stack>
-          <TextField
-            name="ewcCode"
-            label={ strings.adminScreen.addNewWasteCategoryDialog.text2 }
-            onChange={ onNewWasteCategoryChange }
-          />
-        </Stack>
+      <Stack spacing={ 2 }>
+        <TextField
+          name="name"
+          label={ strings.adminScreen.addNewWasteCategoryDialog.text1 }
+          onChange={ onNewWasteCategoryChange }
+        >
+          { wasteCategoryItems() }
+        </TextField>
+        <TextField
+          name="ewcCode"
+          label={ strings.adminScreen.addNewWasteCategoryDialog.text2 }
+          onChange={ onNewWasteCategoryChange }
+        />
       </Stack>
     </GenericDialog>
   );
@@ -261,24 +257,20 @@ const WasteCategories: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <Stack>
-        <Stack marginBottom={ 2 }>
-          <TextField
-            fullWidth
-            value={ editableWasteCategory?.name }
-            label={ strings.adminScreen.updateWasteCategoryDialog.text1 }
-            name="name"
-            onChange={ onEditableWasteCategoryChange }
-          />
-        </Stack>
-        <Stack>
-          <TextField
-            value={ editableWasteCategory?.ewcCode }
-            label={ strings.adminScreen.updateWasteCategoryDialog.text2 }
-            name="ewcCode"
-            onChange={ onEditableWasteCategoryChange }
-          />
-        </Stack>
+      <Stack spacing={ 2 }>
+        <TextField
+          fullWidth
+          value={ editableWasteCategory?.name }
+          label={ strings.adminScreen.updateWasteCategoryDialog.text1 }
+          name="name"
+          onChange={ onEditableWasteCategoryChange }
+        />
+        <TextField
+          value={ editableWasteCategory?.ewcCode }
+          label={ strings.adminScreen.updateWasteCategoryDialog.text2 }
+          name="ewcCode"
+          onChange={ onEditableWasteCategoryChange }
+        />
       </Stack>
     </GenericDialog>
   );
@@ -288,7 +280,16 @@ const WasteCategories: React.FC = () => {
    */
   const renderList = () => {
     if (loading) {
-      return <CircularProgress color="primary" size={ 60 }/>;
+      return (
+        <Box
+          display="flex"
+          flex={ 1 }
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="primary" size={ 60 }/>
+        </Box>
+      );
     }
 
     return (

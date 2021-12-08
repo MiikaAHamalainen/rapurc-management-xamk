@@ -4,7 +4,7 @@ import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import WithDebounce from "components/generic/with-debounce";
 import { selectKeycloak } from "features/auth-slice";
-import { Address, Building } from "generated/client";
+import { Address, Building, BuildingType } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
 import theme from "theme";
@@ -23,9 +23,10 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const [ building, setBuilding ] = React.useState<Building>();
+  const [ buildingTypes, setBuildingTypes ] = React.useState<BuildingType[]>();
 
   /**
-   * Create new owner information
+   * Fetch building array
    */
   const fetchBuilding = async () => {
     if (!keycloak?.token || !surveyId) {
@@ -47,8 +48,24 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
     }
   };
 
+  /**
+   * Fetch building type array
+   */
+  const fetchBuildingType = async () => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      setBuildingTypes(await Api.getBuildingTypesApi(keycloak.token).listBuildingTypes());
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.buildingTypes.list, error);
+    }
+  };
+
   React.useEffect(() => {
     fetchBuilding();
+    fetchBuildingType();
   }, []);
 
   /**
@@ -142,6 +159,45 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
+   * Renders building select textfield with debounce
+   * 
+   * @param name name
+   * @param label label
+   * @param onChange onChange
+   * @param value value
+   */
+  const renderBuildingTypeSelect = (
+    name: string,
+    label: string,
+    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    value?: string,
+  ) => (
+    <WithDebounce
+      name={ name }
+      value={ value }
+      label={ label }
+      onChange={ onChange }
+      component={ props =>
+        <TextField
+          select
+          sx={{ mb: 1 }}
+          { ...props }
+        >
+          { buildingTypes?.map(buildingType =>
+            (
+              <MenuItem
+                key={ buildingType.id }
+                value={ buildingType.id }
+              >
+                { buildingType.name }
+              </MenuItem>
+            )) }
+        </TextField>
+      }
+    />
+  );
+
+  /**
    * Renders textfield with debounce
    * 
    * @param name name
@@ -178,6 +234,7 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
       propertyId,
       buildingId,
       constructionYear,
+      buildingTypeId,
       space,
       volume,
       floors,
@@ -209,9 +266,14 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
             onBuildingPropChange
           )
         }
-        <TextField disabled select label={ strings.survey.building.buildingClass }>
-          <MenuItem>{ strings.generic.notImplemented }</MenuItem>
-        </TextField>
+        {
+          renderBuildingTypeSelect(
+            "buildingTypeId",
+            strings.survey.building.buildingClass,
+            onBuildingPropChange,
+            buildingTypeId || ""
+          )
+        }
         {
           renderWithDebounceNumberTextField(
             "constructionYear",
