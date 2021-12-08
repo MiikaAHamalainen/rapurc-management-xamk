@@ -122,7 +122,7 @@ const Reusables: React.FC = () => {
    *
    * @param material material
    */
-  const deleteIconClick = (material : ReusableMaterial) => () => {
+  const deleteIconClick = (material: ReusableMaterial) => () => {
     setDeletableMaterial(material);
     setDeletingMaterial(true);
   };
@@ -132,7 +132,7 @@ const Reusables: React.FC = () => {
    *
    * @param material material
    */
-  const editIconClick = (material : ReusableMaterial) => () => {
+  const editIconClick = (material: ReusableMaterial) => () => {
     setEditableMaterial(material);
     setEditingMaterial(true);
   };

@@ -141,7 +141,9 @@ const HazardousMaterials: React.FC = () => {
         hazardousMaterial: editableHazardousMaterial
       });
 
-      const hazardousMaterialsList = hazardousMaterials.map(hazardousMaterial => (hazardousMaterial.id === editableHazardousMaterial.id ? updatedHazardousMaterial : hazardousMaterial));
+      const hazardousMaterialsList = hazardousMaterials.map(
+        hazardousMaterial => (hazardousMaterial.id === editableHazardousMaterial.id ? updatedHazardousMaterial : hazardousMaterial)
+      );
       setHazardousMaterials(hazardousMaterialsList);
       setEditableHazardousMaterial(undefined);
     } catch (error) {

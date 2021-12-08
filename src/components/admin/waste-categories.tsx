@@ -126,7 +126,7 @@ const WasteCategories: React.FC = () => {
    *
    * @param wasteCategory waste category
    */
-  const deleteIconClick = (wasteCategory : WasteCategory) => {
+  const deleteIconClick = (wasteCategory: WasteCategory) => {
     setDeletableWasteCategory(wasteCategory);
     setDeletingWasteCategory(true);
   };

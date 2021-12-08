@@ -155,7 +155,7 @@ const Waste: React.FC = () => {
    *
    * @param waste waste
    */
-  const deleteIconClick = (waste : WasteMaterial) => {
+  const deleteIconClick = (waste: WasteMaterial) => {
     setDeletableWaste(waste);
     setDeletingWaste(true);
   };

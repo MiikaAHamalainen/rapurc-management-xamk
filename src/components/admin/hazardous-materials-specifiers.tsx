@@ -108,7 +108,9 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
         wasteSpecifierId: editableHazardousWasteSpecifier.id, wasteSpecifier: editableHazardousWasteSpecifier
       });
 
-      const hazardousWasteSpecifierList = hazardousWasteSpecifiers.map(wasteSpecifier => (wasteSpecifier.id === updatedHazardousWasteSpecifier.id ? updatedHazardousWasteSpecifier : wasteSpecifier));
+      const hazardousWasteSpecifierList = hazardousWasteSpecifiers.map(
+        wasteSpecifier => (wasteSpecifier.id === updatedHazardousWasteSpecifier.id ? updatedHazardousWasteSpecifier : wasteSpecifier)
+      );
       setHazardousWasteSpecifiers(hazardousWasteSpecifierList);
       setEditableHazardousWasteSpecifier(undefined);
     } catch (error) {
@@ -123,7 +125,7 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
    *
    * @param wasteSpecifier hazardous waste specifier
    */
-  const deleteIconClick = (wasteSpecifier : WasteSpecifier) => () => {
+  const deleteIconClick = (wasteSpecifier: WasteSpecifier) => () => {
     setDeletableHazardousWasteSpecifier(wasteSpecifier);
     setDeletingHazardousWasteSpecifier(true);
   };
@@ -133,7 +135,7 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
    *
    * @param wasteSpecifier hazardous waste specifier 
    */
-  const editIconClick = (wasteSpecifier : WasteSpecifier) => () => {
+  const editIconClick = (wasteSpecifier: WasteSpecifier) => () => {
     setEditableHazardousWasteSpecifier(wasteSpecifier);
     setEditingHazardousWasteSpecifier(true);
   };
