@@ -15,8 +15,10 @@ import { useNavigate } from "react-router-dom";
 import { ControlsContainer, FilterRoot, SearchBar, SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
 import { SurveyWithInfo } from "types";
+import LocalizationUtils from "utils/localization-utils";
 import SurveyUtils from "utils/survey";
 import WhiteOutlinedInput from "../../styled/generic/inputs";
+import { SurveyStatus } from "../../generated/client/models/SurveyStatus";
 
 /**
  * Surveys screen component
@@ -43,6 +45,21 @@ const SurveysScreen: React.FC = () => {
       errorContext.setError(strings.errorHandling.surveys.list, error);
     }
     return [];
+  };
+
+  /**
+   * Lists building types
+   */
+  const listBuildingTypes = async () => {
+    if (!keycloak?.token) {
+      return;
+    }
+
+    try {
+      return await Api.getBuildingTypesApi(keycloak.token).listBuildingTypes();
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.buildingTypes.list, error);
+    }
   };
 
   /**
@@ -93,16 +110,19 @@ const SurveysScreen: React.FC = () => {
   const loadData = async () => {
     setLoading(true);
     const surveys = await listSurveys();
+    const buildingTypes = await listBuildingTypes();
 
-    const surveyWithInfoArray: SurveyWithInfo[] = [];
+    const surveyWithInfoArray: SurveyWithInfo[] = await Promise.all(
+      surveys.map(async survey => {
+        const building = await fetchBuilding(survey.id);
+        const owner = await fetchOwner(survey.id);
 
-    await Promise.all(
-      await surveys.map(async survey => {
-        const surveyBuilding = await fetchBuilding(survey.id);
-        const surveyOwner = await fetchOwner(survey.id);
-
-        const surveyWithInfoParsed = SurveyUtils.parseToSurveyWithInfo(survey, surveyBuilding, surveyOwner);
-        surveyWithInfoParsed && surveyWithInfoArray.push(surveyWithInfoParsed);
+        return SurveyUtils.parseToSurveyWithInfo(
+          survey,
+          building,
+          buildingTypes?.find(type => type.id === building?.buildingTypeId),
+          owner
+        );
       })
     );
 
@@ -196,6 +216,7 @@ const SurveysScreen: React.FC = () => {
       </Typography>
       <SearchBar>
         <TextField
+          disabled
           fullWidth={ isMobile }
           label={ strings.surveysScreen.address }
           value={ addressFilter }
@@ -204,6 +225,7 @@ const SurveysScreen: React.FC = () => {
         />
         <ControlsContainer direction="row" spacing={ 2 }>
           <WhiteOutlinedInput
+            disabled
             fullWidth={ isMobile }
             color="secondary"
             select
@@ -297,32 +319,33 @@ const SurveysScreen: React.FC = () => {
       {
         field: "status",
         headerName: strings.surveysScreen.dataGridColumns.status,
-        width: 360
+        width: 150,
+        valueFormatter: ({ value }) => LocalizationUtils.getLocalizedSurveyStatus(value as SurveyStatus)
       },
       {
         field: "buildingId",
         headerName: strings.surveysScreen.dataGridColumns.buildingId,
-        width: 360
+        width: 200
       },
       {
         field: "classificationCode",
         headerName: strings.surveysScreen.dataGridColumns.classificationCode,
-        width: 360
+        flex: 1
       },
       {
         field: "ownerName",
         headerName: strings.surveysScreen.dataGridColumns.ownerName,
-        width: 360
+        flex: 1
       },
       {
         field: "city",
         headerName: strings.surveysScreen.dataGridColumns.city,
-        width: 360
+        width: 200
       },
       {
         field: "streetAddress",
         headerName: strings.surveysScreen.dataGridColumns.streetAddress,
-        width: 360
+        flex: 1
       }
     ];
   
