@@ -85,6 +85,12 @@ export interface Localized extends LocalizedStringsMethods {
       create: string;
       delete: string;
     };
+    hazardousWastes: {
+      list: string;
+      update: string;
+      create: string;
+      delete: string;
+    };
     surveyors: {
       list: string;
       create: string;
@@ -425,6 +431,15 @@ export interface Localized extends LocalizedStringsMethods {
         amount: string;
         description: string;
         editDescription: string;
+      };
+    };
+    hazardousMaterial: {
+      title: string;
+      dataGridColumns: {
+        material: string;
+        wasteSpecifier: string;
+        amount: string;
+        description: string;
       };
     };
     otherStructures: {

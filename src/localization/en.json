@@ -68,6 +68,12 @@
       "create": "Error while creating hazardous material",
       "delete": "Error while deleting hazardous material"
     },
+    "hazardousWastes": {
+      "list": "Error while listing hazardous wastes",
+      "update": "Error while updating hazardous wastes",
+      "create": "Error while creating hazardous wastes",
+      "delete": "Error while deleting hazardous wastes"
+    },
     "surveyors": {
       "list": "Error while listing surveyor",
       "create": "Error while creating surveyor",
@@ -390,6 +396,15 @@
         "amount": "Amount",
         "description": "Description",
         "editDescription": "Edit description"
+      }
+    },
+    "hazardousMaterial": {
+      "title": "Hazardous material",
+      "dataGridColumns": {
+        "material": "Material",
+        "wasteSpecifier": "Waste specifier",
+        "amount": "Amount",
+        "description": "Description"
       }
     },
     "otherStructures": {

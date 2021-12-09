@@ -5,7 +5,7 @@ import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { selectKeycloak } from "features/auth-slice";
 import { selectSelectedSurvey } from "features/surveys-slice";
-import { Building, BuildingType, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Waste, WasteMaterial } from "generated/client";
+import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Usage, Waste, WasteMaterial, WasteSpecifier } from "generated/client";
 import strings from "localization/strings";
 import moment from "moment";
 import * as React from "react";
@@ -28,6 +28,10 @@ const SummaryView: React.FC = () => {
   const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
   const [ wastes, setWastes ] = React.useState<Waste[]>([]);
   const [ wasteMaterials, setWasteMaterials ] = React.useState<WasteMaterial[]>([]);
+  const [ hazardousWastes, setHazardousWastes ] = React.useState<HazardousWaste[]>([]);
+  const [ hazardousMaterials, setHazardousMaterials ] = React.useState<HazardousMaterial[]>([]);
+  const [ wasteSpecifiers, setWasteSpecifiers ] = React.useState<WasteSpecifier[]>([]);
+  const [ usages, setUsages ] = React.useState<Usage[]>([]);
   const [ surveyors, setSurveyors ] = React.useState<Surveyor[]>([]);
 
   /**
@@ -154,6 +158,67 @@ const SummaryView: React.FC = () => {
     }
   };
 
+  /**
+   * Fetch hazardous waste array
+   */
+  const fetchHazardousWaste = async () => {
+    if (!keycloak?.token || !selectedSurvey?.id) {
+      return;
+    }
+
+    try {
+      setHazardousWastes(await Api.getHazardousWasteApi(keycloak.token).listSurveyHazardousWastes({ surveyId: selectedSurvey.id }));
+    } catch (error) {
+      // TODO error catching
+      errorContext.setError(strings.errorHandling.hazardousWastes.list, error);
+    }
+  };
+
+  /**
+   * Fetches hazardous material array
+   */
+  const fetchHazardousMaterial = async () => {
+    if (!keycloak?.token) {
+      return;
+    }
+
+    try {
+      setHazardousMaterials(await Api.getHazardousMaterialApi(keycloak.token).listHazardousMaterials());
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.hazardousMaterials.list, error);
+    }
+  };
+
+  /**
+   * Fetches waste specifier array
+   */
+  const fetchWasteSpecifier = async () => {
+    if (!keycloak?.token) {
+      return;
+    }
+
+    try {
+      setWasteSpecifiers(await Api.getWasteSpecifiersApi(keycloak.token).listWasteSpecifiers());
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.wasteSpecifiers.list, error);
+    }
+  };
+
+  /**
+   * Fetches usage array
+   */
+  const fetchUsages = async () => {
+    if (!keycloak?.token) {
+      return;
+    }
+
+    try {
+      setUsages(await Api.getUsageApi(keycloak.token).listUsages());
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.postProcess.list, error);
+    }
+  };
+
   // TODO hazardous materials wastes
 
   /**
@@ -164,22 +229,13 @@ const SummaryView: React.FC = () => {
       return;
     }
 
-    setLoading(true);
-
     try {
       const fetchedSurveyors = await Api.getSurveyorsApi(keycloak.token).listSurveyors({ surveyId: selectedSurvey.id });
       setSurveyors(fetchedSurveyors);
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveyors.list, error);
     }
-
-    setLoading(false);
   };
-
-  /**
-   * Check if viewport is mobile size
-   */
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   /**
    * Create new owner information
@@ -187,12 +243,16 @@ const SummaryView: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     await fetchBuilding();
+    await fetchBuildingTypes();
     await fetchOwnerInformation();
     await fetchSurveyReusables();
     await fetchReusableMaterials();
     await fetchWastes();
     await fetchWastesMaterials();
+    await fetchUsages();
     await fetchSurveyors();
+    await fetchHazardousWaste();
+    await fetchHazardousMaterial();
     setLoading(false);
   };
 
@@ -201,7 +261,12 @@ const SummaryView: React.FC = () => {
   }, []);
 
   /**
-   * Render data title
+   * Check if viewport is mobile size
+   */
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+
+  /**
+   * Renders data title
    * 
    * @param title title
    */
@@ -223,7 +288,7 @@ const SummaryView: React.FC = () => {
   );
 
   /**
-   * Render data cell
+   * Renders data cell
    * 
    * @param title title
    * @param value value
@@ -240,7 +305,23 @@ const SummaryView: React.FC = () => {
   );
 
   /**
-   * Render building info section
+   * Renders data cell
+   * 
+   * @param title title
+   * @param value value
+   */
+  const renderMediaDataCell = (title: string, value?: string | number) => (
+    <Stack
+      direction={ isMobile ? "column" : "row" }
+      spacing={ 1 }
+    >
+      { renderDataTitle(`${title}:`) }
+      { renderDataValue(value) }
+    </Stack>
+  );
+
+  /**
+   * Renders building info section
    */
   const renderBuildingInfoSection = () => {
     if (!building) {
@@ -283,7 +364,7 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Render owner info section
+   * Renders owner info section
    */
   const renderOwnerInfoSection = () => {
     if (!ownerInformation) {
@@ -325,7 +406,7 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Render owner info section
+   * Renders owner info section
    */
   const renderSurveyInfoSection = () => {
     if (!selectedSurvey) {
@@ -361,7 +442,7 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Render surveyor section
+   * Renders surveyor section
    */
   const renderSurveyorSection = () => {
     if (!surveyors) {
@@ -369,27 +450,162 @@ const SummaryView: React.FC = () => {
     }
 
     return (
-    <Paper>
-      <Stack
-        direction="column"
-        padding={ 2 }
-      >
-        <Typography variant="h3">
-          { strings.survey.info.surveyors }
-        </Typography>
+      <Paper>
         <Stack
-          direction={ isMobile ? "column" : "row" }
-          marginTop={ 2 }
+          direction="column"
+          padding={ 2 }
         >
-          { surveyors.map(surveyor => 
-            (
-              <Box width="100%">
-                { renderDataCell(surveyor.role || "", `${surveyor.firstName} ${surveyor.lastName}`) }
-              </Box>
-            )) }
+          <Typography variant="h3">
+            { strings.survey.info.surveyors }
+          </Typography>
+          <Stack
+            direction={ isMobile ? "column" : "row" }
+            marginTop={ 2 }
+          >
+            { surveyors.map(surveyor => 
+              (
+                <Box width="100%">
+                  { renderDataCell(surveyor.role || "", `${surveyor.firstName} ${surveyor.lastName}`) }
+                </Box>
+              )) }
+          </Stack>
         </Stack>
-      </Stack>
-    </Paper>
+      </Paper>
+    );
+  };
+
+  /**
+   * Renders surveyor section
+   */
+  const renderReusableMaterialsSection = () => {
+    if (!surveyReusables) {
+      return null;
+    }
+
+    return (
+      <Paper>
+        <Stack
+          direction="column"
+          padding={ 2 }
+        >
+          <Typography variant="h3">
+            { strings.survey.reusables.title }
+          </Typography>
+          <Stack
+            direction="column"
+          >
+            { surveyReusables.map(surveyReusable => 
+              (
+                <Stack
+                  direction="column"
+                  spacing={ 1 }
+                  mt={ 2 }
+                >
+                  <Typography variant="subtitle1">
+                    { reusableMaterials.find(reusableMaterial => reusableMaterial.id === surveyReusable.reusableMaterialId)?.name || "" }
+                  </Typography>
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.buildingPart, surveyReusable.componentName) }
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.usability, LocalizationUtils.getLocalizedUsability(surveyReusable.usability)) }
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.unit, surveyReusable.unit ? LocalizationUtils.getLocalizedUnits(surveyReusable.unit) : "") }
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.wasteAmount, surveyReusable.amount) }
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, surveyReusable.description) }
+                </Stack>
+              )) }
+          </Stack>
+        </Stack>
+      </Paper>
+    );
+  };
+
+  /**
+   * Renders waste material section
+   */
+  const renderWasteMaterialsSection = () => {
+    if (!wastes) {
+      return null;
+    }
+
+    return (
+      <Paper>
+        <Stack
+          direction="column"
+          padding={ 2 }
+        >
+          <Typography variant="h3">
+            { strings.survey.wasteMaterial.title }
+          </Typography>
+          <Stack
+            direction="column"
+          >
+            { wastes.map(waste => 
+              (
+                <Stack
+                  direction="column"
+                  spacing={ 1 }
+                  mt={ 2 }
+                >
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="subtitle1">
+                      { wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.name }
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      { wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.ewcSpecificationCode }
+                    </Typography>
+                  </Stack>
+                  { renderMediaDataCell(strings.survey.wasteMaterial.dataGridColumns.usage, usages.find(usage => usage.id === waste.usageId)?.name) }
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.amount, waste.amount) }
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, waste.description) }
+                </Stack>
+              )) }
+          </Stack>
+        </Stack>
+      </Paper>
+    );
+  };
+
+
+  /**
+   * Renders hazardous material section
+   */
+  const renderHazardousMaterialsSection = () => {
+    if (!hazardousWastes) {
+      return null;
+    }
+
+    return (
+      <Paper>
+        <Stack
+          direction="column"
+          padding={ 2 }
+        >
+          <Typography variant="h3">
+            { strings.survey.hazardousMaterial.title }
+          </Typography>
+          <Stack
+            direction="column"
+          >
+            { hazardousWastes.map(hazardousWaste => 
+              (
+                <Stack
+                  direction="column"
+                  spacing={ 1 }
+                  mt={ 2 }
+                >
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="subtitle1">
+                      { hazardousMaterials.find(hazardousMaterial => hazardousMaterial.id === hazardousWaste.hazardousMaterialId)?.name }
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      { wasteSpecifiers.find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.name }
+                    </Typography>
+                  </Stack>
+                  { renderMediaDataCell(strings.survey.hazardousMaterial.dataGridColumns.amount, hazardousWaste.amount) }
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, hazardousWaste.description) }
+                </Stack>
+              )) }
+          </Stack>
+        </Stack>
+      </Paper>
     );
   };
 
@@ -429,6 +645,9 @@ const SummaryView: React.FC = () => {
         { renderOwnerInfoSection() }
         { renderSurveyInfoSection() }
         { renderSurveyorSection() }
+        { renderReusableMaterialsSection() }
+        { renderWasteMaterialsSection() }
+        { renderHazardousMaterialsSection() }
       </Stack>
     </>
   );

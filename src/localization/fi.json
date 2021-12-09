@@ -63,6 +63,12 @@
       "create": "Virhe luotaessa rakennus- tai purkujätemateriaalia",
       "delete": "Virhe poistettaessa rakennus- tai purkujätemateriaalia"
     },
+    "hazardousWastes": {
+      "list": "Error while listing hazardous wastes",
+      "update": "Error while updating hazardous wastes",
+      "create": "Error while creating hazardous wastes",
+      "delete": "Error while deleting hazardous wastes"
+    },
     "hazardousMaterials": {
       "list": "Virhe ladattaessa haitta-ainetta sisältäviä materiaaleja",
       "create": "Virhe luotaessa haitta-ainetta sisältävää materiaalia",
@@ -390,6 +396,15 @@
         "amount": "Määrä",
         "description": "Lisätieto",
         "editDescription": "Muokkaa lisätietoa"
+      }
+    },
+    "hazardousMaterial": {
+      "title": "Hazardous material",
+      "dataGridColumns": {
+        "material": "Material",
+        "wasteSpecifier": "Waste specifier",
+        "amount": "Amount",
+        "description": "Description"
       }
     },
     "otherStructures": {
