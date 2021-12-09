@@ -63,6 +63,11 @@
       "create": "Error while creating waste material",
       "delete": "Error while deleting waste material"
     },
+    "hazardousMaterials": {
+      "list": "Error while listing hazardous materials",
+      "create": "Error while creating hazardous material",
+      "delete": "Error while deleting hazardous material"
+    },
     "surveyors": {
       "list": "Error while listing surveyor",
       "create": "Error while creating surveyor",
@@ -86,6 +91,12 @@
       "create": "Error while creating post processing",
       "delete": "Error while deleting post processing",
       "update": "Error while updating post process"
+    },
+    "wasteSpecifiers": {
+      "list": "Error while listing waste specifiers",
+      "create": "Error while creating waste specifier",
+      "delete": "Error while deleting waste specifier",
+      "update": "Error while updating waste specifier"
     }
   },
 
@@ -216,7 +227,7 @@
     },
     "addNewPostProcessDialog": {
       "title": "Add new post processing",
-      "text": "Name of the post process:"
+      "text": "Name of the post process"
     },
     "deletePostProcessDialog": {
       "title": "Delete post processing",
@@ -225,6 +236,31 @@
     "updatePostProcessDialog": {
       "title": "Update post process",
       "text": "Post process"
+    },
+    "addNewWasteSpecifierDialog": {
+      "title": "Add new waste specifier",
+      "text": "Name of the waste specifier"
+    },
+    "deleteWasteSpecifierDialog": {
+      "title": "Delete waste specifier",
+      "text": "Are you sure you want to delete waste specifier:"
+    },
+    "updateWasteSpecifierDialog": {
+      "title": "Update waste specifier",
+      "text": "Name of the waste specifier"
+    },
+    "addNewHazardousMaterialDialog": {
+      "title": "Add new hazardous material",
+      "text1": "Name of the hazardous material",
+      "text2": "Last two characters of EWC-code",
+      "text3": "Waste category"
+    },
+    "deleteHazardousMaterialDialog": {
+      "title": "Delete hazardous material",
+      "text": "Are you sure you want to delete hazardous material \"{0}\""
+    },
+    "updateHazardousMaterialDialog": {
+      "title": "Update hazardous material"
     }
   },
 

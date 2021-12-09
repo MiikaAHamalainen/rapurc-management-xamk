@@ -63,6 +63,11 @@
       "create": "Virhe luotaessa rakennus- tai purkujätemateriaalia",
       "delete": "Virhe poistettaessa rakennus- tai purkujätemateriaalia"
     },
+    "hazardousMaterials": {
+      "list": "Virhe ladattaessa haitta-ainetta sisältäviä materiaaleja",
+      "create": "Virhe luotaessa haitta-ainetta sisältävää materiaalia",
+      "delete": "Virhe poistettaessa haitta-ainetta sisältävää materiaalia"
+    },
     "surveyors": {
       "list": "Virhe kartoittajaa listattaessa",
       "create": "Virhe luotaessa kartoittajaa",
@@ -86,6 +91,12 @@
       "create": "Virhe luotaessa jatkokäsittelyä",
       "delete": "Virhe poistettaessa jatkokäsittelyä",
       "update": "Virhe päivitettäessä jatkokäsittelyä"
+    },
+    "wasteSpecifiers": {
+      "list": "Virhe ladattaessa haitta-ainetarkenteita",
+      "create": "Virhe luotaessa haitta-ainetarkennetta",
+      "delete": "Virhe poistettaessa haitta-ainetarkennetta",
+      "update": "Virhe päivitettäessä haitta-ainetarkennetta"
     }
   },
 
@@ -225,6 +236,31 @@
     "updatePostProcessDialog": {
       "title": "Päivitä jatkokäsittely",
       "text": "Jatkokäsittely"
+    },
+    "addNewWasteSpecifierDialog": {
+      "title": "Lisää haitta-ainetarkenne",
+      "text": "Haitta-ainetarkenteen nimi"
+    },
+    "deleteWasteSpecifierDialog": {
+      "title": "Poista haitta-ainetarkenne",
+      "text": "Haluatko varmasti poistaa haitta-ainetarkenteen?"
+    },
+    "updateWasteSpecifierDialog": {
+      "title": "Päivitä haitta-ainetarkenne",
+      "text": "Haitta-ainetarkenteen nimi"
+    },
+    "addNewHazardousMaterialDialog": {
+      "title": "Lisää haitta-ainetta sisältävä materiaali",
+      "text1": "Haitta-ainetta sisältävän materiaali nimi",
+      "text2": "EWC-koodin kaksi viimeistä merkkiä",
+      "text3": "Jätekategoria"
+    },
+    "deleteHazardousMaterialDialog": {
+      "title": "Poista haitta-ainetta sisältävä materiaali",
+      "text": "Haluatko varmasti poistaa haitta-ainetta sisältävän materiaalin \"{0}\""
+    },
+    "updateHazardousMaterialDialog": {
+      "title": "Päivitä haitta-ainetta sisältävä materiaali"
     }
   },
 

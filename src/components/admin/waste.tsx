@@ -1,5 +1,5 @@
 import { Delete, Edit } from "@mui/icons-material";
-import { Button, CircularProgress, IconButton, List, ListItemSecondaryAction, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, List, ListItemSecondaryAction, MenuItem, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import strings from "localization/strings";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
@@ -9,6 +9,7 @@ import { selectKeycloak } from "features/auth-slice";
 import { MaterialItem, MaterialText } from "../../styled/layout-components/material-item";
 import { WasteCategory, WasteMaterial } from "generated/client";
 import GenericDialog from "components/generic/generic-dialog";
+import theme from "theme";
 
 const initialNewMaterialState: WasteMaterial = {
   name: "",
@@ -33,6 +34,11 @@ const Waste: React.FC = () => {
   const [ deletableWaste, setDeletableWaste ] = React.useState<WasteMaterial>();
   const [ newWasteMaterial, setNewWasteMaterial ] = React.useState<WasteMaterial>(initialNewMaterialState);
   const [ editableWasteMaterial, setEditableWasteMaterial ] = React.useState<WasteMaterial>();
+
+  /**
+   * Check if viewport is mobile size
+   */
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   /**
    * Fetches list of wastes
@@ -149,7 +155,7 @@ const Waste: React.FC = () => {
    *
    * @param waste waste
    */
-  const deleteIconClick = (waste : WasteMaterial) => {
+  const deleteIconClick = (waste: WasteMaterial) => {
     setDeletableWaste(waste);
     setDeletingWaste(true);
   };
@@ -200,19 +206,24 @@ const Waste: React.FC = () => {
    * @returns waste material items
    */
   const wasteMaterialItems = () => (
-    wasteMaterials.map(wasteMaterial =>
-      <MaterialItem key={ wasteMaterial.id }>
-        <MaterialText primary={ wasteMaterial.name } secondary={ wasteMaterial.ewcSpecificationCode }/>
-        <ListItemSecondaryAction>
-          <IconButton onClick={ () => deleteIconClick(wasteMaterial) }>
-            <Delete/>
-          </IconButton>
-          <IconButton onClick={ editIconClick(wasteMaterial) }>
-            <Edit/>
-          </IconButton>
-        </ListItemSecondaryAction>
-      </MaterialItem>
-    )
+    wasteMaterials.map(wasteMaterial => {
+      const wasteCategory = wasteCategories.find(category => (category.id === wasteMaterial.wasteCategoryId));
+      const fullEwcCode = `${wasteCategory?.ewcCode || ""}${wasteMaterial.ewcSpecificationCode}`;
+      
+      return (
+        <MaterialItem key={ wasteMaterial.id }>
+          <MaterialText primary={ wasteMaterial.name } secondary={ fullEwcCode }/>
+          <ListItemSecondaryAction>
+            <IconButton onClick={ () => deleteIconClick(wasteMaterial) }>
+              <Delete/>
+            </IconButton>
+            <IconButton onClick={ editIconClick(wasteMaterial) }>
+              <Edit/>
+            </IconButton>
+          </ListItemSecondaryAction>
+        </MaterialItem>
+      );
+    })
   );
 
   /**
@@ -245,34 +256,28 @@ const Waste: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <Stack>
-        <Stack marginBottom={ 2 }>
+      <Stack spacing={ 2 }>
+        <TextField
+          name="name"
+          label={ strings.adminScreen.addNewWasteMaterialDialog.text1 }
+          onChange={ onNewWasteChange }
+        />
+        <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
           <TextField
-            name="name"
-            label={ strings.adminScreen.addNewWasteMaterialDialog.text1 }
+            fullWidth
+            select
+            name="wasteCategoryId"
+            label={ strings.adminScreen.addNewWasteMaterialDialog.text3 }
+            onChange={ onNewWasteChange }
+          >
+            { wasteCategoryItems() }
+          </TextField>
+          <TextField
+            fullWidth
+            name="ewcSpecificationCode"
+            label={ strings.adminScreen.addNewWasteMaterialDialog.text2 }
             onChange={ onNewWasteChange }
           />
-        </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Stack>
-            <TextField
-              fullWidth
-              select
-              name="wasteCategoryId"
-              label={ strings.adminScreen.addNewWasteMaterialDialog.text3 }
-              onChange={ onNewWasteChange }
-            >
-              { wasteCategoryItems() }
-            </TextField>
-          </Stack>
-          <Stack>
-            <TextField
-              fullWidth
-              name="ewcSpecificationCode"
-              label={ strings.adminScreen.addNewWasteMaterialDialog.text2 }
-              onChange={ onNewWasteChange }
-            />
-          </Stack>
         </Stack>
       </Stack>
     </GenericDialog>
@@ -312,38 +317,32 @@ const Waste: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <Stack>
-        <Stack marginBottom={ 2 }>
+      <Stack spacing={ 2 }>
+        <TextField
+          fullWidth
+          value={ editableWasteMaterial?.name }
+          label={ strings.adminScreen.addNewWasteMaterialDialog.text1 }
+          name="name"
+          onChange={ onEditableWasteMaterialChange }
+        />
+        <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
           <TextField
             fullWidth
-            value={ editableWasteMaterial?.name }
-            label={ strings.adminScreen.addNewWasteMaterialDialog.text1 }
-            name="name"
+            select
+            value={ editableWasteMaterial?.wasteCategoryId }
+            label={ strings.adminScreen.addNewWasteMaterialDialog.text3 }
+            name="wasteCategoryId"
+            onChange={ onEditableWasteMaterialChange }
+          >
+            { wasteCategoryItems() }
+          </TextField>
+          <TextField
+            fullWidth
+            name="ewcSpecificationCode"
+            value={ editableWasteMaterial?.ewcSpecificationCode }
+            label={ strings.adminScreen.addNewWasteMaterialDialog.text2 }
             onChange={ onEditableWasteMaterialChange }
           />
-        </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Stack>
-            <TextField
-              fullWidth
-              select
-              value={ editableWasteMaterial?.wasteCategoryId }
-              label={ strings.adminScreen.addNewWasteMaterialDialog.text3 }
-              name="wasteCategoryId"
-              onChange={ onEditableWasteMaterialChange }
-            >
-              { wasteCategoryItems() }
-            </TextField>
-          </Stack>
-          <Stack>
-            <TextField
-              fullWidth
-              name="ewcSpecificationCode"
-              value={ editableWasteMaterial?.ewcSpecificationCode }
-              label={ strings.adminScreen.addNewWasteMaterialDialog.text2 }
-              onChange={ onEditableWasteMaterialChange }
-            />
-          </Stack>
         </Stack>
       </Stack>
     </GenericDialog>
@@ -354,7 +353,16 @@ const Waste: React.FC = () => {
    */
   const renderList = () => {
     if (loading) {
-      return <CircularProgress color="primary" size={ 60 }/>;
+      return (
+        <Box
+          display="flex"
+          flex={ 1 }
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress color="primary" size={ 60 }/>
+        </Box>
+      );
     }
 
     return (
