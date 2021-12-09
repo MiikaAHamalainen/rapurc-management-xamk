@@ -34,6 +34,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const errorContext = React.useContext(ErrorContext);
   const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
   const [ loading, setLoading ] = React.useState(false);
+  const [ uploadedFiles, setUploadedFiles ] = React.useState<File[]>([]);
   const [ imageDialogOpen, setImageDialogOpen ] = React.useState(false);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
@@ -48,12 +49,16 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     reusableMaterialId: "",
     metadata: {}
   });
-  const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     // Disable click and keydown behavior
     noClick: true,
     noKeyboard: true,
     accept: "image/jpg, image/png, image/gif",
-    maxFiles: 4
+    maxFiles: 4,
+    onDrop: acceptedFiles => {
+      const updatedFiles = [ ...uploadedFiles, ...acceptedFiles ].splice(0, 4);
+      setUploadedFiles(updatedFiles);
+    }
   });
 
   /**
@@ -99,6 +104,15 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     fetchReusableMaterials();
     setSelectedReusableIds([]);
   }, []);
+
+  /**
+   * On uploaded file delete
+   */
+  const onUploadedFileDelete = (index: number) => {
+    const updatedFiles = [ ...uploadedFiles ];
+    updatedFiles.splice(index, 1);
+    setUploadedFiles(updatedFiles);
+  };
 
   /**
    * Event handler for add reusable confirm
@@ -195,7 +209,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const onImageDialogClose = () => {
     setImageDialogOpen(false);
     setReusableUploadingImage(undefined);
-    acceptedFiles.splice(0, acceptedFiles.length);
+    setUploadedFiles([]);
   };
 
   /**
@@ -209,7 +223,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       await onMaterialRowChange(reusableUploadingImage);
     }
     setReusableUploadingImage(undefined);
-    acceptedFiles.splice(0, acceptedFiles.length);
+    setUploadedFiles([]);
   };
 
   /**
@@ -407,6 +421,59 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   /**
    * Renders add survey reusable dialog
    */
+  const renderNewReusableImageUpload = () => (
+    <Stack
+      direction="column"
+      marginTop={ 2 }
+      spacing={ 2 }
+    >
+      <Stack direction={ isMobile ? "column" : "row" } justifyContent="space-between">
+        <Typography sx={{ whiteSpace: "pre-wrap" }}>
+          { strings.survey.reusables.addNewBuildingPartsDialog.imageDescription }
+        </Typography>
+        <Box { ...getRootProps({ className: "dropzone" }) }>
+          <input { ...getInputProps() }/>
+          <SurveyButton
+            startIcon={ <Add/> }
+            variant="contained"
+            color="primary"
+            onClick={ open }
+          >
+            { strings.survey.reusables.moreImage }
+          </SurveyButton>
+        </Box>
+      </Stack>
+      {
+        uploadedFiles.map((uploadedFile, index) => (
+          <Stack
+            direction="row"
+            alignItems="center"
+          >
+            <img
+              width={ 50 }
+              height={ 50 }
+              alt={ uploadedFile.name }
+              src={ URL.createObjectURL(uploadedFile) }
+            />
+            <Typography ml={ 2 }>
+              { `${uploadedFile.name} ${uploadedFile.size}` }
+            </Typography>
+            <SurveyButton
+              sx={{ ml: "auto" }}
+              color="error"
+              onClick={ () => onUploadedFileDelete(index) }
+            >
+              { strings.generic.delete }
+            </SurveyButton>
+          </Stack>
+        ))
+      }
+    </Stack>
+  );
+
+  /**
+   * Renders add survey reusable dialog
+   */
   const renderAddSurveyReusableDialog = () => {
     const reusableOptions = Object.values(reusableMaterials).map(material =>
       <MenuItem key={ material.id } value={ material.id }>
@@ -525,24 +592,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         <Typography marginTop={ 2 } variant="h3">
           { strings.survey.reusables.dataGridColumns.images }
         </Typography>
-        <Stack
-          direction={ isMobile ? "column" : "row" }
-          spacing={ 2 }
-          marginTop={ 2 }
-          justifyContent="space-between"
-        >
-          <Typography sx={{ whiteSpace: "pre-wrap" }}>
-            { strings.survey.reusables.addNewBuildingPartsDialog.imageDescription }
-          </Typography>
-          <SurveyButton
-            startIcon={ <Add/> }
-            variant="contained"
-            color="primary"
-            onClick={ () => {} }
-          >
-            { strings.survey.reusables.moreImage }
-          </SurveyButton>
-        </Stack>
+        { renderNewReusableImageUpload() }
       </GenericDialog>
     );
   };
@@ -557,7 +607,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
     // TODO populate the acceptedFiles with image urls  
 
-    if (acceptedFiles.length === 0) {
+    if (uploadedFiles.length === 0) {
       return (
         <DropZoneContainer { ...getRootProps({ className: "dropzone" }) }>
           <input { ...getInputProps() }/>
@@ -573,25 +623,23 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       );
     }
 
-    const selectedImageFile = acceptedFiles[Math.min(displayedImageIndex, acceptedFiles.length - 1)];
-
-    console.log("acceptedFiles", acceptedFiles);
+    const selectedImageFile = uploadedFiles[Math.min(displayedImageIndex, uploadedFiles.length - 1)];
 
     return (
       <Stack spacing={ 2 } direction="column">
         <img alt={ selectedImageFile.name } src={ URL.createObjectURL(selectedImageFile) }/>
         <Grid container spacing={ 2 }>
           {
-            acceptedFiles.map((acceptedFile, index) => (
+            uploadedFiles.map((uploadedFile, index) => (
               <Grid item md={ 3 }>
                 <Button onClick={ () => setDisplayedImageIndex(index) }>
-                  <img width={ 150 } height={ 150 } alt={ acceptedFile.name } src={ URL.createObjectURL(acceptedFile) }/>
+                  <img width={ 150 } height={ 150 } alt={ uploadedFile.name } src={ URL.createObjectURL(uploadedFile) }/>
                 </Button>
               </Grid>
             ))
           }
           {
-            acceptedFiles.length <= 4 &&
+            uploadedFiles.length < 4 &&
             <Grid item md={ 3 }>
               <Box { ...getRootProps({ className: "dropzone" }) }>
                 <input { ...getInputProps() }/>
