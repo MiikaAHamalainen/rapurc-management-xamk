@@ -332,6 +332,8 @@
     },
     "reusables": {
       "title": "Uudelleenkäytettävät rakennusosat",
+      "viewImage": "Näytä kuvia",
+      "moreImage": "Lisää kuvia",
       "addNewBuildingPart": "Lisää uusi rakennusosa",
       "deleteBuildingParts": "Poista rakennusosa",
       "addNewBuildingPartsDialog": {
@@ -341,7 +343,8 @@
         "buildingPartOrMaterialHelperText": "Anna osaa vastaava tarkenne",
         "usabilityHelperText": "Jos ei tiedossa, valitse \"ei arvioitu\"",
         "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms.",
-        "wasteAmountHelperText": "Valinnainen tieto"
+        "wasteAmountHelperText": "Valinnainen tieto",
+        "imageDescription": "Tuetut formaatit: jpg, gif tai png\nMax. 4 kuvaa / rakennusosa"
       },
       "deleteReusableDialog": {
         "title": "Poista uudelleenkäytettävä osa",
@@ -355,7 +358,8 @@
         "wasteAmount": "Purkujätemäärä",
         "description": "Lisätieto",
         "unit": "Yksikkö",
-        "editDescription": "Muokkaa lisätietoa"
+        "editDescription": "Muokkaa lisätietoa",
+        "images": "Kuvia"
       },
       "usability": {
         "excellent": "Erinomainen",

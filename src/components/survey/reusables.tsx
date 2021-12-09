@@ -33,6 +33,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const errorContext = React.useContext(ErrorContext);
   const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
   const [ loading, setLoading ] = React.useState(false);
+  const [ imageDialogOpen, setImageDialogOpen ] = React.useState(false);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
@@ -480,9 +481,50 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
           />
         </Stack>
+        <Typography marginTop={ 2 } variant="h3">
+          { strings.survey.reusables.dataGridColumns.images }
+        </Typography>
+        <Stack
+          direction={ isMobile ? "column" : "row" }
+          spacing={ 2 }
+          marginTop={ 2 }
+          justifyContent="space-between"
+        >
+          <Typography sx={{ whiteSpace: "pre-wrap" }}>
+            { strings.survey.reusables.addNewBuildingPartsDialog.imageDescription }
+          </Typography>
+          <SurveyButton
+            startIcon={ <Add/> }
+            variant="contained"
+            color="primary"
+            onClick={ () => {} }
+          >
+            { strings.survey.reusables.moreImage }
+          </SurveyButton>
+        </Stack>
       </GenericDialog>
     );
   };
+
+  /**
+   * Renders delete material dialog
+   */
+  const renderReusableImageDialog = () => (
+    <GenericDialog
+      error={ false }
+      open={ imageDialogOpen }
+      onClose={ () => setImageDialogOpen(false) }
+      onCancel={ () => setImageDialogOpen(false) }
+      onConfirm={ () => setImageDialogOpen(false) }
+      title={ strings.survey.reusables.dataGridColumns.images }
+      positiveButtonText={ strings.generic.confirm }
+      cancelButtonText={ strings.generic.cancel }
+    >
+      <Typography>
+        { strings.survey.reusables.deleteReusableDialog.text }
+      </Typography>
+    </GenericDialog>
+  );
 
   /**
    * Render material list item
@@ -693,6 +735,24 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             </GenericDialog>
           );
         }
+      },
+      {
+        field: "images",
+        headerName: strings.survey.reusables.dataGridColumns.images,
+        width: 200,
+        renderCell: (params: GridRenderCellParams) => {
+          const { value } = params;
+          return (
+            <SurveyButton
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={ () => setImageDialogOpen(true) }
+            >
+              { value.length ? strings.survey.reusables.viewImage : strings.survey.reusables.moreImage }
+            </SurveyButton>
+          );
+        }
       }
     ];
 
@@ -763,6 +823,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       </Hidden>
       { renderAddSurveyReusableDialog() }
       { renderDeleteSurveyMaterialDialog() }
+      { renderReusableImageDialog() }
     </>
   );
 };

@@ -332,6 +332,8 @@
     },
     "reusables": {
       "title": "Reusable building parts",
+      "viewImage": "View images",
+      "moreImage": "More images",
       "addNewBuildingPart": "Add new building part",
       "deleteBuildingParts": "Delete building part",
       "addNewBuildingPartsDialog": {
@@ -341,7 +343,8 @@
         "buildingPartOrMaterialHelperText": "Give description to part or material",
         "usabilityHelperText": "If it's unknown, choose \"Not validated\"",
         "descriptionHelperText": "Free description, for example, location in the building.",
-        "wasteAmountHelperText": "Optional"
+        "wasteAmountHelperText": "Optional",
+        "imageDescription": "Supported formats: jpg, gif or png\nMax. 4 pictures / building block"
       },
       "deleteReusableDialog": {
         "title": "Delete reusable building part",
@@ -355,7 +358,8 @@
         "amount": "Amount",
         "description": "Description",
         "unit": "Unit",
-        "editDescription": "Edit description"
+        "editDescription": "Edit description",
+        "images": "Images"
       },
       "usability": {
         "excellent": "Excellent",

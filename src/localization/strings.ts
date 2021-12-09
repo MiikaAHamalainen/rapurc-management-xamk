@@ -367,6 +367,8 @@ export interface Localized extends LocalizedStringsMethods {
     };
     reusables: {
       title: string;
+      viewImage: string;
+      moreImage: string;
       addNewBuildingPart: string;
       deleteBuildingParts: string;
       addNewBuildingPartsDialog: {
@@ -377,12 +379,14 @@ export interface Localized extends LocalizedStringsMethods {
         usabilityHelperText: string;
         descriptionHelperText: string;
         wasteAmountHelperText: string;
+        imageDescription: string
       };
       deleteReusableDialog: {
         title: string;
         text: string;
       };
       dataGridColumns: {
+        images: string;
         material: string;
         buildingPart: string;
         usability: string;
