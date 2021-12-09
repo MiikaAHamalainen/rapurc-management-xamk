@@ -1,5 +1,5 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Grid, Hidden, IconButton, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams, GridRenderEditCellParams, GridRowId } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
@@ -12,9 +12,10 @@ import { selectKeycloak } from "features/auth-slice";
 import { Reusable, ReusableMaterial, Unit, Usability } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
-import { SurveyButton } from "styled/screens/surveys-screen";
+import { DropZoneContainer, SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
 import LocalizationUtils from "utils/localization-utils";
+import { useDropzone } from "react-dropzone";
 
 const WithReusableDataGridDebounce = WithDataGridDebounceFactory<Reusable>();
 
@@ -36,6 +37,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const [ imageDialogOpen, setImageDialogOpen ] = React.useState(false);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
+  const [ reusableUploadingImage, setReusableUploadingImage ] = React.useState<Reusable>();
+  const [ displayedImageIndex, setDisplayedImageIndex ] = React.useState(0);
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
   const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
   const [ selectedReusableIds, setSelectedReusableIds ] = React.useState<GridRowId[]>([]);
@@ -44,6 +47,13 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     usability: Usability.NotValidated,
     reusableMaterialId: "",
     metadata: {}
+  });
+  const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
+    // Disable click and keydown behavior
+    noClick: true,
+    noKeyboard: true,
+    accept: "image/jpg, image/png, image/gif",
+    maxFiles: 4
   });
 
   /**
@@ -169,6 +179,37 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
     setDeletingMaterial(true);
     setSelectedReusableIds([ surveyorId ]);
+  };
+
+  /**
+   * Event handler for add reusable confirm
+   */
+  const onImageDialogOpen = (reusable: Reusable) => {
+    setImageDialogOpen(true);
+    setReusableUploadingImage(reusable);
+  };
+
+  /**
+   * Event handler for add reusable confirm
+   */
+  const onImageDialogClose = () => {
+    setImageDialogOpen(false);
+    setReusableUploadingImage(undefined);
+    acceptedFiles.splice(0, acceptedFiles.length);
+  };
+
+  /**
+   * Event handler for add reusable confirm
+   */
+  const onImageDialogConfirm = async () => {
+    setImageDialogOpen(false);
+
+    if (reusableUploadingImage) {
+      // TODO upload the files and get the links
+      await onMaterialRowChange(reusableUploadingImage);
+    }
+    setReusableUploadingImage(undefined);
+    acceptedFiles.splice(0, acceptedFiles.length);
   };
 
   /**
@@ -509,20 +550,77 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   /**
    * Renders delete material dialog
    */
+  const imageDialogContent = () => {
+    if (!reusableUploadingImage) {
+      return null;
+    }
+
+    // TODO populate the acceptedFiles with image urls  
+
+    if (acceptedFiles.length === 0) {
+      return (
+        <DropZoneContainer { ...getRootProps({ className: "dropzone" }) }>
+          <input { ...getInputProps() }/>
+          <Typography>TODO Drag n drop some files here</Typography>
+          <SurveyButton
+            variant="contained"
+            color="primary"
+            onClick={ open }
+          >
+            { strings.survey.reusables.moreImage }
+          </SurveyButton>
+        </DropZoneContainer>
+      );
+    }
+
+    const selectedImageFile = acceptedFiles[Math.min(displayedImageIndex, acceptedFiles.length - 1)];
+
+    console.log("acceptedFiles", acceptedFiles);
+
+    return (
+      <Stack spacing={ 2 } direction="column">
+        <img alt={ selectedImageFile.name } src={ URL.createObjectURL(selectedImageFile) }/>
+        <Grid container spacing={ 2 }>
+          {
+            acceptedFiles.map((acceptedFile, index) => (
+              <Grid item md={ 3 }>
+                <Button onClick={ () => setDisplayedImageIndex(index) }>
+                  <img width={ 150 } height={ 150 } alt={ acceptedFile.name } src={ URL.createObjectURL(acceptedFile) }/>
+                </Button>
+              </Grid>
+            ))
+          }
+          {
+            acceptedFiles.length <= 4 &&
+            <Grid item md={ 3 }>
+              <Box { ...getRootProps({ className: "dropzone" }) }>
+                <input { ...getInputProps() }/>
+                <IconButton onClick={ open }>
+                  <Add/>
+                </IconButton>
+              </Box>
+            </Grid>
+          }
+        </Grid>
+      </Stack>
+    );
+  };
+
+  /**
+   * Renders delete material dialog
+   */
   const renderReusableImageDialog = () => (
     <GenericDialog
       error={ false }
       open={ imageDialogOpen }
-      onClose={ () => setImageDialogOpen(false) }
-      onCancel={ () => setImageDialogOpen(false) }
-      onConfirm={ () => setImageDialogOpen(false) }
+      onClose={ onImageDialogClose }
+      onCancel={ onImageDialogClose }
+      onConfirm={ onImageDialogConfirm }
       title={ strings.survey.reusables.dataGridColumns.images }
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <Typography>
-        { strings.survey.reusables.deleteReusableDialog.text }
-      </Typography>
+      { imageDialogContent() }
     </GenericDialog>
   );
 
@@ -741,15 +839,16 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         headerName: strings.survey.reusables.dataGridColumns.images,
         width: 200,
         renderCell: (params: GridRenderCellParams) => {
-          const { value } = params;
+          const { row } = params;
+          // TODO check this
           return (
             <SurveyButton
               fullWidth
               variant="contained"
               color="primary"
-              onClick={ () => setImageDialogOpen(true) }
+              onClick={ () => onImageDialogOpen(row) }
             >
-              { value.length ? strings.survey.reusables.viewImage : strings.survey.reusables.moreImage }
+              { row.images ? strings.survey.reusables.viewImage : strings.survey.reusables.moreImage }
             </SurveyButton>
           );
         }

@@ -53,3 +53,16 @@ export const SurveyButton = styled(Button, {
     width: "100%"
   }
 }));
+
+/**
+ * Styled drop zone container
+ */
+export const DropZoneContainer = styled(Box, {
+  label: "surveys-screen-drop-zone-container"
+})(({ theme }) => ({
+  padding: `${theme.spacing(4)} 0`,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  border: "1px black dashed"
+}));
