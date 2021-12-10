@@ -27,6 +27,13 @@ export interface Localized extends LocalizedStringsMethods {
   };
 
   /**
+   * Translations related to generic units
+   */
+  units: {
+    tons: string;
+  }
+
+  /**
    * Translations related to error handling
    */
   errorHandling: {
@@ -436,8 +443,9 @@ export interface Localized extends LocalizedStringsMethods {
     hazardousMaterial: {
       title: string;
       dataGridColumns: {
+        hazardousMaterial: string;
         material: string;
-        wasteSpecifier: string;
+        wasteCode: string;
         amount: string;
         description: string;
       };

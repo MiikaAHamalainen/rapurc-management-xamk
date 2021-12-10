@@ -143,6 +143,9 @@ export default createTheme({
       styleOverrides: {
         root: {
           width: "100%"
+        },
+        vertical: {
+          width: 1
         }
       }
     },

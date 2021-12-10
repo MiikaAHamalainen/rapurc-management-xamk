@@ -12,6 +12,10 @@
     "open": "Open"
   },
 
+  "units": {
+    "tons": "tonnia"
+  },
+
   "errorHandling": {
     "title": "Error",
     "missingAccessToken": "Missing access token",
@@ -401,8 +405,9 @@
     "hazardousMaterial": {
       "title": "Hazardous material",
       "dataGridColumns": {
+        "hazardousMaterial": "Hazardous material",
         "material": "Material",
-        "wasteSpecifier": "Waste specifier",
+        "wasteCode": "Waste code",
         "amount": "Amount",
         "description": "Description"
       }

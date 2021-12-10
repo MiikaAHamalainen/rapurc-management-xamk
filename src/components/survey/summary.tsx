@@ -1,11 +1,11 @@
 import { Print } from "@mui/icons-material";
-import { Box, CircularProgress, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, CircularProgress, Divider, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { selectKeycloak } from "features/auth-slice";
 import { selectSelectedSurvey } from "features/surveys-slice";
-import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Usage, Waste, WasteMaterial, WasteSpecifier } from "generated/client";
+import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Usage, Waste, WasteCategory, WasteMaterial } from "generated/client";
 import strings from "localization/strings";
 import moment from "moment";
 import * as React from "react";
@@ -27,10 +27,10 @@ const SummaryView: React.FC = () => {
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
   const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
   const [ wastes, setWastes ] = React.useState<Waste[]>([]);
+  const [ wasteCategories, setWasteCategories ] = React.useState<WasteCategory[]>([]);
   const [ wasteMaterials, setWasteMaterials ] = React.useState<WasteMaterial[]>([]);
   const [ hazardousWastes, setHazardousWastes ] = React.useState<HazardousWaste[]>([]);
   const [ hazardousMaterials, setHazardousMaterials ] = React.useState<HazardousMaterial[]>([]);
-  const [ wasteSpecifiers, setWasteSpecifiers ] = React.useState<WasteSpecifier[]>([]);
   const [ usages, setUsages ] = React.useState<Usage[]>([]);
   const [ surveyors, setSurveyors ] = React.useState<Surveyor[]>([]);
 
@@ -144,6 +144,21 @@ const SummaryView: React.FC = () => {
   };
 
   /**
+   * Fetches list of waste categories
+   */
+  const fetchWasteCategories = async () => {
+    if (!keycloak?.token) {
+      return;
+    }
+
+    try {
+      setWasteCategories(await Api.getWasteCategoryApi(keycloak.token).listWasteCategories());
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.wasteMaterials.list, error);
+    }
+  };
+
+  /**
    * Fetches waste material array
    */
   const fetchWastesMaterials = async () => {
@@ -190,21 +205,6 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Fetches waste specifier array
-   */
-  const fetchWasteSpecifier = async () => {
-    if (!keycloak?.token) {
-      return;
-    }
-
-    try {
-      setWasteSpecifiers(await Api.getWasteSpecifiersApi(keycloak.token).listWasteSpecifiers());
-    } catch (error) {
-      errorContext.setError(strings.errorHandling.wasteSpecifiers.list, error);
-    }
-  };
-
-  /**
    * Fetches usage array
    */
   const fetchUsages = async () => {
@@ -247,6 +247,7 @@ const SummaryView: React.FC = () => {
     await fetchOwnerInformation();
     await fetchSurveyReusables();
     await fetchReusableMaterials();
+    await fetchWasteCategories();
     await fetchWastes();
     await fetchWastesMaterials();
     await fetchUsages();
@@ -283,7 +284,7 @@ const SummaryView: React.FC = () => {
    */
   const renderDataValue = (value?: string | number) => (
     <Typography variant="body2">
-      { value || "/" }
+      { value || "-" }
     </Typography>
   );
 
@@ -294,11 +295,7 @@ const SummaryView: React.FC = () => {
    * @param value value
    */
   const renderDataCell = (title: string, value?: string | number) => (
-    <Stack
-      direction="column"
-      spacing={ 1 }
-      marginBottom={ 2 }
-    >
+    <Stack>
       { renderDataTitle(title) }
       { renderDataValue(value) }
     </Stack>
@@ -311,10 +308,7 @@ const SummaryView: React.FC = () => {
    * @param value value
    */
   const renderMediaDataCell = (title: string, value?: string | number) => (
-    <Stack
-      direction={ isMobile ? "column" : "row" }
-      spacing={ 1 }
-    >
+    <Stack flex={ 1 }>
       { renderDataTitle(`${title}:`) }
       { renderDataValue(value) }
     </Stack>
@@ -329,27 +323,25 @@ const SummaryView: React.FC = () => {
     }
 
     return (
-      <Paper>
-        <Stack
-          direction="column"
-          padding={ 2 }
-        >
-          <Typography variant="h3">
-            { strings.survey.building.title }
-          </Typography>
+      <Stack spacing={ 2 }>
+        <Typography variant="h3">
+          { strings.survey.building.title }
+        </Typography>
+        <Paper>
           <Stack
             direction={ isMobile ? "column" : "row" }
-            marginTop={ 2 }
+            spacing={ 2 }
+            p={ 2 }
           >
-            <Stack width="100%" direction="column">
+            <Stack width="100%" spacing={ 2 }>
               { renderDataCell(strings.survey.building.propertyID, building.propertyId) }
               { renderDataCell(strings.survey.building.buildingID, building.buildingId) }
-              { renderDataCell(strings.survey.building.buildingClass, buildingTypes?.find(buildingType => buildingType.id === building.buildingTypeId)?.name ) }
+              { renderDataCell(strings.survey.building.buildingClass, buildingTypes?.find(buildingType => buildingType.id === building.buildingTypeId)?.name) }
               { renderDataCell(strings.survey.building.year, building.constructionYear) }
               { renderDataCell(strings.survey.building.area, building.space) }
               { renderDataCell(strings.survey.building.volume, building.volume) }
             </Stack>
-            <Stack width="100%" direction="column">
+            <Stack width="100%" spacing={ 2 }>
               { renderDataCell(strings.survey.building.floors, building.floors) }
               { renderDataCell(strings.survey.building.basementFloors, building.basements) }
               { renderDataCell(strings.survey.building.foundationMaterial, building.foundation) }
@@ -358,8 +350,8 @@ const SummaryView: React.FC = () => {
               { renderDataCell(strings.survey.building.roofStructure, building.roofType) }
             </Stack>
           </Stack>
-        </Stack>
-      </Paper>
+        </Paper>
+      </Stack>
     );
   };
 
@@ -372,36 +364,29 @@ const SummaryView: React.FC = () => {
     }
 
     return (
-      <Paper>
-        <Stack
-          direction={ isMobile ? "column" : "row" }
-          padding={ 2 }
-        >
-          <Stack
-            spacing={ 2 }
-            width="100%"
-            direction="column"
-          >
-            <Typography variant="h3">
-              { strings.survey.owner.title }
-            </Typography>
+      <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
+        <Stack spacing={ 2 } width="100%">
+          <Typography variant="h3">
+            { strings.survey.owner.title }
+          </Typography>
+          <Paper sx={{ p: 2 }}>
             { ownerInformation.ownerName && renderDataValue(ownerInformation.ownerName) }
-          </Stack>
-          <Stack
-            spacing={ 2 }
-            width="100%"
-            direction="column"
-          >
-            <Typography variant="h3">
-              { strings.survey.owner.contactPerson }
-            </Typography>
-            { renderDataValue(`${ownerInformation.contactPerson?.firstName} ${ownerInformation.contactPerson?.lastName}`) }
-            { ownerInformation.contactPerson?.profession && renderDataValue(ownerInformation.contactPerson?.profession) }
-            { ownerInformation.contactPerson?.phone && renderDataValue(ownerInformation.contactPerson?.phone) }
-            { ownerInformation.contactPerson?.email && renderDataValue(ownerInformation.contactPerson?.email) }
-          </Stack>
+          </Paper>
         </Stack>
-      </Paper>
+        <Stack spacing={ 2 } width="100%">
+          <Typography variant="h3">
+            { strings.survey.owner.contactPerson }
+          </Typography>
+          <Paper>
+            <Stack spacing={ 2 } p={ 2 }>
+              { renderDataValue(`${ownerInformation.contactPerson?.firstName || ""} ${ownerInformation.contactPerson?.lastName || ""}`) }
+              { ownerInformation.contactPerson?.profession && renderDataValue(ownerInformation.contactPerson?.profession) }
+              { ownerInformation.contactPerson?.phone && renderDataValue(ownerInformation.contactPerson?.phone) }
+              { ownerInformation.contactPerson?.email && renderDataValue(ownerInformation.contactPerson?.email) }
+            </Stack>
+          </Paper>
+        </Stack>
+      </Stack>
     );
   };
 
@@ -414,30 +399,36 @@ const SummaryView: React.FC = () => {
     }
 
     return (
-    <Paper>
-      <Stack
-        direction="column"
-        padding={ 2 }
-      >
+      <Stack spacing={ 2 }>
         <Typography variant="h3">
           { strings.survey.info.title }
         </Typography>
-        <Stack
-          direction={ isMobile ? "column" : "row" }
-          marginTop={ 2 }
-        >
-          <Box width="100%">
+        <Paper>
+          <Stack
+            direction={ isMobile ? "column" : "row" }
+            spacing={ isMobile ? 2 : 6 }
+            padding={ 2 }
+          >
             { renderDataCell(strings.survey.info.demolitionScope, LocalizationUtils.getLocalizedDemolitionScope(selectedSurvey.type)) }
-          </Box>
-          <Box width="100%">
-            { renderDataCell(strings.survey.info.startDate, moment(selectedSurvey.startDate).format("YYYY-MM-DD")) }
-          </Box>
-          <Box width="100%">
-            { renderDataCell(strings.survey.info.endDate, moment(selectedSurvey.endDate).format("YYYY-MM-DD")) }
-          </Box>
-        </Stack>
+            { !isMobile &&
+              <Divider
+                variant="inset"
+                orientation="vertical"
+                flexItem
+              />
+            }
+            { renderDataCell(strings.survey.info.startDate, moment(selectedSurvey.startDate).format("MMMM YYYY")) }
+            { !isMobile &&
+              <Divider
+                variant="inset"
+                orientation="vertical"
+                flexItem
+              />
+            }
+            { renderDataCell(strings.survey.info.endDate, moment(selectedSurvey.endDate).format("MMMM YYYY")) }
+          </Stack>
+        </Paper>
       </Stack>
-    </Paper>
     );
   };
 
@@ -450,27 +441,34 @@ const SummaryView: React.FC = () => {
     }
 
     return (
-      <Paper>
-        <Stack
-          direction="column"
-          padding={ 2 }
-        >
-          <Typography variant="h3">
-            { strings.survey.info.surveyors }
-          </Typography>
-          <Stack
-            direction={ isMobile ? "column" : "row" }
-            marginTop={ 2 }
-          >
-            { surveyors.map(surveyor => 
+      <Stack spacing={ 2 }>
+        <Typography variant="h3">
+          { strings.survey.info.surveyors }
+        </Typography>
+        <Paper>
+          <Stack direction={ isMobile ? "column" : "row" }>
+            { surveyors.map(surveyor =>
               (
-                <Box width="100%">
-                  { renderDataCell(surveyor.role || "", `${surveyor.firstName} ${surveyor.lastName}`) }
-                </Box>
+                <Stack
+                  key={ surveyor.id }
+                  flex={ 1 }
+                  p={ 2 }
+                  direction="row"
+                  justifyContent="space-between"
+                >
+                  { renderDataCell(surveyor.role || "", `${surveyor.firstName || ""} ${surveyor.lastName || ""}`) }
+                  { !isMobile &&
+                    <Divider
+                      variant="inset"
+                      orientation="vertical"
+                      flexItem
+                    />
+                  }
+                </Stack>
               )) }
           </Stack>
-        </Stack>
-      </Paper>
+        </Paper>
+      </Stack>
     );
   };
 
@@ -483,37 +481,56 @@ const SummaryView: React.FC = () => {
     }
 
     return (
-      <Paper>
-        <Stack
-          direction="column"
-          padding={ 2 }
-        >
-          <Typography variant="h3">
-            { strings.survey.reusables.title }
-          </Typography>
-          <Stack
-            direction="column"
-          >
-            { surveyReusables.map(surveyReusable => 
-              (
-                <Stack
-                  direction="column"
-                  spacing={ 1 }
-                  mt={ 2 }
-                >
-                  <Typography variant="subtitle1">
-                    { reusableMaterials.find(reusableMaterial => reusableMaterial.id === surveyReusable.reusableMaterialId)?.name || "" }
+      <Stack spacing={ 2 }>
+        <Typography variant="h3">
+          { strings.survey.reusables.title }
+        </Typography>
+        <Stack spacing={ 2 }>
+          { surveyReusables.map(surveyReusable => {
+            const materialName = reusableMaterials.find(reusableMaterial => reusableMaterial.id === surveyReusable.reusableMaterialId)?.name || "";
+            const materialUsability = LocalizationUtils.getLocalizedUsability(surveyReusable.usability);
+            const materialAmount = `${surveyReusable.amount} ${surveyReusable.unit ? LocalizationUtils.getLocalizedUnits(surveyReusable.unit) : ""}`;
+            const materialAmountAsWaste = `${surveyReusable.amountAsWaste} ${strings.units.tons}`;
+
+            return (
+              <Paper elevation={ 1 } key={ surveyReusable.id }>
+                <Stack spacing={ 2 } p={ 2 }>
+                  <Typography variant="h4">
+                    { surveyReusable.componentName }
                   </Typography>
-                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.buildingPart, surveyReusable.componentName) }
-                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.usability, LocalizationUtils.getLocalizedUsability(surveyReusable.usability)) }
-                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.unit, surveyReusable.unit ? LocalizationUtils.getLocalizedUnits(surveyReusable.unit) : "") }
-                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.wasteAmount, surveyReusable.amount) }
+                  <Stack
+                    spacing={ isMobile ? 2 : 4}
+                    justifyContent="space-between"
+                    direction={ isMobile ? "column" : "row" }
+                  >
+                    { renderMediaDataCell(strings.survey.reusables.dataGridColumns.buildingPart, materialName) }
+                    <Divider
+                      variant="inset"
+                      orientation="vertical"
+                      flexItem
+                    />
+                    { renderMediaDataCell(strings.survey.reusables.dataGridColumns.usability, materialUsability)}
+                    <Divider
+                      variant="inset"
+                      orientation="vertical"
+                      flexItem
+                    />
+                    { renderMediaDataCell(strings.survey.reusables.dataGridColumns.amount, materialAmount)}
+                    <Divider
+                      variant="inset"
+                      orientation="vertical"
+                      flexItem
+                    />
+                    { surveyReusable.amountAsWaste && renderMediaDataCell(strings.survey.reusables.dataGridColumns.wasteAmount, materialAmountAsWaste) }
+                  </Stack>
                   { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, surveyReusable.description) }
                 </Stack>
-              )) }
-          </Stack>
+              </Paper>
+            );
+          })
+          }
         </Stack>
-      </Paper>
+      </Stack>
     );
   };
 
@@ -526,43 +543,55 @@ const SummaryView: React.FC = () => {
     }
 
     return (
-      <Paper>
-        <Stack
-          direction="column"
-          padding={ 2 }
-        >
-          <Typography variant="h3">
-            { strings.survey.wasteMaterial.title }
-          </Typography>
-          <Stack
-            direction="column"
-          >
-            { wastes.map(waste => 
-              (
-                <Stack
-                  direction="column"
-                  spacing={ 1 }
-                  mt={ 2 }
-                >
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="subtitle1">
-                      { wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.name }
-                    </Typography>
-                    <Typography variant="subtitle1">
-                      { wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.ewcSpecificationCode }
+      <Stack spacing={ 2 }>
+        <Typography variant="h3">
+          { strings.survey.wasteMaterial.title }
+        </Typography>
+        <Stack spacing={ 2 }>
+          { wastes.map(waste => {
+            const wasteMaterial = wasteMaterials.find(material => material.id === waste.wasteMaterialId);
+            const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
+            const fullEwcCode = `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}`;
+            const wasteUsage = usages.find(usage => usage.id === waste.usageId)?.name;
+            const wasteAmount = `${waste?.amount || ""} ${strings.units.tons}`;
+
+            return (
+              <Paper elevation={ 1 } key={ waste.id }>
+                <Stack spacing={ 2 } p={ 2 }>
+                  <Stack direction="row">
+                    <Typography variant="h4">
+                      { wasteMaterial?.name }
                     </Typography>
                   </Stack>
-                  { renderMediaDataCell(strings.survey.wasteMaterial.dataGridColumns.usage, usages.find(usage => usage.id === waste.usageId)?.name) }
-                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.amount, waste.amount) }
+                  <Stack
+                    spacing={ isMobile ? 2 : 4}
+                    justifyContent="space-between"
+                    direction={ isMobile ? "column" : "row" }
+                  >
+                    { renderMediaDataCell(strings.survey.wasteMaterial.dataGridColumns.wasteCode, fullEwcCode) }
+                    <Divider
+                      variant="inset"
+                      orientation="vertical"
+                      flexItem
+                    />
+                    { renderMediaDataCell(strings.survey.wasteMaterial.dataGridColumns.usage, wasteUsage) }
+                    <Divider
+                      variant="inset"
+                      orientation="vertical"
+                      flexItem
+                    />
+                    { renderMediaDataCell(strings.survey.reusables.dataGridColumns.amount, wasteAmount) }
+                  </Stack>
                   { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, waste.description) }
                 </Stack>
-              )) }
-          </Stack>
+              </Paper>
+            );
+          })
+          }
         </Stack>
-      </Paper>
+      </Stack>
     );
   };
-
 
   /**
    * Renders hazardous material section
@@ -573,39 +602,36 @@ const SummaryView: React.FC = () => {
     }
 
     return (
-      <Paper>
-        <Stack
-          direction="column"
-          padding={ 2 }
-        >
-          <Typography variant="h3">
-            { strings.survey.hazardousMaterial.title }
-          </Typography>
-          <Stack
-            direction="column"
-          >
-            { hazardousWastes.map(hazardousWaste => 
-              (
-                <Stack
-                  direction="column"
-                  spacing={ 1 }
-                  mt={ 2 }
-                >
+      <Stack spacing={ 2 }>
+        <Typography variant="h3">
+          { strings.survey.hazardousMaterial.title }
+        </Typography>
+        <Stack spacing={ 2 }>
+          { hazardousWastes.map(hazardousWaste => {
+            const wasteMaterial = wasteMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
+            const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
+            const fullEwcCode = `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}`;
+
+            return (
+              <Paper key={ hazardousWaste.id }>
+                <Stack>
                   <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="subtitle1">
+                    <Typography variant="h4">
                       { hazardousMaterials.find(hazardousMaterial => hazardousMaterial.id === hazardousWaste.hazardousMaterialId)?.name }
                     </Typography>
-                    <Typography variant="subtitle1">
-                      { wasteSpecifiers.find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.name }
+                    <Typography variant="h4">
+                      { fullEwcCode }
                     </Typography>
                   </Stack>
                   { renderMediaDataCell(strings.survey.hazardousMaterial.dataGridColumns.amount, hazardousWaste.amount) }
                   { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, hazardousWaste.description) }
                 </Stack>
-              )) }
-          </Stack>
+              </Paper>
+            );
+          })
+          }
         </Stack>
-      </Paper>
+      </Stack>
     );
   };
 
@@ -613,7 +639,16 @@ const SummaryView: React.FC = () => {
    * Renders list of materials
    */
   if (loading) {
-    return <CircularProgress color="primary" size={ 60 }/>;
+    return (
+      <Box
+        display="flex"
+        flex={ 1 }
+        justifyContent="center"
+        alignItems="center"
+      >
+        <CircularProgress color="primary" size={ 60 }/>
+      </Box>
+    );
   }
 
   return (
@@ -637,10 +672,7 @@ const SummaryView: React.FC = () => {
           { strings.survey.summary.print }
         </SurveyButton>
       </Stack>
-      <Stack
-        spacing={ 2 }
-        direction="column"
-      >
+      <Stack spacing={ 4 }>
         { renderBuildingInfoSection() }
         { renderOwnerInfoSection() }
         { renderSurveyInfoSection() }
