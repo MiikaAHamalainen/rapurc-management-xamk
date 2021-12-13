@@ -75,7 +75,7 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Create new owner information
+   * Fetches building
    */
   const fetchBuilding = async () => {
     if (!keycloak?.token || !selectedSurvey?.id) {
