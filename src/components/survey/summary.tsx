@@ -391,6 +391,36 @@ const SummaryView: React.FC = () => {
   };
 
   /**
+   * Renders other structures section
+   */
+  const renderOtherStructuresSection = () => {
+    if (!building?.otherStructures) {
+      return null;
+    }
+
+    return (
+      <Stack spacing={ 2 }>
+        <Typography variant="h3">
+          { strings.survey.otherStructures.title }
+        </Typography>
+        <Stack spacing={ 2 }>
+          { building?.otherStructures.map(otherStructure => (
+            <Paper elevation={ 1 } key={ otherStructure.name }>
+              <Stack spacing={ 2 } p={ 2 }>
+                <Typography variant="h4">
+                  { otherStructure.name }
+                </Typography>
+                { renderMediaDataCell(strings.survey.otherStructures.description, otherStructure.description) }
+              </Stack>
+            </Paper>
+          ))
+          }
+        </Stack>
+      </Stack>
+    );
+  };
+
+  /**
    * Renders owner info section
    */
   const renderSurveyInfoSection = () => {
@@ -674,6 +704,7 @@ const SummaryView: React.FC = () => {
       </Stack>
       <Stack spacing={ 4 }>
         { renderBuildingInfoSection() }
+        { renderOtherStructuresSection() }
         { renderOwnerInfoSection() }
         { renderSurveyInfoSection() }
         { renderSurveyorSection() }
