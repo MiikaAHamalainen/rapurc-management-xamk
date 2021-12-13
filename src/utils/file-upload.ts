@@ -29,7 +29,7 @@ export default class FileUploadUtils {
    * @param callback file upload progress callback function
    * @returns Promise of UploadData
    */
-  public static upload = async (token: string, fileToUpload: File, callback: (progress: number) => void): Promise<UploadData> => {
+  public static upload = async (token: string, fileToUpload: File, callback?: (progress: number) => void): Promise<UploadData> => {
     const response = await FileUploadUtils.getPresignedPostData(fileToUpload, token);
     return FileUploadUtils.getUploadData(response, fileToUpload, callback);
   };
@@ -42,7 +42,7 @@ export default class FileUploadUtils {
    * @param callback file upload progress callback function
    * @return returns UploadData object
    */
-  private static getUploadData = (response: PreSignedPostDataResponse, file: File, callback: (progress: number) => void): UploadData => {
+  private static getUploadData = (response: PreSignedPostDataResponse, file: File, callback?: (progress: number) => void): UploadData => {
     if (response.error) {
       throw new Error(response.message);
     }
@@ -55,7 +55,7 @@ export default class FileUploadUtils {
 
     const xhr = new XMLHttpRequest();
 
-    xhr.upload.addEventListener("progress", event => callback((event.loaded / event.total) * 100));
+    callback && xhr.upload.addEventListener("progress", event => callback((event.loaded / event.total) * 100));
 
     return {
       xhrRequest: xhr,

@@ -117,9 +117,20 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     }
 
     try {
+      const imageUrlPromises = newReusableFiles.map(async newReusableFile => {
+        const uploadData = await FileUploadUtils.upload(keycloak.token!!, newReusableFile);
+        const { xhrRequest, uploadUrl, formData, key } = uploadData;
+
+        xhrRequest.open("POST", uploadUrl, true);
+        xhrRequest.send(formData);
+        return `${uploadUrl}/${key}`;
+      });
+
+      const imagesUrls = await Promise.all(imageUrlPromises);
+
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
-        reusable: newMaterial
+        reusable: { ...newMaterial, images: imagesUrls }
       });
 
       setSurveyReusables([ ...surveyReusables, createdReusable ]);
@@ -129,6 +140,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         reusableMaterialId: "",
         metadata: {}
       });
+      setNewReusableFiles([]);
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.create, error);
     }
@@ -216,7 +228,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         onMaterialRowChange(updatedReusable);
       });
     } catch (error) {
-      errorContext.setError("TODO failed to upload", error);
+      errorContext.setError(strings.errorHandling.failToUpload, error);
     }
   };
 
@@ -226,7 +238,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     noKeyboard: true,
     accept: "image/jpg, image/png, image/gif",
     maxFiles: 4,
-    // TODO invalid image name
     onDrop: reusableUploadingImage?.id ? filesUpload : newReusableFilesUpload
   });
 
@@ -283,7 +294,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     setImageDialogOpen(false);
 
     if (reusableUploadingImage) {
-      // TODO upload the files and get the links
       await onMaterialRowChange(reusableUploadingImage);
     }
     setReusableUploadingImage(undefined);
@@ -723,7 +733,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       return (
         <DropZoneContainer { ...getRootProps({ className: "dropzone" }) }>
           <input { ...getInputProps() }/>
-          <Typography>TODO Drag n drop some files here</Typography>
+          <Typography>{ strings.survey.reusables.dropFile }</Typography>
           <SurveyButton
             variant="contained"
             color="primary"

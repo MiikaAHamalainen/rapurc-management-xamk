@@ -15,6 +15,7 @@
   "errorHandling": {
     "title": "Error",
     "missingAccessToken": "API-avain puuttuu",
+    "failToUpload": "Fail to upload images",
     "surveys": {
       "list": "Virhe listattaessa kartoituksia",
       "create": "Virhe luodessa uutta kartoitusta",
@@ -332,6 +333,7 @@
     },
     "reusables": {
       "title": "Uudelleenkäytettävät rakennusosat",
+      "dropFile": "Drop here",
       "viewImage": "Näytä kuvia",
       "moreImage": "Lisää kuvia",
       "addNewBuildingPart": "Lisää uusi rakennusosa",

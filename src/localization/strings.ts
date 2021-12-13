@@ -32,6 +32,7 @@ export interface Localized extends LocalizedStringsMethods {
   errorHandling: {
     title: string;
     missingAccessToken: string;
+    failToUpload: string;
     surveys: {
       list: string;
       create: string;
@@ -367,6 +368,7 @@ export interface Localized extends LocalizedStringsMethods {
     };
     reusables: {
       title: string;
+      dropFile: string;
       viewImage: string;
       moreImage: string;
       addNewBuildingPart: string;

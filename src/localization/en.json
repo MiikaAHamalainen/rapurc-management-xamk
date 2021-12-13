@@ -15,6 +15,7 @@
   "errorHandling": {
     "title": "Error",
     "missingAccessToken": "Missing access token",
+    "failToUpload": "Fail to upload images",
     "surveys": {
       "list": "Error while listing surveys",
       "create": "Error while creating new survey",
@@ -332,6 +333,7 @@
     },
     "reusables": {
       "title": "Reusable building parts",
+      "dropFile": "Drop here",
       "viewImage": "View images",
       "moreImage": "More images",
       "addNewBuildingPart": "Add new building part",
