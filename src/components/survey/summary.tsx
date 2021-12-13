@@ -58,7 +58,7 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Fetch building
+   * Fetches building types
    */
   const fetchBuildingTypes = async () => {
     if (!keycloak?.token || !selectedSurvey?.id) {
