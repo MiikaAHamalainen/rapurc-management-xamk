@@ -39,7 +39,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const [ loading, setLoading ] = React.useState(false);
   const [ uploadedFiles, setUploadedFiles ] = React.useState<UploadFile[]>([]);
   const [ newReusableFiles, setNewReusableFiles ] = React.useState<File[]>([]);
-  // TODO create reusable 
   const [ imageDialogOpen, setImageDialogOpen ] = React.useState(false);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
@@ -100,7 +99,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   }, []);
 
   /**
-   * On uploaded file delete
+   * On new reusable file delete
    */
   const onNewReusableFileDelete = (index: number) => {
     const updatedNewReusableFiles = [ ...newReusableFiles ];
@@ -149,14 +148,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Event handler for add reusable confirm
-   */
-  const onAddReusableClose = async () => {
-    setUploadedFiles([]);
-    setAddingSurveyReusable(false);
-  };
-
-  /**
    * Reusable change handler
    * 
    * @param updatedReusable updated reusable
@@ -182,9 +173,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Reusable change handler
+   * New reusable files upload
    * 
-   * @param addedFiles added files
+   * @param acceptedFiles accepted files
    */
   const newReusableFilesUpload = (acceptedFiles: File[]) => {
     const updatedNewReusableFiles = FileUploadUtils.normalizeFileNames([ ...newReusableFiles, ...acceptedFiles ].splice(0, 4));
@@ -192,18 +183,19 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Reusable change handler
+   * Reusable file upload progress
    * 
-   * @param updatedReusable updated reusable
+   * @param acceptedFiles accepted files
+   * @param file file
    */
   const onFileUploadProgress = (updatedUploadedFile: UploadFile[], file: File) => (progress: number) => {
     setUploadedFiles(updatedUploadedFile.map(uploadedFile => (uploadedFile.file?.name === file.name ? { ...uploadedFile, progress: progress } : uploadedFile)));
   };
 
   /**
-   * Reusable change handler
+   * files upload handler
    * 
-   * @param addedFiles added files
+   * @param acceptedFiles accepted files
    */
   const filesUpload = (acceptedFiles: File[]) => {
     if (!keycloak || !reusableUploadingImage) {
@@ -493,7 +485,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
-   * Renders add survey reusable dialog
+   * Renders new reusable image upload 
    */
   const renderNewReusableImageUpload = () => (
     <Stack
@@ -572,8 +564,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         error={ false }
         disabled={ !newMaterial.componentName || !newMaterial.reusableMaterialId }
         open={ addingSurveyReusable }
-        onClose={ onAddReusableClose }
-        onCancel={ onAddReusableClose }
+        onClose={ () => setAddingSurveyReusable(false) }
+        onCancel={ () => setAddingSurveyReusable(false) }
         onConfirm={ onAddReusableConfirm }
         title={ strings.survey.reusables.addNewBuildingPartsDialog.title }
         positiveButtonText={ strings.generic.confirm }
@@ -672,7 +664,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Renders delete material dialog
+   * Renders image dialog preview
    */
   const renderImagePreview = (uploadedFile: UploadFile) => {
     if (uploadedFile.imageUrl) {
@@ -689,7 +681,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Renders delete material dialog
+   * Renders image thumbnail
    */
   const renderImageThumbnail = (uploadedFile: UploadFile, index: number) => {
     if (uploadedFile.imageUrl) {
@@ -722,7 +714,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Renders delete material dialog
+   * Renders delete image dialog
    */
   const imageDialogContent = () => {
     if (!reusableUploadingImage) {
@@ -769,7 +761,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Renders delete material dialog
+   * Renders reusable image dialog
    */
   const renderReusableImageDialog = () => (
     <GenericDialog
@@ -1002,7 +994,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         width: 200,
         renderCell: (params: GridRenderCellParams) => {
           const { row } = params;
-          // TODO check this
           return (
             <SurveyButton
               fullWidth
@@ -1010,7 +1001,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
               color="primary"
               onClick={ () => onImageDialogOpen(row) }
             >
-              { row.images ? strings.survey.reusables.viewImage : strings.survey.reusables.moreImage }
+              { row.images?.length ? strings.survey.reusables.viewImage : strings.survey.reusables.moreImage }
             </SurveyButton>
           );
         }
