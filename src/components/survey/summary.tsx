@@ -436,7 +436,7 @@ const SummaryView: React.FC = () => {
    * Renders surveyor section
    */
   const renderSurveyorSection = () => {
-    if (!surveyors) {
+    if (!surveyors.length) {
       return null;
     }
 
@@ -476,7 +476,7 @@ const SummaryView: React.FC = () => {
    * Renders surveyor section
    */
   const renderReusableMaterialsSection = () => {
-    if (!surveyReusables) {
+    if (!surveyReusables.length) {
       return null;
     }
 
@@ -538,7 +538,7 @@ const SummaryView: React.FC = () => {
    * Renders waste material section
    */
   const renderWasteMaterialsSection = () => {
-    if (!wastes) {
+    if (!wastes.length) {
       return null;
     }
 
@@ -597,7 +597,7 @@ const SummaryView: React.FC = () => {
    * Renders hazardous material section
    */
   const renderHazardousMaterialsSection = () => {
-    if (!hazardousWastes) {
+    if (!hazardousWastes.length) {
       return null;
     }
 
