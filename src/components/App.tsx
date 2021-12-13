@@ -8,8 +8,8 @@ import SurveyScreen from "./screens/survey-screen";
 import ErrorHandler from "./error-handler/error-handler";
 import VisibleWithRole from "./containers/visible-with-role";
 import moment from "moment";
-import strings from "localization/strings";
 import "moment/locale/fi";
+import strings from "localization/strings";
 
 /**
  * Application component

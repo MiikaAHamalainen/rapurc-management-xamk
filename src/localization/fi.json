@@ -17,7 +17,7 @@
   },
 
   "errorHandling": {
-    "title": "Error",
+    "title": "Virhe",
     "missingAccessToken": "API-avain puuttuu",
     "surveys": {
       "list": "Virhe listattaessa kartoituksia",

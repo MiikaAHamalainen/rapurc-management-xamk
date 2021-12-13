@@ -14,7 +14,7 @@ import theme from "theme";
 import LocalizationUtils from "utils/localization-utils";
 
 /**
- * Component for waste material materials
+ * Component for summary view
  */
 const SummaryView: React.FC = () => {
   const keycloak = useAppSelector(selectKeycloak);
@@ -35,7 +35,7 @@ const SummaryView: React.FC = () => {
   const [ surveyors, setSurveyors ] = React.useState<Surveyor[]>([]);
 
   /**
-   * Fetch owner information array
+   * Fetches owner information array
    */
   const fetchOwnerInformation = async () => {
     if (!keycloak?.token || !selectedSurvey?.id) {
@@ -129,7 +129,7 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Fetch waste array
+   * Fetches waste array
    */
   const fetchWastes = async () => {
     if (!keycloak?.token || !selectedSurvey?.id) {
@@ -238,7 +238,7 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Create new owner information
+   * Fetches summary data
    */
   const fetchData = async () => {
     setLoading(true);
@@ -302,7 +302,7 @@ const SummaryView: React.FC = () => {
   );
 
   /**
-   * Renders data cell
+   * Renders data cell with inline label
    * 
    * @param title title
    * @param value value
