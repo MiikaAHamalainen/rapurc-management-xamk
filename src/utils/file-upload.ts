@@ -14,6 +14,21 @@ export default class FileUploadUtils {
    * @param callback file upload progress callback function
    * @returns Promise of UploadData
    */
+  public static normalizeFileNames = (files: File[]): File[] => {
+    return files.map(file => {
+      const blob = file.slice(0, file.size, file.type);
+      return new File([blob], file.name.replaceAll(" ", "_"), { type: file.type });
+    });
+  };
+
+  /**
+   * Uploads file
+   *
+   * @param token access token
+   * @param fileToUpload file to upload
+   * @param callback file upload progress callback function
+   * @returns Promise of UploadData
+   */
   public static upload = async (token: string, fileToUpload: File, callback: (progress: number) => void): Promise<UploadData> => {
     const response = await FileUploadUtils.getPresignedPostData(fileToUpload, token);
     return FileUploadUtils.getUploadData(response, fileToUpload, callback);

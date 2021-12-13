@@ -117,7 +117,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     }
 
     try {
-      // TODO upload the files to s3 clear the files, add the image urls to the reusable object
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
         reusable: newMaterial
@@ -176,7 +175,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * @param addedFiles added files
    */
   const newReusableFilesUpload = (acceptedFiles: File[]) => {
-    const updatedNewReusableFiles = [ ...newReusableFiles, ...acceptedFiles ].splice(0, 4);
+    const updatedNewReusableFiles = FileUploadUtils.normalizeFileNames([ ...newReusableFiles, ...acceptedFiles ].splice(0, 4));
     setNewReusableFiles(updatedNewReusableFiles);
   };
 
@@ -199,7 +198,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
-    const addedFiles = acceptedFiles.splice(0, 4 - uploadedFiles.length);
+    const addedFiles = FileUploadUtils.normalizeFileNames(acceptedFiles.splice(0, 4 - uploadedFiles.length));
     const updatedUploadedFile = [ ...uploadedFiles, ...addedFiles.map(addedFile => ({ file: addedFile, progress: 0 })) ];
     setUploadedFiles(updatedUploadedFile);
     try {
