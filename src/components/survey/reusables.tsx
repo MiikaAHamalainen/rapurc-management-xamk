@@ -343,6 +343,25 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
+   * Event handler for new material number change
+   *
+   * @param index number
+   */
+  const onReusableImageDelete = (index: number) => () => {
+    if (!reusableUploadingImage?.images) {
+      return;
+    }
+
+    const updatedReusableUploadingImage = produce(reusableUploadingImage, draft => {
+      draft.images && draft.images.splice(index, 1);
+    });
+
+    setUploadedFiles(updatedReusableUploadingImage.images?.map(image => ({ imageUrl: image, progress: 100 })) || []);
+    setReusableUploadingImage(updatedReusableUploadingImage);
+    onMaterialRowChange(updatedReusableUploadingImage);
+  };
+
+  /**
    * Check if viewport is mobile size
    */
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
@@ -664,16 +683,42 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Renders image dialog preview
+   * Renders delete image preview button
+   * 
+   * @param index index
    */
-  const renderImagePreview = (uploadedFile: UploadFile) => {
+  const renderDeletePreviewButton = (index: number) => (
+    <IconButton
+      color="error"
+      sx={{
+        position: "relative", top: 10, right: 10
+      }}
+      onClick={ onReusableImageDelete(index) }
+    >
+      <Delete/>
+    </IconButton>
+  );
+
+  /**
+   * Renders image dialog preview
+   * 
+   * @param uploadedFile uploaded file
+   * @param index index
+   */
+  const renderImagePreview = (uploadedFile: UploadFile, index: number) => {
     if (uploadedFile.imageUrl) {
       return (
-        <img alt={ uploadedFile.imageUrl } src={ uploadedFile.imageUrl }/>
+        <Box>
+          { renderDeletePreviewButton(index) }
+          <img alt={ uploadedFile.imageUrl } src={ uploadedFile.imageUrl }/>
+        </Box>
       );
     } if (uploadedFile.file) {
       return (
-        <img alt={ uploadedFile.file.name } src={ URL.createObjectURL(uploadedFile.file) }/>
+        <Box>
+          { renderDeletePreviewButton(index) }
+          <img alt={ uploadedFile.file.name } src={ URL.createObjectURL(uploadedFile.file) }/>
+        </Box>
       );
     }
 
@@ -682,6 +727,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * Renders image thumbnail
+   * 
+   * @param uploadedFile uploaded file
+   * @param index index
    */
   const renderImageThumbnail = (uploadedFile: UploadFile, index: number) => {
     if (uploadedFile.imageUrl) {
@@ -737,11 +785,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       );
     }
 
-    const selectedImageFile = uploadedFiles[Math.min(displayedImageIndex, uploadedFiles.length - 1)];
+    const selectedImageIndex = Math.min(displayedImageIndex, uploadedFiles.length - 1);
+    const selectedImageFile = uploadedFiles[selectedImageIndex];
 
     return (
       <Stack spacing={ 2 } direction="column">
-        { renderImagePreview(selectedImageFile) }
+        { renderImagePreview(selectedImageFile, selectedImageIndex) }
         <Grid container spacing={ 2 }>
           { uploadedFiles.map(renderImageThumbnail) }
           {
