@@ -98,7 +98,7 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Fetch owner information array
+   * Fetches reusables
    */
   const fetchSurveyReusables = async () => {
     if (!keycloak?.token || !selectedSurvey?.id) {
