@@ -1,5 +1,5 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Button, Grid, Hidden, IconButton, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Hidden, IconButton, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams, GridRenderEditCellParams, GridRowId } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
@@ -16,6 +16,9 @@ import { DropZoneContainer, SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
 import LocalizationUtils from "utils/localization-utils";
 import { useDropzone } from "react-dropzone";
+import FileUploadUtils from "utils/file-upload";
+import { UploadFile } from "types";
+import produce from "immer";
 
 const WithReusableDataGridDebounce = WithDataGridDebounceFactory<Reusable>();
 
@@ -34,7 +37,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const errorContext = React.useContext(ErrorContext);
   const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
   const [ loading, setLoading ] = React.useState(false);
-  const [ uploadedFiles, setUploadedFiles ] = React.useState<File[]>([]);
+  const [ uploadedFiles, setUploadedFiles ] = React.useState<UploadFile[]>([]);
+  const [ newReusableFiles, setNewReusableFiles ] = React.useState<File[]>([]);
+  // TODO create reusable 
   const [ imageDialogOpen, setImageDialogOpen ] = React.useState(false);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
@@ -48,17 +53,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     usability: Usability.NotValidated,
     reusableMaterialId: "",
     metadata: {}
-  });
-  const { getRootProps, getInputProps, open } = useDropzone({
-    // Disable click and keydown behavior
-    noClick: true,
-    noKeyboard: true,
-    accept: "image/jpg, image/png, image/gif",
-    maxFiles: 4,
-    onDrop: acceptedFiles => {
-      const updatedFiles = [ ...uploadedFiles, ...acceptedFiles ].splice(0, 4);
-      setUploadedFiles(updatedFiles);
-    }
   });
 
   /**
@@ -108,10 +102,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   /**
    * On uploaded file delete
    */
-  const onUploadedFileDelete = (index: number) => {
-    const updatedFiles = [ ...uploadedFiles ];
-    updatedFiles.splice(index, 1);
-    setUploadedFiles(updatedFiles);
+  const onNewReusableFileDelete = (index: number) => {
+    const updatedNewReusableFiles = [ ...newReusableFiles ];
+    updatedNewReusableFiles.splice(index, 1);
+    setNewReusableFiles(updatedNewReusableFiles);
   };
 
   /**
@@ -123,6 +117,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     }
 
     try {
+      // TODO upload the files to s3 clear the files, add the image urls to the reusable object
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
         reusable: newMaterial
@@ -139,6 +134,14 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       errorContext.setError(strings.errorHandling.reusables.create, error);
     }
 
+    setAddingSurveyReusable(false);
+  };
+
+  /**
+   * Event handler for add reusable confirm
+   */
+  const onAddReusableClose = async () => {
+    setUploadedFiles([]);
     setAddingSurveyReusable(false);
   };
 
@@ -166,6 +169,67 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     
     setReusableDescriptionDialogOpen(true); // TODO: Find another way to set description dialog open
   };
+
+  /**
+   * Reusable change handler
+   * 
+   * @param addedFiles added files
+   */
+  const newReusableFilesUpload = (acceptedFiles: File[]) => {
+    const updatedNewReusableFiles = [ ...newReusableFiles, ...acceptedFiles ].splice(0, 4);
+    setNewReusableFiles(updatedNewReusableFiles);
+  };
+
+  /**
+   * Reusable change handler
+   * 
+   * @param updatedReusable updated reusable
+   */
+  const onFileUploadProgress = (updatedUploadedFile: UploadFile[], file: File) => (progress: number) => {
+    setUploadedFiles(updatedUploadedFile.map(uploadedFile => (uploadedFile.file?.name === file.name ? { ...uploadedFile, progress: progress } : uploadedFile)));
+  };
+
+  /**
+   * Reusable change handler
+   * 
+   * @param addedFiles added files
+   */
+  const filesUpload = (acceptedFiles: File[]) => {
+    if (!keycloak || !reusableUploadingImage) {
+      return;
+    }
+
+    const addedFiles = acceptedFiles.splice(0, 4 - uploadedFiles.length);
+    const updatedUploadedFile = [ ...uploadedFiles, ...addedFiles.map(addedFile => ({ file: addedFile, progress: 0 })) ];
+    setUploadedFiles(updatedUploadedFile);
+    try {
+      addedFiles.forEach(async addedFile => {
+        const uploadData = await FileUploadUtils.upload(keycloak.token!!, addedFile, onFileUploadProgress(updatedUploadedFile, addedFile));
+        const { xhrRequest, uploadUrl, formData, key } = uploadData;
+
+        xhrRequest.open("POST", uploadUrl, true);
+        xhrRequest.send(formData);
+        const imageUrl = `${uploadUrl}/${key}`;
+        uploadedFiles.map(uploadedFile => (uploadedFile.file?.name === addedFile.name ? { ...uploadedFile, imageUrl: imageUrl } : uploadedFile));
+        const updatedReusable = produce(reusableUploadingImage, draft => {
+          draft.images ? draft.images.push(imageUrl) : draft.images = [ imageUrl ];
+        });
+        onMaterialRowChange(updatedReusable);
+      });
+    } catch (error) {
+      errorContext.setError("TODO failed to upload", error);
+    }
+  };
+
+  const { getRootProps, getInputProps, open } = useDropzone({
+    // Disable click and keydown behavior
+    noClick: true,
+    noKeyboard: true,
+    accept: "image/jpg, image/png, image/gif",
+    maxFiles: 4,
+    // TODO invalid image name
+    onDrop: reusableUploadingImage?.id ? filesUpload : newReusableFilesUpload
+  });
 
   /**
    * Event Handler set material prop
@@ -201,6 +265,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const onImageDialogOpen = (reusable: Reusable) => {
     setImageDialogOpen(true);
     setReusableUploadingImage(reusable);
+    setUploadedFiles(reusable.images?.map(image => ({ imageUrl: image, progress: 100 })) || []);
   };
 
   /**
@@ -444,7 +509,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         </Box>
       </Stack>
       {
-        uploadedFiles.map((uploadedFile, index) => (
+        newReusableFiles.map((uploadedFile, index) => (
           <Stack
             direction="row"
             alignItems="center"
@@ -456,12 +521,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
               src={ URL.createObjectURL(uploadedFile) }
             />
             <Typography ml={ 2 }>
-              { `${uploadedFile.name} ${uploadedFile.size}` }
+              { uploadedFile.name }
             </Typography>
             <SurveyButton
               sx={{ ml: "auto" }}
               color="error"
-              onClick={ () => onUploadedFileDelete(index) }
+              onClick={ () => onNewReusableFileDelete(index) }
             >
               { strings.generic.delete }
             </SurveyButton>
@@ -498,8 +563,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         error={ false }
         disabled={ !newMaterial.componentName || !newMaterial.reusableMaterialId }
         open={ addingSurveyReusable }
-        onClose={ () => setAddingSurveyReusable(false) }
-        onCancel={ () => setAddingSurveyReusable(false) }
+        onClose={ onAddReusableClose }
+        onCancel={ onAddReusableClose }
         onConfirm={ onAddReusableConfirm }
         title={ strings.survey.reusables.addNewBuildingPartsDialog.title }
         positiveButtonText={ strings.generic.confirm }
@@ -600,12 +665,60 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   /**
    * Renders delete material dialog
    */
+  const renderImagePreview = (uploadedFile: UploadFile) => {
+    if (uploadedFile.imageUrl) {
+      return (
+        <img alt={ uploadedFile.imageUrl } src={ uploadedFile.imageUrl }/>
+      );
+    } if (uploadedFile.file) {
+      return (
+        <img alt={ uploadedFile.file.name } src={ URL.createObjectURL(uploadedFile.file) }/>
+      );
+    }
+
+    return null;
+  };
+
+  /**
+   * Renders delete material dialog
+   */
+  const renderImageThumbnail = (uploadedFile: UploadFile, index: number) => {
+    if (uploadedFile.imageUrl) {
+      return (
+        <Grid item md={ 3 }>
+          <Button onClick={ () => setDisplayedImageIndex(index) }>
+            <img width={ 150 } height={ 150 } alt={ uploadedFile.imageUrl } src={ uploadedFile.imageUrl }/>
+          </Button>
+        </Grid>
+      );
+    } if (uploadedFile.file) {
+      return (
+        <Grid item md={ 3 }>
+          <Button onClick={ () => setDisplayedImageIndex(index) }>
+            { uploadedFile.progress < 100 && <CircularProgress
+              sx={{
+                position: "absolute",
+                top: 75,
+                left: 75
+              }}
+            />
+            }
+            <img width={ 150 } height={ 150 } alt={ uploadedFile.file.name } src={ URL.createObjectURL(uploadedFile.file) }/>
+          </Button>
+        </Grid>
+      );
+    }
+
+    return null;
+  };
+
+  /**
+   * Renders delete material dialog
+   */
   const imageDialogContent = () => {
     if (!reusableUploadingImage) {
       return null;
     }
-
-    // TODO populate the acceptedFiles with image urls  
 
     if (uploadedFiles.length === 0) {
       return (
@@ -627,17 +740,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
     return (
       <Stack spacing={ 2 } direction="column">
-        <img alt={ selectedImageFile.name } src={ URL.createObjectURL(selectedImageFile) }/>
+        { renderImagePreview(selectedImageFile) }
         <Grid container spacing={ 2 }>
-          {
-            uploadedFiles.map((uploadedFile, index) => (
-              <Grid item md={ 3 }>
-                <Button onClick={ () => setDisplayedImageIndex(index) }>
-                  <img width={ 150 } height={ 150 } alt={ uploadedFile.name } src={ URL.createObjectURL(uploadedFile) }/>
-                </Button>
-              </Grid>
-            ))
-          }
+          { uploadedFiles.map(renderImageThumbnail) }
           {
             uploadedFiles.length < 4 &&
             <Grid item md={ 3 }>
