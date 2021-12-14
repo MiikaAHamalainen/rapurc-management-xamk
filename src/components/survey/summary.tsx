@@ -13,6 +13,34 @@ import { SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
 import LocalizationUtils from "utils/localization-utils";
 
+interface SurveySummary {
+  building?: Building;
+  buildingTypes: BuildingType[];
+  ownerInformation?: OwnerInformation;
+  reusables: Reusable[];
+  reusableMaterials: ReusableMaterial[];
+  wastes: Waste[];
+  wasteCategories: WasteCategory[];
+  wasteMaterials: WasteMaterial[];
+  hazardousWastes: HazardousWaste[];
+  hazardousMaterials: HazardousMaterial[];
+  usages: Usage[];
+  surveyors: Surveyor[];
+}
+
+const initialSurveySummary: SurveySummary = {
+  buildingTypes: [],
+  reusables: [],
+  reusableMaterials: [],
+  wastes: [],
+  wasteCategories: [],
+  wasteMaterials: [],
+  hazardousWastes: [],
+  hazardousMaterials: [],
+  usages: [],
+  surveyors: []
+};
+
 /**
  * Component for summary view
  */
@@ -21,18 +49,7 @@ const SummaryView: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const selectedSurvey = useAppSelector(selectSelectedSurvey);
   const [ loading, setLoading ] = React.useState(false);
-  const [ building, setBuilding ] = React.useState<Building>();
-  const [ buildingTypes, setBuildingTypes ] = React.useState<BuildingType[]>();
-  const [ ownerInformation, setOwnerInformation ] = React.useState<OwnerInformation>();
-  const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
-  const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
-  const [ wastes, setWastes ] = React.useState<Waste[]>([]);
-  const [ wasteCategories, setWasteCategories ] = React.useState<WasteCategory[]>([]);
-  const [ wasteMaterials, setWasteMaterials ] = React.useState<WasteMaterial[]>([]);
-  const [ hazardousWastes, setHazardousWastes ] = React.useState<HazardousWaste[]>([]);
-  const [ hazardousMaterials, setHazardousMaterials ] = React.useState<HazardousMaterial[]>([]);
-  const [ usages, setUsages ] = React.useState<Usage[]>([]);
-  const [ surveyors, setSurveyors ] = React.useState<Surveyor[]>([]);
+  const [ surveySummary, setSurveySummary ] = React.useState<SurveySummary>(initialSurveySummary);
 
   /**
    * Fetches owner information array
@@ -51,7 +68,7 @@ const SummaryView: React.FC = () => {
         return;
       }
 
-      setOwnerInformation(fetchedOwnerInformationArray[0]);
+      return fetchedOwnerInformationArray[0];
     } catch (error) {
       errorContext.setError(strings.errorHandling.owners.create, error);
     }
@@ -66,9 +83,7 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      const fetchedBuildingTypes = await Api.getBuildingTypesApi(keycloak.token).listBuildingTypes();
-
-      setBuildingTypes(fetchedBuildingTypes);
+      return await Api.getBuildingTypesApi(keycloak.token).listBuildingTypes();
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildingTypes.list, error);
     }
@@ -91,7 +106,7 @@ const SummaryView: React.FC = () => {
         return;
       }
 
-      setBuilding(fetchedBuildings[0]);
+      return fetchedBuildings[0];
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildings.list, error);
     }
@@ -100,14 +115,13 @@ const SummaryView: React.FC = () => {
   /**
    * Fetches reusables
    */
-  const fetchSurveyReusables = async () => {
+  const fetchReusables = async () => {
     if (!keycloak?.token || !selectedSurvey?.id) {
       return;
     }
 
     try {
-      const fetchedReusables = await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: selectedSurvey.id });
-      setSurveyReusables(fetchedReusables);
+      return await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: selectedSurvey.id });
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.list, error);
     }
@@ -122,7 +136,7 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      setReusableMaterials(await Api.getReusableMaterialApi(keycloak.token).listReusableMaterials());
+      return await Api.getReusableMaterialApi(keycloak.token).listReusableMaterials();
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.list, error);
     }
@@ -137,7 +151,7 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      setWastes(await Api.getWastesApi(keycloak.token).listSurveyWastes({ surveyId: selectedSurvey.id }));
+      return await Api.getWastesApi(keycloak.token).listSurveyWastes({ surveyId: selectedSurvey.id });
     } catch (error) {
       errorContext.setError(strings.errorHandling.waste.list, error);
     }
@@ -152,7 +166,7 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      setWasteCategories(await Api.getWasteCategoryApi(keycloak.token).listWasteCategories());
+      return await Api.getWasteCategoryApi(keycloak.token).listWasteCategories();
     } catch (error) {
       errorContext.setError(strings.errorHandling.wasteMaterials.list, error);
     }
@@ -167,7 +181,7 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      setWasteMaterials(await Api.getWasteMaterialApi(keycloak.token).listWasteMaterials());
+      return await Api.getWasteMaterialApi(keycloak.token).listWasteMaterials();
     } catch (error) {
       errorContext.setError(strings.errorHandling.wasteMaterial.list, error);
     }
@@ -182,9 +196,8 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      setHazardousWastes(await Api.getHazardousWasteApi(keycloak.token).listSurveyHazardousWastes({ surveyId: selectedSurvey.id }));
+      return await Api.getHazardousWasteApi(keycloak.token).listSurveyHazardousWastes({ surveyId: selectedSurvey.id });
     } catch (error) {
-      // TODO error catching
       errorContext.setError(strings.errorHandling.hazardousWastes.list, error);
     }
   };
@@ -198,7 +211,7 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      setHazardousMaterials(await Api.getHazardousMaterialApi(keycloak.token).listHazardousMaterials());
+      return await Api.getHazardousMaterialApi(keycloak.token).listHazardousMaterials();
     } catch (error) {
       errorContext.setError(strings.errorHandling.hazardousMaterials.list, error);
     }
@@ -213,7 +226,7 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      setUsages(await Api.getUsageApi(keycloak.token).listUsages());
+      return await Api.getUsageApi(keycloak.token).listUsages();
     } catch (error) {
       errorContext.setError(strings.errorHandling.postProcess.list, error);
     }
@@ -230,8 +243,7 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      const fetchedSurveyors = await Api.getSurveyorsApi(keycloak.token).listSurveyors({ surveyId: selectedSurvey.id });
-      setSurveyors(fetchedSurveyors);
+      return await Api.getSurveyorsApi(keycloak.token).listSurveyors({ surveyId: selectedSurvey.id });
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveyors.list, error);
     }
@@ -242,18 +254,50 @@ const SummaryView: React.FC = () => {
    */
   const fetchData = async () => {
     setLoading(true);
-    await fetchBuilding();
-    await fetchBuildingTypes();
-    await fetchOwnerInformation();
-    await fetchSurveyReusables();
-    await fetchReusableMaterials();
-    await fetchWasteCategories();
-    await fetchWastes();
-    await fetchWastesMaterials();
-    await fetchUsages();
-    await fetchSurveyors();
-    await fetchHazardousWaste();
-    await fetchHazardousMaterial();
+    // @ts-ignore
+    const resolvedResult = await Promise.all([
+      fetchBuilding(),
+      fetchBuildingTypes(),
+      fetchOwnerInformation(),
+      fetchReusables(),
+      fetchReusableMaterials(),
+      fetchWasteCategories(),
+      fetchWastes(),
+      fetchWastesMaterials(),
+      fetchUsages(),
+      fetchSurveyors(),
+      fetchHazardousWaste(),
+      fetchHazardousMaterial()
+    ]);
+
+    const fetchedSurveySummary: SurveySummary = {
+      // @ts-ignore
+      building: resolvedResult[0],
+      // @ts-ignore
+      buildingTypes: resolvedResult[1] || [],
+      // @ts-ignore
+      ownerInformation: resolvedResult[2],
+      // @ts-ignore
+      reusables: resolvedResult[3] || [],
+      // @ts-ignore
+      reusableMaterials: resolvedResult[4] || [],
+      // @ts-ignore
+      wasteCategories: resolvedResult[5] || [],
+      // @ts-ignore
+      wastes: resolvedResult[6] || [],
+      // @ts-ignore
+      wasteMaterials: resolvedResult[7] || [],
+      // @ts-ignore
+      usages: resolvedResult[8] || [],
+      // @ts-ignore
+      surveyors: resolvedResult[9] || [],
+      // @ts-ignore
+      hazardousWastes: resolvedResult[10] || [],
+      // @ts-ignore
+      hazardousMaterials: resolvedResult[11] || []
+    };
+
+    setSurveySummary(fetchedSurveySummary);
     setLoading(false);
   };
 
@@ -265,6 +309,21 @@ const SummaryView: React.FC = () => {
    * Check if viewport is mobile size
    */
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+
+  const {
+    buildingTypes,
+    hazardousMaterials,
+    hazardousWastes,
+    reusableMaterials,
+    reusables,
+    surveyors,
+    usages,
+    wasteCategories,
+    wasteMaterials,
+    wastes,
+    building,
+    ownerInformation
+  } = surveySummary;
 
   /**
    * Renders data title
@@ -282,9 +341,9 @@ const SummaryView: React.FC = () => {
    * 
    * @param value value
    */
-  const renderDataValue = (value?: string | number) => (
+  const renderDataValue = (value?: string | number) => value?.toString() && (
     <Typography variant="body2">
-      { value || "-" }
+      { value.toString() }
     </Typography>
   );
 
@@ -297,7 +356,7 @@ const SummaryView: React.FC = () => {
   const renderDataCell = (title: string, value?: string | number) => (
     <Stack>
       { renderDataTitle(title) }
-      { renderDataValue(value) }
+      { renderDataValue(value || "-") }
     </Stack>
   );
 
@@ -310,7 +369,7 @@ const SummaryView: React.FC = () => {
   const renderMediaDataCell = (title: string, value?: string | number) => (
     <Stack flex={ 1 }>
       { renderDataTitle(`${title}:`) }
-      { renderDataValue(value) }
+      { renderDataValue(value || "-") }
     </Stack>
   );
 
@@ -370,7 +429,7 @@ const SummaryView: React.FC = () => {
             { strings.survey.owner.title }
           </Typography>
           <Paper sx={{ p: 2 }}>
-            { ownerInformation.ownerName && renderDataValue(ownerInformation.ownerName) }
+            { renderDataValue(ownerInformation.ownerName) }
           </Paper>
         </Stack>
         <Stack spacing={ 2 } width="100%">
@@ -380,9 +439,9 @@ const SummaryView: React.FC = () => {
           <Paper>
             <Stack spacing={ 2 } p={ 2 }>
               { renderDataValue(`${ownerInformation.contactPerson?.firstName || ""} ${ownerInformation.contactPerson?.lastName || ""}`) }
-              { ownerInformation.contactPerson?.profession && renderDataValue(ownerInformation.contactPerson?.profession) }
-              { ownerInformation.contactPerson?.phone && renderDataValue(ownerInformation.contactPerson?.phone) }
-              { ownerInformation.contactPerson?.email && renderDataValue(ownerInformation.contactPerson?.email) }
+              { renderDataValue(ownerInformation.contactPerson?.profession) }
+              { renderDataValue(ownerInformation.contactPerson?.phone) }
+              { renderDataValue(ownerInformation.contactPerson?.email) }
             </Stack>
           </Paper>
         </Stack>
@@ -506,7 +565,7 @@ const SummaryView: React.FC = () => {
    * Renders surveyor section
    */
   const renderReusableMaterialsSection = () => {
-    if (!surveyReusables.length) {
+    if (!reusables.length) {
       return null;
     }
 
@@ -516,17 +575,17 @@ const SummaryView: React.FC = () => {
           { strings.survey.reusables.title }
         </Typography>
         <Stack spacing={ 2 }>
-          { surveyReusables.map(surveyReusable => {
-            const materialName = reusableMaterials.find(reusableMaterial => reusableMaterial.id === surveyReusable.reusableMaterialId)?.name || "";
-            const materialUsability = LocalizationUtils.getLocalizedUsability(surveyReusable.usability);
-            const materialAmount = `${surveyReusable.amount} ${surveyReusable.unit ? LocalizationUtils.getLocalizedUnits(surveyReusable.unit) : ""}`;
-            const materialAmountAsWaste = `${surveyReusable.amountAsWaste} ${strings.units.tons}`;
+          { reusables.map(reusable => {
+            const materialName = reusableMaterials.find(reusableMaterial => reusableMaterial.id === reusable.reusableMaterialId)?.name || "";
+            const materialUsability = LocalizationUtils.getLocalizedUsability(reusable.usability);
+            const materialAmount = `${reusable.amount} ${reusable.unit ? LocalizationUtils.getLocalizedUnits(reusable.unit) : ""}`;
+            const materialAmountAsWaste = `${reusable.amountAsWaste} ${strings.units.tons}`;
 
             return (
-              <Paper elevation={ 1 } key={ surveyReusable.id }>
+              <Paper elevation={ 1 } key={ reusable.id }>
                 <Stack spacing={ 2 } p={ 2 }>
                   <Typography variant="h4">
-                    { surveyReusable.componentName }
+                    { reusable.componentName }
                   </Typography>
                   <Stack
                     spacing={ isMobile ? 2 : 4}
@@ -551,9 +610,9 @@ const SummaryView: React.FC = () => {
                       orientation="vertical"
                       flexItem
                     />
-                    { surveyReusable.amountAsWaste && renderMediaDataCell(strings.survey.reusables.dataGridColumns.wasteAmount, materialAmountAsWaste) }
+                    { reusable.amountAsWaste && renderMediaDataCell(strings.survey.reusables.dataGridColumns.wasteAmount, materialAmountAsWaste) }
                   </Stack>
-                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, surveyReusable.description) }
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, reusable.description) }
                 </Stack>
               </Paper>
             );
