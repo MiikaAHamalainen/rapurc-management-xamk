@@ -12,8 +12,12 @@
     "open": "Avaa"
   },
 
+  "units": {
+    "tons": "tonnia"
+  },
+
   "errorHandling": {
-    "title": "Error",
+    "title": "Virhe",
     "missingAccessToken": "API-avain puuttuu",
     "surveys": {
       "list": "Virhe listattaessa kartoituksia",
@@ -63,10 +67,17 @@
       "create": "Virhe luotaessa rakennus- tai purkujätemateriaalia",
       "delete": "Virhe poistettaessa rakennus- tai purkujätemateriaalia"
     },
+    "hazardousWastes": {
+      "list": "Virhe ladattaessa haitta-ainetta sisältäviä materiaaleja",
+      "create": "Virhe luotaessa haitta-ainetta sisältävää materiaalia",
+      "delete": "Virhe poistettaessa haitta-ainetta sisältävää materiaalia",
+      "update": "Virhe päivitettäessä haitta-ainetta sisältävää materiaalia"
+    },
     "hazardousMaterials": {
       "list": "Virhe ladattaessa haitta-ainetta sisältäviä materiaaleja",
       "create": "Virhe luotaessa haitta-ainetta sisältävää materiaalia",
-      "delete": "Virhe poistettaessa haitta-ainetta sisältävää materiaalia"
+      "delete": "Virhe poistettaessa haitta-ainetta sisältävää materiaalia",
+      "update": "Virhe päivitettäessä haitta-ainetta sisältävää materiaalia"
     },
     "surveyors": {
       "list": "Virhe kartoittajaa listattaessa",
@@ -275,7 +286,7 @@
       "buildingID": "Rakennustunnus",
       "buildingClass": "Rakennusluokka",
       "year": "Rakennusvuosi",
-      "area": "Kokonaisala (m²)",
+      "area": "Kerrosala (m²)",
       "volume": "Rakennustilavuus (m³)",
       "floors": "Kerrosluku",
       "basementFloors": "Kellarikerrokset",
@@ -388,8 +399,18 @@
         "wasteCode": "Jätekoodi",
         "usage": "Jatkokäsittely",
         "amount": "Määrä",
-        "description": "Lisätieto",
+        "description": "Lisätiedot",
         "editDescription": "Muokkaa lisätietoa"
+      }
+    },
+    "hazardousMaterial": {
+      "title": "Haitta-aineita sisältävät materiaalit",
+      "dataGridColumns": {
+        "hazardousMaterial": "Haitta-aine",
+        "material": "Materiaali",
+        "wasteCode": "Jätekoodi",
+        "amount": "Määrä",
+        "description": "Lisätiedot"
       }
     },
     "otherStructures": {
@@ -403,6 +424,10 @@
         "deleteBuilding": "Poista rakennus / rakennelma",
         "areYouSure": "Oletko varma että haluat poistaa rakennuksen / rakennelman?"
       }
+    },
+    "summary": {
+      "title": "Yhteenveto",
+      "print": "Tulosta"
     }
   }
 }

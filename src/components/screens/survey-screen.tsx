@@ -113,7 +113,6 @@ const SurveyScreen: React.FC = () => {
         title={ strings.surveyScreen.navigation.attachments }
       />
       <NavigationItem
-        disabled
         icon={ <Summarize/> }
         to="summary"
         title={ strings.surveyScreen.navigation.summary }

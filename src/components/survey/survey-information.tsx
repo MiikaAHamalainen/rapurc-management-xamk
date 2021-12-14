@@ -451,7 +451,6 @@ const SurveyInformation: React.FC = () => {
         field: "company",
         headerName: strings.survey.info.dataGridColumns.company,
         width: 200,
-        type: "singleSelect",
         editable: true
       },
       {

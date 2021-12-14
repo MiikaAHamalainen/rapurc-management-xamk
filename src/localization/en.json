@@ -12,6 +12,10 @@
     "open": "Open"
   },
 
+  "units": {
+    "tons": "tons"
+  },
+
   "errorHandling": {
     "title": "Error",
     "missingAccessToken": "Missing access token",
@@ -67,6 +71,12 @@
       "list": "Error while listing hazardous materials",
       "create": "Error while creating hazardous material",
       "delete": "Error while deleting hazardous material"
+    },
+    "hazardousWastes": {
+      "list": "Error while listing hazardous wastes",
+      "update": "Error while updating hazardous wastes",
+      "create": "Error while creating hazardous wastes",
+      "delete": "Error while deleting hazardous wastes"
     },
     "surveyors": {
       "list": "Error while listing surveyor",
@@ -392,6 +402,16 @@
         "editDescription": "Edit description"
       }
     },
+    "hazardousMaterial": {
+      "title": "Hazardous material",
+      "dataGridColumns": {
+        "hazardousMaterial": "Hazardous material",
+        "material": "Material",
+        "wasteCode": "Waste code",
+        "amount": "Amount",
+        "description": "Description"
+      }
+    },
     "otherStructures": {
       "title": "Other demolished buildings and structures",
       "description": "Add buildings and structures that are going to be demolished with the building.",
@@ -403,6 +423,10 @@
         "deleteBuilding": "Delete other building / structure",
         "areYouSure": "Are you sure you want to delete this building / structure?"
       }
+    },
+    "summary": {
+      "title": "Summary",
+      "print": "Print"
     }
   }
 }

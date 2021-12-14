@@ -56,7 +56,7 @@ const Waste: React.FC = () => {
   };
 
   /**
-   * Fetches list of wastes
+   * Fetches list of waste categories
    */
   const fetchWasteCategories = async () => {
     if (!keycloak?.token) {

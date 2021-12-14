@@ -6,6 +6,7 @@ import Reusables from "components/survey/reusables";
 import * as React from "react";
 import { Route, Routes } from "react-router-dom";
 import WasteMaterial from "components/survey/waste-material";
+import SummaryView from "components/survey/summary";
 
 /**
  * Component properties
@@ -47,6 +48,10 @@ const SurveyRoutes: React.FC<Props> = ({ surveyId }) => {
       <Route
         path="waste"
         element={ <WasteMaterial surveyId={ surveyId }/> }
+      />
+      <Route
+        path="summary"
+        element={ <SummaryView/> }
       />
     </Routes>
   );

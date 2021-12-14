@@ -27,6 +27,13 @@ export interface Localized extends LocalizedStringsMethods {
   };
 
   /**
+   * Translations related to generic units
+   */
+  units: {
+    tons: string;
+  }
+
+  /**
    * Translations related to error handling
    */
   errorHandling: {
@@ -82,6 +89,12 @@ export interface Localized extends LocalizedStringsMethods {
     };
     hazardousMaterials: {
       list: string;
+      create: string;
+      delete: string;
+    };
+    hazardousWastes: {
+      list: string;
+      update: string;
       create: string;
       delete: string;
     };
@@ -427,6 +440,16 @@ export interface Localized extends LocalizedStringsMethods {
         editDescription: string;
       };
     };
+    hazardousMaterial: {
+      title: string;
+      dataGridColumns: {
+        hazardousMaterial: string;
+        material: string;
+        wasteCode: string;
+        amount: string;
+        description: string;
+      };
+    };
     otherStructures: {
       title: string;
       description: string;
@@ -438,6 +461,10 @@ export interface Localized extends LocalizedStringsMethods {
         deleteBuilding: string;
         areYouSure: string;
       }
+    };
+    summary: {
+      title: string;
+      print: string;
     };
   };
 }

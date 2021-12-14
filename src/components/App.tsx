@@ -7,11 +7,18 @@ import AdminScreen from "./screens/admin-screen";
 import SurveyScreen from "./screens/survey-screen";
 import ErrorHandler from "./error-handler/error-handler";
 import VisibleWithRole from "./containers/visible-with-role";
+import moment from "moment";
+import "moment/locale/fi";
+import strings from "localization/strings";
 
 /**
  * Application component
  */
 const App: React.FC = () => {
+  React.useEffect(() => {
+    moment.locale(strings.getLanguage());
+  }, []);
+
   return (
     <ErrorHandler>
       <AccessTokenRefresh>
