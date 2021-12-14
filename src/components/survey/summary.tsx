@@ -13,6 +13,9 @@ import { SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
 import LocalizationUtils from "utils/localization-utils";
 
+/**
+ * Interface for survey summary 
+ */
 interface SurveySummary {
   building?: Building;
   buildingTypes: BuildingType[];
@@ -175,7 +178,7 @@ const SummaryView: React.FC = () => {
   /**
    * Fetches waste material array
    */
-  const fetchWastesMaterials = async () => {
+  const fetchWasteMaterials = async () => {
     if (!keycloak?.token) {
       return;
     }
@@ -274,7 +277,7 @@ const SummaryView: React.FC = () => {
       fetchReusableMaterials(),
       fetchWasteCategories(),
       fetchWastes(),
-      fetchWastesMaterials(),
+      fetchWasteMaterials(),
       fetchUsages(),
       fetchSurveyors(),
       fetchHazardousWaste(),
