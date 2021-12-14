@@ -232,8 +232,6 @@ const SummaryView: React.FC = () => {
     }
   };
 
-  // TODO hazardous materials wastes
-
   /**
    * Fetch surveyor array
    */
@@ -254,8 +252,21 @@ const SummaryView: React.FC = () => {
    */
   const fetchData = async () => {
     setLoading(true);
-    // @ts-ignore
-    const resolvedResult = await Promise.all([
+
+    const [
+      fetchedBuilding,
+      fetchedBuildingTypes,
+      fetchedOwnerInformation,
+      fetchedReusables,
+      fetchedReusableMaterials,
+      fetchedWasteCategories,
+      fetchedWaste,
+      fetchedWasteMaterials,
+      fetchedUsages,
+      fetchedSurveyors,
+      fetchedHazardousWaste,
+      fetchedHazardousMaterials
+    ] = await Promise.all<any>([
       fetchBuilding(),
       fetchBuildingTypes(),
       fetchOwnerInformation(),
@@ -270,31 +281,21 @@ const SummaryView: React.FC = () => {
       fetchHazardousMaterial()
     ]);
 
+    fetchSurveyors();
+
     const fetchedSurveySummary: SurveySummary = {
-      // @ts-ignore
-      building: resolvedResult[0],
-      // @ts-ignore
-      buildingTypes: resolvedResult[1] || [],
-      // @ts-ignore
-      ownerInformation: resolvedResult[2],
-      // @ts-ignore
-      reusables: resolvedResult[3] || [],
-      // @ts-ignore
-      reusableMaterials: resolvedResult[4] || [],
-      // @ts-ignore
-      wasteCategories: resolvedResult[5] || [],
-      // @ts-ignore
-      wastes: resolvedResult[6] || [],
-      // @ts-ignore
-      wasteMaterials: resolvedResult[7] || [],
-      // @ts-ignore
-      usages: resolvedResult[8] || [],
-      // @ts-ignore
-      surveyors: resolvedResult[9] || [],
-      // @ts-ignore
-      hazardousWastes: resolvedResult[10] || [],
-      // @ts-ignore
-      hazardousMaterials: resolvedResult[11] || []
+      building: fetchedBuilding,
+      buildingTypes: fetchedBuildingTypes || [],
+      ownerInformation: fetchedOwnerInformation,
+      reusables: fetchedReusables || [],
+      reusableMaterials: fetchedReusableMaterials || [],
+      wasteCategories: fetchedWasteCategories || [],
+      wastes: fetchedWaste || [],
+      wasteMaterials: fetchedWasteMaterials || [],
+      usages: fetchedUsages || [],
+      surveyors: fetchedSurveyors || [],
+      hazardousWastes: fetchedHazardousWaste || [],
+      hazardousMaterials: fetchedHazardousMaterials || []
     };
 
     setSurveySummary(fetchedSurveySummary);
@@ -753,6 +754,7 @@ const SummaryView: React.FC = () => {
         </Typography>
         {/* TODO print button */}
         <SurveyButton
+          disabled
           variant="contained"
           color="secondary"
           startIcon={ <Print/> }
