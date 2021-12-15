@@ -669,7 +669,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           <TextField
             type="number"
             name="amountAsWaste"
-            label={ strings.survey.reusables.dataGridColumns.wasteAmount }
+            label={ strings.survey.reusables.dataGridColumns.wasteAmountInTons }
             value={ newMaterial.amountAsWaste }
             onChange={ onNewMaterialNumberChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
@@ -689,7 +689,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * @param index index
    */
   const renderDeletePreviewButton = (index: number) => (
-    <DeleteButton title="Poista kuva" onClick={ onReusableImageDelete(index) }>
+    <DeleteButton title={ strings.survey.reusables.deleteImage } onClick={ onReusableImageDelete(index) }>
       <Delete/>
     </DeleteButton>
   );
@@ -720,10 +720,16 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       );
     } if (uploadedFile.file) {
       return (
-        <Box position="relative">
+        <Box
+          sx={{
+            position: "relative",
+            justifyContent: "center",
+            display: "flex"
+          }}
+        >
           { renderDeletePreviewButton(index) }
           <img
-            style={{ maxWidth: "100%" }}
+            style={{ maxWidth: "100%", maxHeight: "50vh" }}
             alt={ uploadedFile.file.name }
             src={ URL.createObjectURL(uploadedFile.file) }
           />
@@ -757,14 +763,16 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         <Grid item md={ 3 }>
           <ThumbnailButton onClick={ () => setDisplayedImageIndex(index) }>
             { uploadedFile.progress < 100 &&
-              <CircularProgress
+              <Box
                 sx={{
                   position: "absolute",
                   transform: "translate3d(-50%, -50%, 0)",
                   top: "50%",
                   left: "50%"
                 }}
-              />
+              >
+                <CircularProgress color="inherit"/>
+              </Box>
             }
             <img
               alt={ uploadedFile.file.name }
@@ -828,7 +836,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
               >
                 <input { ...getInputProps() }/>
                 <Fab
-                  title="Lisää kuva"
+                  title={ strings.survey.reusables.addImage }
                   color="primary"
                   onClick={ open }
                 >
@@ -934,7 +942,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           }
           { renderWithDebounceNumberTextField(
             "amountAsWaste",
-            strings.survey.reusables.dataGridColumns.amount,
+            strings.survey.reusables.dataGridColumns.wasteAmountInTons,
             onMaterialPropChange(reusable),
             reusable.amountAsWaste
           )
@@ -989,7 +997,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "reusableMaterialId",
         headerName: strings.survey.reusables.dataGridColumns.material,
-        width: 300,
+        width: 200,
         editable: true,
         type: "singleSelect",
         valueOptions: reusableMaterialsArray,
@@ -1005,13 +1013,13 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "componentName",
         headerName: strings.survey.reusables.dataGridColumns.buildingPart,
-        width: 300,
+        width: 220,
         editable: true
       },
       {
         field: "usability",
         headerName: strings.survey.reusables.dataGridColumns.usability,
-        width: 200,
+        width: 180,
         type: "singleSelect",
         valueOptions: localizedUsability,
         editable: true,
@@ -1083,14 +1091,22 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "amountAsWaste",
         headerName: strings.survey.reusables.dataGridColumns.wasteAmount,
-        width: 200,
+        width: 160,
         type: "number",
-        editable: true
+        editable: true,
+        renderCell: (params: GridRenderCellParams) => {
+          const { value } = params;
+          return (
+            <Typography variant="body2">
+              { `${value} tn` }
+            </Typography>
+          );
+        }
       },
       {
         field: "images",
         headerName: strings.survey.reusables.dataGridColumns.images,
-        width: 200,
+        width: 180,
         renderCell: (params: GridRenderCellParams) => {
           const { row } = params;
           return (

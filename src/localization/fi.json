@@ -336,6 +336,8 @@
       "dropFile": "Pudota kuvat tähän tai valitse alla olevasta painikkeesta.",
       "viewImage": "Näytä kuvat",
       "moreImage": "Lisää kuvia",
+      "addImage": "Lisää kuva",
+      "deleteImage": "Poista kuva",
       "addNewBuildingPart": "Lisää uusi",
       "deleteBuildingParts": "Poista rakennusosa",
       "addNewBuildingPartsDialog": {
@@ -358,6 +360,7 @@
         "usability": "Käyttökelpoisuus",
         "amount": "Määrä",
         "wasteAmount": "Purkujätemäärä",
+        "wasteAmountInTons": "Purkujätemäärä tonneina",
         "description": "Lisätieto",
         "unit": "Yksikkö",
         "editDescription": "Muokkaa lisätietoa",

@@ -75,10 +75,15 @@ export const DropZoneContainer = styled(Box, {
 export const ThumbnailButton = styled(Button, {
   label: "survey-reusable-image-thumbnail-button"
 })(({ theme }) => ({
+  position: "relative",
   backgroundColor: "transparent",
   padding: 2,
   width: 50,
   height: 50,
+  [theme.breakpoints.up("sm")]: {
+    width: 100,
+    height: 100
+  },
   [theme.breakpoints.up("md")]: {
     width: 150,
     height: 150

@@ -371,6 +371,8 @@ export interface Localized extends LocalizedStringsMethods {
       dropFile: string;
       viewImage: string;
       moreImage: string;
+      addImage: string;
+      deleteImage: string;
       addNewBuildingPart: string;
       deleteBuildingParts: string;
       addNewBuildingPartsDialog: {
@@ -393,6 +395,7 @@ export interface Localized extends LocalizedStringsMethods {
         buildingPart: string;
         usability: string;
         wasteAmount: string;
+        wasteAmountInTons: string;
         amount: string;
         description: string;
         unit: string;

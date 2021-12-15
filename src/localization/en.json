@@ -336,6 +336,8 @@
       "dropFile": "Drop here",
       "viewImage": "View images",
       "moreImage": "More images",
+      "addImage": "Add image",
+      "deleteImage": "Poista kuva",
       "addNewBuildingPart": "Add new building part",
       "deleteBuildingParts": "Delete building part",
       "addNewBuildingPartsDialog": {
@@ -356,7 +358,8 @@
         "material": "Material",
         "buildingPart": "Building part",
         "usability": "Usability",
-        "wasteAmount": "Waste amount",
+        "wasteAmount": "Amount as waste",
+        "wasteAmountInTons": "Waste amount in tons",
         "amount": "Amount",
         "description": "Description",
         "unit": "Unit",
