@@ -92,7 +92,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Fetches waste material array
+   * Fetches waste specifiers array
    */
   const fetchWasteSpecifiers = async () => {
     if (!keycloak?.token) {
@@ -126,7 +126,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   }, []);
 
   /**
-   * Event handler for add waste confirm
+   * Event handler for add hazardous waste confirm
    */
   const onAddHazardousWasteConfirm = async () => {
     if (!keycloak?.token || !surveyId) {
@@ -192,7 +192,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-    * Event handler for mobile view delete waste click
+    * Event handler for mobile view delete hazardous waste click
     *
     * @param wasteId waste id
     */
@@ -206,7 +206,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Event handler for delete waste confirm
+   * Event handler for delete hazardous waste confirm
    */
   const onDeleteWasteConfirm = async () => {
     if (!keycloak?.token || !selectedHazardousWasteIds || !surveyId) {
@@ -234,11 +234,11 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Event handler for new waste string change
+   * Event handler for new hazardous waste string change
    *
    * @param event React change event
    */
-  const onNewWasteTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNewHazardousWasteTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
     setNewHazardousWaste({ ...newHazardousWaste, [name]: value });
@@ -353,7 +353,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
-   * Renders delete material dialog
+   * Renders delete hazardous material dialog
    */
   const renderDeleteHazardousWasteDialog = () => (
     <GenericDialog
@@ -373,7 +373,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
-   * Renders add waste dialog
+   * Renders add hazardous waste dialog
    */
   const renderAddHazardousWasteDialog = () => {
     const wasteMaterialOptions = hazardousWasteMaterials.map(wasteMaterial =>
@@ -416,7 +416,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             value={ newHazardousWaste.hazardousMaterialId }
             name="hazardousMaterialId"
             label={ strings.survey.hazardousMaterial.dataGridColumns.material }
-            onChange={ onNewWasteTextChange }
+            onChange={ onNewHazardousWasteTextChange }
           >
             { wasteMaterialOptions }
           </TextField>
@@ -439,7 +439,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             name="wasteSpecifierId"
             label={ strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier }
             value={ newHazardousWaste.wasteSpecifierId }
-            onChange={ onNewWasteTextChange }
+            onChange={ onNewHazardousWasteTextChange }
           >
             { wasteSpecifierOptions }
           </TextField>
@@ -459,7 +459,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             name="description"
             label={ strings.survey.hazardousMaterial.dataGridColumns.description }
             value={ newHazardousWaste.description }
-            onChange={ onNewWasteTextChange }
+            onChange={ onNewHazardousWasteTextChange }
           />
         </Stack>
       </GenericDialog>
@@ -467,7 +467,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Render waste list
+   * Render hazardous waste list
    */
   const renderHazardousWasteList = () => {
     const wasteMaterialOptions = hazardousWasteMaterials.map(wasteMaterial =>
@@ -554,7 +554,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Render survey waste table for desktop
+   * Render survey hazardous waste table for desktop
    */
   const renderHazardousWasteDataTable = () => {
     const hazardousWasteMaterialOptions = hazardousWasteMaterials.map(hazardousWasteMaterial => ({
