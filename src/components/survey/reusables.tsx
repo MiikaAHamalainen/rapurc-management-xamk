@@ -265,6 +265,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * Event handler for add reusable confirm
+   *
+   * @param reusable reusable
    */
   const onImageDialogOpen = (reusable: Reusable) => {
     setImageDialogOpen(true);
