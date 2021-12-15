@@ -708,7 +708,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           />
         </Box>
       );
-    } if (uploadedFile.file) {
+    }
+
+    if (uploadedFile.file) {
       return (
         <Box
           sx={{
