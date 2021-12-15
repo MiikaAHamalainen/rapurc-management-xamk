@@ -228,7 +228,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   const { getRootProps, getInputProps, open } = useDropzone({
-    // Disable click and keydown behavior
     noClick: true,
     noKeyboard: true,
     accept: ["image/jpeg", "image/jpg", "image/png", "image/gif"],
