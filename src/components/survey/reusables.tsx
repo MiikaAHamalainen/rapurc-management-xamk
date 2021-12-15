@@ -187,7 +187,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   /**
    * Reusable file upload progress
    * 
-   * @param acceptedFiles accepted files
+   * @param updatedUploadedFile updated uploaded file
    * @param file file
    */
   const onFileUploadProgress = (updatedUploadedFile: UploadFile[], file: File) => (progress: number) => {
