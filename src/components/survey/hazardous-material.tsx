@@ -25,9 +25,9 @@ interface Props {
 }
 
 /**
- * Component for waste material materials
+ * Component for hazardous materials
  */
-const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
+const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const [ loading, setLoading ] = React.useState(false);
@@ -391,7 +391,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
     const materialId = wasteMaterials.find(material => material.id === newWaste.wasteMaterialId);
     const wasteCategory = wasteCategories.find(category => category.id === materialId?.wasteCategoryId);
     const fullEwcCode = materialId ? `${wasteCategory?.ewcCode || ""}${materialId?.ewcSpecificationCode}` : "";
-  
+
     return (
       <GenericDialog
         error={ false }
@@ -488,7 +488,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
           wastes.map(waste => {
             const materialId = wasteMaterials.find(material => material.id === waste.wasteMaterialId);
             const wasteCategory = wasteCategories.find(category => category.id === materialId?.wasteCategoryId);
-            const fullEwcCode = `${wasteCategory?.ewcCode || ""}${materialId?.ewcSpecificationCode}`;
+            const fullEwcCode = materialId ? `${wasteCategory?.ewcCode || ""}${materialId?.ewcSpecificationCode}` : "";
             return (
               <SurveyItem
                 title={ wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.name || "" }
@@ -507,7 +507,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
                   disabled
                   color="primary"
                   sx={{ mb: 1 }}
-                  value={ fullEwcCode}
+                  value={ fullEwcCode }
                   label={ strings.survey.wasteMaterial.dataGridColumns.wasteCode }
                 />
                 {
@@ -577,7 +577,9 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography variant="body2">{ wasteMaterials.find(wasteMaterial => (wasteMaterial.id === formattedValue))?.name }</Typography>
+            <Typography variant="body2">
+              { wasteMaterials.find(wasteMaterial => (wasteMaterial.id === formattedValue))?.name }
+            </Typography>
           );
         }
       },
@@ -609,7 +611,9 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography variant="body2">{ usages.find(usage => (usage.id === formattedValue))?.name }</Typography>
+            <Typography variant="body2">
+              { usages.find(usage => (usage.id === formattedValue))?.name }
+            </Typography>
           );
         }
       },
@@ -618,7 +622,15 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         headerName: strings.survey.wasteMaterial.dataGridColumns.amount,
         width: 280,
         type: "number",
-        editable: true
+        editable: true,
+        renderCell: (params: GridRenderCellParams) => {
+          const { value } = params;
+          return (
+            <Typography variant="body2">
+              { value }
+            </Typography>
+          );
+        }
       },
       {
         field: "description",
@@ -686,7 +698,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         marginBottom={ 2 }
       >
         <Typography variant="h2">
-          { strings.survey.wasteMaterial.title }
+          { strings.survey.hazardousMaterial.title }
         </Typography>
         <Box
           display="flex"
@@ -726,4 +738,4 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   );
 };
 
-export default WasteMaterialView;
+export default HazardousMaterialView;

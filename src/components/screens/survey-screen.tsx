@@ -100,7 +100,6 @@ const SurveyScreen: React.FC = () => {
         title={ strings.surveyScreen.navigation.waste }
       />
       <NavigationItem
-        disabled
         icon={ <WarningAmber/> }
         to="hazardous"
         title={ strings.surveyScreen.navigation.hazardous }

@@ -372,7 +372,7 @@ const SummaryView: React.FC = () => {
    */
   const renderMediaDataCell = (title: string, value?: string | number) => (
     <Stack flex={ 1 }>
-      { renderDataTitle(`${title}:`) }
+      { renderDataTitle(`${title}`) }
       { renderDataValue(value || "-") }
     </Stack>
   );
@@ -473,7 +473,7 @@ const SummaryView: React.FC = () => {
                 <Typography variant="h4">
                   { otherStructure.name }
                 </Typography>
-                { renderMediaDataCell(strings.survey.otherStructures.description, otherStructure.description) }
+                { renderDataValue(otherStructure.description) }
               </Stack>
             </Paper>
           ))
