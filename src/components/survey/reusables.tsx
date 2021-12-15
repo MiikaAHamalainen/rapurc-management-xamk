@@ -131,7 +131,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
-        reusable: { ...newMaterial, images: imagesUrls }
+        reusable: { ...newMaterial, images: imageUrls }
       });
 
       setSurveyReusables([ ...surveyReusables, createdReusable ]);
