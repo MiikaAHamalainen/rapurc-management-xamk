@@ -127,7 +127,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         return `${uploadUrl}/${key}`;
       });
 
-      const imagesUrls = await Promise.all(imageUrlPromises);
+      const imageUrls = await Promise.all(imageUrlPromises);
 
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
