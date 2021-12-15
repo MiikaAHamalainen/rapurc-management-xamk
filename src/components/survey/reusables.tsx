@@ -745,7 +745,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           </ThumbnailButton>
         </Grid>
       );
-    } if (uploadedFile.file) {
+    }
+
+    if (uploadedFile.file) {
       return (
         <Grid item md={ 3 }>
           <ThumbnailButton onClick={ () => setDisplayedImageIndex(index) }>
