@@ -419,7 +419,9 @@
         "material": "Material",
         "wasteCode": "Waste code",
         "amount": "Amount",
-        "description": "Description"
+        "amountInTons": "Amount in tons",
+        "description": "Description",
+        "wasteSpecifier": "Hazardous waste specifier"
       }
     },
     "otherStructures": {

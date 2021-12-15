@@ -420,7 +420,9 @@
         "material": "Materiaali",
         "wasteCode": "Jätekoodi",
         "amount": "Määrä",
-        "description": "Lisätiedot"
+        "amountInTons": "Määrä tonneina",
+        "description": "Lisätiedot",
+        "wasteSpecifier": "Haitta-aine tarkenne"
       }
     },
     "otherStructures": {

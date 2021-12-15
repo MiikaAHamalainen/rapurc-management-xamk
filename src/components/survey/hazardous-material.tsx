@@ -9,13 +9,13 @@ import WithDataGridDebounceFactory from "components/generic/with-data-grid-debou
 import WithDebounce from "components/generic/with-debounce";
 import SurveyItem from "components/layout-components/survey-item";
 import { selectKeycloak } from "features/auth-slice";
-import { Usage, Waste, WasteCategory, WasteMaterial } from "generated/client";
+import { WasteCategory, HazardousWaste, HazardousMaterial, WasteSpecifier } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
 import { SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
 
-const WithWasteDataGridDebounce = WithDataGridDebounceFactory<Waste>();
+const WithWasteDataGridDebounce = WithDataGridDebounceFactory<HazardousWaste>();
 
 /**
  * Component properties
@@ -31,31 +31,31 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const [ loading, setLoading ] = React.useState(false);
-  const [ addingWaste, setAddingWaste ] = React.useState(false);
-  const [ deletingWaste, setDeletingWaste ] = React.useState(false);
+  const [ addingWaste, setAddingHazardousWaste ] = React.useState(false);
+  const [ deletingHazardousWaste, setDeletingHazardousWaste ] = React.useState(false);
   const [ wasteDescriptionDialogOpen, setWasteDescriptionDialogOpen ] = React.useState(true);
-  const [ wastes, setWastes ] = React.useState<Waste[]>([]);
-  const [ wasteMaterials, setWasteMaterials ] = React.useState<WasteMaterial[]>([]);
+  const [ hazardousWastes, setHazardousWastes ] = React.useState<HazardousWaste[]>([]);
+  const [ hazardousWasteMaterials, setHazardousWasteMaterials ] = React.useState<HazardousMaterial[]>([]);
+  const [ wasteSpecifiers, setWasteSpecifiers ] = React.useState<WasteSpecifier[]>([]);
   const [ wasteCategories, setWasteCategories ] = React.useState<WasteCategory[]>([]);
-  const [ usages, setUsages ] = React.useState<Usage[]>([]);
-  const [ selectedWasteIds, setSelectedWasteIds ] = React.useState<GridRowId[]>([]);
-  const [ newWaste, setNewWaste ] = React.useState<Waste>({
-    wasteMaterialId: "",
-    usageId: "",
+  const [ selectedHazardousWasteIds, setSelectedHazardousWasteIds ] = React.useState<GridRowId[]>([]);
+  const [ newHazardousWaste, setNewHazardousWaste ] = React.useState<HazardousWaste>({
+    hazardousMaterialId: "",
+    wasteSpecifierId: "",
     amount: 0,
     metadata: {}
   });
 
   /**
-   * Fetch waste array
+   * Fetch hazardous waste array
    */
-  const fetchWastes = async () => {
+  const fetchHazardousWastes = async () => {
     if (!keycloak?.token || !surveyId) {
       return;
     }
 
     try {
-      setWastes(await Api.getWastesApi(keycloak.token).listSurveyWastes({ surveyId: surveyId }));
+      setHazardousWastes(await Api.getHazardousWasteApi(keycloak.token).listSurveyHazardousWastes({ surveyId: surveyId }));
     } catch (error) {
       errorContext.setError(strings.errorHandling.waste.list, error);
     }
@@ -70,9 +70,9 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
     }
 
     try {
-      setWasteMaterials(await Api.getWasteMaterialApi(keycloak.token).listWasteMaterials());
+      setHazardousWasteMaterials(await Api.getHazardousMaterialApi(keycloak.token).listHazardousMaterials());
     } catch (error) {
-      errorContext.setError(strings.errorHandling.wasteMaterial.list, error);
+      errorContext.setError(strings.errorHandling.hazardousMaterials.list, error);
     }
   };
 
@@ -92,17 +92,17 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Fetches usage array
+   * Fetches waste material array
    */
-  const fetchUsages = async () => {
+  const fetchWasteSpecifiers = async () => {
     if (!keycloak?.token) {
       return;
     }
 
     try {
-      setUsages(await Api.getUsageApi(keycloak.token).listUsages());
+      setWasteSpecifiers(await Api.getWasteSpecifiersApi(keycloak.token).listWasteSpecifiers());
     } catch (error) {
-      errorContext.setError(strings.errorHandling.postProcess.list, error);
+      errorContext.setError(strings.errorHandling.hazardousMaterials.list, error);
     }
   };
 
@@ -111,10 +111,10 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const loadData = async () => {
     setLoading(true);
-    await fetchWastes();
+    await fetchHazardousWastes();
     await fetchWastesMaterials();
-    await fetchUsages();
     await fetchWasteCategories();
+    await fetchWasteSpecifiers();
     setLoading(false);
   };
 
@@ -128,49 +128,49 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   /**
    * Event handler for add waste confirm
    */
-  const onAddWasteConfirm = async () => {
+  const onAddHazardousWasteConfirm = async () => {
     if (!keycloak?.token || !surveyId) {
       return;
     }
 
     try {
-      const createWaste = await Api.getWastesApi(keycloak.token).createSurveyWaste({
+      const createHazardousWaste = await Api.getHazardousWasteApi(keycloak.token).createSurveyHazardousWaste({
         surveyId: surveyId,
-        waste: newWaste
+        hazardousWaste: newHazardousWaste
       });
 
-      setWastes([ ...wastes, createWaste ]);
-      setNewWaste({
-        wasteMaterialId: "",
-        usageId: "",
+      setHazardousWastes([ ...hazardousWastes, createHazardousWaste ]);
+      setNewHazardousWaste({
+        hazardousMaterialId: "",
+        wasteSpecifierId: "",
         amount: 0,
         metadata: {}
       });
     } catch (error) {
-      errorContext.setError(strings.errorHandling.waste.create, error);
+      errorContext.setError(strings.errorHandling.hazardousWastes.create, error);
     }
 
-    setAddingWaste(false);
+    setAddingHazardousWaste(false);
   };
 
   /**
-   * Waste change handler
+   * Hazardous waste change handler
    * 
-   * @param updatedWaste updated waste
+   * @param updatedHazardousWaste updated hazardous waste
    */
-  const onWasteRowChange = async (updatedWaste: Waste) => {
-    if (!keycloak?.token || !updatedWaste.id || !surveyId) {
+  const onHazardousWasteRowChange = async (updatedHazardousWaste: HazardousWaste) => {
+    if (!keycloak?.token || !updatedHazardousWaste.id || !surveyId) {
       return;
     }
 
     try {
-      const fetchedUpdatedMaterial = await Api.getWastesApi(keycloak.token).updateSurveyWaste({
+      const fetchedUpdatedMaterial = await Api.getHazardousWasteApi(keycloak.token).updateSurveyHazardousWaste({
         surveyId: surveyId,
-        wasteId: updatedWaste.id,
-        waste: updatedWaste
+        hazardousWasteId: updatedHazardousWaste.id,
+        hazardousWaste: updatedHazardousWaste
       });
 
-      setWastes(wastes.map(waste => (waste.id === fetchedUpdatedMaterial.id ? fetchedUpdatedMaterial : waste)));
+      setHazardousWastes(hazardousWastes.map(hazardousWaste => (hazardousWaste.id === fetchedUpdatedMaterial.id ? fetchedUpdatedMaterial : hazardousWaste)));
     } catch (error) {
       errorContext.setError(strings.errorHandling.waste.update, error);
     }
@@ -179,16 +179,16 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Event Handler set waste prop
+   * Event Handler set hazardous waste prop
    * 
-   * @param waste waste
+   * @param hazardousWaste hazardous waste
    */
-  const onWastePropChange: (waste: Waste) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> =
-  (waste: Waste) => ({ target }) => {
+  const onWastePropChange: (hazardousWaste: HazardousWaste) => React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> =
+  (hazardousWaste: HazardousWaste) => ({ target }) => {
     const { value, name } = target;
 
-    const updatedWaste: Waste = { ...waste, [name]: value };
-    onWasteRowChange(updatedWaste);
+    const updatedHazardousWaste: HazardousWaste = { ...hazardousWaste, [name]: value };
+    onHazardousWasteRowChange(updatedHazardousWaste);
   };
 
   /**
@@ -201,15 +201,15 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
-    setDeletingWaste(true);
-    setSelectedWasteIds([ wasteId ]);
+    setDeletingHazardousWaste(true);
+    setSelectedHazardousWasteIds([ wasteId ]);
   };
 
   /**
    * Event handler for delete waste confirm
    */
   const onDeleteWasteConfirm = async () => {
-    if (!keycloak?.token || !selectedWasteIds || !surveyId) {
+    if (!keycloak?.token || !selectedHazardousWasteIds || !surveyId) {
       return;
     }
 
@@ -217,7 +217,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
 
     try {
       await Promise.all(
-        selectedWasteIds.map(async wasteId => {
+        selectedHazardousWasteIds.map(async wasteId => {
           await wasteApi.deleteSurveyWaste({
             surveyId: surveyId,
             wasteId: wasteId.toString()
@@ -228,9 +228,9 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       errorContext.setError(strings.errorHandling.waste.delete, error);
     }
 
-    fetchWastes();
-    setSelectedWasteIds([]);
-    setDeletingWaste(false);
+    fetchHazardousWastes();
+    setSelectedHazardousWasteIds([]);
+    setDeletingHazardousWaste(false);
   };
 
   /**
@@ -241,7 +241,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   const onNewWasteTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
-    setNewWaste({ ...newWaste, [name]: value });
+    setNewHazardousWaste({ ...newHazardousWaste, [name]: value });
   };
 
   /**
@@ -252,7 +252,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   const onNewWasteNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
-    setNewWaste({ ...newWaste, [name]: Number(value) });
+    setNewHazardousWaste({ ...newHazardousWaste, [name]: Number(value) });
   };
 
   /**
@@ -355,12 +355,12 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   /**
    * Renders delete material dialog
    */
-  const renderDeleteWasteDialog = () => (
+  const renderDeleteHazardousWasteDialog = () => (
     <GenericDialog
       error={ false }
-      open={ deletingWaste }
-      onClose={ () => setDeletingWaste(false) }
-      onCancel={ () => setDeletingWaste(false) }
+      open={ deletingHazardousWaste }
+      onClose={ () => setDeletingHazardousWaste(false) }
+      onCancel={ () => setDeletingHazardousWaste(false) }
       onConfirm={ onDeleteWasteConfirm }
       title={ strings.survey.wasteMaterial.deleteWasteDialog.title }
       positiveButtonText={ strings.generic.confirm }
@@ -375,31 +375,31 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   /**
    * Renders add waste dialog
    */
-  const renderAddWasteDialog = () => {
-    const wasteMaterialOptions = wasteMaterials.map(wasteMaterial =>
+  const renderAddHazardousWasteDialog = () => {
+    const wasteMaterialOptions = hazardousWasteMaterials.map(wasteMaterial =>
       <MenuItem value={ wasteMaterial.id }>
         { wasteMaterial.name }
       </MenuItem>
     );
 
-    const usageOptions = usages.map(usage =>
-      <MenuItem value={ usage.id }>
-        { usage.name }
+    const wasteSpecifierOptions = wasteSpecifiers.map(wasteSpecifier =>
+      <MenuItem value={ wasteSpecifier.id }>
+        { wasteSpecifier.name }
       </MenuItem>
     );
 
-    const materialId = wasteMaterials.find(material => material.id === newWaste.wasteMaterialId);
+    const materialId = hazardousWasteMaterials.find(material => material.id === newHazardousWaste.hazardousMaterialId);
     const wasteCategory = wasteCategories.find(category => category.id === materialId?.wasteCategoryId);
     const fullEwcCode = materialId ? `${wasteCategory?.ewcCode || ""}${materialId?.ewcSpecificationCode}` : "";
 
     return (
       <GenericDialog
         error={ false }
-        disabled={ !newWaste.wasteMaterialId || !newWaste.usageId }
+        disabled={ !newHazardousWaste.hazardousMaterialId || !newHazardousWaste.wasteSpecifierId }
         open={ addingWaste }
-        onClose={ () => setAddingWaste(false) }
-        onCancel={ () => setAddingWaste(false) }
-        onConfirm={ onAddWasteConfirm }
+        onClose={ () => setAddingHazardousWaste(false) }
+        onCancel={ () => setAddingHazardousWaste(false) }
+        onConfirm={ onAddHazardousWasteConfirm }
         title={ strings.survey.wasteMaterial.addNewWasteDialog.title }
         positiveButtonText={ strings.generic.confirm }
         cancelButtonText={ strings.generic.cancel }
@@ -413,9 +413,9 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             fullWidth
             select
             color="primary"
-            value={ newWaste.wasteMaterialId }
-            name="wasteMaterialId"
-            label={ strings.survey.wasteMaterial.dataGridColumns.material }
+            value={ newHazardousWaste.hazardousMaterialId }
+            name="hazardousMaterialId"
+            label={ strings.survey.hazardousMaterial.dataGridColumns.material }
             onChange={ onNewWasteTextChange }
           >
             { wasteMaterialOptions }
@@ -424,7 +424,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             disabled
             value={ fullEwcCode || "" }
             color="primary"
-            label={ strings.survey.wasteMaterial.dataGridColumns.wasteCode }
+            label={ strings.survey.hazardousMaterial.dataGridColumns.wasteCode }
           />
         </Stack>
         <Stack
@@ -436,19 +436,19 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             fullWidth
             select
             color="primary"
-            name="usageId"
-            label={ strings.survey.wasteMaterial.dataGridColumns.usage }
-            value={ newWaste.usageId }
+            name="wasteSpecifierId"
+            label={ strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier }
+            value={ newHazardousWaste.wasteSpecifierId }
             onChange={ onNewWasteTextChange }
           >
-            { usageOptions }
+            { wasteSpecifierOptions }
           </TextField>
           <TextField
             name="amount"
             type="number"
             color="primary"
-            value={ newWaste.amount }
-            label={ strings.survey.wasteMaterial.dataGridColumns.amount }
+            value={ newHazardousWaste.amount }
+            label={ strings.survey.hazardousMaterial.dataGridColumns.amountInTons }
             onChange={ onNewWasteNumberChange }
           />
         </Stack>
@@ -457,8 +457,8 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             multiline
             rows={ 6 }
             name="description"
-            label={ strings.survey.wasteMaterial.dataGridColumns.description }
-            value={ newWaste.description }
+            label={ strings.survey.hazardousMaterial.dataGridColumns.description }
+            value={ newHazardousWaste.description }
             onChange={ onNewWasteTextChange }
           />
         </Stack>
@@ -469,38 +469,39 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   /**
    * Render waste list
    */
-  const renderWasteList = () => {
-    const wasteMaterialOptions = wasteMaterials.map(wasteMaterial =>
+  const renderHazardousWasteList = () => {
+    const wasteMaterialOptions = hazardousWasteMaterials.map(wasteMaterial =>
       <MenuItem value={ wasteMaterial.id }>
         { wasteMaterial.name }
       </MenuItem>
     );
 
-    const usageOptions = usages.map(usage =>
-      <MenuItem value={ usage.id }>
-        { usage.name }
+    const wasteSpecifierOptions = wasteSpecifiers.map(wasteSpecifier =>
+      <MenuItem value={ wasteSpecifier.id }>
+        { wasteSpecifier.name }
       </MenuItem>
     );
 
     return (
       <List>
         {
-          wastes.map(waste => {
-            const materialId = wasteMaterials.find(material => material.id === waste.wasteMaterialId);
+          hazardousWastes.map(hazardousWaste => {
+            const materialId = hazardousWasteMaterials.find(material => material.id === newHazardousWaste.hazardousMaterialId);
             const wasteCategory = wasteCategories.find(category => category.id === materialId?.wasteCategoryId);
             const fullEwcCode = materialId ? `${wasteCategory?.ewcCode || ""}${materialId?.ewcSpecificationCode}` : "";
+
             return (
               <SurveyItem
-                title={ wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.name || "" }
-                subtitle={ `${waste.amount} t` }
+                title={ hazardousWasteMaterials.find(wasteMaterial => wasteMaterial.id === hazardousWaste.hazardousMaterialId)?.name || "" }
+                subtitle={ `${hazardousWaste.amount} t` }
               >
                 {
                   renderWithDebounceSelectTextField(
-                    "wasteMaterialId",
-                    strings.survey.wasteMaterial.dataGridColumns.material,
+                    "hazardousMaterialId",
+                    strings.survey.hazardousMaterial.dataGridColumns.material,
                     wasteMaterialOptions,
-                    onWastePropChange(waste),
-                    waste.wasteMaterialId
+                    onWastePropChange(hazardousWaste),
+                    hazardousWaste.hazardousMaterialId
                   )
                 }
                 <TextField
@@ -508,37 +509,37 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
                   color="primary"
                   sx={{ mb: 1 }}
                   value={ fullEwcCode }
-                  label={ strings.survey.wasteMaterial.dataGridColumns.wasteCode }
+                  label={ strings.survey.hazardousMaterial.dataGridColumns.wasteCode }
                 />
                 {
                   renderWithDebounceSelectTextField(
-                    "usageId",
-                    strings.survey.wasteMaterial.dataGridColumns.usage,
-                    usageOptions,
-                    onWastePropChange(waste),
-                    waste.usageId,
+                    "wasteSpecifierId",
+                    strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier,
+                    wasteSpecifierOptions,
+                    onWastePropChange(hazardousWaste),
+                    hazardousWaste.wasteSpecifierId,
                   )
                 }
                 {
                   renderWithDebounceNumberTextField(
                     "amount",
-                    strings.survey.wasteMaterial.dataGridColumns.amount,
-                    onWastePropChange(waste),
-                    waste.amount,
+                    strings.survey.hazardousMaterial.dataGridColumns.amountInTons,
+                    onWastePropChange(hazardousWaste),
+                    hazardousWaste.amount,
                   )
                 }
                 {
                   renderWithDebounceMultilineTextField(
                     "description",
-                    strings.survey.wasteMaterial.dataGridColumns.description,
-                    waste.description || "",
-                    onWastePropChange(waste),
+                    strings.survey.hazardousMaterial.dataGridColumns.description,
+                    hazardousWaste.description || "",
+                    onWastePropChange(hazardousWaste),
                   )
                 }
                 <SurveyButton
                   variant="outlined"
                   color="primary"
-                  onClick={ () => deleteWasteButtonClick(waste.id) }
+                  onClick={ () => deleteWasteButtonClick(hazardousWaste.id) }
                 >
                   <Typography color={ theme.palette.primary.main }>
                     { strings.generic.delete }
@@ -555,30 +556,30 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   /**
    * Render survey waste table for desktop
    */
-  const renderWasteDataTable = () => {
-    const wasteMaterialOptions = wasteMaterials.map(wasteMaterial => ({
-      label: wasteMaterial.name,
-      value: wasteMaterial.id
+  const renderHazardousWasteDataTable = () => {
+    const hazardousWasteMaterialOptions = hazardousWasteMaterials.map(hazardousWasteMaterial => ({
+      label: hazardousWasteMaterial.name,
+      value: hazardousWasteMaterial.id
     }));
 
-    const usageOptions = usages.map(usage => ({
-      label: usage.name,
-      value: usage.id
+    const wasteSpecifierOptions = wasteSpecifiers.map(wasteSpecifier => ({
+      label: wasteSpecifier.name,
+      value: wasteSpecifier.id
     }));
 
     const columns: GridColDef[] = [
       {
-        field: "wasteMaterialId",
-        headerName: strings.survey.wasteMaterial.dataGridColumns.material,
-        width: 280,
+        field: "hazardousMaterialId",
+        headerName: strings.survey.hazardousMaterial.dataGridColumns.material,
+        width: 450,
         type: "singleSelect",
         editable: true,
-        valueOptions: wasteMaterialOptions,
+        valueOptions: hazardousWasteMaterialOptions,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
             <Typography variant="body2">
-              { wasteMaterials.find(wasteMaterial => (wasteMaterial.id === formattedValue))?.name }
+              { hazardousWasteMaterials.find(hazardousWasteMaterial => (hazardousWasteMaterial.id === formattedValue))?.name }
             </Typography>
           );
         }
@@ -586,55 +587,55 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       {
         field: "wasteCode",
         valueGetter: (params: GridValueGetterParams) => {
-          return params.getValue(params.id, "wasteMaterialId");
+          return params.getValue(params.id, "hazardousMaterialId");
         },
-        headerName: strings.survey.wasteMaterial.dataGridColumns.wasteCode,
-        width: 280,
+        headerName: strings.survey.hazardousMaterial.dataGridColumns.wasteCode,
+        width: 150,
         type: "string",
         editable: false,
         renderCell: (params: GridRenderCellParams) => {
-          const wasteMaterial = wasteMaterials.find(material => material.id === params.value);
-          const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
-          const fullEwcCode = `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}`;
+          const hazardousWasteMaterial = hazardousWasteMaterials.find(material => material.id === params.value);
+          const wasteCategory = wasteCategories.find(category => category.id === hazardousWasteMaterial?.wasteCategoryId);
+          const fullEwcCode = `${wasteCategory?.ewcCode || ""}${hazardousWasteMaterial?.ewcSpecificationCode}`;
           return (
             <Typography variant="body2">{ fullEwcCode }</Typography>
           );
         }
       },
       {
-        field: "usageId",
-        headerName: strings.survey.wasteMaterial.dataGridColumns.usage,
+        field: "wasteSpecifierId",
+        headerName: strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier,
         width: 280,
         type: "singleSelect",
         editable: true,
-        valueOptions: usageOptions,
+        valueOptions: wasteSpecifierOptions,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
             <Typography variant="body2">
-              { usages.find(usage => (usage.id === formattedValue))?.name }
+              { wasteSpecifiers.find(wasteSpecifier => (wasteSpecifier.id === formattedValue))?.name }
             </Typography>
           );
         }
       },
       {
         field: "amount",
-        headerName: strings.survey.wasteMaterial.dataGridColumns.amount,
-        width: 280,
+        headerName: strings.survey.hazardousMaterial.dataGridColumns.amount,
+        width: 120,
         type: "number",
         editable: true,
         renderCell: (params: GridRenderCellParams) => {
           const { value } = params;
           return (
             <Typography variant="body2">
-              { value }
+              {`${value} tn`}
             </Typography>
           );
         }
       },
       {
         field: "description",
-        headerName: strings.survey.wasteMaterial.dataGridColumns.description,
+        headerName: strings.survey.hazardousMaterial.dataGridColumns.description,
         width: 400,
         editable: true,
         renderEditCell: (params: GridRenderEditCellParams) => {
@@ -651,7 +652,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
               cancelButtonText={ strings.generic.cancel }
             >
               <TextField
-                label={ strings.survey.wasteMaterial.dataGridColumns.description }
+                label={ strings.survey.hazardousMaterial.dataGridColumns.description }
                 multiline
                 rows={ 4 }
                 value={ value }
@@ -670,12 +671,12 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
     return (
       <Paper>
         <WithWasteDataGridDebounce
-          rows={ wastes }
+          rows={ hazardousWastes }
           columns={ columns }
-          onRowChange={ onWasteRowChange }
+          onRowChange={ onHazardousWasteRowChange }
           component={ params =>
             <DataGrid
-              onSelectionModelChange={ selectedIds => setSelectedWasteIds(selectedIds) }
+              onSelectionModelChange={ selectedIds => setSelectedHazardousWasteIds(selectedIds) }
               checkboxSelection
               autoHeight
               loading={ loading }
@@ -706,11 +707,11 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
         >
           <Hidden lgDown>
             <SurveyButton
-              disabled={ selectedWasteIds && !selectedWasteIds.length }
+              disabled={ selectedHazardousWasteIds && !selectedHazardousWasteIds.length }
               variant="contained"
               color="error"
               startIcon={ <Delete/> }
-              onClick={ () => setDeletingWaste(true) }
+              onClick={ () => setDeletingHazardousWaste(true) }
               sx={{ mr: 2 }}
             >
               { strings.survey.wasteMaterial.deleteWaste }
@@ -720,20 +721,20 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             variant="contained"
             color="secondary"
             startIcon={ <Add/> }
-            onClick={ () => setAddingWaste(true) }
+            onClick={ () => setAddingHazardousWaste(true) }
           >
             { strings.survey.wasteMaterial.addNewWaste }
           </SurveyButton>
         </Box>
       </Stack>
       <Hidden lgUp>
-        { renderWasteList() }
+        { renderHazardousWasteList() }
       </Hidden>
       <Hidden lgDown>
-        { renderWasteDataTable() }
+        { renderHazardousWasteDataTable() }
       </Hidden>
-      { renderAddWasteDialog() }
-      { renderDeleteWasteDialog() }
+      { renderAddHazardousWasteDialog() }
+      { renderDeleteHazardousWasteDialog() }
     </>
   );
 };
