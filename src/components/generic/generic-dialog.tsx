@@ -10,7 +10,7 @@ interface Props {
   positiveButtonText?: string;
   cancelButtonText?: string;
   onClose: () => void;
-  onCancel: () => void;
+  onCancel?: () => void;
   onConfirm: () => void | Promise<void>;
   open: boolean;
   error: boolean;

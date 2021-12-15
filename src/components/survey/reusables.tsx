@@ -1,5 +1,5 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, CircularProgress, Fab, Grid, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams, GridRenderEditCellParams, GridRowId } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
@@ -12,9 +12,13 @@ import { selectKeycloak } from "features/auth-slice";
 import { Reusable, ReusableMaterial, Unit, Usability } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
-import { SurveyButton } from "styled/screens/surveys-screen";
+import { DropZoneContainer, SurveyButton, ThumbnailButton, DeleteButton } from "styled/screens/surveys-screen";
 import theme from "theme";
 import LocalizationUtils from "utils/localization-utils";
+import { useDropzone } from "react-dropzone";
+import FileUploadUtils from "utils/file-upload";
+import { UploadFile } from "types";
+import produce from "immer";
 
 const WithReusableDataGridDebounce = WithDataGridDebounceFactory<Reusable>();
 
@@ -33,8 +37,13 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const errorContext = React.useContext(ErrorContext);
   const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
   const [ loading, setLoading ] = React.useState(false);
+  const [ uploadedFiles, setUploadedFiles ] = React.useState<UploadFile[]>([]);
+  const [ newReusableFiles, setNewReusableFiles ] = React.useState<File[]>([]);
+  const [ imageDialogOpen, setImageDialogOpen ] = React.useState(false);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
   const [ reusableDescriptionDialogOpen, setReusableDescriptionDialogOpen ] = React.useState(true);
+  const [ reusableUploadingImage, setReusableUploadingImage ] = React.useState<Reusable>();
+  const [ displayedImageIndex, setDisplayedImageIndex ] = React.useState(0);
   const [ surveyReusables, setSurveyReusables ] = React.useState<Reusable[]>([]);
   const [ reusableMaterials, setReusableMaterials ] = React.useState<ReusableMaterial[]>([]);
   const [ selectedReusableIds, setSelectedReusableIds ] = React.useState<GridRowId[]>([]);
@@ -90,6 +99,17 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   }, []);
 
   /**
+   * On new reusable file delete
+   *
+   * @param index index
+   */
+  const onNewReusableFileDelete = (index: number) => {
+    const updatedNewReusableFiles = [ ...newReusableFiles ];
+    updatedNewReusableFiles.splice(index, 1);
+    setNewReusableFiles(updatedNewReusableFiles);
+  };
+
+  /**
    * Event handler for add reusable confirm
    */
   const onAddReusableConfirm = async () => {
@@ -98,9 +118,20 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     }
 
     try {
+      const imageUrlPromises = newReusableFiles.map(async newReusableFile => {
+        const uploadData = await FileUploadUtils.upload(keycloak.token!!, newReusableFile);
+        const { xhrRequest, uploadUrl, formData, key } = uploadData;
+
+        xhrRequest.open("POST", uploadUrl, true);
+        xhrRequest.send(formData);
+        return `${uploadUrl}/${key}`;
+      });
+
+      const imageUrls = await Promise.all(imageUrlPromises);
+
       const createdReusable = await Api.getSurveyReusablesApi(keycloak.token).createSurveyReusable({
         surveyId: surveyId,
-        reusable: newMaterial
+        reusable: { ...newMaterial, images: imageUrls }
       });
 
       setSurveyReusables([ ...surveyReusables, createdReusable ]);
@@ -110,6 +141,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         reusableMaterialId: "",
         metadata: {}
       });
+      setNewReusableFiles([]);
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.create, error);
     }
@@ -143,6 +175,67 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
+   * New reusable files upload
+   * 
+   * @param acceptedFiles accepted files
+   */
+  const newReusableFilesUpload = (acceptedFiles: File[]) => {
+    const updatedNewReusableFiles = FileUploadUtils.normalizeFileNames([ ...newReusableFiles, ...acceptedFiles ].splice(0, 4));
+    setNewReusableFiles(updatedNewReusableFiles);
+  };
+
+  /**
+   * Reusable file upload progress
+   * 
+   * @param updatedUploadedFile updated uploaded file
+   * @param file file
+   */
+  const onFileUploadProgress = (updatedUploadedFile: UploadFile[], file: File) => (progress: number) => {
+    setUploadedFiles(updatedUploadedFile.map(uploadedFile => (uploadedFile.file?.name === file.name ? { ...uploadedFile, progress: progress } : uploadedFile)));
+  };
+
+  /**
+   * files upload handler
+   * 
+   * @param acceptedFiles accepted files
+   */
+  const filesUpload = async (acceptedFiles: File[]) => {
+    if (!keycloak || !reusableUploadingImage) {
+      return;
+    }
+
+    const addedFiles = FileUploadUtils.normalizeFileNames(acceptedFiles.splice(0, 4 - uploadedFiles.length));
+    const updatedUploadedFile = [ ...uploadedFiles, ...addedFiles.map(addedFile => ({ file: addedFile, progress: 0 })) ];
+    setUploadedFiles(updatedUploadedFile);
+    const updatedReusable = { ...reusableUploadingImage };
+
+    try {
+      const fileUploadPromises = addedFiles.map(async addedFile => {
+        const uploadData = await FileUploadUtils.upload(keycloak.token!!, addedFile, onFileUploadProgress(updatedUploadedFile, addedFile));
+        const { xhrRequest, uploadUrl, formData, key } = uploadData;
+        
+        xhrRequest.open("POST", uploadUrl, true);
+        xhrRequest.send(formData);
+        const imageUrl = `${uploadUrl}/${key}`;
+        updatedReusable.images ? updatedReusable.images.push(imageUrl) : updatedReusable.images = [ imageUrl ];
+      });
+      await Promise.all(fileUploadPromises);
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.failToUpload, error);
+    }
+
+    onMaterialRowChange(updatedReusable);
+  };
+
+  const { getRootProps, getInputProps, open } = useDropzone({
+    noClick: true,
+    noKeyboard: true,
+    accept: ["image/jpeg", "image/jpg", "image/png", "image/gif"],
+    maxFiles: 1,
+    onDrop: reusableUploadingImage?.id ? filesUpload : newReusableFilesUpload
+  });
+
+  /**
    * Event Handler set material prop
    * 
    * @param reusable reusable
@@ -168,6 +261,26 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
     setDeletingMaterial(true);
     setSelectedReusableIds([ surveyorId ]);
+  };
+
+  /**
+   * Event handler for add reusable confirm
+   *
+   * @param reusable reusable
+   */
+  const onImageDialogOpen = (reusable: Reusable) => {
+    setImageDialogOpen(true);
+    setReusableUploadingImage(reusable);
+    setUploadedFiles(reusable.images?.map(image => ({ imageUrl: image, progress: 100 })) || []);
+  };
+
+  /**
+   * Event handler for add reusable confirm
+   */
+  const onImageDialogClose = () => {
+    setImageDialogOpen(false);
+    setReusableUploadingImage(undefined);
+    setUploadedFiles([]);
   };
 
   /**
@@ -218,6 +331,25 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     const { value, name } = event.target;
 
     setNewMaterial({ ...newMaterial, [name]: Number(value) });
+  };
+
+  /**
+   * Event handler for new material number change
+   *
+   * @param index number
+   */
+  const onReusableImageDelete = (index: number) => () => {
+    if (!reusableUploadingImage?.images) {
+      return;
+    }
+
+    const updatedReusableUploadingImage = produce(reusableUploadingImage, draft => {
+      draft.images && draft.images.splice(index, 1);
+    });
+
+    setUploadedFiles(updatedReusableUploadingImage.images?.map(image => ({ imageUrl: image, progress: 100 })) || []);
+    setReusableUploadingImage(updatedReusableUploadingImage);
+    onMaterialRowChange(updatedReusableUploadingImage);
   };
 
   /**
@@ -363,6 +495,59 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
+   * Renders new reusable image upload 
+   */
+  const renderNewReusableImageUpload = () => (
+    <Stack
+      direction="column"
+      marginTop={ 2 }
+      spacing={ 2 }
+    >
+      <Stack direction={ isMobile ? "column" : "row" } justifyContent="space-between">
+        <Typography sx={{ whiteSpace: "pre-wrap" }}>
+          { strings.survey.reusables.addNewBuildingPartsDialog.imageDescription }
+        </Typography>
+        <Box { ...getRootProps({ className: "dropzone" }) }>
+          <input { ...getInputProps() }/>
+          <Button
+            startIcon={ <Add/> }
+            variant="contained"
+            color="primary"
+            onClick={ open }
+          >
+            { strings.survey.reusables.moreImage }
+          </Button>
+        </Box>
+      </Stack>
+      {
+        newReusableFiles.map((uploadedFile, index) => (
+          <Stack
+            direction="row"
+            alignItems="center"
+          >
+            <img
+              width={ 50 }
+              height={ 50 }
+              alt={ uploadedFile.name }
+              src={ URL.createObjectURL(uploadedFile) }
+            />
+            <Typography ml={ 2 }>
+              { uploadedFile.name }
+            </Typography>
+            <Button
+              sx={{ ml: "auto" }}
+              color="error"
+              onClick={ () => onNewReusableFileDelete(index) }
+            >
+              { strings.generic.delete }
+            </Button>
+          </Stack>
+        ))
+      }
+    </Stack>
+  );
+
+  /**
    * Renders add survey reusable dialog
    */
   const renderAddSurveyReusableDialog = () => {
@@ -474,22 +659,213 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           <TextField
             type="number"
             name="amountAsWaste"
-            label={ strings.survey.reusables.dataGridColumns.wasteAmount }
+            label={ strings.survey.reusables.dataGridColumns.wasteAmountInTons }
             value={ newMaterial.amountAsWaste }
             onChange={ onNewMaterialNumberChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
           />
         </Stack>
+        <Typography marginTop={ 2 } variant="h3">
+          { strings.survey.reusables.dataGridColumns.images }
+        </Typography>
+        { renderNewReusableImageUpload() }
       </GenericDialog>
     );
   };
+
+  /**
+   * Renders delete image preview button
+   * 
+   * @param index index
+   */
+  const renderDeletePreviewButton = (index: number) => (
+    <DeleteButton title={ strings.survey.reusables.deleteImage } onClick={ onReusableImageDelete(index) }>
+      <Delete/>
+    </DeleteButton>
+  );
+
+  /**
+   * Renders image dialog preview
+   * 
+   * @param uploadedFile uploaded file
+   * @param index index
+   */
+  const renderImagePreview = (uploadedFile: UploadFile, index: number) => {
+    if (uploadedFile.imageUrl) {
+      return (
+        <Box
+          sx={{
+            position: "relative",
+            justifyContent: "center",
+            display: "flex"
+          }}
+        >
+          { renderDeletePreviewButton(index) }
+          <img
+            style={{ maxWidth: "100%", maxHeight: "50vh" }}
+            alt={ uploadedFile.imageUrl }
+            src={ uploadedFile.imageUrl }
+          />
+        </Box>
+      );
+    }
+
+    if (uploadedFile.file) {
+      return (
+        <Box
+          sx={{
+            position: "relative",
+            justifyContent: "center",
+            display: "flex"
+          }}
+        >
+          { renderDeletePreviewButton(index) }
+          <img
+            style={{ maxWidth: "100%", maxHeight: "50vh" }}
+            alt={ uploadedFile.file.name }
+            src={ URL.createObjectURL(uploadedFile.file) }
+          />
+        </Box>
+      );
+    }
+
+    return null;
+  };
+
+  /**
+   * Renders image thumbnail
+   * 
+   * @param uploadedFile uploaded file
+   * @param index index
+   */
+  const renderImageThumbnail = (uploadedFile: UploadFile, index: number) => {
+    if (uploadedFile.imageUrl) {
+      return (
+        <Grid item md={ 3 } >
+          <ThumbnailButton onClick={ () => setDisplayedImageIndex(index) }>
+            <img
+              alt={ uploadedFile.imageUrl }
+              src={ uploadedFile.imageUrl }
+            />
+          </ThumbnailButton>
+        </Grid>
+      );
+    }
+
+    if (uploadedFile.file) {
+      return (
+        <Grid item md={ 3 }>
+          <ThumbnailButton onClick={ () => setDisplayedImageIndex(index) }>
+            { uploadedFile.progress < 100 &&
+              <Box
+                sx={{
+                  position: "absolute",
+                  transform: "translate3d(-50%, -50%, 0)",
+                  top: "50%",
+                  left: "50%"
+                }}
+              >
+                <CircularProgress color="inherit"/>
+              </Box>
+            }
+            <img
+              alt={ uploadedFile.file.name }
+              src={ URL.createObjectURL(uploadedFile.file) }
+            />
+          </ThumbnailButton>
+        </Grid>
+      );
+    }
+
+    return null;
+  };
+
+  /**
+   * Renders delete image dialog
+   */
+  const imageDialogContent = () => {
+    if (!reusableUploadingImage) {
+      return null;
+    }
+
+    if (uploadedFiles.length === 0) {
+      return (
+        <DropZoneContainer { ...getRootProps({ className: "dropzone" }) }>
+          <input { ...getInputProps() }/>
+          <Stack spacing={ 2 }>
+            <Typography>
+              { strings.survey.reusables.dropFile }
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={ open }
+            >
+              { strings.survey.reusables.moreImage }
+            </Button>
+          </Stack>
+        </DropZoneContainer>
+      );
+    }
+
+    const selectedImageIndex = Math.min(displayedImageIndex, uploadedFiles.length - 1);
+    const selectedImageFile = uploadedFiles[selectedImageIndex];
+
+    return (
+      <Stack spacing={ 2 } direction="column">
+        { renderImagePreview(selectedImageFile, selectedImageIndex) }
+        <Grid container spacing={ 1 }>
+          { uploadedFiles.map(renderImageThumbnail) }
+          {
+            uploadedFiles.length < 4 &&
+            <Grid item md={ 3 }>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%"
+                }}
+                { ...getRootProps({ className: "dropzone" }) }
+              >
+                <input { ...getInputProps() }/>
+                <Fab
+                  title={ strings.survey.reusables.addImage }
+                  color="primary"
+                  onClick={ open }
+                >
+                  <Add/>
+                </Fab>
+              </Box>
+            </Grid>
+          }
+        </Grid>
+      </Stack>
+    );
+  };
+
+  /**
+   * Renders reusable image dialog
+   */
+  const renderReusableImageDialog = () => (
+    <GenericDialog
+      error={ false }
+      open={ imageDialogOpen }
+      onClose={ onImageDialogClose }
+      onConfirm={ onImageDialogClose }
+      title={ strings.survey.reusables.dataGridColumns.images }
+      positiveButtonText={ strings.generic.close }
+    >
+      { imageDialogContent() }
+    </GenericDialog>
+  );
 
   /**
    * Render material list item
    */
   const renderMaterialListItems = () => {
     const materialOptions = reusableMaterials.map(material => (
-      <MenuItem value={ material.id }>
+      <MenuItem key={ material.id } value={ material.id }>
         { material.name }
       </MenuItem>
     ));
@@ -507,6 +883,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     return (
       surveyReusables.map(reusable =>
         <SurveyItem
+          key={ reusable.id }
           title={ reusable.componentName }
           subtitle={ `${reusable.amount} ${reusable.unit ? LocalizationUtils.getLocalizedUnits(reusable.unit) : ""}` }
         >
@@ -548,13 +925,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             reusable.unit,
           )
           }
-          { renderWithDebounceNumberTextField(
-            "amountAsWaste",
-            strings.survey.reusables.dataGridColumns.amount,
-            onMaterialPropChange(reusable),
-            reusable.amountAsWaste
-          )
-          }
           { renderWithDebounceMultilineTextField(
             "description",
             strings.survey.reusables.dataGridColumns.description,
@@ -562,15 +932,32 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             onMaterialPropChange(reusable),
           )
           }
-          <SurveyButton
-            variant="outlined"
-            color="primary"
-            onClick={ () => deleteMaterialButtonClick(reusable.id) }
-          >
-            <Typography color={ theme.palette.primary.main }>
-              { strings.generic.delete }
-            </Typography>
-          </SurveyButton>
+          { renderWithDebounceNumberTextField(
+            "amountAsWaste",
+            strings.survey.reusables.dataGridColumns.wasteAmountInTons,
+            onMaterialPropChange(reusable),
+            reusable.amountAsWaste
+          )
+          }
+          <Stack spacing={ 2 }>
+            <SurveyButton
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={ () => onImageDialogOpen(reusable) }
+            >
+              { reusable.images?.length ? strings.survey.reusables.viewImage : strings.survey.reusables.moreImage }
+            </SurveyButton>
+            <SurveyButton
+              variant="outlined"
+              color="primary"
+              onClick={ () => deleteMaterialButtonClick(reusable.id) }
+            >
+              <Typography color={ theme.palette.primary.main }>
+                { strings.generic.delete }
+              </Typography>
+            </SurveyButton>
+          </Stack>
         </SurveyItem>
       )
     );
@@ -602,34 +989,38 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "reusableMaterialId",
         headerName: strings.survey.reusables.dataGridColumns.material,
-        width: 300,
+        width: 200,
         editable: true,
         type: "singleSelect",
         valueOptions: reusableMaterialsArray,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography>{ reusableMaterials.find(material => (material.id === formattedValue))?.name }</Typography>
+            <Typography variant="body2">
+              { reusableMaterials.find(material => (material.id === formattedValue))?.name }
+            </Typography>
           );
         }
       },
       {
         field: "componentName",
         headerName: strings.survey.reusables.dataGridColumns.buildingPart,
-        width: 300,
+        width: 220,
         editable: true
       },
       {
         field: "usability",
         headerName: strings.survey.reusables.dataGridColumns.usability,
-        width: 200,
+        width: 180,
         type: "singleSelect",
         valueOptions: localizedUsability,
         editable: true,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography>{ LocalizationUtils.getLocalizedUsability(formattedValue) }</Typography>
+            <Typography variant="body2">
+              { LocalizationUtils.getLocalizedUsability(formattedValue) }
+            </Typography>
           );
         }
       },
@@ -643,23 +1034,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "unit",
         headerName: strings.survey.reusables.dataGridColumns.unit,
-        width: 180,
+        width: 200,
         type: "singleSelect",
         valueOptions: localizedUnits,
         editable: true,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography>{ LocalizationUtils.getLocalizedUnits(formattedValue) }</Typography>
+            <Typography variant="body2">
+              { LocalizationUtils.getLocalizedUnits(formattedValue) }
+            </Typography>
           );
         }
-      },
-      {
-        field: "amountAsWaste",
-        headerName: strings.survey.reusables.dataGridColumns.wasteAmount,
-        width: 200,
-        type: "number",
-        editable: true
       },
       {
         field: "description",
@@ -691,6 +1077,39 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
                 }, e) }
               />
             </GenericDialog>
+          );
+        }
+      },
+      {
+        field: "amountAsWaste",
+        headerName: strings.survey.reusables.dataGridColumns.wasteAmount,
+        width: 160,
+        type: "number",
+        editable: true,
+        renderCell: (params: GridRenderCellParams) => {
+          const { value } = params;
+          return (
+            <Typography variant="body2">
+              { `${value} tn` }
+            </Typography>
+          );
+        }
+      },
+      {
+        field: "images",
+        headerName: strings.survey.reusables.dataGridColumns.images,
+        width: 180,
+        renderCell: (params: GridRenderCellParams) => {
+          const { row } = params;
+          return (
+            <SurveyButton
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={ () => onImageDialogOpen(row) }
+            >
+              { row.images?.length ? strings.survey.reusables.viewImage : strings.survey.reusables.moreImage }
+            </SurveyButton>
           );
         }
       }
@@ -763,6 +1182,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       </Hidden>
       { renderAddSurveyReusableDialog() }
       { renderDeleteSurveyMaterialDialog() }
+      { renderReusableImageDialog() }
     </>
   );
 };
