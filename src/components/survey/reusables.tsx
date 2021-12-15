@@ -197,7 +197,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param acceptedFiles accepted files
    */
-  const filesUpload = (acceptedFiles: File[]) => {
+  const filesUpload = async (acceptedFiles: File[]) => {
     if (!keycloak || !reusableUploadingImage) {
       return;
     }
@@ -205,25 +205,24 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     const addedFiles = FileUploadUtils.normalizeFileNames(acceptedFiles.splice(0, 4 - uploadedFiles.length));
     const updatedUploadedFile = [ ...uploadedFiles, ...addedFiles.map(addedFile => ({ file: addedFile, progress: 0 })) ];
     setUploadedFiles(updatedUploadedFile);
-    let updatedReusable = { ...reusableUploadingImage };
+    const updatedReusable = { ...reusableUploadingImage };
 
     try {
-      addedFiles.forEach(async addedFile => {
+      const fileUploadPromises = addedFiles.map(async addedFile => {
         const uploadData = await FileUploadUtils.upload(keycloak.token!!, addedFile, onFileUploadProgress(updatedUploadedFile, addedFile));
         const { xhrRequest, uploadUrl, formData, key } = uploadData;
         
         xhrRequest.open("POST", uploadUrl, true);
         xhrRequest.send(formData);
         const imageUrl = `${uploadUrl}/${key}`;
-        uploadedFiles.map(uploadedFile => (uploadedFile.file?.name === addedFile.name ? { ...uploadedFile, imageUrl: imageUrl } : uploadedFile));
-        updatedReusable = produce(updatedReusable, draft => {
-          draft.images ? draft.images.push(imageUrl) : draft.images = [ imageUrl ];
-        });
-        onMaterialRowChange(updatedReusable);
+        updatedReusable.images ? updatedReusable.images.push(imageUrl) : updatedReusable.images = [ imageUrl ];
       });
+      await Promise.all(fileUploadPromises);
     } catch (error) {
       errorContext.setError(strings.errorHandling.failToUpload, error);
     }
+
+    onMaterialRowChange(updatedReusable);
   };
 
   const { getRootProps, getInputProps, open } = useDropzone({
