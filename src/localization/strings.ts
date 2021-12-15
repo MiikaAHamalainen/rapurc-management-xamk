@@ -24,6 +24,7 @@ export interface Localized extends LocalizedStringsMethods {
     delete: string;
     logout: string;
     open: string;
+    close: string;
   };
 
   /**
@@ -39,6 +40,7 @@ export interface Localized extends LocalizedStringsMethods {
   errorHandling: {
     title: string;
     missingAccessToken: string;
+    failToUpload: string;
     surveys: {
       list: string;
       create: string;
@@ -380,6 +382,11 @@ export interface Localized extends LocalizedStringsMethods {
     };
     reusables: {
       title: string;
+      dropFile: string;
+      viewImage: string;
+      moreImage: string;
+      addImage: string;
+      deleteImage: string;
       addNewBuildingPart: string;
       deleteBuildingParts: string;
       addNewBuildingPartsDialog: {
@@ -390,16 +397,19 @@ export interface Localized extends LocalizedStringsMethods {
         usabilityHelperText: string;
         descriptionHelperText: string;
         wasteAmountHelperText: string;
+        imageDescription: string
       };
       deleteReusableDialog: {
         title: string;
         text: string;
       };
       dataGridColumns: {
+        images: string;
         material: string;
         buildingPart: string;
         usability: string;
         wasteAmount: string;
+        wasteAmountInTons: string;
         amount: string;
         description: string;
         unit: string;

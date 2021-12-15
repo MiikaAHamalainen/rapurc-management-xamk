@@ -53,3 +53,65 @@ export const SurveyButton = styled(Button, {
     width: "100%"
   }
 }));
+
+/**
+ * Styled drop zone container
+ */
+export const DropZoneContainer = styled(Box, {
+  label: "surveys-screen-drop-zone-container"
+})(({ theme }) => ({
+  padding: `${theme.spacing(4)} 0`,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  border: "1px black dashed",
+  borderRadius: 5,
+  backgroundColor: "rgba(0,0,0,0.1)"
+}));
+
+/**
+ * Styled image thumbnail button
+ */
+export const ThumbnailButton = styled(Button, {
+  label: "survey-reusable-image-thumbnail-button"
+})(({ theme }) => ({
+  position: "relative",
+  backgroundColor: "transparent",
+  padding: 2,
+  width: 50,
+  height: 50,
+  [theme.breakpoints.up("sm")]: {
+    width: 100,
+    height: 100
+  },
+  [theme.breakpoints.up("md")]: {
+    width: 150,
+    height: 150
+  },
+  "&:hover": {
+    backgroundColor: "rgba(0,0,0,0.1)"
+  },
+  "& img": {
+    maxWidth: "100%",
+    maxHeight: "100%"
+  }
+}));
+
+/**
+ * Styled image delete button
+ */
+export const DeleteButton = styled(Button, {
+  label: "survey-reusable-image-delete-button"
+})(({ theme }) => ({
+  position: "absolute",
+  top: 8,
+  right: 8,
+  padding: 0,
+  height: 40,
+  width: 40,
+  minWidth: 40,
+  minHeight: 40,
+  backgroundColor: theme.palette.common.black,
+  borderRadius: 50,
+  color: "#fff"
+}));

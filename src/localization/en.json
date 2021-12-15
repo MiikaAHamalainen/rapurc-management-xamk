@@ -9,7 +9,8 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "logout": "Log out",
-    "open": "Open"
+    "open": "Open",
+    "close": "Close"
   },
 
   "units": {
@@ -19,6 +20,7 @@
   "errorHandling": {
     "title": "Error",
     "missingAccessToken": "Missing access token",
+    "failToUpload": "Fail to upload images",
     "surveys": {
       "list": "Error while listing surveys",
       "create": "Error while creating new survey",
@@ -342,6 +344,11 @@
     },
     "reusables": {
       "title": "Reusable building parts",
+      "dropFile": "Drop here",
+      "viewImage": "View images",
+      "moreImage": "More images",
+      "addImage": "Add image",
+      "deleteImage": "Poista kuva",
       "addNewBuildingPart": "Add new building part",
       "deleteBuildingParts": "Delete building part",
       "addNewBuildingPartsDialog": {
@@ -351,7 +358,8 @@
         "buildingPartOrMaterialHelperText": "Give description to part or material",
         "usabilityHelperText": "If it's unknown, choose \"Not validated\"",
         "descriptionHelperText": "Free description, for example, location in the building.",
-        "wasteAmountHelperText": "Optional"
+        "wasteAmountHelperText": "Optional",
+        "imageDescription": "Supported formats: jpg, gif or png\nMax. 4 pictures / building block"
       },
       "deleteReusableDialog": {
         "title": "Delete reusable building part",
@@ -361,11 +369,13 @@
         "material": "Material",
         "buildingPart": "Building part",
         "usability": "Usability",
-        "wasteAmount": "Waste amount",
+        "wasteAmount": "Amount as waste",
+        "wasteAmountInTons": "Waste amount in tons",
         "amount": "Amount",
         "description": "Description",
         "unit": "Unit",
-        "editDescription": "Edit description"
+        "editDescription": "Edit description",
+        "images": "Images"
       },
       "usability": {
         "excellent": "Excellent",
