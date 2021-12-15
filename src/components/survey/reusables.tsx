@@ -100,6 +100,8 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * On new reusable file delete
+   *
+   * @param index index
    */
   const onNewReusableFileDelete = (index: number) => {
     const updatedNewReusableFiles = [ ...newReusableFiles ];
