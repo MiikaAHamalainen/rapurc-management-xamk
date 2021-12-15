@@ -15,7 +15,7 @@
   "errorHandling": {
     "title": "Error",
     "missingAccessToken": "API-avain puuttuu",
-    "failToUpload": "Fail to upload images",
+    "failToUpload": "Kuvan lisäys epäonnistui.",
     "surveys": {
       "list": "Virhe listattaessa kartoituksia",
       "create": "Virhe luodessa uutta kartoitusta",
@@ -333,10 +333,10 @@
     },
     "reusables": {
       "title": "Uudelleenkäytettävät rakennusosat",
-      "dropFile": "Drop here",
-      "viewImage": "Näytä kuvia",
+      "dropFile": "Pudota kuvat tähän tai valitse alla olevasta painikkeesta.",
+      "viewImage": "Näytä kuvat",
       "moreImage": "Lisää kuvia",
-      "addNewBuildingPart": "Lisää uusi rakennusosa",
+      "addNewBuildingPart": "Lisää uusi",
       "deleteBuildingParts": "Poista rakennusosa",
       "addNewBuildingPartsDialog": {
         "title": "Lisää rakennusosa",
@@ -361,7 +361,7 @@
         "description": "Lisätieto",
         "unit": "Yksikkö",
         "editDescription": "Muokkaa lisätietoa",
-        "images": "Kuvia"
+        "images": "Materiaalin kuvat"
       },
       "usability": {
         "excellent": "Erinomainen",

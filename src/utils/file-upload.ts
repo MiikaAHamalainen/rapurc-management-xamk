@@ -87,6 +87,7 @@ export default class FileUploadUtils {
         })
       );
 
+      // eslint-disable-next-line func-names
       xhr.onload = function () {
         this.status === 200 ?
           resolve(JSON.parse(this.responseText)) :

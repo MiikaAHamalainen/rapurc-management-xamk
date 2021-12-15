@@ -1,5 +1,5 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Button, CircularProgress, Grid, Hidden, IconButton, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, CircularProgress, Fab, Grid, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams, GridRenderEditCellParams, GridRowId } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
@@ -12,7 +12,7 @@ import { selectKeycloak } from "features/auth-slice";
 import { Reusable, ReusableMaterial, Unit, Usability } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
-import { DropZoneContainer, SurveyButton } from "styled/screens/surveys-screen";
+import { DropZoneContainer, SurveyButton, ThumbnailButton, DeleteButton } from "styled/screens/surveys-screen";
 import theme from "theme";
 import LocalizationUtils from "utils/localization-utils";
 import { useDropzone } from "react-dropzone";
@@ -205,16 +205,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     const addedFiles = FileUploadUtils.normalizeFileNames(acceptedFiles.splice(0, 4 - uploadedFiles.length));
     const updatedUploadedFile = [ ...uploadedFiles, ...addedFiles.map(addedFile => ({ file: addedFile, progress: 0 })) ];
     setUploadedFiles(updatedUploadedFile);
+    let updatedReusable = { ...reusableUploadingImage };
+
     try {
       addedFiles.forEach(async addedFile => {
         const uploadData = await FileUploadUtils.upload(keycloak.token!!, addedFile, onFileUploadProgress(updatedUploadedFile, addedFile));
         const { xhrRequest, uploadUrl, formData, key } = uploadData;
-
+        
         xhrRequest.open("POST", uploadUrl, true);
         xhrRequest.send(formData);
         const imageUrl = `${uploadUrl}/${key}`;
         uploadedFiles.map(uploadedFile => (uploadedFile.file?.name === addedFile.name ? { ...uploadedFile, imageUrl: imageUrl } : uploadedFile));
-        const updatedReusable = produce(reusableUploadingImage, draft => {
+        updatedReusable = produce(updatedReusable, draft => {
           draft.images ? draft.images.push(imageUrl) : draft.images = [ imageUrl ];
         });
         onMaterialRowChange(updatedReusable);
@@ -228,7 +230,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     // Disable click and keydown behavior
     noClick: true,
     noKeyboard: true,
-    accept: "image/jpg, image/png, image/gif",
+    accept: ["image/jpeg", "image/jpg", "image/png", "image/gif"],
     maxFiles: 4,
     onDrop: reusableUploadingImage?.id ? filesUpload : newReusableFilesUpload
   });
@@ -518,14 +520,14 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         </Typography>
         <Box { ...getRootProps({ className: "dropzone" }) }>
           <input { ...getInputProps() }/>
-          <SurveyButton
+          <Button
             startIcon={ <Add/> }
             variant="contained"
             color="primary"
             onClick={ open }
           >
             { strings.survey.reusables.moreImage }
-          </SurveyButton>
+          </Button>
         </Box>
       </Stack>
       {
@@ -543,13 +545,13 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             <Typography ml={ 2 }>
               { uploadedFile.name }
             </Typography>
-            <SurveyButton
+            <Button
               sx={{ ml: "auto" }}
               color="error"
               onClick={ () => onNewReusableFileDelete(index) }
             >
               { strings.generic.delete }
-            </SurveyButton>
+            </Button>
           </Stack>
         ))
       }
@@ -688,15 +690,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * @param index index
    */
   const renderDeletePreviewButton = (index: number) => (
-    <IconButton
-      color="error"
-      sx={{
-        position: "relative", top: 10, right: 10
-      }}
-      onClick={ onReusableImageDelete(index) }
-    >
+    <DeleteButton title="Poista kuva" onClick={ onReusableImageDelete(index) }>
       <Delete/>
-    </IconButton>
+    </DeleteButton>
   );
 
   /**
@@ -708,16 +704,30 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const renderImagePreview = (uploadedFile: UploadFile, index: number) => {
     if (uploadedFile.imageUrl) {
       return (
-        <Box>
+        <Box
+          sx={{
+            position: "relative",
+            justifyContent: "center",
+            display: "flex"
+          }}
+        >
           { renderDeletePreviewButton(index) }
-          <img alt={ uploadedFile.imageUrl } src={ uploadedFile.imageUrl }/>
+          <img
+            style={{ maxWidth: "100%", maxHeight: "50vh" }}
+            alt={ uploadedFile.imageUrl }
+            src={ uploadedFile.imageUrl }
+          />
         </Box>
       );
     } if (uploadedFile.file) {
       return (
-        <Box>
+        <Box position="relative">
           { renderDeletePreviewButton(index) }
-          <img alt={ uploadedFile.file.name } src={ URL.createObjectURL(uploadedFile.file) }/>
+          <img
+            style={{ maxWidth: "100%" }}
+            alt={ uploadedFile.file.name }
+            src={ URL.createObjectURL(uploadedFile.file) }
+          />
         </Box>
       );
     }
@@ -734,26 +744,34 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   const renderImageThumbnail = (uploadedFile: UploadFile, index: number) => {
     if (uploadedFile.imageUrl) {
       return (
-        <Grid item md={ 3 }>
-          <Button onClick={ () => setDisplayedImageIndex(index) }>
-            <img width={ 150 } height={ 150 } alt={ uploadedFile.imageUrl } src={ uploadedFile.imageUrl }/>
-          </Button>
+        <Grid item md={ 3 } >
+          <ThumbnailButton onClick={ () => setDisplayedImageIndex(index) }>
+            <img
+              alt={ uploadedFile.imageUrl }
+              src={ uploadedFile.imageUrl }
+            />
+          </ThumbnailButton>
         </Grid>
       );
     } if (uploadedFile.file) {
       return (
         <Grid item md={ 3 }>
-          <Button onClick={ () => setDisplayedImageIndex(index) }>
-            { uploadedFile.progress < 100 && <CircularProgress
-              sx={{
-                position: "absolute",
-                top: 75,
-                left: 75
-              }}
-            />
+          <ThumbnailButton onClick={ () => setDisplayedImageIndex(index) }>
+            { uploadedFile.progress < 100 &&
+              <CircularProgress
+                sx={{
+                  position: "absolute",
+                  transform: "translate3d(-50%, -50%, 0)",
+                  top: "50%",
+                  left: "50%"
+                }}
+              />
             }
-            <img width={ 150 } height={ 150 } alt={ uploadedFile.file.name } src={ URL.createObjectURL(uploadedFile.file) }/>
-          </Button>
+            <img
+              alt={ uploadedFile.file.name }
+              src={ URL.createObjectURL(uploadedFile.file) }
+            />
+          </ThumbnailButton>
         </Grid>
       );
     }
@@ -773,14 +791,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       return (
         <DropZoneContainer { ...getRootProps({ className: "dropzone" }) }>
           <input { ...getInputProps() }/>
-          <Typography>{ strings.survey.reusables.dropFile }</Typography>
-          <SurveyButton
-            variant="contained"
-            color="primary"
-            onClick={ open }
-          >
-            { strings.survey.reusables.moreImage }
-          </SurveyButton>
+          <Stack spacing={ 2 }>
+            <Typography>
+              { strings.survey.reusables.dropFile }
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={ open }
+            >
+              { strings.survey.reusables.moreImage }
+            </Button>
+          </Stack>
         </DropZoneContainer>
       );
     }
@@ -791,16 +813,28 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     return (
       <Stack spacing={ 2 } direction="column">
         { renderImagePreview(selectedImageFile, selectedImageIndex) }
-        <Grid container spacing={ 2 }>
+        <Grid container spacing={ 1 }>
           { uploadedFiles.map(renderImageThumbnail) }
           {
             uploadedFiles.length < 4 &&
             <Grid item md={ 3 }>
-              <Box { ...getRootProps({ className: "dropzone" }) }>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%"
+                }}
+                { ...getRootProps({ className: "dropzone" }) }
+              >
                 <input { ...getInputProps() }/>
-                <IconButton onClick={ open }>
+                <Fab
+                  title="Lisää kuva"
+                  color="primary"
+                  onClick={ open }
+                >
                   <Add/>
-                </IconButton>
+                </Fab>
               </Box>
             </Grid>
           }
@@ -832,7 +866,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const renderMaterialListItems = () => {
     const materialOptions = reusableMaterials.map(material => (
-      <MenuItem value={ material.id }>
+      <MenuItem key={ material.id } value={ material.id }>
         { material.name }
       </MenuItem>
     ));
@@ -850,6 +884,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     return (
       surveyReusables.map(reusable =>
         <SurveyItem
+          key={ reusable.id }
           title={ reusable.componentName }
           subtitle={ `${reusable.amount} ${reusable.unit ? LocalizationUtils.getLocalizedUnits(reusable.unit) : ""}` }
         >
@@ -891,13 +926,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             reusable.unit,
           )
           }
-          { renderWithDebounceNumberTextField(
-            "amountAsWaste",
-            strings.survey.reusables.dataGridColumns.amount,
-            onMaterialPropChange(reusable),
-            reusable.amountAsWaste
-          )
-          }
           { renderWithDebounceMultilineTextField(
             "description",
             strings.survey.reusables.dataGridColumns.description,
@@ -905,15 +933,32 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             onMaterialPropChange(reusable),
           )
           }
-          <SurveyButton
-            variant="outlined"
-            color="primary"
-            onClick={ () => deleteMaterialButtonClick(reusable.id) }
-          >
-            <Typography color={ theme.palette.primary.main }>
-              { strings.generic.delete }
-            </Typography>
-          </SurveyButton>
+          { renderWithDebounceNumberTextField(
+            "amountAsWaste",
+            strings.survey.reusables.dataGridColumns.amount,
+            onMaterialPropChange(reusable),
+            reusable.amountAsWaste
+          )
+          }
+          <Stack spacing={ 2 }>
+            <SurveyButton
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={ () => onImageDialogOpen(reusable) }
+            >
+              { reusable.images?.length ? strings.survey.reusables.viewImage : strings.survey.reusables.moreImage }
+            </SurveyButton>
+            <SurveyButton
+              variant="outlined"
+              color="primary"
+              onClick={ () => deleteMaterialButtonClick(reusable.id) }
+            >
+              <Typography color={ theme.palette.primary.main }>
+                { strings.generic.delete }
+              </Typography>
+            </SurveyButton>
+          </Stack>
         </SurveyItem>
       )
     );
@@ -952,7 +997,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography>{ reusableMaterials.find(material => (material.id === formattedValue))?.name }</Typography>
+            <Typography variant="body2">
+              { reusableMaterials.find(material => (material.id === formattedValue))?.name }
+            </Typography>
           );
         }
       },
@@ -972,7 +1019,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography>{ LocalizationUtils.getLocalizedUsability(formattedValue) }</Typography>
+            <Typography variant="body2">
+              { LocalizationUtils.getLocalizedUsability(formattedValue) }
+            </Typography>
           );
         }
       },
@@ -986,23 +1035,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "unit",
         headerName: strings.survey.reusables.dataGridColumns.unit,
-        width: 180,
+        width: 200,
         type: "singleSelect",
         valueOptions: localizedUnits,
         editable: true,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography>{ LocalizationUtils.getLocalizedUnits(formattedValue) }</Typography>
+            <Typography variant="body2">
+              { LocalizationUtils.getLocalizedUnits(formattedValue) }
+            </Typography>
           );
         }
-      },
-      {
-        field: "amountAsWaste",
-        headerName: strings.survey.reusables.dataGridColumns.wasteAmount,
-        width: 200,
-        type: "number",
-        editable: true
       },
       {
         field: "description",
@@ -1036,6 +1080,13 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             </GenericDialog>
           );
         }
+      },
+      {
+        field: "amountAsWaste",
+        headerName: strings.survey.reusables.dataGridColumns.wasteAmount,
+        width: 200,
+        type: "number",
+        editable: true
       },
       {
         field: "images",
