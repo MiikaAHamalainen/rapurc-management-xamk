@@ -230,7 +230,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     noClick: true,
     noKeyboard: true,
     accept: ["image/jpeg", "image/jpg", "image/png", "image/gif"],
-    maxFiles: 4,
+    maxFiles: 1,
     onDrop: reusableUploadingImage?.id ? filesUpload : newReusableFilesUpload
   });
 
@@ -276,19 +276,6 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const onImageDialogClose = () => {
     setImageDialogOpen(false);
-    setReusableUploadingImage(undefined);
-    setUploadedFiles([]);
-  };
-
-  /**
-   * Event handler for add reusable confirm
-   */
-  const onImageDialogConfirm = async () => {
-    setImageDialogOpen(false);
-
-    if (reusableUploadingImage) {
-      await onMaterialRowChange(reusableUploadingImage);
-    }
     setReusableUploadingImage(undefined);
     setUploadedFiles([]);
   };
@@ -858,11 +845,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       error={ false }
       open={ imageDialogOpen }
       onClose={ onImageDialogClose }
-      onCancel={ onImageDialogClose }
-      onConfirm={ onImageDialogConfirm }
+      onConfirm={ onImageDialogClose }
       title={ strings.survey.reusables.dataGridColumns.images }
-      positiveButtonText={ strings.generic.confirm }
-      cancelButtonText={ strings.generic.cancel }
+      positiveButtonText={ strings.generic.close }
     >
       { imageDialogContent() }
     </GenericDialog>

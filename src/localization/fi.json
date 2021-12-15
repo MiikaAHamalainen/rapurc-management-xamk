@@ -9,7 +9,8 @@
     "cancel": "Peruuta",
     "delete": "Poista",
     "logout": "Kirjaudu ulos",
-    "open": "Avaa"
+    "open": "Avaa",
+    "close": "Sulje"
   },
 
   "errorHandling": {

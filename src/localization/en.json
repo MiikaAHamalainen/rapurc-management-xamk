@@ -9,7 +9,8 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "logout": "Log out",
-    "open": "Open"
+    "open": "Open",
+    "close": "Close"
   },
 
   "errorHandling": {
