@@ -750,13 +750,8 @@ const SummaryView: React.FC = () => {
                       flexItem
                     />
                     { renderMediaDataCell(strings.survey.hazardousMaterial.dataGridColumns.amount, wasteAmount) }
-                    <Divider
-                      variant="inset"
-                      orientation="vertical"
-                      flexItem
-                    />
-                    { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, hazardousWaste.description) }
                   </Stack>
+                  { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, hazardousWaste.description) }
                 </Stack>
               </Paper>
             );
