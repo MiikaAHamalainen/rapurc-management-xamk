@@ -8,6 +8,7 @@ import { Route, Routes } from "react-router-dom";
 import WasteMaterial from "components/survey/waste-material";
 import SummaryView from "components/survey/summary";
 import HazardousMaterial from "components/survey/hazardous-material";
+import AttachmentView from "components/survey/attachment";
 
 /**
  * Component properties
@@ -53,6 +54,10 @@ const SurveyRoutes: React.FC<Props> = ({ surveyId }) => {
       <Route
         path="hazardous"
         element={ <HazardousMaterial surveyId={ surveyId }/> }
+      />
+      <Route
+        path="attachments"
+        element={ <AttachmentView surveyId={ surveyId }/> }
       />
       <Route
         path="summary"

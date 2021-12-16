@@ -763,7 +763,7 @@ const SummaryView: React.FC = () => {
   };
 
   /**
-   * Renders list of materials
+   * Renders loader
    */
   if (loading) {
     return (

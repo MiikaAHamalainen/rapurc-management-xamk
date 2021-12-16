@@ -110,6 +110,12 @@
       "create": "Virhe luotaessa haitta-ainetarkennetta",
       "delete": "Virhe poistettaessa haitta-ainetarkennetta",
       "update": "Virhe päivitettäessä haitta-ainetarkennetta"
+    },
+    "attachments": {
+      "list": "Error while listing waste attachment",
+      "create": "Error while creating waste attachment",
+      "delete": "Error while deleting waste attachment",
+      "update": "Error while updating waste attachment"
     }
   },
 
@@ -435,6 +441,14 @@
         "description": "Lisätiedot",
         "deleteBuilding": "Poista rakennus / rakennelma",
         "areYouSure": "Oletko varma että haluat poistaa rakennuksen / rakennelman?"
+      }
+    },
+    "attachments": {
+      "title": "Attachments",
+      "add": "Add attachment",
+      "dialog": {
+        "title": "Delete attachmenr",
+        "text": "Are you sure you want to delete attachment"
       }
     },
     "summary": {

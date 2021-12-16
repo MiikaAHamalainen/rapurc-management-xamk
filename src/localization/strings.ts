@@ -130,6 +130,12 @@ export interface Localized extends LocalizedStringsMethods {
       delete: string;
       update: string;
     };
+    attachments: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
   };
 
   /**
@@ -472,6 +478,14 @@ export interface Localized extends LocalizedStringsMethods {
         description: string;
         deleteBuilding: string;
         areYouSure: string;
+      }
+    };
+    attachments: {
+      title: string;
+      add: string;
+      dialog: {
+        title: string;
+        text: string;
       }
     };
     summary: {
