@@ -1,11 +1,12 @@
 import { Print } from "@mui/icons-material";
-import { Box, CircularProgress, Divider, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, CircularProgress, Divider, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
+import AttachmentCard from "components/generic/acttachment-card";
 import { selectKeycloak } from "features/auth-slice";
 import { selectSelectedSurvey } from "features/surveys-slice";
-import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Usage, Waste, WasteCategory, WasteMaterial, WasteSpecifier } from "generated/client";
+import { Attachment, Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Usage, Waste, WasteCategory, WasteMaterial, WasteSpecifier } from "generated/client";
 import strings from "localization/strings";
 import moment from "moment";
 import * as React from "react";
@@ -30,6 +31,7 @@ interface SurveySummary {
   hazardousMaterials: HazardousMaterial[];
   usages: Usage[];
   surveyors: Surveyor[];
+  attachments: Attachment[];
 }
 
 const initialSurveySummary: SurveySummary = {
@@ -43,7 +45,8 @@ const initialSurveySummary: SurveySummary = {
   hazardousWastes: [],
   hazardousMaterials: [],
   usages: [],
-  surveyors: []
+  surveyors: [],
+  attachments: []
 };
 
 /**
@@ -268,6 +271,21 @@ const SummaryView: React.FC = () => {
   };
 
   /**
+   * Fetches survey attachments
+   */
+  const fetchAttachment = async () => {
+    if (!keycloak?.token || !selectedSurvey?.id) {
+      return;
+    }
+
+    try {
+      return await Api.getAttachmentsApi(keycloak.token).listSurveyAttachments({ surveyId: selectedSurvey.id });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.attachments.list, error);
+    }
+  };
+
+  /**
    * Fetches summary data
    */
   const fetchData = async () => {
@@ -286,7 +304,8 @@ const SummaryView: React.FC = () => {
       fetchedUsages,
       fetchedSurveyors,
       fetchedHazardousWaste,
-      fetchedHazardousMaterials
+      fetchedHazardousMaterials,
+      fetchedAttachments
     ] = await Promise.all<any>([
       fetchBuilding(),
       fetchBuildingTypes(),
@@ -300,7 +319,8 @@ const SummaryView: React.FC = () => {
       fetchUsages(),
       fetchSurveyors(),
       fetchHazardousWaste(),
-      fetchHazardousMaterial()
+      fetchHazardousMaterial(),
+      fetchAttachment()
     ]);
 
     fetchSurveyors();
@@ -318,7 +338,8 @@ const SummaryView: React.FC = () => {
       usages: fetchedUsages || [],
       surveyors: fetchedSurveyors || [],
       hazardousWastes: fetchedHazardousWaste || [],
-      hazardousMaterials: fetchedHazardousMaterials || []
+      hazardousMaterials: fetchedHazardousMaterials || [],
+      attachments: fetchedAttachments || []
     };
 
     setSurveySummary(fetchedSurveySummary);
@@ -347,7 +368,8 @@ const SummaryView: React.FC = () => {
     wasteSpecifiers,
     wastes,
     building,
-    ownerInformation
+    ownerInformation,
+    attachments
   } = surveySummary;
 
   /**
@@ -763,6 +785,46 @@ const SummaryView: React.FC = () => {
   };
 
   /**
+   * Renders hazardous material section
+   * 
+   * @param url url
+   */
+  const renderOpenAttachmentButton = (url: string) => (
+    <Button
+      color="primary"
+      variant="text"
+      onClick={ () => window.open(url) }
+    >
+      { strings.generic.open }
+    </Button>
+  );
+
+  /**
+   * Renders attachment section
+   */
+  const renderAttachmentsSection = () => {
+    if (!attachments.length) {
+      return null;
+    }
+
+    return (
+      <Stack spacing={ 2 }>
+        <Typography variant="h3">
+          { strings.survey.attachments.title }
+        </Typography>
+        <Stack spacing={ 2 }>
+          { attachments.map(attachment => (
+            <AttachmentCard
+              attachment={ attachment }
+              rightControl={ renderOpenAttachmentButton(attachment.url) }
+            />
+          )) }
+        </Stack>
+      </Stack>
+    );
+  };
+
+  /**
    * Renders loader
    */
   if (loading) {
@@ -809,6 +871,7 @@ const SummaryView: React.FC = () => {
         { renderReusableMaterialsSection() }
         { renderWasteMaterialsSection() }
         { renderHazardousMaterialsSection() }
+        { renderAttachmentsSection() }
       </Stack>
     </>
   );

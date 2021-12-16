@@ -40,15 +40,11 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
-    setLoading(true);
-
     try {
       setSurveyAttachments(await Api.getAttachmentsApi(keycloak.token).listSurveyAttachments({ surveyId: surveyId }));
     } catch (error) {
       errorContext.setError(strings.errorHandling.attachments.list, error);
     }
-
-    setLoading(false);
   };
 
   /**

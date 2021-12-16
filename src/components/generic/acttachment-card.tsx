@@ -1,5 +1,5 @@
 import { FileCopy } from "@mui/icons-material";
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, Hidden } from "@mui/material";
 import { Attachment } from "generated/client";
 import * as React from "react";
 import { AttachmentContainer } from "styled/screens/surveys-screen";
@@ -10,7 +10,7 @@ import { AttachmentContainer } from "styled/screens/surveys-screen";
 interface Props {
   attachment: Attachment;
   rightControl: JSX.Element;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 /**
@@ -37,7 +37,9 @@ const AttachmentCard: React.FC<Props> = ({
         direction="row"
         spacing={ 3 }
       >
-        <FileCopy/>
+        <Hidden lgDown>
+          <FileCopy htmlColor="rgba(0,0,0,0.54)"/>
+        </Hidden>
         <Typography>
           { attachment.name }
         </Typography>
