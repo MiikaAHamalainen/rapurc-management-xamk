@@ -5,7 +5,7 @@ import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { selectKeycloak } from "features/auth-slice";
 import { selectSelectedSurvey } from "features/surveys-slice";
-import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Usage, Waste, WasteCategory, WasteMaterial } from "generated/client";
+import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Usage, Waste, WasteCategory, WasteMaterial, WasteSpecifier } from "generated/client";
 import strings from "localization/strings";
 import moment from "moment";
 import * as React from "react";
@@ -25,6 +25,7 @@ interface SurveySummary {
   wastes: Waste[];
   wasteCategories: WasteCategory[];
   wasteMaterials: WasteMaterial[];
+  wasteSpecifiers: WasteSpecifier[];
   hazardousWastes: HazardousWaste[];
   hazardousMaterials: HazardousMaterial[];
   usages: Usage[];
@@ -38,6 +39,7 @@ const initialSurveySummary: SurveySummary = {
   wastes: [],
   wasteCategories: [],
   wasteMaterials: [],
+  wasteSpecifiers: [],
   hazardousWastes: [],
   hazardousMaterials: [],
   usages: [],
@@ -191,6 +193,21 @@ const SummaryView: React.FC = () => {
   };
 
   /**
+   * Fetches waste specifiers array
+   */
+  const fetchWasteSpecifiers = async () => {
+    if (!keycloak?.token) {
+      return;
+    }
+
+    try {
+      return await Api.getWasteSpecifiersApi(keycloak.token).listWasteSpecifiers();
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.wasteSpecifiers.list, error);
+    }
+  };
+
+  /**
    * Fetch hazardous waste array
    */
   const fetchHazardousWaste = async () => {
@@ -265,6 +282,7 @@ const SummaryView: React.FC = () => {
       fetchedWasteCategories,
       fetchedWaste,
       fetchedWasteMaterials,
+      fetchedWasteSpecifiers,
       fetchedUsages,
       fetchedSurveyors,
       fetchedHazardousWaste,
@@ -278,6 +296,7 @@ const SummaryView: React.FC = () => {
       fetchWasteCategories(),
       fetchWastes(),
       fetchWasteMaterials(),
+      fetchWasteSpecifiers(),
       fetchUsages(),
       fetchSurveyors(),
       fetchHazardousWaste(),
@@ -295,6 +314,7 @@ const SummaryView: React.FC = () => {
       wasteCategories: fetchedWasteCategories || [],
       wastes: fetchedWaste || [],
       wasteMaterials: fetchedWasteMaterials || [],
+      wasteSpecifiers: fetchedWasteSpecifiers || [],
       usages: fetchedUsages || [],
       surveyors: fetchedSurveyors || [],
       hazardousWastes: fetchedHazardousWaste || [],
@@ -324,6 +344,7 @@ const SummaryView: React.FC = () => {
     usages,
     wasteCategories,
     wasteMaterials,
+    wasteSpecifiers,
     wastes,
     building,
     ownerInformation
@@ -372,7 +393,7 @@ const SummaryView: React.FC = () => {
    */
   const renderMediaDataCell = (title: string, value?: string | number) => (
     <Stack flex={ 1 }>
-      { renderDataTitle(`${title}:`) }
+      { renderDataTitle(`${title}`) }
       { renderDataValue(value || "-") }
     </Stack>
   );
@@ -473,7 +494,7 @@ const SummaryView: React.FC = () => {
                 <Typography variant="h4">
                   { otherStructure.name }
                 </Typography>
-                { renderMediaDataCell(strings.survey.otherStructures.description, otherStructure.description) }
+                { renderDataValue(otherStructure.description) }
               </Stack>
             </Paper>
           ))
@@ -644,18 +665,16 @@ const SummaryView: React.FC = () => {
           { wastes.map(waste => {
             const wasteMaterial = wasteMaterials.find(material => material.id === waste.wasteMaterialId);
             const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
-            const fullEwcCode = `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}`;
+            const fullEwcCode = wasteCategory ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
             const wasteUsage = usages.find(usage => usage.id === waste.usageId)?.name;
             const wasteAmount = `${waste?.amount || ""} ${strings.units.tons}`;
 
             return (
               <Paper elevation={ 1 } key={ waste.id }>
                 <Stack spacing={ 2 } p={ 2 }>
-                  <Stack direction="row">
-                    <Typography variant="h4">
-                      { wasteMaterial?.name }
-                    </Typography>
-                  </Stack>
+                  <Typography variant="h4">
+                    { wasteMaterial?.name }
+                  </Typography>
                   <Stack
                     spacing={ isMobile ? 2 : 4}
                     justifyContent="space-between"
@@ -701,22 +720,37 @@ const SummaryView: React.FC = () => {
         </Typography>
         <Stack spacing={ 2 }>
           { hazardousWastes.map(hazardousWaste => {
-            const wasteMaterial = wasteMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
+            const wasteMaterial = hazardousMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
             const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
-            const fullEwcCode = `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}`;
+            const fullEwcCode = wasteMaterial ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
+            const wasteSpecifierName = wasteSpecifiers.find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.name;
+            const wasteAmount = `${hazardousWaste?.amount || ""} ${strings.units.tons}`;
 
             return (
               <Paper key={ hazardousWaste.id }>
-                <Stack>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="h4">
-                      { hazardousMaterials.find(hazardousMaterial => hazardousMaterial.id === hazardousWaste.hazardousMaterialId)?.name }
-                    </Typography>
-                    <Typography variant="h4">
-                      { fullEwcCode }
-                    </Typography>
+                <Stack spacing={ 2 } p={ 2 }>
+                  <Typography variant="h4">
+                    { hazardousMaterials.find(hazardousMaterial => hazardousMaterial.id === hazardousWaste.hazardousMaterialId)?.name }
+                  </Typography>
+                  <Stack
+                    spacing={ isMobile ? 2 : 4}
+                    justifyContent="space-between"
+                    direction={ isMobile ? "column" : "row" }
+                  >
+                    { renderMediaDataCell(strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier, wasteSpecifierName) }
+                    <Divider
+                      variant="inset"
+                      orientation="vertical"
+                      flexItem
+                    />
+                    { renderMediaDataCell(strings.survey.hazardousMaterial.dataGridColumns.wasteCode, fullEwcCode) }
+                    <Divider
+                      variant="inset"
+                      orientation="vertical"
+                      flexItem
+                    />
+                    { renderMediaDataCell(strings.survey.hazardousMaterial.dataGridColumns.amount, wasteAmount) }
                   </Stack>
-                  { renderMediaDataCell(strings.survey.hazardousMaterial.dataGridColumns.amount, hazardousWaste.amount) }
                   { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, hazardousWaste.description) }
                 </Stack>
               </Paper>
