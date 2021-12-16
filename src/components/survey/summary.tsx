@@ -1,35 +1,17 @@
 import { Print } from "@mui/icons-material";
-import { Box, CircularProgress, Divider, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, CircularProgress, Divider, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
+import PdfExportDialog from "components/pdf-export/pdf-export-dialog";
 import { selectKeycloak } from "features/auth-slice";
 import { selectSelectedSurvey } from "features/surveys-slice";
-import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Usage, Waste, WasteCategory, WasteMaterial } from "generated/client";
 import strings from "localization/strings";
 import moment from "moment";
 import * as React from "react";
-import { SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
+import { SurveySummary } from "types";
 import LocalizationUtils from "utils/localization-utils";
-
-/**
- * Interface for survey summary 
- */
-interface SurveySummary {
-  building?: Building;
-  buildingTypes: BuildingType[];
-  ownerInformation?: OwnerInformation;
-  reusables: Reusable[];
-  reusableMaterials: ReusableMaterial[];
-  wastes: Waste[];
-  wasteCategories: WasteCategory[];
-  wasteMaterials: WasteMaterial[];
-  hazardousWastes: HazardousWaste[];
-  hazardousMaterials: HazardousMaterial[];
-  usages: Usage[];
-  surveyors: Surveyor[];
-}
 
 const initialSurveySummary: SurveySummary = {
   buildingTypes: [],
@@ -53,6 +35,7 @@ const SummaryView: React.FC = () => {
   const selectedSurvey = useAppSelector(selectSelectedSurvey);
   const [ loading, setLoading ] = React.useState(false);
   const [ surveySummary, setSurveySummary ] = React.useState<SurveySummary>(initialSurveySummary);
+  const [ pdfDialogOpen, setPdfDialogOpen ] = React.useState<boolean>(false);
 
   /**
    * Fetches owner information array
@@ -755,16 +738,14 @@ const SummaryView: React.FC = () => {
         <Typography variant="h2">
           { strings.survey.summary.title }
         </Typography>
-        {/* TODO print button */}
-        <SurveyButton
-          disabled
+        <Button
           variant="contained"
           color="secondary"
           startIcon={ <Print/> }
-          onClick={ () => {} }
+          onClick={ () => setPdfDialogOpen(true) }
         >
           { strings.survey.summary.print }
-        </SurveyButton>
+        </Button>
       </Stack>
       <Stack spacing={ 4 }>
         { renderBuildingInfoSection() }
@@ -776,6 +757,11 @@ const SummaryView: React.FC = () => {
         { renderWasteMaterialsSection() }
         { renderHazardousMaterialsSection() }
       </Stack>
+      <PdfExportDialog
+        open={ pdfDialogOpen }
+        onClose={ () => setPdfDialogOpen(false) }
+        surveySummary={ surveySummary }
+      />
     </>
   );
 };

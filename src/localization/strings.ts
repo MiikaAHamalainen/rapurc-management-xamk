@@ -25,6 +25,8 @@ export interface Localized extends LocalizedStringsMethods {
     logout: string;
     open: string;
     close: string;
+    save: string;
+    download: string;
   };
 
   /**

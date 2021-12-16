@@ -10,7 +10,9 @@
     "delete": "Delete",
     "logout": "Log out",
     "open": "Open",
-    "close": "Close"
+    "close": "Close",
+    "save": "Save",
+    "download": "Download"
   },
 
   "units": {

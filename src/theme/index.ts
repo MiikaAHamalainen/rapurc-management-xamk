@@ -128,7 +128,7 @@ export default createTheme({
           justifyContent: "space-between"
         },
         colorPrimary: {
-          backgroundColor: "#000"
+          backgroundColor: "#009E9E"
         }
       }
     },

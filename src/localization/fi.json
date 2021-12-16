@@ -10,7 +10,9 @@
     "delete": "Poista",
     "logout": "Kirjaudu ulos",
     "open": "Avaa",
-    "close": "Sulje"
+    "close": "Sulje",
+    "save": "Tallenna",
+    "download": "Lataa"
   },
 
   "units": {

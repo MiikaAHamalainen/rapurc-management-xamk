@@ -1,4 +1,4 @@
-import { SurveyStatus } from "generated/client";
+import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, SurveyStatus, Usage, Waste, WasteCategory, WasteMaterial } from "generated/client";
 
 /**
  * Application configuration
@@ -80,4 +80,22 @@ export interface UploadFile {
   imageUrl?: string;
   file?: File;
   progress: number
+}
+
+/**
+ * Interface for survey summary 
+ */
+export interface SurveySummary {
+  building?: Building;
+  buildingTypes: BuildingType[];
+  ownerInformation?: OwnerInformation;
+  reusables: Reusable[];
+  reusableMaterials: ReusableMaterial[];
+  wastes: Waste[];
+  wasteCategories: WasteCategory[];
+  wasteMaterials: WasteMaterial[];
+  hazardousWastes: HazardousWaste[];
+  hazardousMaterials: HazardousMaterial[];
+  usages: Usage[];
+  surveyors: Surveyor[];
 }
