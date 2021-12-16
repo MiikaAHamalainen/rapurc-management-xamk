@@ -459,7 +459,9 @@ export interface Localized extends LocalizedStringsMethods {
         material: string;
         wasteCode: string;
         amount: string;
+        amountInTons: string;
         description: string;
+        wasteSpecifier: string;
       };
     };
     otherStructures: {

@@ -1,4 +1,4 @@
-import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, SurveyStatus, Usage, Waste, WasteCategory, WasteMaterial } from "generated/client";
+import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, SurveyStatus, Usage, Waste, WasteCategory, WasteMaterial, WasteSpecifier } from "generated/client";
 
 /**
  * Application configuration
@@ -94,6 +94,7 @@ export interface SurveySummary {
   wastes: Waste[];
   wasteCategories: WasteCategory[];
   wasteMaterials: WasteMaterial[];
+  wasteSpecifiers: WasteSpecifier[];
   hazardousWastes: HazardousWaste[];
   hazardousMaterials: HazardousMaterial[];
   usages: Usage[];
