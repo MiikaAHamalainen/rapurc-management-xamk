@@ -665,7 +665,7 @@ const SummaryView: React.FC = () => {
           { wastes.map(waste => {
             const wasteMaterial = wasteMaterials.find(material => material.id === waste.wasteMaterialId);
             const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
-            const fullEwcCode = `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}`;
+            const fullEwcCode = wasteCategory ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
             const wasteUsage = usages.find(usage => usage.id === waste.usageId)?.name;
             const wasteAmount = `${waste?.amount || ""} ${strings.units.tons}`;
 
@@ -720,10 +720,10 @@ const SummaryView: React.FC = () => {
         </Typography>
         <Stack spacing={ 2 }>
           { hazardousWastes.map(hazardousWaste => {
-            const wasteMaterial = wasteMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
+            const wasteMaterial = hazardousMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
             const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
             const fullEwcCode = wasteMaterial ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
-            const wasteSpecifierName = wasteSpecifiers.find(hazardousMaterial => hazardousMaterial.id === hazardousWaste.hazardousMaterialId)?.name;
+            const wasteSpecifierName = wasteSpecifiers.find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.name;
             const wasteAmount = `${hazardousWaste?.amount || ""} ${strings.units.tons}`;
 
             return (
