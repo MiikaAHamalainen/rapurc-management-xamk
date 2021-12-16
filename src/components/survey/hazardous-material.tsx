@@ -175,7 +175,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       errorContext.setError(strings.errorHandling.waste.update, error);
     }
 
-    setWasteDescriptionDialogOpen(true); // TODO: Find another way to set description dialog open
+    setWasteDescriptionDialogOpen(true);
   };
 
   /**
