@@ -390,9 +390,16 @@ const SummaryView: React.FC = () => {
 
     return (
       <Stack spacing={ 2 }>
-        <Typography variant="h3">
-          { strings.survey.building.title }
-        </Typography>
+        <Stack spacing={ 2 }>
+          <Typography variant="h3">
+            { strings.survey.building.title }
+          </Typography>
+          <Box>
+            <Typography>
+              { `${building.address?.streetAddress} ${building.address?.postCode} ${building.address?.city}` }
+            </Typography>
+          </Box>
+        </Stack>
         <Paper>
           <Stack
             direction={ isMobile ? "column" : "row" }
@@ -793,6 +800,7 @@ const SummaryView: React.FC = () => {
       <PdfExportDialog
         open={ pdfDialogOpen }
         onClose={ () => setPdfDialogOpen(false) }
+        survey={ selectedSurvey }
         surveySummary={ surveySummary }
       />
     </>

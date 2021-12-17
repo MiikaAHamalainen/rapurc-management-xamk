@@ -30,6 +30,13 @@ export interface Localized extends LocalizedStringsMethods {
   };
 
   /**
+   * Translations related to PDF export
+   */
+  pdf: {
+    demolitionSurvey: string;
+  }
+
+  /**
    * Translations related to generic units
    */
   units: {

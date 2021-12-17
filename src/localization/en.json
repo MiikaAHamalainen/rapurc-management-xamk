@@ -15,6 +15,10 @@
     "download": "Download"
   },
 
+  "pdf": {
+    "demolitionSurvey": "Purkujätekartoitus"
+  },
+
   "units": {
     "tons": "tons"
   },

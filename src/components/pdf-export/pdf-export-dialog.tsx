@@ -6,6 +6,7 @@ import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import PdfDocument from "./pdf-document";
 import { Download } from "@mui/icons-material";
 import { SurveySummary } from "types";
+import { Survey } from "generated/client";
 
 /**
  * Component properties
@@ -13,6 +14,7 @@ import { SurveySummary } from "types";
 interface Props {
   open: boolean;
   onClose(): void;
+  survey: Survey | undefined;
   surveySummary: SurveySummary;
 }
 
@@ -21,12 +23,17 @@ interface Props {
  *
  * @param props component properties
  */
-const PdfExportDialog: React.FC<Props> = ({ open, onClose, surveySummary }) => {
+const PdfExportDialog: React.FC<Props> = ({
+  open,
+  onClose,
+  surveySummary,
+  survey
+}) => {
   /**
    * Render PDF document
    */
   const renderPdfDocument = () => (
-    <PdfDocument summary={ surveySummary }/>
+    <PdfDocument selectedSurvey={ survey } summary={ surveySummary }/>
   );
 
   return (
