@@ -33,6 +33,7 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to PDF export
    */
   pdf: {
+    previewTitle: string;
     demolitionSurvey: string;
   }
 

@@ -36,7 +36,7 @@ const SummaryView: React.FC = () => {
   const selectedSurvey = useAppSelector(selectSelectedSurvey);
   const [ loading, setLoading ] = React.useState(false);
   const [ surveySummary, setSurveySummary ] = React.useState<SurveySummary>(initialSurveySummary);
-  const [ pdfDialogOpen, setPdfDialogOpen ] = React.useState<boolean>(false);
+  const [ pdfDialogOpen, setPdfDialogOpen ] = React.useState(false);
 
   /**
    * Fetches owner information array

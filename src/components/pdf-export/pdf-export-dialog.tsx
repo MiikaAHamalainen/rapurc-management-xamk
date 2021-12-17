@@ -14,7 +14,7 @@ import { Survey } from "generated/client";
 interface Props {
   open: boolean;
   onClose(): void;
-  survey: Survey | undefined;
+  survey?: Survey;
   surveySummary: SurveySummary;
 }
 
@@ -32,12 +32,22 @@ const PdfExportDialog: React.FC<Props> = ({
   /**
    * Render PDF document
    */
-  const renderPdfDocument = () => (
-    <PdfDocument selectedSurvey={ survey } summary={ surveySummary }/>
-  );
+  const renderPdfDocument = () => {
+    if (!survey) {
+      return <></>;
+    }
+
+    return (
+      <PdfDocument selectedSurvey={ survey } summary={ surveySummary }/>
+    );
+  };
 
   return (
-    <Dialog fullScreen open={ open } onClose={() => onClose()} >
+    <Dialog
+      fullScreen
+      open={ open }
+      onClose={ () => onClose() }
+    >
       <AppBar color="primary" elevation={ 10 }>
         <Toolbar>
           <Stack
@@ -54,7 +64,7 @@ const PdfExportDialog: React.FC<Props> = ({
               <CloseIcon/>
             </IconButton>
             <Typography>
-              Purkujätekartoitus PDF esikatselu
+              { strings.pdf.previewTitle }
             </Typography>
           </Stack>
           <PDFDownloadLink
@@ -64,7 +74,7 @@ const PdfExportDialog: React.FC<Props> = ({
             <Button
               color="inherit"
               variant="outlined"
-              startIcon={<Download/>}
+              startIcon={ <Download/> }
             >
               { strings.generic.download }
             </Button>

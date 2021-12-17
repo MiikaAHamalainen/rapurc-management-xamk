@@ -16,7 +16,8 @@
   },
 
   "pdf": {
-    "demolitionSurvey": "Purkujätekartoitus"
+    "previewTitle": "Survey PDF preview",
+    "demolitionSurvey": "Demolition survey"
   },
 
   "units": {

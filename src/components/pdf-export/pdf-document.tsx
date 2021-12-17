@@ -109,8 +109,11 @@ const styles = StyleSheet.create({
 
 });
 
+/**
+ * Component props interface
+ */
 interface Props {
-  selectedSurvey: Survey | undefined;
+  selectedSurvey: Survey;
   summary: SurveySummary;
 }
 
@@ -121,7 +124,7 @@ interface Props {
  * @returns survey report pdf
  */
 const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
-  const date = `${new Date().getDate()}.${new Date().getMonth() + 1}.${new Date().getFullYear()}`;
+  const date = moment().format("DD.MM.YYYY");
   /**
    * Render document info with current date
    */
@@ -143,6 +146,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     const scope = selectedSurvey ? LocalizationUtils.getLocalizedDemolitionScope(selectedSurvey.type) : "";
     const startDate = selectedSurvey ? moment(selectedSurvey.startDate).format("MMMM YYYY") : "";
     const endDate = selectedSurvey ? moment(selectedSurvey.endDate).format("MMMM YYYY") : "";
+
     return (
       <View wrap={ false } style={ styles.container }>
         <Text style={ styles.titleText }>
@@ -194,13 +198,17 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
    * Render contact person
    */
   const renderContactPerson = () => {
-    const { ownerInformation } = summary;
-
-    if (!ownerInformation) {
+    if (!summary?.ownerInformation?.contactPerson) {
       return null;
     }
 
-    const { contactPerson } = ownerInformation;
+    const {
+      firstName,
+      lastName,
+      profession,
+      phone,
+      email
+    } = summary?.ownerInformation?.contactPerson;
 
     return (
       <View wrap={ false } style={ styles.container }>
@@ -208,10 +216,10 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
           { strings.survey.owner.contactPerson }
         </Text>
         <View style={ styles.cell }>
-          <Text>{`${contactPerson?.firstName || ""} ${contactPerson?.lastName || ""}`}</Text>
-          <Text>{ contactPerson?.profession }</Text>
-          <Text>{ contactPerson?.phone }</Text>
-          <Text>{ contactPerson?.email }</Text>
+          <Text>{`${firstName || ""} ${lastName || ""}`}</Text>
+          <Text>{ profession }</Text>
+          <Text>{ phone }</Text>
+          <Text>{ email }</Text>
         </View>
       </View>
     );
