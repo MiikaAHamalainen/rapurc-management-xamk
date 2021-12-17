@@ -22,32 +22,27 @@ const AttachmentCard: React.FC<Props> = ({
   loading,
   attachment,
   rightControl
-}) => {
-  /**
-   * Component render
-   */
-  return (
-    <AttachmentContainer
+}) => (
+  <AttachmentContainer
+    direction="row"
+    justifyContent="space-between"
+    sx={{ backgroundColor: "#fff" }}
+  >
+    <Stack
       direction="row"
-      justifyContent="space-between"
-      sx={{ backgroundColor: "#fff" }}
+      spacing={ 3 }
     >
-      <Stack
-        direction="row"
-        spacing={ 3 }
-      >
-        <Hidden lgDown>
-          <FileCopy htmlColor="rgba(0,0,0,0.54)"/>
-        </Hidden>
-        <Typography>
-          { attachment.name }
-        </Typography>
-      </Stack>
-      <Box>
-        { loading ? <CircularProgress/> : rightControl }
-      </Box>
-    </AttachmentContainer>
-  );
-};
+      <Hidden lgDown>
+        <FileCopy htmlColor="rgba(0,0,0,0.54)"/>
+      </Hidden>
+      <Typography>
+        { attachment.name }
+      </Typography>
+    </Stack>
+    <Box>
+      { loading ? <CircularProgress/> : rightControl }
+    </Box>
+  </AttachmentContainer>
+);
 
 export default AttachmentCard;
