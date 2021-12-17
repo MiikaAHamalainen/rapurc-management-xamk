@@ -28,9 +28,19 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const [ surveyAttachments, setSurveyAttachments ] = React.useState<Attachment[]>([]);
+  const [ loadingAttachments, setLoadingAttachments ] = React.useState<Attachment[]>([]);
   const [ loading, setLoading ] = React.useState(false);
   const [ deletingAttachment, setDeletingAttachment ] = React.useState(false);
   const [ attachmentToBeDeleted, setAttachmentToBeDeleted ] = React.useState<Attachment>();
+
+  React.useEffect(() => {
+    const lastUploadedAttachment = surveyAttachments[surveyAttachments.length - 1];
+
+    const index = loadingAttachments.findIndex(attachment => attachment.url === lastUploadedAttachment.url);
+    const updatedLoadingAttachments = [ ...loadingAttachments ];
+    updatedLoadingAttachments.splice(index, 1);
+    setLoadingAttachments(updatedLoadingAttachments);
+  }, [surveyAttachments]);
 
   /**
    * Fetches survey attachments
@@ -132,10 +142,17 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
     const [ addedFile ] = FileUploadUtils.normalizeFileNames([ addedFiles[0] ]);
     const uploadData = await FileUploadUtils.upload(keycloak.token, addedFile);
     const { xhrRequest, uploadUrl, formData, key } = uploadData;
-    
+
+    const fileUrl = `${uploadUrl}/${key}`;
+
+    const loadingAttachment: Attachment = {
+      url: fileUrl,
+      name: addedFile.name
+    };
+
+    setLoadingAttachments([ ...loadingAttachments, loadingAttachment ]);
     xhrRequest.open("POST", uploadUrl, true);
     xhrRequest.send(formData);
-    const fileUrl = `${uploadUrl}/${key}`;
 
     const newAttachment: Attachment = {
       url: fileUrl,
@@ -209,6 +226,25 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
+   * Renders loading attachment list
+   */
+  const renderLoadingAttachmentList = () => (
+    <Stack
+      mt={ 3 }
+      spacing={ 3 }
+    >
+      {
+        loadingAttachments.map(attachment => (
+          <AttachmentCard
+            loading
+            attachment={ attachment }
+          />
+        ))
+      }
+    </Stack>
+  );
+
+  /**
    * Renders delete hazardous material dialog
    */
   const renderDeleteAttachmentDialog = () => (
@@ -272,6 +308,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
         </Box>
       </Stack>
       { renderAttachmentList() }
+      { renderLoadingAttachmentList() }
       { renderDeleteAttachmentDialog() }
     </>
   );
