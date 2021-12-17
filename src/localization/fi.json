@@ -16,8 +16,8 @@
   },
 
   "pdf": {
-    "previewTitle": "Purkujätekartoitus PDF esikatselu",
-    "demolitionSurvey": "Purkujätekartoitus"
+    "previewTitle": "Purkukartoitus PDF esikatselu",
+    "demolitionSurvey": "Purkukartoitus"
   },
 
   "units": {
@@ -133,6 +133,7 @@
   },
 
   "surveysScreen": {
+    "loadingSurveys": "Ladataan kartoituksia",
     "title": "Kartoitukset",
     "description": "Hae purkukartoituksia osoitteella",
     "address": "Osoite",
@@ -187,7 +188,7 @@
     "navigation": {
       "dropdownSettings": {
         "title": "Alasvetovalikot",
-        "reusableMaterials": "Rakennusosa- tai materiaali",
+        "reusableMaterials": "Rakennusosa tai -materiaali",
         "wasteMaterials": "Rakennus- ja purkujätemateriaali",
         "wasteCategories": "Jätekategoria",
         "postProcessing": "Jatkokäsittely",
@@ -422,6 +423,7 @@
         "wasteCode": "Jätekoodi",
         "usage": "Jatkokäsittely",
         "amount": "Määrä",
+        "amountInTons": "Määrä tonneina",
         "description": "Lisätiedot",
         "editDescription": "Muokkaa lisätietoa"
       }

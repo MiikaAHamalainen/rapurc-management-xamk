@@ -132,6 +132,7 @@
   },
 
   "surveysScreen": {
+    "loadingSurveys": "Loading surveys",
     "title": "Surveys",
     "description": "Search surveys by address",
     "address": "Address",
@@ -421,6 +422,7 @@
         "wasteCode": "Waste code",
         "usage": "Usage",
         "amount": "Amount",
+        "amountInTons": "Amount in tons",
         "description": "Description",
         "editDescription": "Edit description"
       }

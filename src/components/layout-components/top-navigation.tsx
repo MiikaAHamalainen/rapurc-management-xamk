@@ -22,12 +22,6 @@ const TopNavigation: React.FC = () => {
       >
         { strings.navigation.surveys }
       </Button>
-      <Button
-        variant="text"
-        onClick={ () => navigate("/new-survey") }
-      >
-        { strings.navigation.newSurvey }
-      </Button>
       <VisibleWithRole userRole="admin">
         <Button
           variant="text"
