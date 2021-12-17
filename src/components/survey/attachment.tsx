@@ -255,10 +255,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
    * Renders loading attachment list
    */
   const renderLoadingAttachmentList = () => (
-    <Stack
-      mt={ 3 }
-      spacing={ 3 }
-    >
+    <Stack mt={ 3 } spacing={ 3 }>
       {
         loadingAttachments.map(attachment => (
           <AttachmentCard
