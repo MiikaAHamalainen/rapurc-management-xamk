@@ -37,10 +37,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   React.useEffect(() => {
     const lastUploadedAttachment = surveyAttachments[surveyAttachments.length - 1];
 
-    const index = loadingAttachments.findIndex(attachment => attachment.url === lastUploadedAttachment.url);
-    const updatedLoadingAttachments = [ ...loadingAttachments ];
-    updatedLoadingAttachments.splice(index, 1);
-    setLoadingAttachments(updatedLoadingAttachments);
+    setLoadingAttachments(loadingAttachments.filter(attachment => attachment.url === lastUploadedAttachment.url));
   }, [surveyAttachments]);
 
   /**
@@ -82,12 +79,11 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
     }
 
     try {
-      await Api.getAttachmentsApi(keycloak.token).createSurveyAttachment({ surveyId: surveyId, attachment: newAttachment });
+      const createdAttachment = await Api.getAttachmentsApi(keycloak.token).createSurveyAttachment({ surveyId: surveyId, attachment: newAttachment });
+      setSurveyAttachments([ ...surveyAttachments, createdAttachment ]);
     } catch (error) {
       errorContext.setError(strings.errorHandling.attachments.create, error);
     }
-
-    await fetchAttachment();
   };
 
   /**
@@ -95,18 +91,17 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param attachment attachment
    */
-  const deleteAttachment = async (attachment: Attachment) => {
-    if (!keycloak?.token || !surveyId || !attachment.id) {
+  const deleteAttachment = async () => {
+    if (!keycloak?.token || !surveyId || !attachmentToBeDeleted?.id) {
       return;
     }
 
     try {
-      await Api.getAttachmentsApi(keycloak.token).deleteSurveyAttachment({ surveyId: surveyId, attachmentId: attachment.id });
+      await Api.getAttachmentsApi(keycloak.token).deleteSurveyAttachment({ surveyId: surveyId, attachmentId: attachmentToBeDeleted.id });
+      setSurveyAttachments(surveyAttachments.filter(attachment => attachment.id === attachmentToBeDeleted.id));
     } catch (error) {
       errorContext.setError(strings.errorHandling.attachments.delete, error);
     }
-
-    await fetchAttachment();
   };
 
   /**
@@ -131,7 +126,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
    * Handler for delete attachment confirm
    */
   const onDeleteAttachmentConfirm = async () => {
-    attachmentToBeDeleted && await deleteAttachment(attachmentToBeDeleted);
+    attachmentToBeDeleted && await deleteAttachment();
     setAttachmentToBeDeleted(undefined);
     setDeletingAttachment(false);
   };
@@ -166,7 +161,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
     noClick: true,
     noKeyboard: true,
     maxFiles: 1,
-    maxSize: 5242880,
+    maxSize: 5 * 1024 * 1024,
     onDrop: onAttachmentDrop
   });
 
