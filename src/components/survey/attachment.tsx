@@ -38,7 +38,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
     const lastUploadedAttachment = surveyAttachments[surveyAttachments.length - 1];
 
     setLoadingAttachments(loadingAttachments.filter(attachment => attachment.url === lastUploadedAttachment.url));
-  }, [surveyAttachments]);
+  }, [ surveyAttachments ]);
 
   /**
    * Fetches survey attachments
