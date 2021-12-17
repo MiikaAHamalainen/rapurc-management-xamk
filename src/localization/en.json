@@ -10,7 +10,14 @@
     "delete": "Delete",
     "logout": "Log out",
     "open": "Open",
-    "close": "Close"
+    "close": "Close",
+    "save": "Save",
+    "download": "Download"
+  },
+
+  "pdf": {
+    "previewTitle": "Survey PDF preview",
+    "demolitionSurvey": "Demolition survey"
   },
 
   "units": {

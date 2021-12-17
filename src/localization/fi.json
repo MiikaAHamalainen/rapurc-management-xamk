@@ -10,7 +10,14 @@
     "delete": "Poista",
     "logout": "Kirjaudu ulos",
     "open": "Avaa",
-    "close": "Sulje"
+    "close": "Sulje",
+    "save": "Tallenna",
+    "download": "Lataa"
+  },
+
+  "pdf": {
+    "previewTitle": "Purkujätekartoitus PDF esikatselu",
+    "demolitionSurvey": "Purkujätekartoitus"
   },
 
   "units": {

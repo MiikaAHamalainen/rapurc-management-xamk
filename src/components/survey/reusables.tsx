@@ -1088,7 +1088,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           const { value } = params;
           return (
             <Typography variant="body2">
-              { `${value} tn` }
+              { value ? `${value} tn` : "-" }
             </Typography>
           );
         }

@@ -1,4 +1,5 @@
-import { SurveyStatus } from "generated/client";
+import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, SurveyStatus, Usage, Waste, WasteCategory, WasteMaterial, WasteSpecifier } from "generated/client";
+import { Attachment } from "../generated/client/models/Attachment";
 
 /**
  * Application configuration
@@ -80,4 +81,24 @@ export interface UploadFile {
   imageUrl?: string;
   file?: File;
   progress: number
+}
+
+/**
+ * Interface for survey summary 
+ */
+export interface SurveySummary {
+  building?: Building;
+  buildingTypes: BuildingType[];
+  ownerInformation?: OwnerInformation;
+  reusables: Reusable[];
+  reusableMaterials: ReusableMaterial[];
+  wastes: Waste[];
+  wasteCategories: WasteCategory[];
+  wasteMaterials: WasteMaterial[];
+  wasteSpecifiers: WasteSpecifier[];
+  hazardousWastes: HazardousWaste[];
+  hazardousMaterials: HazardousMaterial[];
+  usages: Usage[];
+  surveyors: Surveyor[];
+  attachments: Attachment[];
 }

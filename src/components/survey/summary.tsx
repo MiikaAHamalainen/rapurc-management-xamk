@@ -6,33 +6,13 @@ import { ErrorContext } from "components/error-handler/error-handler";
 import AttachmentCard from "components/generic/acttachment-card";
 import { selectKeycloak } from "features/auth-slice";
 import { selectSelectedSurvey } from "features/surveys-slice";
-import { Attachment, Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, Usage, Waste, WasteCategory, WasteMaterial, WasteSpecifier } from "generated/client";
+import PdfExportDialog from "components/pdf-export/pdf-export-dialog";
 import strings from "localization/strings";
 import moment from "moment";
 import * as React from "react";
-import { SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
+import { SurveySummary } from "types";
 import LocalizationUtils from "utils/localization-utils";
-
-/**
- * Interface for survey summary 
- */
-interface SurveySummary {
-  building?: Building;
-  buildingTypes: BuildingType[];
-  ownerInformation?: OwnerInformation;
-  reusables: Reusable[];
-  reusableMaterials: ReusableMaterial[];
-  wastes: Waste[];
-  wasteCategories: WasteCategory[];
-  wasteMaterials: WasteMaterial[];
-  wasteSpecifiers: WasteSpecifier[];
-  hazardousWastes: HazardousWaste[];
-  hazardousMaterials: HazardousMaterial[];
-  usages: Usage[];
-  surveyors: Surveyor[];
-  attachments: Attachment[];
-}
 
 const initialSurveySummary: SurveySummary = {
   buildingTypes: [],
@@ -58,6 +38,7 @@ const SummaryView: React.FC = () => {
   const selectedSurvey = useAppSelector(selectSelectedSurvey);
   const [ loading, setLoading ] = React.useState(false);
   const [ surveySummary, setSurveySummary ] = React.useState<SurveySummary>(initialSurveySummary);
+  const [ pdfDialogOpen, setPdfDialogOpen ] = React.useState(false);
 
   /**
    * Fetches owner information array
@@ -430,9 +411,16 @@ const SummaryView: React.FC = () => {
 
     return (
       <Stack spacing={ 2 }>
-        <Typography variant="h3">
-          { strings.survey.building.title }
-        </Typography>
+        <Stack spacing={ 2 }>
+          <Typography variant="h3">
+            { strings.survey.building.title }
+          </Typography>
+          <Box>
+            <Typography>
+              { `${building.address?.streetAddress} ${building.address?.postCode} ${building.address?.city}` }
+            </Typography>
+          </Box>
+        </Stack>
         <Paper>
           <Stack
             direction={ isMobile ? "column" : "row" }
@@ -851,16 +839,14 @@ const SummaryView: React.FC = () => {
         <Typography variant="h2">
           { strings.survey.summary.title }
         </Typography>
-        {/* TODO print button */}
-        <SurveyButton
-          disabled
+        <Button
           variant="contained"
           color="secondary"
           startIcon={ <Print/> }
-          onClick={ () => {} }
+          onClick={ () => setPdfDialogOpen(true) }
         >
           { strings.survey.summary.print }
-        </SurveyButton>
+        </Button>
       </Stack>
       <Stack spacing={ 4 }>
         { renderBuildingInfoSection() }
@@ -873,6 +859,12 @@ const SummaryView: React.FC = () => {
         { renderHazardousMaterialsSection() }
         { renderAttachmentsSection() }
       </Stack>
+      <PdfExportDialog
+        open={ pdfDialogOpen }
+        onClose={ () => setPdfDialogOpen(false) }
+        survey={ selectedSurvey }
+        surveySummary={ surveySummary }
+      />
     </>
   );
 };
