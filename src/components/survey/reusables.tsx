@@ -200,31 +200,29 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * @param acceptedFiles accepted files
    */
   const filesUpload = async (acceptedFiles: File[]) => {
-    if (!keycloak || !reusableUploadingImage) {
+    if (!keycloak || !reusableUploadingImage || (reusableUploadingImage.images?.length || 0) >= 4) {
       return;
     }
 
-    const addedFiles = FileUploadUtils.normalizeFileNames(acceptedFiles.splice(0, 4 - uploadedFiles.length));
-    const updatedUploadedFile = [ ...uploadedFiles, ...addedFiles.map(addedFile => ({ file: addedFile, progress: 0 })) ];
+    const addedFile = FileUploadUtils.normalizeFileNames(acceptedFiles)[0];
+    const updatedUploadedFile = [ ...uploadedFiles, ({ file: addedFile, progress: 0 }) ];
     setUploadedFiles(updatedUploadedFile);
     const updatedReusable = { ...reusableUploadingImage };
 
     try {
-      const fileUploadPromises = addedFiles.map(async addedFile => {
-        const uploadData = await FileUploadUtils.upload(keycloak.token!!, addedFile, onFileUploadProgress(updatedUploadedFile, addedFile));
-        const { xhrRequest, uploadUrl, formData, key } = uploadData;
-        
-        xhrRequest.open("POST", uploadUrl, true);
-        xhrRequest.send(formData);
-        const imageUrl = `${uploadUrl}/${key}`;
-        updatedReusable.images ? updatedReusable.images.push(imageUrl) : updatedReusable.images = [ imageUrl ];
-      });
-      await Promise.all(fileUploadPromises);
+      const uploadData = await FileUploadUtils.upload(keycloak.token!!, addedFile, onFileUploadProgress(updatedUploadedFile, addedFile));
+      const { xhrRequest, uploadUrl, formData, key } = uploadData;
+      
+      xhrRequest.open("POST", uploadUrl, true);
+      xhrRequest.send(formData);
+      const imageUrl = `${uploadUrl}/${key}`;
+      updatedReusable.images = updatedReusable.images ? [ ...updatedReusable.images, imageUrl ] : [ imageUrl ];
     } catch (error) {
       errorContext.setError(strings.errorHandling.failToUpload, error);
     }
 
-    onMaterialRowChange(updatedReusable);
+    await onMaterialRowChange(updatedReusable);
+    setReusableUploadingImage(updatedReusable);
   };
 
   const { getRootProps, getInputProps, open } = useDropzone({

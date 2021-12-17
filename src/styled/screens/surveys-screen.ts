@@ -76,7 +76,6 @@ export const AttachmentContainer = styled(Stack, {
   label: "survey-attachment-container"
 })(({ theme }) => ({
   height: 72,
-  cursor: "pointer",
   alignItems: "center",
   backgroundColor: "#fff",
   padding: theme.spacing(4)

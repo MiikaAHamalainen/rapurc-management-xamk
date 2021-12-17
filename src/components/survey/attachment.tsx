@@ -1,5 +1,5 @@
-import { Add, Delete } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Add, Delete, Download } from "@mui/icons-material";
+import { Box, Button, CircularProgress, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
@@ -180,9 +180,12 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param onClick on click event handler
    */
-  const renderMobileDeleteAttachment = (onClick?: React.MouseEventHandler<HTMLButtonElement>) => (
-    <IconButton onClick={ onClick }>
-      <Delete/>
+  const renderAttachmentDownload = (attachment: Attachment) => (
+    <IconButton
+      sx={{ mr: 2 }}
+      onClick={ () => window.open(attachment.url) }
+    >
+      <Download/>
     </IconButton>
   );
 
@@ -191,15 +194,32 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param onClick on click event handler
    */
-  const renderMobileAttachment = (onClick?: React.MouseEventHandler<HTMLButtonElement>) => (
-    <SurveyButton
-      variant="text"
-      color="primary"
-      startIcon={ <Delete/> }
-      onClick={ onClick }
-    >
-      { strings.generic.delete }
-    </SurveyButton>
+  const renderMobileAttachmentControl = (attachment: Attachment) => (
+    <>
+      { renderAttachmentDownload(attachment) }
+      <IconButton onClick={ () => onDeleteAttachmentClick(attachment) }>
+        <Delete/>
+      </IconButton>
+    </>
+  );
+
+  /**
+   * Renders mobile delete attachment button
+   * 
+   * @param onClick on click event handler
+   */
+  const renderAttachmentControl = (attachment: Attachment) => (
+    <>
+      { renderAttachmentDownload(attachment) }
+      <Button
+        variant="text"
+        color="primary"
+        startIcon={ <Delete/> }
+        onClick={ () => onDeleteAttachmentClick(attachment) }
+      >
+        { strings.generic.delete }
+      </Button>
+    </>
   );
 
   /**
@@ -213,12 +233,11 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
         surveyAttachments.map(attachment => (
           <AttachmentCard
             attachment={ attachment }
-            onClick={ () => window.open(attachment.url) }
             rightControl={ isMobile
               ?
-              renderMobileDeleteAttachment(() => onDeleteAttachmentClick(attachment))
+              renderMobileAttachmentControl(attachment)
               :
-              renderMobileAttachment(() => onDeleteAttachmentClick(attachment)) }
+              renderAttachmentControl(attachment) }
           />
         ))
       }

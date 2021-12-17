@@ -1,5 +1,5 @@
 import { FileCopy } from "@mui/icons-material";
-import { Stack, Typography, Hidden, CircularProgress } from "@mui/material";
+import { Stack, Typography, Hidden, CircularProgress, Box } from "@mui/material";
 import { Attachment } from "generated/client";
 import * as React from "react";
 import { AttachmentContainer } from "styled/screens/surveys-screen";
@@ -11,7 +11,6 @@ interface Props {
   loading?: boolean;
   attachment: Attachment;
   rightControl?: JSX.Element;
-  onClick?: () => void;
 }
 
 /**
@@ -22,7 +21,6 @@ interface Props {
 const AttachmentCard: React.FC<Props> = ({
   loading,
   attachment,
-  onClick,
   rightControl
 }) => {
   /**
@@ -32,7 +30,6 @@ const AttachmentCard: React.FC<Props> = ({
     <AttachmentContainer
       direction="row"
       justifyContent="space-between"
-      onClick={ onClick }
       sx={{ backgroundColor: "#fff" }}
     >
       <Stack
@@ -46,7 +43,9 @@ const AttachmentCard: React.FC<Props> = ({
           { attachment.name }
         </Typography>
       </Stack>
-      { loading ? <CircularProgress/> : rightControl }
+      <Box>
+        { loading ? <CircularProgress/> : rightControl }
+      </Box>
     </AttachmentContainer>
   );
 };
