@@ -112,10 +112,10 @@
       "update": "Virhe päivitettäessä haitta-ainetarkennetta"
     },
     "attachments": {
-      "list": "Error while listing waste attachment",
-      "create": "Error while creating waste attachment",
-      "delete": "Error while deleting waste attachment",
-      "update": "Error while updating waste attachment"
+      "list": "Virhe liitettä listattaessa",
+      "create": "Virhe luotaessa liitettä",
+      "delete": "Virhe poistettaessa liitettä",
+      "update": "Virhe päivitettäessä liitettä"
     }
   },
 
@@ -444,11 +444,11 @@
       }
     },
     "attachments": {
-      "title": "Attachments",
-      "add": "Add attachment",
+      "title": "Liitteet",
+      "add": "Lisää liite",
       "dialog": {
-        "title": "Delete attachmenr",
-        "text": "Are you sure you want to delete attachment"
+        "title": "Poista liite",
+        "text": "Haluatko varmasti poistaa liitteen"
       }
     },
     "summary": {

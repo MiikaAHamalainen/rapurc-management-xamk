@@ -22,7 +22,7 @@ interface Props {
 }
 
 /**
- * Component for hazardous materials
+ * Component for attachment
  */
 const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
@@ -58,7 +58,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Fetches survey attachments
+   * Loads data
    */
   const loadData = async () => {
     setLoading(true);
@@ -71,7 +71,9 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   }, []);
 
   /**
-   * Fetches survey attachments
+   * Create attachment
+   * 
+   * @param newAttachment new attachment
    */
   const createAttachment = async (newAttachment: Attachment) => {
     if (!keycloak?.token || !surveyId) {
@@ -88,7 +90,9 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Fetches survey attachments
+   * Delete attachment
+   * 
+   * @param attachment attachment
    */
   const deleteAttachment = async (attachment: Attachment) => {
     if (!keycloak?.token || !surveyId || !attachment.id) {
@@ -107,7 +111,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   /**
    * Handler for delete attachment click
    * 
-   * @parma attachment
+   * @param attachment attachment
    */
   const onDeleteAttachmentClick = (attachment: Attachment) => {
     setAttachmentToBeDeleted(attachment);
@@ -115,7 +119,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   };
 
   /**
-   * Handler for delete attachment cloase
+   * Handler for delete attachment close
    */
   const onDeleteAttachmentClose = async () => {
     setAttachmentToBeDeleted(undefined);
@@ -133,6 +137,8 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
 
   /**
    * Handler for attachment drop
+   * 
+   * @param addedFiles added files
    */
   const onAttachmentDrop = async (addedFiles: File[]) => {
     if (addedFiles.length !== 1 || !keycloak?.token) {
@@ -176,9 +182,9 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   /**
-   * Renders mobile delete attachment button
+   * Renders attachment download button
    * 
-   * @param onClick on click event handler
+   * @param attachment attachment
    */
   const renderAttachmentDownload = (attachment: Attachment) => (
     <IconButton
@@ -190,9 +196,9 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
-   * Renders mobile delete attachment button
+   * Renders mobile attachment control
    * 
-   * @param onClick on click event handler
+   * @param attachment attachment
    */
   const renderMobileAttachmentControl = (attachment: Attachment) => (
     <>
@@ -204,9 +210,9 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
-   * Renders mobile delete attachment button
+   * Renders attachment control
    * 
-   * @param onClick on click event handler
+   * @param attachment attachment
    */
   const renderAttachmentControl = (attachment: Attachment) => (
     <>
@@ -264,7 +270,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   );
 
   /**
-   * Renders delete hazardous material dialog
+   * Renders delete attachment dialog
    */
   const renderDeleteAttachmentDialog = () => (
     <GenericDialog

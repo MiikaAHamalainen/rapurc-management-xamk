@@ -111,10 +111,10 @@
       "update": "Error while updating waste specifier"
     },
     "attachments": {
-      "list": "Error while listing waste attachment",
-      "create": "Error while creating waste attachment",
-      "delete": "Error while deleting waste attachment",
-      "update": "Error while updating waste attachment"
+      "list": "Error while listing attachment",
+      "create": "Error while creating attachment",
+      "delete": "Error while deleting attachment",
+      "update": "Error while updating attachment"
     }
   },
 
@@ -446,7 +446,7 @@
       "title": "Attachments",
       "add": "Add attachment",
       "dialog": {
-        "title": "Delete attachmenr",
+        "title": "Delete attachment",
         "text": "Are you sure you want to delete attachment"
       }
     },
