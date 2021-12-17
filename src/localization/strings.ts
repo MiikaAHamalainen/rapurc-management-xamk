@@ -24,7 +24,25 @@ export interface Localized extends LocalizedStringsMethods {
     delete: string;
     logout: string;
     open: string;
+    close: string;
+    save: string;
+    download: string;
   };
+
+  /**
+   * Translations related to PDF export
+   */
+  pdf: {
+    previewTitle: string;
+    demolitionSurvey: string;
+  }
+
+  /**
+   * Translations related to generic units
+   */
+  units: {
+    tons: string;
+  }
 
   /**
    * Translations related to error handling
@@ -32,6 +50,7 @@ export interface Localized extends LocalizedStringsMethods {
   errorHandling: {
     title: string;
     missingAccessToken: string;
+    failToUpload: string;
     surveys: {
       list: string;
       create: string;
@@ -85,6 +104,12 @@ export interface Localized extends LocalizedStringsMethods {
       create: string;
       delete: string;
     };
+    hazardousWastes: {
+      list: string;
+      update: string;
+      create: string;
+      delete: string;
+    };
     surveyors: {
       list: string;
       create: string;
@@ -115,6 +140,12 @@ export interface Localized extends LocalizedStringsMethods {
       delete: string;
       update: string;
     };
+    attachments: {
+      list: string;
+      create: string;
+      delete: string;
+      update: string;
+    };
   };
 
   /**
@@ -130,6 +161,7 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to surveys screen
    */
   surveysScreen: {
+    loadingSurveys: string;
     title: string;
     description: string;
     address: string;
@@ -367,6 +399,11 @@ export interface Localized extends LocalizedStringsMethods {
     };
     reusables: {
       title: string;
+      dropFile: string;
+      viewImage: string;
+      moreImage: string;
+      addImage: string;
+      deleteImage: string;
       addNewBuildingPart: string;
       deleteBuildingParts: string;
       addNewBuildingPartsDialog: {
@@ -377,16 +414,19 @@ export interface Localized extends LocalizedStringsMethods {
         usabilityHelperText: string;
         descriptionHelperText: string;
         wasteAmountHelperText: string;
+        imageDescription: string
       };
       deleteReusableDialog: {
         title: string;
         text: string;
       };
       dataGridColumns: {
+        images: string;
         material: string;
         buildingPart: string;
         usability: string;
         wasteAmount: string;
+        wasteAmountInTons: string;
         amount: string;
         description: string;
         unit: string;
@@ -423,8 +463,21 @@ export interface Localized extends LocalizedStringsMethods {
         wasteCode: string;
         usage: string;
         amount: string;
+        amountInTons: string;
         description: string;
         editDescription: string;
+      };
+    };
+    hazardousMaterial: {
+      title: string;
+      dataGridColumns: {
+        hazardousMaterial: string;
+        material: string;
+        wasteCode: string;
+        amount: string;
+        amountInTons: string;
+        description: string;
+        wasteSpecifier: string;
       };
     };
     otherStructures: {
@@ -438,6 +491,18 @@ export interface Localized extends LocalizedStringsMethods {
         deleteBuilding: string;
         areYouSure: string;
       }
+    };
+    attachments: {
+      title: string;
+      add: string;
+      dialog: {
+        title: string;
+        text: string;
+      }
+    };
+    summary: {
+      title: string;
+      print: string;
     };
   };
 }

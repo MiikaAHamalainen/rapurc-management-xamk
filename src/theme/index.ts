@@ -75,6 +75,11 @@ export default createTheme({
       fontWeight: 700,
       fontSize: 16
     },
+    subtitle2: {
+      fontFamily: "Quicksand, sans-serif",
+      fontWeight: 700,
+      fontSize: 14
+    },
     body2: {
       fontSize: 16,
       lineHeight: 1.63
@@ -123,7 +128,7 @@ export default createTheme({
           justifyContent: "space-between"
         },
         colorPrimary: {
-          backgroundColor: "#000"
+          backgroundColor: "#009E9E"
         }
       }
     },
@@ -138,6 +143,9 @@ export default createTheme({
       styleOverrides: {
         root: {
           width: "100%"
+        },
+        vertical: {
+          width: 1
         }
       }
     },

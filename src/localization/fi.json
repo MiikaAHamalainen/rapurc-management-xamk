@@ -9,12 +9,25 @@
     "cancel": "Peruuta",
     "delete": "Poista",
     "logout": "Kirjaudu ulos",
-    "open": "Avaa"
+    "open": "Avaa",
+    "close": "Sulje",
+    "save": "Tallenna",
+    "download": "Lataa"
+  },
+
+  "pdf": {
+    "previewTitle": "Purkukartoitus PDF esikatselu",
+    "demolitionSurvey": "Purkukartoitus"
+  },
+
+  "units": {
+    "tons": "tonnia"
   },
 
   "errorHandling": {
-    "title": "Error",
+    "title": "Virhe",
     "missingAccessToken": "API-avain puuttuu",
+    "failToUpload": "Kuvan lisäys epäonnistui.",
     "surveys": {
       "list": "Virhe listattaessa kartoituksia",
       "create": "Virhe luodessa uutta kartoitusta",
@@ -63,10 +76,17 @@
       "create": "Virhe luotaessa rakennus- tai purkujätemateriaalia",
       "delete": "Virhe poistettaessa rakennus- tai purkujätemateriaalia"
     },
+    "hazardousWastes": {
+      "list": "Virhe ladattaessa haitta-ainetta sisältäviä materiaaleja",
+      "create": "Virhe luotaessa haitta-ainetta sisältävää materiaalia",
+      "delete": "Virhe poistettaessa haitta-ainetta sisältävää materiaalia",
+      "update": "Virhe päivitettäessä haitta-ainetta sisältävää materiaalia"
+    },
     "hazardousMaterials": {
       "list": "Virhe ladattaessa haitta-ainetta sisältäviä materiaaleja",
       "create": "Virhe luotaessa haitta-ainetta sisältävää materiaalia",
-      "delete": "Virhe poistettaessa haitta-ainetta sisältävää materiaalia"
+      "delete": "Virhe poistettaessa haitta-ainetta sisältävää materiaalia",
+      "update": "Virhe päivitettäessä haitta-ainetta sisältävää materiaalia"
     },
     "surveyors": {
       "list": "Virhe kartoittajaa listattaessa",
@@ -97,6 +117,12 @@
       "create": "Virhe luotaessa haitta-ainetarkennetta",
       "delete": "Virhe poistettaessa haitta-ainetarkennetta",
       "update": "Virhe päivitettäessä haitta-ainetarkennetta"
+    },
+    "attachments": {
+      "list": "Virhe liitettä listattaessa",
+      "create": "Virhe luotaessa liitettä",
+      "delete": "Virhe poistettaessa liitettä",
+      "update": "Virhe päivitettäessä liitettä"
     }
   },
 
@@ -107,6 +133,7 @@
   },
 
   "surveysScreen": {
+    "loadingSurveys": "Ladataan kartoituksia",
     "title": "Kartoitukset",
     "description": "Hae purkukartoituksia osoitteella",
     "address": "Osoite",
@@ -161,7 +188,7 @@
     "navigation": {
       "dropdownSettings": {
         "title": "Alasvetovalikot",
-        "reusableMaterials": "Rakennusosa- tai materiaali",
+        "reusableMaterials": "Rakennusosa tai -materiaali",
         "wasteMaterials": "Rakennus- ja purkujätemateriaali",
         "wasteCategories": "Jätekategoria",
         "postProcessing": "Jatkokäsittely",
@@ -275,7 +302,7 @@
       "buildingID": "Rakennustunnus",
       "buildingClass": "Rakennusluokka",
       "year": "Rakennusvuosi",
-      "area": "Kokonaisala (m²)",
+      "area": "Kerrosala (m²)",
       "volume": "Rakennustilavuus (m³)",
       "floors": "Kerrosluku",
       "basementFloors": "Kellarikerrokset",
@@ -332,7 +359,12 @@
     },
     "reusables": {
       "title": "Uudelleenkäytettävät rakennusosat",
-      "addNewBuildingPart": "Lisää uusi rakennusosa",
+      "dropFile": "Pudota kuvat tähän tai valitse alla olevasta painikkeesta.",
+      "viewImage": "Näytä kuvat",
+      "moreImage": "Lisää kuvia",
+      "addImage": "Lisää kuva",
+      "deleteImage": "Poista kuva",
+      "addNewBuildingPart": "Lisää uusi",
       "deleteBuildingParts": "Poista rakennusosa",
       "addNewBuildingPartsDialog": {
         "title": "Lisää rakennusosa",
@@ -341,7 +373,8 @@
         "buildingPartOrMaterialHelperText": "Anna osaa vastaava tarkenne",
         "usabilityHelperText": "Jos ei tiedossa, valitse \"ei arvioitu\"",
         "descriptionHelperText": "Vapaa kuvaus esim. sijainnista rakennuksessa tms.",
-        "wasteAmountHelperText": "Valinnainen tieto"
+        "wasteAmountHelperText": "Valinnainen tieto",
+        "imageDescription": "Tuetut formaatit: jpg, gif tai png\nMax. 4 kuvaa / rakennusosa"
       },
       "deleteReusableDialog": {
         "title": "Poista uudelleenkäytettävä osa",
@@ -353,9 +386,11 @@
         "usability": "Käyttökelpoisuus",
         "amount": "Määrä",
         "wasteAmount": "Purkujätemäärä",
+        "wasteAmountInTons": "Purkujätemäärä tonneina",
         "description": "Lisätieto",
         "unit": "Yksikkö",
-        "editDescription": "Muokkaa lisätietoa"
+        "editDescription": "Muokkaa lisätietoa",
+        "images": "Materiaalin kuvat"
       },
       "usability": {
         "excellent": "Erinomainen",
@@ -388,8 +423,21 @@
         "wasteCode": "Jätekoodi",
         "usage": "Jatkokäsittely",
         "amount": "Määrä",
-        "description": "Lisätieto",
+        "amountInTons": "Määrä tonneina",
+        "description": "Lisätiedot",
         "editDescription": "Muokkaa lisätietoa"
+      }
+    },
+    "hazardousMaterial": {
+      "title": "Haitta-aineita sisältävät materiaalit",
+      "dataGridColumns": {
+        "hazardousMaterial": "Haitta-aine",
+        "material": "Materiaali",
+        "wasteCode": "Jätekoodi",
+        "amount": "Määrä",
+        "amountInTons": "Määrä tonneina",
+        "description": "Lisätiedot",
+        "wasteSpecifier": "Haitta-aine tarkenne"
       }
     },
     "otherStructures": {
@@ -403,6 +451,18 @@
         "deleteBuilding": "Poista rakennus / rakennelma",
         "areYouSure": "Oletko varma että haluat poistaa rakennuksen / rakennelman?"
       }
+    },
+    "attachments": {
+      "title": "Liitteet",
+      "add": "Lisää liite",
+      "dialog": {
+        "title": "Poista liite",
+        "text": "Haluatko varmasti poistaa liitteen"
+      }
+    },
+    "summary": {
+      "title": "Yhteenveto",
+      "print": "Tulosta"
     }
   }
 }
