@@ -240,11 +240,10 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
         surveyAttachments.map(attachment => (
           <AttachmentCard
             attachment={ attachment }
-            rightControl={ isMobile
-              ?
-              renderMobileAttachmentControl(attachment)
-              :
-              renderAttachmentControl(attachment) }
+            rightControl={ isMobile ?
+              renderMobileAttachmentControl(attachment) :
+              renderAttachmentControl(attachment)
+            }
           />
         ))
       }
