@@ -27,6 +27,7 @@ interface Props {
 const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
+
   const [ surveyAttachments, setSurveyAttachments ] = React.useState<Attachment[]>([]);
   const [ loadingAttachments, setLoadingAttachments ] = React.useState<Attachment[]>([]);
   const [ loading, setLoading ] = React.useState(false);
