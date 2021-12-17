@@ -317,7 +317,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
         <Box
           display="flex"
           alignItems="stretch"
-          { ...getRootProps({ className: "dropzone" })}
+          { ...getRootProps({ className: "dropzone" }) }
         >
           <input { ...getInputProps() }/>
           <SurveyButton
