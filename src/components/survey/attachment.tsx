@@ -150,21 +150,14 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
     const uploadData = await FileUploadUtils.upload(keycloak.token, addedFile);
     const { xhrRequest, uploadUrl, formData, key } = uploadData;
 
-    const fileUrl = `${uploadUrl}/${key}`;
-
-    const loadingAttachment: Attachment = {
-      url: fileUrl,
+    const newAttachment: Attachment = {
+      url: `${uploadUrl}/${key}`,
       name: addedFile.name
     };
 
-    setLoadingAttachments([ ...loadingAttachments, loadingAttachment ]);
+    setLoadingAttachments([ ...loadingAttachments, newAttachment ]);
     xhrRequest.open("POST", uploadUrl, true);
     xhrRequest.send(formData);
-
-    const newAttachment: Attachment = {
-      url: fileUrl,
-      name: addedFile.name
-    };
 
     await createAttachment(newAttachment);
   };
