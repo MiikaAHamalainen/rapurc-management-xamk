@@ -116,6 +116,12 @@
       "create": "Error while creating waste specifier",
       "delete": "Error while deleting waste specifier",
       "update": "Error while updating waste specifier"
+    },
+    "attachments": {
+      "list": "Error while listing attachment",
+      "create": "Error while creating attachment",
+      "delete": "Error while deleting attachment",
+      "update": "Error while updating attachment"
     }
   },
 
@@ -441,6 +447,14 @@
         "description": "Additional information",
         "deleteBuilding": "Delete other building / structure",
         "areYouSure": "Are you sure you want to delete this building / structure?"
+      }
+    },
+    "attachments": {
+      "title": "Attachments",
+      "add": "Add attachment",
+      "dialog": {
+        "title": "Delete attachment",
+        "text": "Are you sure you want to delete attachment"
       }
     },
     "summary": {

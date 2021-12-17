@@ -70,6 +70,18 @@ export const DropZoneContainer = styled(Box, {
 }));
 
 /**
+ * Styled attachment card container
+ */
+export const AttachmentContainer = styled(Stack, {
+  label: "survey-attachment-container"
+})(({ theme }) => ({
+  height: 72,
+  alignItems: "center",
+  backgroundColor: "#fff",
+  padding: theme.spacing(4)
+}));
+
+/**
  * Styled image thumbnail button
  */
 export const ThumbnailButton = styled(Button, {

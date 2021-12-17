@@ -1,4 +1,4 @@
-import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi, SurveyorsApi, SurveyWastesApi, UsagesApi, WasteMaterialApi, WasteCategoryApi, WasteSpecifiersApi, HazardousMaterialApi, SurveyHazardousWastesApi } from "../generated/client";
+import { Configuration, SurveysApi, BuildingsApi, OwnersApi, ReusableMaterialApi, SurveyReusablesApi, BuildingTypesApi, SurveyorsApi, SurveyWastesApi, UsagesApi, WasteMaterialApi, WasteCategoryApi, WasteSpecifiersApi, HazardousMaterialApi, SurveyHazardousWastesApi, SurveyAttachmentsApi } from "../generated/client";
 
 /**
  * Utility class for loading api with predefined configuration
@@ -153,6 +153,16 @@ export default class Api {
    */
   public static getHazardousWasteApi = (accessToken: string) => {
     return new SurveyHazardousWastesApi(Api.getConfiguration(accessToken));
+  };
+
+  /**
+   * Gets initialized attachments API
+   *
+   * @param accessToken access token
+   * @returns initialized waste attachments API
+   */
+  public static getAttachmentsApi = (accessToken: string) => {
+    return new SurveyAttachmentsApi(Api.getConfiguration(accessToken));
   };
 
   /**

@@ -106,7 +106,6 @@ const SurveyScreen: React.FC = () => {
       />
       <Divider/>
       <NavigationItem
-        disabled
         icon={ <Attachment/> }
         to="attachments"
         title={ strings.surveyScreen.navigation.attachments }

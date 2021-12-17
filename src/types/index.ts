@@ -1,4 +1,5 @@
 import { Building, BuildingType, HazardousMaterial, HazardousWaste, OwnerInformation, Reusable, ReusableMaterial, Surveyor, SurveyStatus, Usage, Waste, WasteCategory, WasteMaterial, WasteSpecifier } from "generated/client";
+import { Attachment } from "../generated/client/models/Attachment";
 
 /**
  * Application configuration
@@ -99,4 +100,5 @@ export interface SurveySummary {
   hazardousMaterials: HazardousMaterial[];
   usages: Usage[];
   surveyors: Surveyor[];
+  attachments: Attachment[];
 }

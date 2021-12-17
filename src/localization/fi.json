@@ -117,6 +117,12 @@
       "create": "Virhe luotaessa haitta-ainetarkennetta",
       "delete": "Virhe poistettaessa haitta-ainetarkennetta",
       "update": "Virhe päivitettäessä haitta-ainetarkennetta"
+    },
+    "attachments": {
+      "list": "Virhe liitettä listattaessa",
+      "create": "Virhe luotaessa liitettä",
+      "delete": "Virhe poistettaessa liitettä",
+      "update": "Virhe päivitettäessä liitettä"
     }
   },
 
@@ -442,6 +448,14 @@
         "description": "Lisätiedot",
         "deleteBuilding": "Poista rakennus / rakennelma",
         "areYouSure": "Oletko varma että haluat poistaa rakennuksen / rakennelman?"
+      }
+    },
+    "attachments": {
+      "title": "Liitteet",
+      "add": "Lisää liite",
+      "dialog": {
+        "title": "Poista liite",
+        "text": "Haluatko varmasti poistaa liitteen"
       }
     },
     "summary": {
