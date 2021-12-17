@@ -25,7 +25,17 @@ export interface Localized extends LocalizedStringsMethods {
     logout: string;
     open: string;
     close: string;
+    save: string;
+    download: string;
   };
+
+  /**
+   * Translations related to PDF export
+   */
+  pdf: {
+    previewTitle: string;
+    demolitionSurvey: string;
+  }
 
   /**
    * Translations related to generic units

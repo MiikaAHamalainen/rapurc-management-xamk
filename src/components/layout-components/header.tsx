@@ -18,6 +18,8 @@ interface Props {
 
 /**
  * Header component
+ *
+ * @param props component properties
  */
 const Header: React.FC<Props> = ({
   title,
