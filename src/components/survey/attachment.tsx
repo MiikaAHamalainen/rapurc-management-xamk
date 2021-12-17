@@ -122,7 +122,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   /**
    * Handler for delete attachment close
    */
-  const onDeleteAttachmentClose = async () => {
+  const onDeleteAttachmentClose = () => {
     setAttachmentToBeDeleted(undefined);
     setDeletingAttachment(false);
   };
