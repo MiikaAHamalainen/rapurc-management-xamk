@@ -1,4 +1,4 @@
-import { Add, Delete, Download } from "@mui/icons-material";
+import { Add, Delete } from "@mui/icons-material";
 import { Box, Button, CircularProgress, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
@@ -38,7 +38,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
     const lastUploadedAttachment = surveyAttachments[surveyAttachments.length - 1];
 
     setLoadingAttachments(loadingAttachments.filter(attachment => attachment.url === lastUploadedAttachment.url));
-  }, [surveyAttachments]);
+  }, [ surveyAttachments ]);
 
   /**
    * Fetches survey attachments
@@ -161,7 +161,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
     noClick: true,
     noKeyboard: true,
     maxFiles: 1,
-    maxSize: 5 * 1024 * 1024,
+    maxSize: 15 * 1024 * 1024,
     onDrop: onAttachmentDrop
   });
 
@@ -176,12 +176,14 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
    * @param attachment attachment
    */
   const renderAttachmentDownload = (attachment: Attachment) => (
-    <IconButton
+    <Button
+      variant="text"
+      color="primary"
       sx={{ mr: 2 }}
       onClick={ () => window.open(attachment.url) }
     >
-      <Download/>
-    </IconButton>
+      { strings.generic.open }
+    </Button>
   );
 
   /**

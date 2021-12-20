@@ -162,6 +162,7 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to surveys screen
    */
   surveysScreen: {
+    loadingSurveys: string;
     title: string;
     description: string;
     address: string;
@@ -463,6 +464,7 @@ export interface Localized extends LocalizedStringsMethods {
         wasteCode: string;
         usage: string;
         amount: string;
+        amountInTons: string;
         description: string;
         editDescription: string;
       };

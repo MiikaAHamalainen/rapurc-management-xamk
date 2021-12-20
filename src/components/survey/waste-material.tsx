@@ -448,7 +448,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             type="number"
             color="primary"
             value={ newWaste.amount }
-            label={ strings.survey.wasteMaterial.dataGridColumns.amount }
+            label={ strings.survey.wasteMaterial.dataGridColumns.amountInTons }
             onChange={ onNewWasteNumberChange }
           />
         </Stack>
@@ -522,7 +522,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
                 {
                   renderWithDebounceNumberTextField(
                     "amount",
-                    strings.survey.wasteMaterial.dataGridColumns.amount,
+                    strings.survey.wasteMaterial.dataGridColumns.amountInTons,
                     onWastePropChange(waste),
                     waste.amount,
                   )
@@ -587,7 +587,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
           return params.getValue(params.id, "wasteMaterialId");
         },
         headerName: strings.survey.wasteMaterial.dataGridColumns.wasteCode,
-        width: 280,
+        width: 150,
         type: "string",
         editable: false,
         renderCell: (params: GridRenderCellParams) => {
@@ -616,9 +616,17 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
       {
         field: "amount",
         headerName: strings.survey.wasteMaterial.dataGridColumns.amount,
-        width: 280,
+        width: 120,
         type: "number",
-        editable: true
+        editable: true,
+        renderCell: (params: GridRenderCellParams) => {
+          const { value } = params;
+          return (
+            <Typography variant="body2">
+              {`${value} tn`}
+            </Typography>
+          );
+        }
       },
       {
         field: "description",

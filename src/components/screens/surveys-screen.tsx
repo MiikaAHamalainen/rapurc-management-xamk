@@ -1,5 +1,5 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Autocomplete, Box, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Autocomplete, Box, CircularProgress, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppDispatch, useAppSelector } from "app/hooks";
@@ -8,7 +8,7 @@ import GenericDialog from "components/generic/generic-dialog";
 import SurveyItem from "components/layout-components/survey-item";
 import StackLayout from "components/layouts/stack-layout";
 import { selectKeycloak } from "features/auth-slice";
-import { deleteSurvey, fetchSurveys } from "features/surveys-slice";
+import { createSurvey, deleteSurvey, fetchSurveys } from "features/surveys-slice";
 import strings from "localization/strings";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +19,7 @@ import LocalizationUtils from "utils/localization-utils";
 import SurveyUtils from "utils/survey";
 import WhiteOutlinedInput from "../../styled/generic/inputs";
 import { SurveyStatus } from "../../generated/client/models/SurveyStatus";
+import { Building, OwnerInformation } from "generated/client";
 
 /**
  * Surveys screen component
@@ -36,6 +37,54 @@ const SurveysScreen: React.FC = () => {
   const [ loading, setLoading ] = React.useState(false);
   const [ deletingSurvey, setDeletingSurvey ] = React.useState(false);
   const [ selectedSurveyIds, setSelectedSurveyIds ] = React.useState<string[]>([]);
+
+  /**
+   * Create new owner information
+   * 
+   * @param surveyId survey id
+   */
+  const createOwnerInformation = async (surveyId?: string) => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      const newOwner: OwnerInformation = {
+        surveyId: surveyId,
+        metadata: {}
+      };
+      await Api.getOwnersApi(keycloak.token).createOwnerInformation({
+        surveyId: surveyId,
+        ownerInformation: newOwner
+      });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.owners.create, error);
+    }
+  };
+
+  /**
+   * Create new owner information
+   * 
+   * @param surveyId survey id
+   */
+  const createBuilding = async (surveyId?: string) => {
+    if (!keycloak?.token || !surveyId) {
+      return;
+    }
+
+    try {
+      const newBuilding: Building = {
+        surveyId: surveyId,
+        metadata: {}
+      };
+      await Api.getBuildingsApi(keycloak.token).createBuilding({
+        surveyId: surveyId,
+        building: newBuilding
+      });
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.buildings.create, error);
+    }
+  };
 
   /**
    * Lists surveys
@@ -206,6 +255,22 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
+   * Create survey manually
+   */
+  const createSurveyManually = async () => {
+    setLoading(true);
+
+    try {
+      const { id } = await dispatch(createSurvey()).unwrap();
+      await createOwnerInformation(id);
+      await createBuilding(id);
+      navigate(`/surveys/${id}/owner`);
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.surveys.create, error);
+    }
+  };
+
+  /**
    * Renders delete survey dialog
    */
   const renderDeleteSurveyDialog = () => (
@@ -290,7 +355,7 @@ const SurveysScreen: React.FC = () => {
                 variant="contained"
                 color="secondary"
                 startIcon={ <Add/> }
-                onClick={ () => navigate("/new-survey") }
+                onClick={ () => createSurveyManually() }
               >
                 { strings.surveysScreen.newSurvey }
               </SurveyButton>
@@ -399,6 +464,30 @@ const SurveysScreen: React.FC = () => {
       </Paper>
     );
   };
+
+  if (loading) {
+    return (
+      <Box
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          top: 0,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(0,158,158,0.85)",
+          color: "#fff"
+        }}
+      >
+        <Stack spacing={ 2 } alignItems="center">
+          <Typography>Ladataan kartoituksia</Typography>
+          <CircularProgress color="inherit"/>
+        </Stack>
+      </Box>
+    );
+  }
 
   return (
     <>
