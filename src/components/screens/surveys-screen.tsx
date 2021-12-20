@@ -14,7 +14,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ControlsContainer, FilterRoot, SearchBar, SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
-import { SurveyWithInfo } from "types";
+import { SurveyShow, SurveyWithInfo } from "types";
 import LocalizationUtils from "utils/localization-utils";
 import SurveyUtils from "utils/survey";
 import WhiteOutlinedInput from "../../styled/generic/inputs";
@@ -28,7 +28,8 @@ const SurveysScreen: React.FC = () => {
   const navigate = useNavigate();
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
-  const [ filter, setFilter ] = React.useState("showAll");
+  const [ filter, setFilter ] = React.useState<SurveyShow>(SurveyShow.ShowAll);
+  const [ userId, setUserId ] = React.useState<string>();
   const [ addressFilter, setAddressFilter ] = React.useState("");
   const [ addressFilterValue, setAddressFilterValue ] = React.useState<string>("");
   const [ surveysWithInfo, setSurveysWithInfo ] = React.useState<SurveyWithInfo[]>([]);
@@ -85,7 +86,7 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-      * Fetches and returns owner with given survey ID
+  * Fetches and returns owner with given survey ID
    * 
    * @param surveyId survey id
    */
@@ -102,6 +103,22 @@ const SurveysScreen: React.FC = () => {
       return owners[0];
     } catch (error) {
       errorContext.setError(strings.errorHandling.owners.list, error);
+    }
+  };
+
+  /**
+   * Fetches user Id
+   */
+  const fetchUserId = async () => {
+    if (!keycloak) {
+      return;
+    }
+
+    try {
+      const userProfile = await keycloak.loadUserProfile();
+      setUserId(userProfile.id);
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.failToLoadUserId, error);
     }
   };
 
@@ -128,6 +145,7 @@ const SurveysScreen: React.FC = () => {
     );
 
     setSurveysWithInfo(surveyWithInfoArray);
+    fetchUserId();
     setLoading(false);
   };
 
@@ -148,7 +166,7 @@ const SurveysScreen: React.FC = () => {
    * @param event 
    */
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(event.target.value);
+    setFilter(event.target.value as SurveyShow);
   };
 
   /**
@@ -235,7 +253,6 @@ const SurveysScreen: React.FC = () => {
           />
           <ControlsContainer direction="row" spacing={ 2 }>
             <WhiteOutlinedInput
-              disabled
               fullWidth={ isMobile }
               color="secondary"
               select
@@ -246,10 +263,10 @@ const SurveysScreen: React.FC = () => {
               onChange={ handleChange }
               label={ strings.surveysScreen.filter }
             >
-              <MenuItem value="showAll">
+              <MenuItem value={ SurveyShow.ShowAll }>
                 { strings.surveysScreen.showAll }
               </MenuItem>
-              <MenuItem value="showMine">
+              <MenuItem value={ SurveyShow.ShowMine }>
                 { strings.surveysScreen.showMine }
               </MenuItem>
             </WhiteOutlinedInput>
@@ -288,7 +305,9 @@ const SurveysScreen: React.FC = () => {
    * Render survey list item
    */
   const renderSurveyListItems = () => (
-    surveysWithInfo.filter(surveyWithInfo => !addressFilter || surveyWithInfo.streetAddress?.includes(addressFilter))
+    surveysWithInfo
+      .filter(surveyWithInfo => !addressFilter || surveyWithInfo.streetAddress?.includes(addressFilter))
+      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (SurveyShow.ShowMine && surveyWithInfo.creatorId === userId))
       .map(surveyWithInfo =>
         <SurveyItem
           title={ surveyWithInfo.ownerName || "" }
@@ -360,7 +379,9 @@ const SurveysScreen: React.FC = () => {
       }
     ];
 
-    const filteredRows = surveysWithInfo.filter(surveyWithInfo => surveyWithInfo.streetAddress?.includes(addressFilter));
+    const filteredRows = surveysWithInfo
+      .filter(surveyWithInfo => !addressFilter || surveyWithInfo.streetAddress?.includes(addressFilter))
+      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (filter === SurveyShow.ShowMine && surveyWithInfo.creatorId === userId));
 
     return (
       <Paper>
@@ -368,7 +389,7 @@ const SurveysScreen: React.FC = () => {
           checkboxSelection
           autoHeight
           loading={ loading }
-          rows={ addressFilter ? filteredRows : surveysWithInfo }
+          rows={ filteredRows }
           columns={ columns }
           pageSize={ 10 }
           disableSelectionOnClick

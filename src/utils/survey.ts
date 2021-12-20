@@ -22,7 +22,8 @@ export default class SurveyUtils {
     classificationCode: buildingType?.name,
     ownerName: ownerInformation?.ownerName,
     city: building?.address?.city,
-    streetAddress: building?.address?.streetAddress
+    streetAddress: building?.address?.streetAddress,
+    creatorId: survey.metadata.creatorId
   });
 
 }
