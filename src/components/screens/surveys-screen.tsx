@@ -1,5 +1,5 @@
 import { Add, Delete } from "@mui/icons-material";
-import { Box, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Autocomplete, Box, Hidden, List, MenuItem, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import Api from "api";
 import { useAppDispatch, useAppSelector } from "app/hooks";
@@ -30,6 +30,7 @@ const SurveysScreen: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const [ filter, setFilter ] = React.useState("showAll");
   const [ addressFilter, setAddressFilter ] = React.useState("");
+  const [ addressFilterValue, setAddressFilterValue ] = React.useState<string>("");
   const [ surveysWithInfo, setSurveysWithInfo ] = React.useState<SurveyWithInfo[]>([]);
   const [ loading, setLoading ] = React.useState(false);
   const [ deletingSurvey, setDeletingSurvey ] = React.useState(false);
@@ -209,97 +210,107 @@ const SurveysScreen: React.FC = () => {
   /**
    * Render header content
    */
-  const renderSurveyListFilter = () => (
-    <FilterRoot spacing={ 2 }>
-      <Typography variant="body2">
-        { strings.surveysScreen.description }
-      </Typography>
-      <SearchBar>
-        <TextField
-          disabled
-          fullWidth={ isMobile }
-          label={ strings.surveysScreen.address }
-          value={ addressFilter }
-          onChange={ event => setAddressFilter(event.target.value) }
-          size={ isMobile ? "medium" : "small" }
-        />
-        <ControlsContainer direction="row" spacing={ 2 }>
-          <WhiteOutlinedInput
-            disabled
-            fullWidth={ isMobile }
-            color="secondary"
-            select
-            size={ isMobile ? "medium" : "small" }
-            variant="outlined"
-            id="filter"
-            value={ filter }
-            onChange={ handleChange }
-            label={ strings.surveysScreen.filter }
-          >
-            <MenuItem value="showAll">
-              { strings.surveysScreen.showAll }
-            </MenuItem>
-            <MenuItem value="showMine">
-              { strings.surveysScreen.showMine }
-            </MenuItem>
-          </WhiteOutlinedInput>
-          <Box
-            display="flex"
-            alignItems="stretch"
-          >
-            <Hidden lgDown>
-              <SurveyButton
-                disabled={ !selectedSurveyIds.length }
-                variant="contained"
-                color="error"
-                startIcon={ <Delete/> }
-                onClick={ () => setDeletingSurvey(true) }
-                sx={{ mr: 2 }}
-              >
-                { strings.generic.delete }
-              </SurveyButton>
-            </Hidden>
-            <SurveyButton
-              variant="contained"
+  const renderSurveyListFilter = () => {
+    const addressFilterOptions = surveysWithInfo.map(surveyWithInfo => surveyWithInfo.streetAddress).filter(option => !!option);
+
+    return (
+      <FilterRoot spacing={ 2 }>
+        <Typography variant="body2">
+          { strings.surveysScreen.description }
+        </Typography>
+        <SearchBar>
+          <Autocomplete
+            value={ addressFilterValue }
+            onChange={(event, newValue) => setAddressFilterValue(newValue || "") }
+            inputValue={ addressFilter }
+            onInputChange={(event, newInputValue) => setAddressFilter(newInputValue) }
+            options={ addressFilterOptions }
+            renderInput={ params => <TextField
+              { ...params }
+              fullWidth={ isMobile }
+              label={ strings.surveysScreen.address }
+              onChange={ event => setAddressFilter(event.target.value) }
+              size={ isMobile ? "medium" : "small" }
+            /> }
+          />
+          <ControlsContainer direction="row" spacing={ 2 }>
+            <WhiteOutlinedInput
+              disabled
+              fullWidth={ isMobile }
               color="secondary"
-              startIcon={ <Add/> }
-              onClick={ () => navigate("/new-survey") }
+              select
+              size={ isMobile ? "medium" : "small" }
+              variant="outlined"
+              id="filter"
+              value={ filter }
+              onChange={ handleChange }
+              label={ strings.surveysScreen.filter }
             >
-              { strings.surveysScreen.newSurvey }
-            </SurveyButton>
-          </Box>
-        </ControlsContainer>
-      </SearchBar>
-    </FilterRoot>
-  );
+              <MenuItem value="showAll">
+                { strings.surveysScreen.showAll }
+              </MenuItem>
+              <MenuItem value="showMine">
+                { strings.surveysScreen.showMine }
+              </MenuItem>
+            </WhiteOutlinedInput>
+            <Box
+              display="flex"
+              alignItems="stretch"
+            >
+              <Hidden lgDown>
+                <SurveyButton
+                  disabled={ !selectedSurveyIds.length }
+                  variant="contained"
+                  color="error"
+                  startIcon={ <Delete/> }
+                  onClick={ () => setDeletingSurvey(true) }
+                  sx={{ mr: 2 }}
+                >
+                  { strings.generic.delete }
+                </SurveyButton>
+              </Hidden>
+              <SurveyButton
+                variant="contained"
+                color="secondary"
+                startIcon={ <Add/> }
+                onClick={ () => navigate("/new-survey") }
+              >
+                { strings.surveysScreen.newSurvey }
+              </SurveyButton>
+            </Box>
+          </ControlsContainer>
+        </SearchBar>
+      </FilterRoot>
+    );
+  };
 
   /**
    * Render survey list item
-   * 
    */
   const renderSurveyListItems = () => (
-    surveysWithInfo.map(surveyWithInfo =>
-      <SurveyItem
-        title={ surveyWithInfo.ownerName || "" }
-        subtitle={ surveyWithInfo.streetAddress || "" }
-      >
-        <Stack spacing={ 2 } direction="row">
-          <SurveyButton
-            color="primary"
-            onClick={ () => navigate(`/surveys/${surveyWithInfo.id}/owner`) }
-          >
-            { strings.generic.open }
-          </SurveyButton>
-          <SurveyButton
-            variant="outlined"
-            color="primary"
-            onClick={ () => deleteSurveyButtonClick(surveyWithInfo.id) }
-          >
-            { strings.generic.delete }
-          </SurveyButton>
-        </Stack>
-      </SurveyItem>
-    )
+    surveysWithInfo.filter(surveyWithInfo => !addressFilter || surveyWithInfo.streetAddress?.includes(addressFilter))
+      .map(surveyWithInfo =>
+        <SurveyItem
+          title={ surveyWithInfo.ownerName || "" }
+          subtitle={ surveyWithInfo.streetAddress || "" }
+        >
+          <Stack spacing={ 2 } direction="row">
+            <SurveyButton
+              color="primary"
+              onClick={ () => navigate(`/surveys/${surveyWithInfo.id}/owner`) }
+            >
+              { strings.generic.open }
+            </SurveyButton>
+            <SurveyButton
+              variant="outlined"
+              color="primary"
+              onClick={ () => deleteSurveyButtonClick(surveyWithInfo.id) }
+            >
+              { strings.generic.delete }
+            </SurveyButton>
+          </Stack>
+        </SurveyItem>
+      )
   );
 
   /**
@@ -348,14 +359,16 @@ const SurveysScreen: React.FC = () => {
         flex: 1
       }
     ];
-  
+
+    const filteredRows = surveysWithInfo.filter(surveyWithInfo => surveyWithInfo.streetAddress?.includes(addressFilter));
+
     return (
       <Paper>
         <DataGrid
           checkboxSelection
           autoHeight
           loading={ loading }
-          rows={ surveysWithInfo }
+          rows={ addressFilter ? filteredRows : surveysWithInfo }
           columns={ columns }
           pageSize={ 10 }
           disableSelectionOnClick
