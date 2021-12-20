@@ -310,13 +310,15 @@ const SurveysScreen: React.FC = () => {
             inputValue={ addressFilter }
             onInputChange={ (event, newInputValue) => setAddressFilter(newInputValue) }
             options={ addressFilterOptions }
-            renderInput={ params => <TextField
-              { ...params }
-              fullWidth={ isMobile }
-              label={ strings.surveysScreen.address }
-              onChange={ event => setAddressFilter(event.target.value) }
-              size={ isMobile ? "medium" : "small" }
-            /> }
+            renderInput={ params => (
+              <TextField
+                { ...params }
+                fullWidth={ isMobile }
+                label={ strings.surveysScreen.address }
+                onChange={ event => setAddressFilter(event.target.value) }
+                size={ isMobile ? "medium" : "small" }
+              />
+            )}
           />
           <ControlsContainer direction="row" spacing={ 2 }>
             <WhiteOutlinedInput
