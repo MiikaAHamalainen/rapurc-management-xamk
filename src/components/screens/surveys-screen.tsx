@@ -294,7 +294,9 @@ const SurveysScreen: React.FC = () => {
    * Render header content
    */
   const renderSurveyListFilter = () => {
-    const addressFilterOptions = surveysWithInfo.map(surveyWithInfo => surveyWithInfo.streetAddress).filter(option => !!option);
+    const addressFilterOptions = surveysWithInfo
+      .map(surveyWithInfo => surveyWithInfo.streetAddress)
+      .filter(option => !!option);
 
     return (
       <FilterRoot spacing={ 2 }>
