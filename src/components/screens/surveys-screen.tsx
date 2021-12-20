@@ -306,9 +306,9 @@ const SurveysScreen: React.FC = () => {
         <SearchBar>
           <Autocomplete
             value={ addressFilterValue }
-            onChange={(event, newValue) => setAddressFilterValue(newValue || "") }
+            onChange={ (event, newValue) => setAddressFilterValue(newValue || "") }
             inputValue={ addressFilter }
-            onInputChange={(event, newInputValue) => setAddressFilter(newInputValue) }
+            onInputChange={ (event, newInputValue) => setAddressFilter(newInputValue) }
             options={ addressFilterOptions }
             renderInput={ params => <TextField
               { ...params }
