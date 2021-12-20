@@ -27,6 +27,7 @@
   "errorHandling": {
     "title": "Virhe",
     "missingAccessToken": "API-avain puuttuu",
+    "failToLoadUserId": "Virhe ladattaessa käyttäjätunnusta",
     "failToUpload": "Kuvan lisäys epäonnistui.",
     "surveys": {
       "list": "Virhe listattaessa kartoituksia",

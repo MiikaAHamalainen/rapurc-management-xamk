@@ -51,6 +51,7 @@ export interface Localized extends LocalizedStringsMethods {
     title: string;
     missingAccessToken: string;
     failToUpload: string;
+    failToLoadUserId: string;
     surveys: {
       list: string;
       create: string;

@@ -26,6 +26,7 @@
 
   "errorHandling": {
     "title": "Error",
+    "failToLoadUserId": "Error when loading user ID",
     "missingAccessToken": "Missing access token",
     "failToUpload": "Fail to upload images",
     "surveys": {
