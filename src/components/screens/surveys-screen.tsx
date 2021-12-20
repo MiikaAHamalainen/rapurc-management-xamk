@@ -156,7 +156,7 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Fetches user Id
+   * Fetches user ID
    */
   const fetchUserId = async () => {
     if (!keycloak) {
