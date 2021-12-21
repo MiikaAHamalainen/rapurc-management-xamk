@@ -1,5 +1,6 @@
 # Getting started with React Typescript template
 
+
 ### `Add OpenApi specification file (swagger.yaml)`
 
 File can be added as a Git submodule, which helps the development with different spec versions:
