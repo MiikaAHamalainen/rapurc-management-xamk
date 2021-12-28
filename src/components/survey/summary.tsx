@@ -645,7 +645,7 @@ const SummaryView: React.FC = () => {
                       orientation="vertical"
                       flexItem
                     />
-                    { reusable.amountAsWaste && renderMediaDataCell(strings.survey.reusables.dataGridColumns.wasteAmount, materialAmountAsWaste) }
+                    { !!reusable.amountAsWaste && renderMediaDataCell(strings.survey.reusables.dataGridColumns.wasteAmount, materialAmountAsWaste) }
                   </Stack>
                   { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, reusable.description) }
                 </Stack>
