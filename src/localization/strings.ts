@@ -504,6 +504,7 @@ export interface Localized extends LocalizedStringsMethods {
     summary: {
       title: string;
       print: string;
+      demolitionInfo: string;
     };
   };
 }

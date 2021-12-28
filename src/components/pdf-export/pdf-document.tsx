@@ -150,7 +150,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     return (
       <View wrap={ false } style={ styles.container }>
         <Text style={ styles.titleText }>
-          { strings.survey.info.title }
+          { strings.survey.summary.demolitionInfo }
         </Text>
         <View style={ styles.row }>
           <Text>{ strings.survey.info.demolitionScope }</Text>
