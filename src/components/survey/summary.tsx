@@ -525,7 +525,7 @@ const SummaryView: React.FC = () => {
     return (
       <Stack spacing={ 2 }>
         <Typography variant="h3">
-          { strings.survey.info.title }
+          { strings.survey.summary.demolitionInfo }
         </Typography>
         <Paper>
           <Stack
@@ -577,10 +577,13 @@ const SummaryView: React.FC = () => {
                   key={ surveyor.id }
                   flex={ 1 }
                   p={ 2 }
-                  direction="row"
+                  direction="column"
                   justifyContent="space-between"
                 >
                   { renderDataCell(surveyor.role || "", `${surveyor.firstName || ""} ${surveyor.lastName || ""}`) }
+                  { renderDataValue(surveyor.company || "") }
+                  { renderDataValue(surveyor.phone || "") }
+                  { renderDataValue(surveyor.email || "") }
                   { !isMobile &&
                     <Divider
                       variant="inset"

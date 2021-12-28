@@ -462,7 +462,8 @@
     },
     "summary": {
       "title": "Summary",
-      "print": "Print"
+      "print": "Print",
+      "demolitionInfo": "Demolition information"
     }
   }
 }

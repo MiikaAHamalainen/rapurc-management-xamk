@@ -463,7 +463,8 @@
     },
     "summary": {
       "title": "Yhteenveto",
-      "print": "Tulosta"
+      "print": "Tulosta",
+      "demolitionInfo": "Purkamista koskevat tiedot"
     }
   }
 }
