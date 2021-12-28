@@ -1,5 +1,5 @@
 import React from "react";
-import { Page, Text, View, Document, StyleSheet, Font } from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet, Font, Image } from "@react-pdf/renderer";
 import { SurveySummary } from "../../types/index";
 import strings from "localization/strings";
 import theme from "theme";
@@ -407,6 +407,22 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
                     { strings.survey.reusables.dataGridColumns.description }
                   </Text>
                   <Text>{ reusable.description }</Text>
+                  {
+                    reusable.images?.map(image => {
+                      return (
+                        <Image
+                          style={{ height: 200, width: 200 }}
+                          key={ `image:${reusable.id}` }
+                          src={{
+                            uri: image,
+                            method: "GET",
+                            headers: { },
+                            body: ""
+                          }}
+                        />
+                      );
+                    })
+                  }
                 </View>
               );
             })
