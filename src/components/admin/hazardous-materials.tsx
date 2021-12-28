@@ -235,14 +235,16 @@ const HazardousMaterials: React.FC = () => {
    * @returns waste category items
    */
   const wasteCategoryItems = () => (
-    wasteCategories.map(wasteCategory =>
-      <MenuItem key={ wasteCategory.id } value={ wasteCategory.id }>
-        <MaterialText
-          primary={ wasteCategory.name }
-          secondary={ wasteCategory.ewcCode }
-        />
-      </MenuItem>
-    )
+    wasteCategories
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(wasteCategory =>
+        <MenuItem key={ wasteCategory.id } value={ wasteCategory.id }>
+          <MaterialText
+            primary={ wasteCategory.name }
+            secondary={ wasteCategory.ewcCode }
+          />
+        </MenuItem>
+      )
   );
 
   /**
