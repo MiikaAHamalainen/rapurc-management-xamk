@@ -37,7 +37,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
   React.useEffect(() => {
     const lastUploadedAttachment = surveyAttachments[surveyAttachments.length - 1];
 
-    setLoadingAttachments(loadingAttachments.filter(attachment => attachment.url === lastUploadedAttachment.url));
+    setLoadingAttachments(loadingAttachments.filter(attachment => attachment.url !== lastUploadedAttachment.url));
   }, [ surveyAttachments ]);
 
   /**
@@ -98,7 +98,7 @@ const AttachmentView: React.FC<Props> = ({ surveyId }) => {
 
     try {
       await Api.getAttachmentsApi(keycloak.token).deleteSurveyAttachment({ surveyId: surveyId, attachmentId: attachmentToBeDeleted.id });
-      setSurveyAttachments(surveyAttachments.filter(attachment => attachment.id === attachmentToBeDeleted.id));
+      setSurveyAttachments(surveyAttachments.filter(attachment => attachment.id !== attachmentToBeDeleted.id));
     } catch (error) {
       errorContext.setError(strings.errorHandling.attachments.delete, error);
     }
