@@ -400,7 +400,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
                   <Text>{`${strings.survey.reusables.dataGridColumns.buildingPart}: ${materialName}`}</Text>
                   <Text>{`${strings.survey.reusables.dataGridColumns.usability}: ${materialUsability}`}</Text>
                   <Text>{`${strings.survey.reusables.dataGridColumns.amount}: ${materialAmount}`}</Text>
-                  { reusable.amountAsWaste &&
+                  { !!reusable.amountAsWaste &&
                     <Text>{`${strings.survey.reusables.dataGridColumns.wasteAmount}: ${materialAmountAsWaste}`}</Text>
                   }
                   <Text style={{ marginBottom: theme.spacing(1) }}>
