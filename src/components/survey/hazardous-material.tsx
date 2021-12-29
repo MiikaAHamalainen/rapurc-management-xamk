@@ -213,14 +213,14 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
-    const wasteApi = Api.getWastesApi(keycloak.token);
+    const hazardousWasteApi = Api.getHazardousWasteApi(keycloak.token);
 
     try {
       await Promise.all(
-        selectedHazardousWasteIds.map(async wasteId => {
-          await wasteApi.deleteSurveyWaste({
+        selectedHazardousWasteIds.map(async hazardousWasteId => {
+          await hazardousWasteApi.deleteSurveyHazardousWaste({
             surveyId: surveyId,
-            wasteId: wasteId.toString()
+            hazardousWasteId: hazardousWasteId.toString()
           });
         })
       );
@@ -470,17 +470,21 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    * Render hazardous waste list
    */
   const renderHazardousWasteList = () => {
-    const wasteMaterialOptions = hazardousWasteMaterials.map(wasteMaterial =>
-      <MenuItem value={ wasteMaterial.id }>
-        { wasteMaterial.name }
-      </MenuItem>
-    );
+    const wasteMaterialOptions = hazardousWasteMaterials
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(wasteMaterial =>
+        <MenuItem value={ wasteMaterial.id }>
+          { wasteMaterial.name }
+        </MenuItem>
+      );
 
-    const wasteSpecifierOptions = wasteSpecifiers.map(wasteSpecifier =>
-      <MenuItem value={ wasteSpecifier.id }>
-        { wasteSpecifier.name }
-      </MenuItem>
-    );
+    const wasteSpecifierOptions = wasteSpecifiers
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(wasteSpecifier =>
+        <MenuItem value={ wasteSpecifier.id }>
+          { wasteSpecifier.name }
+        </MenuItem>
+      );
 
     return (
       <List>
@@ -557,15 +561,19 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    * Render survey hazardous waste table for desktop
    */
   const renderHazardousWasteDataTable = () => {
-    const hazardousWasteMaterialOptions = hazardousWasteMaterials.map(hazardousWasteMaterial => ({
-      label: hazardousWasteMaterial.name,
-      value: hazardousWasteMaterial.id
-    }));
+    const hazardousWasteMaterialOptions = hazardousWasteMaterials
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(hazardousWasteMaterial => ({
+        label: hazardousWasteMaterial.name,
+        value: hazardousWasteMaterial.id
+      }));
 
-    const wasteSpecifierOptions = wasteSpecifiers.map(wasteSpecifier => ({
-      label: wasteSpecifier.name,
-      value: wasteSpecifier.id
-    }));
+    const wasteSpecifierOptions = wasteSpecifiers
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(wasteSpecifier => ({
+        label: wasteSpecifier.name,
+        value: wasteSpecifier.id
+      }));
 
     const columns: GridColDef[] = [
       {

@@ -10,6 +10,8 @@ import { useAppDispatch } from "../../app/hooks";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
+import fiLocale from "date-fns/locale/fi";
+import enLocale from "date-fns/locale/en-US";
 import LocalizationUtils from "utils/localization-utils";
 import WithDataGridDebounceFactory from "components/generic/with-data-grid-debounce";
 import { selectKeycloak } from "features/auth-slice";
@@ -301,7 +303,7 @@ const SurveyInformation: React.FC = () => {
     }
 
     return (
-      <LocalizationProvider dateAdapter={ AdapterDateFns }>
+      <LocalizationProvider dateAdapter={ AdapterDateFns } locale={ strings.getLanguage() === "fi" ? fiLocale : enLocale }>
         <DatePicker
           views={["year", "month"]}
           label={ strings.survey.info.startDate }

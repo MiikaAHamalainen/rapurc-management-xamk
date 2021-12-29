@@ -470,17 +470,21 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
    * Render waste list
    */
   const renderWasteList = () => {
-    const wasteMaterialOptions = wasteMaterials.map(wasteMaterial =>
-      <MenuItem value={ wasteMaterial.id }>
-        { wasteMaterial.name }
-      </MenuItem>
-    );
+    const wasteMaterialOptions = wasteMaterials
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(wasteMaterial =>
+        <MenuItem value={ wasteMaterial.id }>
+          { wasteMaterial.name }
+        </MenuItem>
+      );
 
-    const usageOptions = usages.map(usage =>
-      <MenuItem value={ usage.id }>
-        { usage.name }
-      </MenuItem>
-    );
+    const usageOptions = usages
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(usage =>
+        <MenuItem value={ usage.id }>
+          { usage.name }
+        </MenuItem>
+      );
 
     return (
       <List>
@@ -556,15 +560,19 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
    * Render survey waste table for desktop
    */
   const renderWasteDataTable = () => {
-    const wasteMaterialOptions = wasteMaterials.map(wasteMaterial => ({
-      label: wasteMaterial.name,
-      value: wasteMaterial.id
-    }));
+    const wasteMaterialOptions = wasteMaterials
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(wasteMaterial => ({
+        label: wasteMaterial.name,
+        value: wasteMaterial.id
+      }));
 
-    const usageOptions = usages.map(usage => ({
-      label: usage.name,
-      value: usage.id
-    }));
+    const usageOptions = usages
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(usage => ({
+        label: usage.name,
+        value: usage.id
+      }));
 
     const columns: GridColDef[] = [
       {
