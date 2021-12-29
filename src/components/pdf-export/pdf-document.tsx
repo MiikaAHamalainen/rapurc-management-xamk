@@ -81,6 +81,14 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing(0.5)
   },
 
+  reportingDate: {
+    fontFamily: "Quicksand",
+    fontSize: 12,
+    fontWeight: "bold",
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(0.5)
+  },
+
   materialItem: {
     display: "flex",
     borderBottom: "1px solid #ddd",
@@ -187,6 +195,8 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               <Text>{ surveyor.company }</Text>
               <Text>{ surveyor.email }</Text>
               <Text>{ surveyor.phone }</Text>
+              <Text style={ styles.reportingDate }>{ strings.survey.info.dataGridColumns.reportDate }</Text>
+              <Text>{ moment(surveyor.reportDate).format("DD.MM.YYYY") }</Text>
             </View>
           ))
         }
