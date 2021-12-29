@@ -183,7 +183,7 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
           sx={{ mb: 1 }}
           { ...props }
         >
-          { buildingTypes?.map(buildingType =>
+          { buildingTypes?.sort((a, b) => a.name.localeCompare(b.name)).map(buildingType =>
             (
               <MenuItem
                 key={ buildingType.id }

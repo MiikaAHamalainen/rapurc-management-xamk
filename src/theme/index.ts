@@ -168,7 +168,8 @@ export default createTheme({
       defaultProps: {
         variant: "filled",
         fullWidth: true,
-        size: "medium"
+        size: "medium",
+        autoComplete: "off"
       },
       styleOverrides: {
         root: {

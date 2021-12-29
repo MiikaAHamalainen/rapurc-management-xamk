@@ -862,21 +862,27 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Render material list item
    */
   const renderMaterialListItems = () => {
-    const materialOptions = reusableMaterials.map(material => (
-      <MenuItem key={ material.id } value={ material.id }>
-        { material.name }
-      </MenuItem>
-    ));
-    const usabilityOptions = Object.values(Usability).map(usability => (
-      <MenuItem value={ usability }>
-        { LocalizationUtils.getLocalizedUsability(usability) }
-      </MenuItem>
-    ));
-    const UnitOptions = Object.values(Unit).map(unit => (
-      <MenuItem value={ unit }>
-        { LocalizationUtils.getLocalizedUnits(unit) }
-      </MenuItem>
-    ));
+    const materialOptions = reusableMaterials
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(material => (
+        <MenuItem key={ material.id } value={ material.id }>
+          { material.name }
+        </MenuItem>
+      ));
+    const usabilityOptions = Object.values(Usability)
+      .sort((a, b) => LocalizationUtils.getLocalizedUsability(a).localeCompare(LocalizationUtils.getLocalizedUsability(b)))
+      .map(usability => (
+        <MenuItem value={ usability }>
+          { LocalizationUtils.getLocalizedUsability(usability) }
+        </MenuItem>
+      ));
+    const UnitOptions = Object.values(Unit)
+      .sort((a, b) => LocalizationUtils.getLocalizedUnits(a).localeCompare(LocalizationUtils.getLocalizedUnits(b)))
+      .map(unit => (
+        <MenuItem value={ unit }>
+          { LocalizationUtils.getLocalizedUnits(unit) }
+        </MenuItem>
+      ));
 
     return (
       surveyReusables.map(reusable =>
@@ -974,15 +980,24 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Render survey reusables table for desktop
    */
   const renderSurveyDataTable = () => {
-    const localizedUsability = Object.values(Usability).map(usability => ({
-      label: LocalizationUtils.getLocalizedUsability(usability),
-      value: usability
-    }));
-    const localizedUnits = Object.values(Unit).map(unit => ({
-      label: LocalizationUtils.getLocalizedUnits(unit),
-      value: unit
-    }));
-    const reusableMaterialsArray = reusableMaterials.map(material => ({ value: material.id, label: material.name }));
+    const localizedUsability = Object.values(Usability)
+      .sort((a, b) => LocalizationUtils.getLocalizedUsability(a).localeCompare(LocalizationUtils.getLocalizedUsability(b)))
+      .map(usability => ({
+        label: LocalizationUtils.getLocalizedUsability(usability),
+        value: usability
+      }));
+
+    const localizedUnits = Object.values(Unit)
+      .sort((a, b) => LocalizationUtils.getLocalizedUnits(a).localeCompare(LocalizationUtils.getLocalizedUnits(b)))
+      .map(unit => ({
+        label: LocalizationUtils.getLocalizedUnits(unit),
+        value: unit
+      }));
+
+    const reusableMaterialsArray = reusableMaterials
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(material => ({ value: material.id, label: material.name }));
+
     const columns: GridColDef[] = [
       {
         field: "reusableMaterialId",

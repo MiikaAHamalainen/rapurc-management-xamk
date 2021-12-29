@@ -12,7 +12,8 @@
     "open": "Open",
     "close": "Close",
     "save": "Save",
-    "download": "Download"
+    "download": "Download",
+    "unknown": "Unknown"
   },
 
   "pdf": {

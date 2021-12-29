@@ -27,6 +27,7 @@ export interface Localized extends LocalizedStringsMethods {
     close: string;
     save: string;
     download: string;
+    unknown: string;
   };
 
   /**
