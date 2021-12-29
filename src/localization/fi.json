@@ -12,7 +12,8 @@
     "open": "Avaa",
     "close": "Sulje",
     "save": "Tallenna",
-    "download": "Lataa"
+    "download": "Lataa",
+    "unknown": "Ei tiedossa"
   },
 
   "pdf": {

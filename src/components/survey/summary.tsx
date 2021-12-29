@@ -577,13 +577,14 @@ const SummaryView: React.FC = () => {
                   key={ surveyor.id }
                   flex={ 1 }
                   p={ 2 }
+                  spacing={ 1 }
                   direction="column"
-                  justifyContent="space-between"
                 >
                   { renderDataCell(surveyor.role || "", `${surveyor.firstName || ""} ${surveyor.lastName || ""}`) }
                   { renderDataValue(surveyor.company || "") }
                   { renderDataValue(surveyor.phone || "") }
                   { renderDataValue(surveyor.email || "") }
+                  { renderDataCell(strings.survey.info.dataGridColumns.reportDate, surveyor.reportDate ? moment(surveyor.reportDate).format("DD.MM.YYYY") : strings.generic.unknown) }
                   { !isMobile &&
                     <Divider
                       variant="inset"

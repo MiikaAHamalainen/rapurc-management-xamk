@@ -15,7 +15,7 @@ import enLocale from "date-fns/locale/en-US";
 import LocalizationUtils from "utils/localization-utils";
 import WithDataGridDebounceFactory from "components/generic/with-data-grid-debounce";
 import { selectKeycloak } from "features/auth-slice";
-import { GridColDef, DataGrid, GridRowId } from "@mui/x-data-grid";
+import { GridColDef, DataGrid, GridRowId, GridRenderEditCellParams } from "@mui/x-data-grid";
 import Api from "api";
 import { Delete, Add } from "@mui/icons-material";
 import { SurveyButton } from "styled/screens/surveys-screen";
@@ -476,9 +476,30 @@ const SurveyInformation: React.FC = () => {
       {
         field: "reportDate",
         headerName: strings.survey.info.dataGridColumns.reportDate,
-        width: 200,
+        width: 325,
         type: "date",
-        editable: true
+        editable: true,
+        renderEditCell: (params: GridRenderEditCellParams) => {
+          const { value, api, id, field } = params;
+          return (
+            <LocalizationProvider dateAdapter={ AdapterDateFns } locale={ strings.getLanguage() === "fi" ? fiLocale : enLocale }>
+              <DatePicker
+                value={ value }
+                onChange={ date =>
+                  api.setEditCellValue({
+                    id: id,
+                    field: field,
+                    value: (!date || Number.isNaN((date as Date).getTime())) ? undefined : date
+                  })
+                }
+                renderInput={ inputParams =>
+                  <TextField { ...inputParams }/>
+                }
+              />
+            </LocalizationProvider>
+          );
+        }
+
       }
     ];
 
