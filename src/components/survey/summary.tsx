@@ -584,6 +584,7 @@ const SummaryView: React.FC = () => {
                   { renderDataValue(surveyor.company || "") }
                   { renderDataValue(surveyor.phone || "") }
                   { renderDataValue(surveyor.email || "") }
+                  { renderDataValue(surveyor.reportDate ? moment(surveyor.reportDate).format("DD.MM.YYYY") : "") }
                   { !isMobile &&
                     <Divider
                       variant="inset"
