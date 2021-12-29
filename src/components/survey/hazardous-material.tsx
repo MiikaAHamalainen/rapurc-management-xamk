@@ -213,14 +213,14 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
-    const wasteApi = Api.getWastesApi(keycloak.token);
+    const hazardousWasteApi = Api.getHazardousWasteApi(keycloak.token);
 
     try {
       await Promise.all(
-        selectedHazardousWasteIds.map(async wasteId => {
-          await wasteApi.deleteSurveyWaste({
+        selectedHazardousWasteIds.map(async hazardousWasteId => {
+          await hazardousWasteApi.deleteSurveyHazardousWaste({
             surveyId: surveyId,
-            wasteId: wasteId.toString()
+            hazardousWasteId: hazardousWasteId.toString()
           });
         })
       );
