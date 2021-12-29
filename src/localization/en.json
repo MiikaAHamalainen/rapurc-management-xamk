@@ -465,7 +465,8 @@
       "title": "Summary",
       "print": "Print",
       "demolitionInfo": "Demolition information",
-      "images": "Images"
+      "images": "Images",
+      "image": "Image"
     }
   }
 }

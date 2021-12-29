@@ -666,7 +666,7 @@ const SummaryView: React.FC = () => {
                               return (
                                 <img
                                   style={{ maxWidth: "100%" }}
-                                  key={ `image:${reusable.id}` }
+                                  key={ `${image}_${Math.random()}` }
                                   alt={ materialName }
                                   src={ image }
                                 />

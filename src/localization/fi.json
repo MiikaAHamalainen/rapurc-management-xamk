@@ -466,7 +466,8 @@
       "title": "Yhteenveto",
       "print": "Tulosta",
       "demolitionInfo": "Purkamista koskevat tiedot",
-      "images": "Kuvat"
+      "images": "Kuvat",
+      "image": "Kuva"
     }
   }
 }
