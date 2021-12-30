@@ -1,5 +1,5 @@
 import React from "react";
-import { Page, Text, View, Document, StyleSheet, Font } from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet, Font, Image } from "@react-pdf/renderer";
 import { SurveySummary } from "../../types/index";
 import strings from "localization/strings";
 import theme from "theme";
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(8),
     paddingHorizontal: theme.spacing(6),
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: "Quicksand"
   },
 
@@ -58,35 +58,35 @@ const styles = StyleSheet.create({
 
   documentHeaderText: {
     fontFamily: "Oswald",
-    fontSize: 14,
+    fontSize: 12,
     color: "rgba(0,0,0,0.6)"
   },
 
   titleText: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Oswald",
     marginBottom: theme.spacing(2)
   },
 
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "Oswald",
     marginBottom: theme.spacing(2)
   },
 
   bold: {
     fontFamily: "Quicksand",
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: theme.spacing(0.5)
-  },
-
-  reportingDate: {
-    fontFamily: "Quicksand",
     fontSize: 12,
     fontWeight: "bold",
+    marginBottom: theme.spacing(1)
+  },
+
+  boldSmall: {
+    fontFamily: "Quicksand",
+    fontSize: 10,
+    fontWeight: "bold",
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(0.5)
+    marginBottom: theme.spacing(1)
   },
 
   materialItem: {
@@ -112,6 +112,10 @@ const styles = StyleSheet.create({
   cell: {
     borderBottom: "1px solid #ddd",
     paddingBottom: theme.spacing(1),
+    marginBottom: theme.spacing(1)
+  },
+  
+  marginBottom: {
     marginBottom: theme.spacing(1)
   }
 
@@ -156,7 +160,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     const endDate = selectedSurvey ? moment(selectedSurvey.endDate).format("MMMM YYYY") : "";
 
     return (
-      <View wrap={ false } style={ styles.container }>
+      <View style={ styles.container }>
         <Text style={ styles.titleText }>
           { strings.survey.summary.demolitionInfo }
         </Text>
@@ -195,7 +199,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               <Text>{ surveyor.company }</Text>
               <Text>{ surveyor.email }</Text>
               <Text>{ surveyor.phone }</Text>
-              <Text style={ styles.reportingDate }>{ strings.survey.info.dataGridColumns.reportDate }</Text>
+              <Text style={ styles.boldSmall }>{ strings.survey.info.dataGridColumns.reportDate }</Text>
               <Text>{ moment(surveyor.reportDate).format("DD.MM.YYYY") }</Text>
             </View>
           ))
@@ -221,7 +225,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     } = summary?.ownerInformation?.contactPerson;
 
     return (
-      <View wrap={ false } style={ styles.container }>
+      <View style={ styles.container }>
         <Text style={ styles.subtitle }>
           { strings.survey.owner.contactPerson }
         </Text>
@@ -246,7 +250,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     }
 
     return (
-      <View wrap={ false } style={ styles.container }>
+      <View style={ styles.container }>
         <Text style={ styles.subtitle }>
           { strings.survey.owner.title }
         </Text>
@@ -293,7 +297,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     const buildingTypeName = buildingTypes?.find(buildingType => buildingType.id === buildingTypeId)?.name || "";
 
     return (
-      <View wrap={ false } style={ styles.container }>
+      <View style={ styles.container }>
         <Text style={ styles.subtitle }>
           { strings.survey.building.title }
         </Text>
@@ -363,7 +367,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     }
 
     return (
-      <View wrap={ false } style={ styles.container }>
+      <View style={ styles.container }>
         <Text style={ styles.subtitle }>
           { strings.survey.otherStructures.title }
         </Text>
@@ -393,7 +397,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     }
 
     return (
-      <View wrap={ false } style={ styles.container }>
+      <View>
         <Text style={ styles.titleText }>
           { strings.survey.reusables.title }
         </Text>
@@ -404,19 +408,43 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               const materialUsability = LocalizationUtils.getLocalizedUsability(reusable.usability);
               const materialAmount = `${reusable.amount} ${reusable.unit ? LocalizationUtils.getLocalizedUnits(reusable.unit) : ""}`;
               const materialAmountAsWaste = `${reusable.amountAsWaste} ${strings.units.tons}`;
+              const imageCount = reusable.images ? reusable.images.length : "";
+
               return (
                 <View style={ styles.materialItem } key={ reusable.id }>
                   <Text style={ styles.bold }>{ reusable.componentName }</Text>
-                  <Text>{`${strings.survey.reusables.dataGridColumns.buildingPart}: ${materialName}`}</Text>
-                  <Text>{`${strings.survey.reusables.dataGridColumns.usability}: ${materialUsability}`}</Text>
-                  <Text>{`${strings.survey.reusables.dataGridColumns.amount}: ${materialAmount}`}</Text>
+                  <Text style={ styles.marginBottom }>{`${strings.survey.reusables.dataGridColumns.buildingPart}: ${materialName}`}</Text>
+                  <Text style={ styles.marginBottom }>{`${strings.survey.reusables.dataGridColumns.usability}: ${materialUsability}`}</Text>
+                  <Text style={ styles.marginBottom }>{`${strings.survey.reusables.dataGridColumns.amount}: ${materialAmount}`}</Text>
                   { !!reusable.amountAsWaste &&
-                    <Text>{`${strings.survey.reusables.dataGridColumns.wasteAmount}: ${materialAmountAsWaste}`}</Text>
+                    <Text style={ styles.marginBottom }>{`${strings.survey.reusables.dataGridColumns.wasteAmount}: ${materialAmountAsWaste}`}</Text>
                   }
-                  <Text style={{ marginBottom: theme.spacing(1) }}>
-                    { strings.survey.reusables.dataGridColumns.description }
-                  </Text>
-                  <Text>{ reusable.description }</Text>
+                  { !!reusable.description &&
+                    <View>
+                      <Text style={ styles.boldSmall }>
+                        { strings.survey.reusables.dataGridColumns.description }
+                      </Text>
+                      <Text>{ reusable.description }</Text>
+                    </View>
+                  }
+                  {
+                    reusable.images?.map((image, index) => {
+                      return (
+                        <View>
+                          <Image
+                            key={ `image:${reusable.id}` }
+                            src={{
+                              uri: image,
+                              method: "GET",
+                              headers: {},
+                              body: ""
+                            }}
+                          />
+                          <Text>{`${strings.survey.summary.image}: ${reusable.componentName} ${index + 1}/${imageCount}`}</Text>
+                        </View>
+                      );
+                    })
+                  }
                 </View>
               );
             })
@@ -442,7 +470,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     }
 
     return (
-      <View wrap={ false } style={ styles.container }>
+      <View style={ styles.container }>
         <Text style={ styles.titleText }>
           { strings.survey.wasteMaterial.title }
         </Text>
@@ -456,15 +484,21 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               const wasteAmount = `${waste?.amount || ""} ${strings.units.tons}`;
 
               return (
-                <View style={ styles.materialItem } key={ waste.id }>
+                <View wrap={ false } style={ styles.materialItem } key={ waste.id }>
                   <Text style={ styles.bold }>{ wasteMaterial?.name }</Text>
-                  <Text>{`${strings.survey.wasteMaterial.dataGridColumns.wasteCode}: ${fullEwcCode}`}</Text>
-                  <Text>{`${strings.survey.wasteMaterial.dataGridColumns.usage}: ${wasteUsage}`}</Text>
-                  <Text>{`${strings.survey.reusables.dataGridColumns.amount}: ${wasteAmount}`}</Text>
-                  <Text style={{ marginBottom: theme.spacing(1) }}>
-                    { strings.survey.reusables.dataGridColumns.description }
-                  </Text>
-                  <Text>{ waste.description }</Text>
+                  <Text style={ styles.marginBottom }>{`${strings.survey.wasteMaterial.dataGridColumns.wasteCode}: ${fullEwcCode}`}</Text>
+                  <Text style={ styles.marginBottom }>{`${strings.survey.wasteMaterial.dataGridColumns.usage}: ${wasteUsage}`}</Text>
+                  { !!waste.amount &&
+                    <Text style={ styles.marginBottom }>{`${strings.survey.reusables.dataGridColumns.amount}: ${wasteAmount}`}</Text>
+                  }
+                  { !!waste.description &&
+                    <>
+                      <Text style={ styles.boldSmall }>
+                        { strings.survey.reusables.dataGridColumns.description }
+                      </Text>
+                      <Text>{ waste.description }</Text>
+                    </>
+                  }
                 </View>
               );
             })
@@ -490,7 +524,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     }
 
     return (
-      <View wrap={ false } style={ styles.container }>
+      <View style={ styles.container }>
         <Text style={ styles.titleText }>
           { strings.survey.hazardousMaterial.title }
         </Text>
@@ -506,10 +540,14 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               return (
                 <View style={ styles.materialItem } key={ hazardousWaste.id }>
                   <Text style={ styles.bold }>{ wasteMaterial?.name }</Text>
-                  <Text>{`${strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier}: ${wasteSpecifierName}`}</Text>
-                  <Text>{`${strings.survey.hazardousMaterial.dataGridColumns.wasteCode}: ${fullEwcCode}`}</Text>
-                  <Text>{`${strings.survey.hazardousMaterial.dataGridColumns.amount}: ${wasteAmount}`}</Text>
-                  <Text style={{ marginBottom: theme.spacing(1) }}>
+                  { !!hazardousWaste.wasteSpecifierId &&
+                    <Text style={ styles.marginBottom }>{`${strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier}: ${wasteSpecifierName}`}</Text>
+                  }
+                  <Text style={ styles.marginBottom }>{`${strings.survey.hazardousMaterial.dataGridColumns.wasteCode}: ${fullEwcCode}`}</Text>
+                  { !!hazardousWaste?.amount &&
+                    <Text style={ styles.marginBottom }>{`${strings.survey.hazardousMaterial.dataGridColumns.amount}: ${wasteAmount}`}</Text>
+                  }
+                  <Text style={ styles.boldSmall }>
                     { strings.survey.reusables.dataGridColumns.description }
                   </Text>
                   <Text>{ hazardousWaste.description }</Text>
@@ -526,29 +564,31 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
     <Document
       title={`${strings.pdf.demolitionSurvey} ${summary.ownerInformation?.ownerName}`}
     >
-      <Page size="A4" style={ styles.page } wrap>
-        { renderDocumentInfo() }
-        { renderSurveyInfo() }
-        { renderSurveyors() }
-        { renderContactPerson() }
-      </Page>
       <Page size="A4" style={ styles.page }>
-        { renderDocumentInfo() }
-        { renderOwnerInfo() }
-        { renderBuildingInfo() }
-        { renderOtherStructuresInfo() }
-      </Page>
-      <Page size="A4" style={ styles.page }>
-        { renderDocumentInfo() }
-        { renderReusableMaterials() }
-      </Page>
-      <Page size="A4" style={ styles.page }>
-        { renderDocumentInfo() }
-        { renderWasteMaterials() }
-      </Page>
-      <Page size="A4" style={ styles.page }>
-        { renderDocumentInfo() }
-        { renderHazardousMaterials() }
+        <View>
+          { renderDocumentInfo() }
+          { renderSurveyInfo() }
+          { renderSurveyors() }
+          { renderContactPerson() }
+        </View>
+        <View break>
+          { renderDocumentInfo() }
+          { renderOwnerInfo() }
+          { renderBuildingInfo() }
+          { renderOtherStructuresInfo() }
+        </View>
+        <View break>
+          { renderDocumentInfo() }
+          { renderReusableMaterials() }
+        </View>
+        <View break>
+          { renderDocumentInfo() }
+          { renderWasteMaterials() }
+        </View>
+        <View break>
+          { renderDocumentInfo() }
+          { renderHazardousMaterials() }
+        </View>
       </Page>
     </Document>
   );

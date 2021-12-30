@@ -506,6 +506,8 @@ export interface Localized extends LocalizedStringsMethods {
       title: string;
       print: string;
       demolitionInfo: string;
+      images: string;
+      image: string;
     };
   };
 }

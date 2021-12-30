@@ -1,5 +1,5 @@
-import { Print } from "@mui/icons-material";
-import { Box, Button, CircularProgress, Divider, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
+import { ExpandMore, Print } from "@mui/icons-material";
+import { Accordion, Box, Button, CircularProgress, Divider, Paper, Stack, Typography, useMediaQuery, AccordionDetails, AccordionSummary } from "@mui/material";
 import Api from "api";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
@@ -652,6 +652,31 @@ const SummaryView: React.FC = () => {
                     { !!reusable.amountAsWaste && renderMediaDataCell(strings.survey.reusables.dataGridColumns.wasteAmount, materialAmountAsWaste) }
                   </Stack>
                   { renderMediaDataCell(strings.survey.reusables.dataGridColumns.description, reusable.description) }
+                  { reusable.images?.length &&
+                    <Accordion>
+                      <AccordionSummary expandIcon={ <ExpandMore/> }>
+                        <Typography>
+                          { strings.survey.summary.images }
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Stack spacing={ 2 }>
+                          {
+                            reusable.images?.map(image => {
+                              return (
+                                <img
+                                  style={{ maxWidth: "100%" }}
+                                  key={ `${image}_${Math.random()}` }
+                                  alt={ materialName }
+                                  src={ image }
+                                />
+                              );
+                            })
+                          }
+                        </Stack>
+                      </AccordionDetails>
+                    </Accordion>
+                  }
                 </Stack>
               </Paper>
             );
