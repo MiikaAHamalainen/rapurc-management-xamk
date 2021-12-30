@@ -376,17 +376,21 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
    * Renders add waste dialog
    */
   const renderAddWasteDialog = () => {
-    const wasteMaterialOptions = wasteMaterials.map(wasteMaterial =>
-      <MenuItem value={ wasteMaterial.id }>
-        { wasteMaterial.name }
-      </MenuItem>
-    );
+    const wasteMaterialOptions = wasteMaterials
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(wasteMaterial =>
+        <MenuItem value={ wasteMaterial.id }>
+          { wasteMaterial.name }
+        </MenuItem>
+      );
 
-    const usageOptions = usages.map(usage =>
-      <MenuItem value={ usage.id }>
-        { usage.name }
-      </MenuItem>
-    );
+    const usageOptions = usages
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(usage =>
+        <MenuItem value={ usage.id }>
+          { usage.name }
+        </MenuItem>
+      );
 
     const materialId = wasteMaterials.find(material => material.id === newWaste.wasteMaterialId);
     const wasteCategory = wasteCategories.find(category => category.id === materialId?.wasteCategoryId);

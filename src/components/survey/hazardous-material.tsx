@@ -41,7 +41,6 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   const [ selectedHazardousWasteIds, setSelectedHazardousWasteIds ] = React.useState<GridRowId[]>([]);
   const [ newHazardousWaste, setNewHazardousWaste ] = React.useState<HazardousWaste>({
     hazardousMaterialId: "",
-    wasteSpecifierId: "",
     amount: 0,
     metadata: {}
   });
@@ -142,7 +141,6 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       setHazardousWastes([ ...hazardousWastes, createHazardousWaste ]);
       setNewHazardousWaste({
         hazardousMaterialId: "",
-        wasteSpecifierId: "",
         amount: 0,
         metadata: {}
       });
@@ -376,15 +374,25 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    * Renders add hazardous waste dialog
    */
   const renderAddHazardousWasteDialog = () => {
-    const wasteMaterialOptions = hazardousWasteMaterials.map(wasteMaterial =>
-      <MenuItem value={ wasteMaterial.id }>
-        { wasteMaterial.name }
-      </MenuItem>
-    );
+    const wasteMaterialOptions = hazardousWasteMaterials
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(wasteMaterial =>
+        <MenuItem value={ wasteMaterial.id }>
+          { wasteMaterial.name }
+        </MenuItem>
+      );
 
-    const wasteSpecifierOptions = wasteSpecifiers.map(wasteSpecifier =>
-      <MenuItem value={ wasteSpecifier.id }>
-        { wasteSpecifier.name }
+    const wasteSpecifierOptions = wasteSpecifiers
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(wasteSpecifier =>
+        <MenuItem value={ wasteSpecifier.id }>
+          { wasteSpecifier.name }
+        </MenuItem>
+      );
+
+    wasteSpecifierOptions.unshift(
+      <MenuItem value={ undefined }>
+        { strings.generic.empty }
       </MenuItem>
     );
 
@@ -395,7 +403,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
     return (
       <GenericDialog
         error={ false }
-        disabled={ !newHazardousWaste.hazardousMaterialId || !newHazardousWaste.wasteSpecifierId }
+        disabled={ !newHazardousWaste.hazardousMaterialId }
         open={ addingWaste }
         onClose={ () => setAddingHazardousWaste(false) }
         onCancel={ () => setAddingHazardousWaste(false) }
@@ -486,6 +494,12 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
         </MenuItem>
       );
 
+    wasteSpecifierOptions.unshift(
+      <MenuItem value={ undefined }>
+        { strings.generic.empty }
+      </MenuItem>
+    );
+
     return (
       <List>
         {
@@ -574,6 +588,13 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
         label: wasteSpecifier.name,
         value: wasteSpecifier.id
       }));
+
+    wasteSpecifierOptions.unshift(
+      ({
+        label: strings.generic.empty,
+        value: undefined
+      })
+    );
 
     const columns: GridColDef[] = [
       {

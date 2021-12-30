@@ -549,23 +549,29 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Renders add survey reusable dialog
    */
   const renderAddSurveyReusableDialog = () => {
-    const reusableOptions = Object.values(reusableMaterials).map(material =>
-      <MenuItem key={ material.id } value={ material.id }>
-        { material.name }
-      </MenuItem>
-    );
+    const reusableOptions = Object.values(reusableMaterials)
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(material =>
+        <MenuItem key={ material.id } value={ material.id }>
+          { material.name }
+        </MenuItem>
+      );
 
-    const usabilityOptions = Object.values(Usability).map(usability =>
-      <MenuItem key={ usability } value={ usability }>
-        { LocalizationUtils.getLocalizedUsability(usability) }
-      </MenuItem>
-    );
+    const usabilityOptions = Object.values(Usability)
+      .sort((a, b) => LocalizationUtils.getLocalizedUsability(a).localeCompare(LocalizationUtils.getLocalizedUsability(b)))
+      .map(usability =>
+        <MenuItem key={ usability } value={ usability }>
+          { LocalizationUtils.getLocalizedUsability(usability) }
+        </MenuItem>
+      );
 
-    const unitOptions = Object.values(Unit).map(unit =>
-      <MenuItem key={ unit } value={ unit }>
-        { LocalizationUtils.getLocalizedUnits(unit) }
-      </MenuItem>
-    );
+    const unitOptions = Object.values(Unit)
+      .sort((a, b) => LocalizationUtils.getLocalizedUnits(a).localeCompare(LocalizationUtils.getLocalizedUnits(b)))
+      .map(unit =>
+        <MenuItem key={ unit } value={ unit }>
+          { LocalizationUtils.getLocalizedUnits(unit) }
+        </MenuItem>
+      );
 
     return (
       <GenericDialog
