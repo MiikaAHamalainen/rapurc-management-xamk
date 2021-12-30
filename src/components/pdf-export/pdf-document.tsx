@@ -433,7 +433,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
                       return (
                         <View>
                           <Image
-                            key={`${randomString}`}
+                            key={ image }
                             src={{
                               uri: `${image}?noCache=${randomString}`,
                               method: "GET",
