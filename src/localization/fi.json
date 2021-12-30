@@ -13,7 +13,8 @@
     "close": "Sulje",
     "save": "Tallenna",
     "download": "Lataa",
-    "unknown": "Ei tiedossa"
+    "unknown": "Ei tiedossa",
+    "empty": "Ei valintaa"
   },
 
   "pdf": {

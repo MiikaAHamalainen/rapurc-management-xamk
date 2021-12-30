@@ -13,7 +13,8 @@
     "close": "Close",
     "save": "Save",
     "download": "Download",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "empty": "Empty"
   },
 
   "pdf": {
