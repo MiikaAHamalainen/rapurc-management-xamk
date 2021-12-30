@@ -12,7 +12,9 @@
     "open": "Avaa",
     "close": "Sulje",
     "save": "Tallenna",
-    "download": "Lataa"
+    "download": "Lataa",
+    "unknown": "Ei tiedossa",
+    "empty": "Ei valintaa"
   },
 
   "pdf": {
@@ -27,6 +29,7 @@
   "errorHandling": {
     "title": "Virhe",
     "missingAccessToken": "API-avain puuttuu",
+    "failToLoadUserId": "Virhe ladattaessa käyttäjätunnusta",
     "failToUpload": "Kuvan lisäys epäonnistui.",
     "surveys": {
       "list": "Virhe listattaessa kartoituksia",
@@ -350,7 +353,7 @@
         "reportDate": "Raportointipäivä"
       },
       "addNewSurveyorDialog": {
-        "title": "Lisää katsastaja"
+        "title": "Lisää kartoittaja"
       },
       "deleteSurveyorDialog": {
         "title": "Poista kartoittaja",
@@ -462,7 +465,10 @@
     },
     "summary": {
       "title": "Yhteenveto",
-      "print": "Tulosta"
+      "print": "Tulosta",
+      "demolitionInfo": "Purkamista koskevat tiedot",
+      "images": "Kuvat",
+      "image": "Kuva"
     }
   }
 }

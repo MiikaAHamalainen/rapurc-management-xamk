@@ -27,6 +27,8 @@ export interface Localized extends LocalizedStringsMethods {
     close: string;
     save: string;
     download: string;
+    unknown: string;
+    empty: string;
   };
 
   /**
@@ -51,6 +53,7 @@ export interface Localized extends LocalizedStringsMethods {
     title: string;
     missingAccessToken: string;
     failToUpload: string;
+    failToLoadUserId: string;
     surveys: {
       list: string;
       create: string;
@@ -503,6 +506,9 @@ export interface Localized extends LocalizedStringsMethods {
     summary: {
       title: string;
       print: string;
+      demolitionInfo: string;
+      images: string;
+      image: string;
     };
   };
 }

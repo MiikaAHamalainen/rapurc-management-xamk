@@ -30,6 +30,7 @@ export interface SurveyWithInfo {
   classificationCode?: string;
   streetAddress?: string;
   city?: string;
+  creatorId?: string;
 }
 
 /**
@@ -101,4 +102,12 @@ export interface SurveySummary {
   usages: Usage[];
   surveyors: Surveyor[];
   attachments: Attachment[];
+}
+
+/**
+ * Interface for survey summary 
+ */
+export enum SurveyShow {
+  ShowAll = "showAll",
+  ShowMine = "showMine"
 }

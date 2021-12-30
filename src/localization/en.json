@@ -12,7 +12,9 @@
     "open": "Open",
     "close": "Close",
     "save": "Save",
-    "download": "Download"
+    "download": "Download",
+    "unknown": "Unknown",
+    "empty": "Empty"
   },
 
   "pdf": {
@@ -26,6 +28,7 @@
 
   "errorHandling": {
     "title": "Error",
+    "failToLoadUserId": "Error when loading user ID",
     "missingAccessToken": "Missing access token",
     "failToUpload": "Fail to upload images",
     "surveys": {
@@ -461,7 +464,10 @@
     },
     "summary": {
       "title": "Summary",
-      "print": "Print"
+      "print": "Print",
+      "demolitionInfo": "Demolition information",
+      "images": "Images",
+      "image": "Image"
     }
   }
 }
