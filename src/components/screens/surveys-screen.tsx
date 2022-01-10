@@ -30,7 +30,6 @@ const SurveysScreen: React.FC = () => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const [ filter, setFilter ] = React.useState<SurveyShow>(SurveyShow.ShowAll);
-  const [ userId, setUserId ] = React.useState<string>();
   const [ addressFilter, setAddressFilter ] = React.useState("");
   const [ addressFilterValue, setAddressFilterValue ] = React.useState<string>("");
   const [ surveysWithInfo, setSurveysWithInfo ] = React.useState<SurveyWithInfo[]>([]);
@@ -156,22 +155,6 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Fetches user ID
-   */
-  const fetchUserId = async () => {
-    if (!keycloak) {
-      return;
-    }
-
-    try {
-      const userProfile = await keycloak.loadUserProfile();
-      setUserId(userProfile.id);
-    } catch (error) {
-      errorContext.setError(strings.errorHandling.failToLoadUserId, error);
-    }
-  };
-
-  /**
    * Loads component data
    */
   const loadData = async () => {
@@ -194,7 +177,6 @@ const SurveysScreen: React.FC = () => {
     );
 
     setSurveysWithInfo(surveyWithInfoArray);
-    fetchUserId();
     setLoading(false);
   };
 
@@ -376,7 +358,7 @@ const SurveysScreen: React.FC = () => {
   const renderSurveyListItems = () => (
     surveysWithInfo
       .filter(surveyWithInfo => !addressFilter || surveyWithInfo.streetAddress?.includes(addressFilter))
-      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (SurveyShow.ShowMine && surveyWithInfo.creatorId === userId))
+      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (SurveyShow.ShowMine && surveyWithInfo.creatorId === keycloak?.profile?.id))
       .map(surveyWithInfo =>
         <SurveyItem
           title={ surveyWithInfo.ownerName || "" }
@@ -450,7 +432,7 @@ const SurveysScreen: React.FC = () => {
 
     const filteredRows = surveysWithInfo
       .filter(surveyWithInfo => !addressFilter || surveyWithInfo.streetAddress?.includes(addressFilter))
-      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (filter === SurveyShow.ShowMine && surveyWithInfo.creatorId === userId));
+      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (filter === SurveyShow.ShowMine && surveyWithInfo.creatorId === keycloak?.profile?.id));
 
     return (
       <Paper>
