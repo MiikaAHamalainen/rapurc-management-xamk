@@ -299,11 +299,11 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
           )
         }
         {
-          renderWithDebounceNumberTextField(
+          renderWithDebounceTextField(
             "floors",
             strings.survey.building.floors,
-            onBuildingPropChange,
-            floors
+            floors || "",
+            onBuildingPropChange
           )
         }
         {
