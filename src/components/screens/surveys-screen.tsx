@@ -273,22 +273,36 @@ const SurveysScreen: React.FC = () => {
   /**
    * Renders delete survey dialog
    */
-  const renderDeleteSurveyDialog = () => (
-    <GenericDialog
-      error={ false }
-      open={ deletingSurvey }
-      onClose={ () => setDeletingSurvey(false) }
-      onCancel={ () => setDeletingSurvey(false) }
-      onConfirm={ onDeleteSurveyConfirm }
-      title={ strings.surveysScreen.deleteSurveysDialog.title }
-      positiveButtonText={ strings.generic.confirm }
-      cancelButtonText={ strings.generic.cancel }
-    >
-      <Typography>
-        { strings.surveysScreen.deleteSurveysDialog.text }
-      </Typography>
-    </GenericDialog>
-  );
+  const renderDeleteSurveyDialog = () => {
+    let deletingOthers = false;
+    selectedSurveyIds.every(selectedSurveyId => {
+      deletingOthers = surveysWithInfo.find(surveyWithInfo => surveyWithInfo.id === selectedSurveyId)?.creatorId !== keycloak?.profile?.id;
+      if (deletingOthers) return false;
+      return true;
+    });
+
+    return (
+      <GenericDialog
+        error={ false }
+        open={ deletingSurvey }
+        onClose={ () => setDeletingSurvey(false) }
+        onCancel={ () => setDeletingSurvey(false) }
+        onConfirm={ onDeleteSurveyConfirm }
+        title={ strings.surveysScreen.deleteSurveysDialog.title }
+        positiveButtonText={ strings.generic.confirm }
+        cancelButtonText={ strings.generic.cancel }
+      >
+        <Typography>
+          { strings.surveysScreen.deleteSurveysDialog.text }
+        </Typography>
+        { deletingOthers &&
+          <Typography color="red" fontWeight={ 600 }>
+            { strings.surveysScreen.deleteSurveysDialog.deletingOthers }
+          </Typography>
+        }
+      </GenericDialog>
+    );
+  };
 
   /**
    * Render header content
