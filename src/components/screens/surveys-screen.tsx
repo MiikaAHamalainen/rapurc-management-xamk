@@ -246,11 +246,9 @@ const SurveysScreen: React.FC = () => {
         dispatch(deleteSurvey(surveyId.toString())).unwrap();
       });
 
-      const filteredSurveysWithInfo: SurveyWithInfo[] = [];
-      surveysWithInfo.forEach(surveyWithInfo => {
-        !selectedSurveyIds.find(selectedSurveyId => selectedSurveyId === surveyWithInfo.id) && filteredSurveysWithInfo.push(surveyWithInfo);
-      });
-      setSurveysWithInfo(filteredSurveysWithInfo);
+      setSurveysWithInfo(
+        surveysWithInfo.filter(surveyWithInfo => selectedSurveyIds.every(selectedSurveyId => selectedSurveyId !== surveyWithInfo.id))
+      );
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.delete, error);
     }
