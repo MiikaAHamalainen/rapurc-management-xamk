@@ -245,11 +245,16 @@ const SurveysScreen: React.FC = () => {
       await selectedSurveyIds.forEach(surveyId => {
         dispatch(deleteSurvey(surveyId.toString())).unwrap();
       });
+
+      const filteredSurveysWithInfo: SurveyWithInfo[] = [];
+      surveysWithInfo.forEach(surveyWithInfo => {
+        !selectedSurveyIds.find(selectedSurveyId => selectedSurveyId === surveyWithInfo.id) && filteredSurveysWithInfo.push(surveyWithInfo);
+      });
+      setSurveysWithInfo(filteredSurveysWithInfo);
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.delete, error);
     }
 
-    loadData();
     setSelectedSurveyIds([]);
     setDeletingSurvey(false);
   };
