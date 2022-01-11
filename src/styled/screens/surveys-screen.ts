@@ -60,7 +60,7 @@ export const SurveyButton = styled(Button, {
 export const DropZoneContainer = styled(Box, {
   label: "surveys-screen-drop-zone-container"
 })(({ theme }) => ({
-  padding: `${theme.spacing(4)} 0`,
+  padding: theme.spacing(4),
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -90,8 +90,8 @@ export const ThumbnailButton = styled(Button, {
   position: "relative",
   backgroundColor: "transparent",
   padding: 2,
-  width: 50,
-  height: 50,
+  width: 150,
+  height: "auto",
   [theme.breakpoints.up("sm")]: {
     width: 100,
     height: 100

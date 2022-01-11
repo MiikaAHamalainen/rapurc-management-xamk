@@ -402,6 +402,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
 
     return (
       <GenericDialog
+        fullScreen={ useMediaQuery(theme.breakpoints.down("sm")) }
         error={ false }
         disabled={ !newHazardousWaste.hazardousMaterialId }
         open={ addingWaste }
@@ -723,7 +724,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
     <>
       <Stack
         spacing={ 2 }
-        direction="row"
+        direction={{ xs: "column", sm: "row" }}
         justifyContent="space-between"
         marginBottom={ 2 }
       >
