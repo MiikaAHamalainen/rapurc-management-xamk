@@ -154,7 +154,8 @@
     },
     "deleteSurveysDialog": {
       "title": "Poista kartoitus",
-      "text": "Haluatko varmasti poistaa valitut kartoitukset?"
+      "text": "Haluatko varmasti poistaa valitut kartoitukset?",
+      "deletingOthers": "You are about to delete another users survey. Do you want to proceed?"
     }
   },
 
