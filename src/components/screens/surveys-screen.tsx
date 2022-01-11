@@ -274,12 +274,9 @@ const SurveysScreen: React.FC = () => {
    * Renders delete survey dialog
    */
   const renderDeleteSurveyDialog = () => {
-    let deletingOthers = false;
-    selectedSurveyIds.every(selectedSurveyId => {
-      deletingOthers = surveysWithInfo.find(surveyWithInfo => surveyWithInfo.id === selectedSurveyId)?.creatorId !== keycloak?.profile?.id;
-      if (deletingOthers) return false;
-      return true;
-    });
+    const deletingOthers = selectedSurveyIds.some(
+      selectedSurveyId => surveysWithInfo.find(surveyWithInfo => surveyWithInfo.id === selectedSurveyId)?.creatorId !== keycloak?.profile?.id
+    );
 
     return (
       <GenericDialog
