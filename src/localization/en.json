@@ -368,7 +368,7 @@
       "addImage": "Add image",
       "deleteImage": "Delete image",
       "preview": "Preview:",
-      "previewInfo": "Select and add images below. Delete selected image from trash-button.",
+      "previewInfo": "Select and add images below. Delete selected image from Trash button.",
       "addNewBuildingPart": "Add new building part",
       "deleteBuildingParts": "Delete building part",
       "addNewBuildingPartsDialog": {
