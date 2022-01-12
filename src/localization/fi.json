@@ -154,7 +154,8 @@
     },
     "deleteSurveysDialog": {
       "title": "Poista kartoitus",
-      "text": "Haluatko varmasti poistaa valitut kartoitukset?"
+      "text": "Haluatko varmasti poistaa valitut kartoitukset?",
+      "deletingOthers": "Varoitus! Olet poistamassa toisen käyttäjän luomaa kartoitusta. Haluatko varmasti jatkaa?"
     }
   },
 
@@ -336,8 +337,8 @@
       "demolitionScope": "Purkamisen laajuus",
       "startDate": "Aloitusajankohta",
       "endDate": "Lopetusajankohta",
-      "addSurveyor": "Lisää uusi",
-      "deleteSurveyor": "Poista kartoittaja",
+      "addSurveyor": "Lisää",
+      "deleteSurveyor": "Poista",
       "demolitionScopes": {
         "renovation": "Saneerauspurku",
         "partial": "Osapurku",
@@ -367,8 +368,10 @@
       "moreImage": "Lisää kuvia",
       "addImage": "Lisää kuva",
       "deleteImage": "Poista kuva",
-      "addNewBuildingPart": "Lisää uusi",
-      "deleteBuildingParts": "Poista rakennusosa",
+      "preview": "Esikatselu",
+      "previewInfo": "Valitse ja lisää kuvia alta. Poista valittu kuva Roskakori-painikkeella.",
+      "addNewBuildingPart": "Lisää",
+      "deleteBuildingParts": "Poista",
       "addNewBuildingPartsDialog": {
         "title": "Lisää rakennusosa",
         "buildingPartHelperText": "Anna rakennusosaa kuvaava nimi",
@@ -412,8 +415,8 @@
     },
     "wasteMaterial": {
       "title": "Purkujätemateriaalit",
-      "addNewWaste": "Lisää materiaali",
-      "deleteWaste": "Poista materiaali",
+      "addNewWaste": "Lisää",
+      "deleteWaste": "Poista",
       "addNewWasteDialog": {
         "title": "Lisää purkujätemateriaali"
       },
@@ -446,7 +449,7 @@
     "otherStructures": {
       "title": "Muut purettavat rakennukset / rakennelmat",
       "description": "Jos purkamisen yhteydessä puretaan myös muita samaan kiinteistöön kuuluvia rakennuksia tai rakennelmia, lisää ne tähän listaan.",
-      "add": "Lisää rakennus",
+      "add": "Lisää",
       "dialog": {
         "title": "Lisää rakennus / rakennelma",
         "name": "Rakennus / rakennelma",
@@ -457,7 +460,7 @@
     },
     "attachments": {
       "title": "Liitteet",
-      "add": "Lisää liite",
+      "add": "Lisää",
       "dialog": {
         "title": "Poista liite",
         "text": "Haluatko varmasti poistaa liitteen"

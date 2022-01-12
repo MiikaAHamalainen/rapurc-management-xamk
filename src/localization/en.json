@@ -153,7 +153,8 @@
     },
     "deleteSurveysDialog": {
       "title": "Delete survey(s)",
-      "text": "Are you sure you want to delete these surveys?"
+      "text": "Are you sure you want to delete these surveys?",
+      "deletingOthers": "You are about to delete another users survey. Do you want to proceed?"
     }
   },
 
@@ -365,7 +366,9 @@
       "viewImage": "View images",
       "moreImage": "More images",
       "addImage": "Add image",
-      "deleteImage": "Poista kuva",
+      "deleteImage": "Delete image",
+      "preview": "Preview:",
+      "previewInfo": "Select and add images below. Delete selected image from Trash button.",
       "addNewBuildingPart": "Add new building part",
       "deleteBuildingParts": "Delete building part",
       "addNewBuildingPartsDialog": {

@@ -30,7 +30,6 @@ const SurveysScreen: React.FC = () => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const [ filter, setFilter ] = React.useState<SurveyShow>(SurveyShow.ShowAll);
-  const [ userId, setUserId ] = React.useState<string>();
   const [ addressFilter, setAddressFilter ] = React.useState("");
   const [ addressFilterValue, setAddressFilterValue ] = React.useState<string>("");
   const [ surveysWithInfo, setSurveysWithInfo ] = React.useState<SurveyWithInfo[]>([]);
@@ -156,22 +155,6 @@ const SurveysScreen: React.FC = () => {
   };
 
   /**
-   * Fetches user ID
-   */
-  const fetchUserId = async () => {
-    if (!keycloak) {
-      return;
-    }
-
-    try {
-      const userProfile = await keycloak.loadUserProfile();
-      setUserId(userProfile.id);
-    } catch (error) {
-      errorContext.setError(strings.errorHandling.failToLoadUserId, error);
-    }
-  };
-
-  /**
    * Loads component data
    */
   const loadData = async () => {
@@ -194,7 +177,6 @@ const SurveysScreen: React.FC = () => {
     );
 
     setSurveysWithInfo(surveyWithInfoArray);
-    fetchUserId();
     setLoading(false);
   };
 
@@ -245,11 +227,14 @@ const SurveysScreen: React.FC = () => {
       await selectedSurveyIds.forEach(surveyId => {
         dispatch(deleteSurvey(surveyId.toString())).unwrap();
       });
+
+      setSurveysWithInfo(
+        surveysWithInfo.filter(surveyWithInfo => selectedSurveyIds.every(selectedSurveyId => selectedSurveyId !== surveyWithInfo.id))
+      );
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.delete, error);
     }
 
-    loadData();
     setSelectedSurveyIds([]);
     setDeletingSurvey(false);
   };
@@ -273,22 +258,37 @@ const SurveysScreen: React.FC = () => {
   /**
    * Renders delete survey dialog
    */
-  const renderDeleteSurveyDialog = () => (
-    <GenericDialog
-      error={ false }
-      open={ deletingSurvey }
-      onClose={ () => setDeletingSurvey(false) }
-      onCancel={ () => setDeletingSurvey(false) }
-      onConfirm={ onDeleteSurveyConfirm }
-      title={ strings.surveysScreen.deleteSurveysDialog.title }
-      positiveButtonText={ strings.generic.confirm }
-      cancelButtonText={ strings.generic.cancel }
-    >
-      <Typography>
-        { strings.surveysScreen.deleteSurveysDialog.text }
-      </Typography>
-    </GenericDialog>
-  );
+  const renderDeleteSurveyDialog = () => {
+    const deletingOthers = selectedSurveyIds.some(
+      selectedSurveyId => surveysWithInfo.find(surveyWithInfo => surveyWithInfo.id === selectedSurveyId)?.creatorId !== keycloak?.profile?.id
+    );
+
+    return (
+      <GenericDialog
+        error={ false }
+        open={ deletingSurvey }
+        onClose={ () => setDeletingSurvey(false) }
+        onCancel={ () => setDeletingSurvey(false) }
+        onConfirm={ onDeleteSurveyConfirm }
+        title={ strings.surveysScreen.deleteSurveysDialog.title }
+        positiveButtonText={ strings.generic.confirm }
+        cancelButtonText={ strings.generic.cancel }
+      >
+        <Typography>
+          { strings.surveysScreen.deleteSurveysDialog.text }
+        </Typography>
+        { deletingOthers &&
+          <Typography
+            sx={{ mt: 2 }}
+            color="error"
+            fontWeight={ 600 }
+          >
+            { strings.surveysScreen.deleteSurveysDialog.deletingOthers }
+          </Typography>
+        }
+      </GenericDialog>
+    );
+  };
 
   /**
    * Render header content
@@ -376,7 +376,7 @@ const SurveysScreen: React.FC = () => {
   const renderSurveyListItems = () => (
     surveysWithInfo
       .filter(surveyWithInfo => !addressFilter || surveyWithInfo.streetAddress?.includes(addressFilter))
-      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (SurveyShow.ShowMine && surveyWithInfo.creatorId === userId))
+      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (SurveyShow.ShowMine && surveyWithInfo.creatorId === keycloak?.profile?.id))
       .map(surveyWithInfo =>
         <SurveyItem
           title={ surveyWithInfo.ownerName || "" }
@@ -450,7 +450,7 @@ const SurveysScreen: React.FC = () => {
 
     const filteredRows = surveysWithInfo
       .filter(surveyWithInfo => !addressFilter || surveyWithInfo.streetAddress?.includes(addressFilter))
-      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (filter === SurveyShow.ShowMine && surveyWithInfo.creatorId === userId));
+      .filter(surveyWithInfo => filter === SurveyShow.ShowAll || (filter === SurveyShow.ShowMine && surveyWithInfo.creatorId === keycloak?.profile?.id));
 
     return (
       <Paper>

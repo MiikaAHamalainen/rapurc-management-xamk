@@ -183,6 +183,7 @@ export interface Localized extends LocalizedStringsMethods {
     deleteSurveysDialog: {
       title: string;
       text: string;
+      deletingOthers: string;
     };
   };
 
@@ -407,6 +408,8 @@ export interface Localized extends LocalizedStringsMethods {
       moreImage: string;
       addImage: string;
       deleteImage: string;
+      preview: string;
+      previewInfo: string;
       addNewBuildingPart: string;
       deleteBuildingParts: string;
       addNewBuildingPartsDialog: {

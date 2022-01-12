@@ -496,12 +496,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * Renders new reusable image upload 
    */
   const renderNewReusableImageUpload = () => (
-    <Stack
-      direction="column"
-      marginTop={ 2 }
-      spacing={ 2 }
-    >
-      <Stack direction={ isMobile ? "column" : "row" } justifyContent="space-between">
+    <Stack mt={ 2 } spacing={ 2 }>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        spacing={{ xs: 2, sm: 4 }}
+      >
         <Typography sx={{ whiteSpace: "pre-wrap" }}>
           { strings.survey.reusables.addNewBuildingPartsDialog.imageDescription }
         </Typography>
@@ -575,6 +575,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
     return (
       <GenericDialog
+        fullScreen={ useMediaQuery(theme.breakpoints.down("sm")) }
         error={ false }
         disabled={ !newMaterial.componentName || !newMaterial.reusableMaterialId }
         open={ addingSurveyReusable }
@@ -669,10 +670,12 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
           />
         </Stack>
-        <Typography marginTop={ 2 } variant="h3">
-          { strings.survey.reusables.dataGridColumns.images }
-        </Typography>
-        { renderNewReusableImageUpload() }
+        <Stack mt={ 2 }>
+          <Typography variant="h3">
+            { strings.survey.reusables.dataGridColumns.images }
+          </Typography>
+          { renderNewReusableImageUpload() }
+        </Stack>
       </GenericDialog>
     );
   };
@@ -817,7 +820,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
 
     return (
       <Stack spacing={ 2 } direction="column">
+        <Typography>{ strings.survey.reusables.preview }</Typography>
         { renderImagePreview(selectedImageFile, selectedImageIndex) }
+        <Typography>{ strings.survey.reusables.previewInfo }</Typography>
         <Grid container spacing={ 1 }>
           { uploadedFiles.map(renderImageThumbnail) }
           {
@@ -853,9 +858,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const renderReusableImageDialog = () => (
     <GenericDialog
+      fullScreen={ useMediaQuery(theme.breakpoints.down("sm")) }
       error={ false }
       open={ imageDialogOpen }
       onClose={ onImageDialogClose }
+      onCancel={ onImageDialogClose }
       onConfirm={ onImageDialogClose }
       title={ strings.survey.reusables.dataGridColumns.images }
       positiveButtonText={ strings.generic.close }
@@ -1160,7 +1167,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     <>
       <Stack
         spacing={ 2 }
-        direction="row"
+        direction={{ xs: "column", sm: "row" }}
         justifyContent="space-between"
         marginBottom={ 2 }
       >

@@ -12,6 +12,11 @@ import "moment/locale/fi";
 import strings from "localization/strings";
 
 /**
+ * Set language to Finnish
+ */
+strings.setLanguage("fi");
+
+/**
  * Application component
  */
 const App: React.FC = () => {
