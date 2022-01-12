@@ -278,7 +278,11 @@ const SurveysScreen: React.FC = () => {
           { strings.surveysScreen.deleteSurveysDialog.text }
         </Typography>
         { deletingOthers &&
-          <Typography color="red" fontWeight={ 600 }>
+          <Typography
+            sx={{ mt: 2 }}
+            color="error"
+            fontWeight={ 600 }
+          >
             { strings.surveysScreen.deleteSurveysDialog.deletingOthers }
           </Typography>
         }

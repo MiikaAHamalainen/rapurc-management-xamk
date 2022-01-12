@@ -366,7 +366,9 @@
       "viewImage": "View images",
       "moreImage": "More images",
       "addImage": "Add image",
-      "deleteImage": "Poista kuva",
+      "deleteImage": "Delete image",
+      "preview": "Preview:",
+      "previewInfo": "Select and add images below. Delete selected image from Trash button.",
       "addNewBuildingPart": "Add new building part",
       "deleteBuildingParts": "Delete building part",
       "addNewBuildingPartsDialog": {
