@@ -234,6 +234,34 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
   });
 
   /**
+   * Validates number input event
+   * 
+   * @param onChange event handler callback
+   * @param event event
+   */
+  const numberValidator =
+  (onChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>) => (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const { value } = event.target;
+    if (!value) {
+      const updatedEvent: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> = {
+        ...event,
+        target: {
+          ...event.target,
+          value: "0"
+        }
+      };
+      onChange(updatedEvent);
+      return;
+    }
+
+    if (Number.isNaN(parseFloat(value))) {
+      return;
+    }
+
+    onChange(event);
+  };
+
+  /**
    * Event Handler set material prop
    * 
    * @param reusable reusable
@@ -428,7 +456,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       name={ name }
       value={ value }
       label={ label }
-      onChange={ onChange }
+      onChange={ numberValidator(onChange) }
       component={ props =>
         <TextField
           type="number"
