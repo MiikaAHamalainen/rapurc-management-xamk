@@ -264,21 +264,10 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    *
    * @param event React change event
    */
-  const onNewHazardousWasteTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNewHazardousWasteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
     setNewHazardousWaste({ ...newHazardousWaste, [name]: value });
-  };
-
-  /**
-   * Event handler for new waste number change
-   *
-   * @param event React change event
-   */
-  const onNewWasteNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setNewHazardousWaste({ ...newHazardousWaste, [name]: Number(value) });
   };
 
   /**
@@ -453,7 +442,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             value={ newHazardousWaste.hazardousMaterialId }
             name="hazardousMaterialId"
             label={ strings.survey.hazardousMaterial.dataGridColumns.material }
-            onChange={ onNewHazardousWasteTextChange }
+            onChange={ onNewHazardousWasteChange }
           >
             { wasteMaterialOptions }
           </TextField>
@@ -476,7 +465,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             name="wasteSpecifierId"
             label={ strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier }
             value={ newHazardousWaste.wasteSpecifierId }
-            onChange={ onNewHazardousWasteTextChange }
+            onChange={ onNewHazardousWasteChange }
           >
             { wasteSpecifierOptions }
           </TextField>
@@ -486,7 +475,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             color="primary"
             value={ newHazardousWaste.amount }
             label={ strings.survey.hazardousMaterial.dataGridColumns.amountInTons }
-            onChange={ onNewWasteNumberChange }
+            onChange={ onNewHazardousWasteChange }
           />
         </Stack>
         <Stack spacing={ 2 } marginTop={ 2 }>
@@ -496,7 +485,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             name="description"
             label={ strings.survey.hazardousMaterial.dataGridColumns.description }
             value={ newHazardousWaste.description }
-            onChange={ onNewHazardousWasteTextChange }
+            onChange={ onNewHazardousWasteChange }
           />
         </Stack>
       </GenericDialog>

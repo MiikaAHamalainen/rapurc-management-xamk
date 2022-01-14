@@ -342,21 +342,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    *
    * @param event React change event
    */
-  const onNewMaterialTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNewMaterialChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
     setNewMaterial({ ...newMaterial, [name]: value });
-  };
-
-  /**
-   * Event handler for new material number change
-   *
-   * @param event React change event
-   */
-  const onNewMaterialNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setNewMaterial({ ...newMaterial, [name]: Number(value) });
   };
 
   /**
@@ -619,7 +608,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           color="primary"
           name="componentName"
           label={ strings.survey.reusables.dataGridColumns.buildingPart }
-          onChange={ onNewMaterialTextChange }
+          onChange={ onNewMaterialChange }
           value={ newMaterial.componentName }
           helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
         />
@@ -636,7 +625,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             value={ newMaterial.reusableMaterialId }
             label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterialHelperText }
-            onChange={ onNewMaterialTextChange }
+            onChange={ onNewMaterialChange }
           >
             { reusableOptions }
           </TextField>
@@ -648,7 +637,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             value={ newMaterial.usability }
             label={ strings.survey.reusables.dataGridColumns.usability }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.usabilityHelperText }
-            onChange={ onNewMaterialTextChange }
+            onChange={ onNewMaterialChange }
           >
             { usabilityOptions }
           </TextField>
@@ -665,7 +654,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             value={ newMaterial.amount }
             label={ strings.survey.reusables.dataGridColumns.amount }
             type="number"
-            onChange={ onNewMaterialNumberChange }
+            onChange={ onNewMaterialChange }
           />
           <TextField
             fullWidth
@@ -674,7 +663,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             color="primary"
             value={ newMaterial.unit }
             label={ strings.survey.reusables.dataGridColumns.unit }
-            onChange={ onNewMaterialTextChange }
+            onChange={ onNewMaterialChange }
           >
             { unitOptions }
           </TextField>
@@ -686,7 +675,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             name="description"
             label={ strings.survey.reusables.dataGridColumns.description }
             value={ newMaterial.description }
-            onChange={ onNewMaterialTextChange }
+            onChange={ onNewMaterialChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.descriptionHelperText }
           />
           <TextField
@@ -694,7 +683,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             name="amountAsWaste"
             label={ strings.survey.reusables.dataGridColumns.wasteAmountInTons }
             value={ newMaterial.amountAsWaste }
-            onChange={ onNewMaterialNumberChange }
+            onChange={ onNewMaterialChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
           />
         </Stack>

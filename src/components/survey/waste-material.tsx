@@ -266,21 +266,10 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
    *
    * @param event React change event
    */
-  const onNewWasteTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNewWasteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
     setNewWaste({ ...newWaste, [name]: value });
-  };
-
-  /**
-   * Event handler for new waste number change
-   *
-   * @param event React change event
-   */
-  const onNewWasteNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setNewWaste({ ...newWaste, [name]: Number(value) });
   };
 
   /**
@@ -449,7 +438,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             value={ newWaste.wasteMaterialId }
             name="wasteMaterialId"
             label={ strings.survey.wasteMaterial.dataGridColumns.material }
-            onChange={ onNewWasteTextChange }
+            onChange={ onNewWasteChange }
           >
             { wasteMaterialOptions }
           </TextField>
@@ -472,7 +461,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             name="usageId"
             label={ strings.survey.wasteMaterial.dataGridColumns.usage }
             value={ newWaste.usageId }
-            onChange={ onNewWasteTextChange }
+            onChange={ onNewWasteChange }
           >
             { usageOptions }
           </TextField>
@@ -482,7 +471,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             color="primary"
             value={ newWaste.amount }
             label={ strings.survey.wasteMaterial.dataGridColumns.amountInTons }
-            onChange={ onNewWasteNumberChange }
+            onChange={ onNewWasteChange }
           />
         </Stack>
         <Stack spacing={ 2 } marginTop={ 2 }>
@@ -492,7 +481,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             name="description"
             label={ strings.survey.wasteMaterial.dataGridColumns.description }
             value={ newWaste.description }
-            onChange={ onNewWasteTextChange }
+            onChange={ onNewWasteChange }
           />
         </Stack>
       </GenericDialog>
