@@ -159,18 +159,19 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
    * @param onChange event handler callback
    * @param event event
    */
-  const numberValidator =
-  (onChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>) => (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const numberValidator = (
+    onChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
+  ) => (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { value } = event.target;
+
     if (!value) {
-      const updatedEvent: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> = {
+      onChange({
         ...event,
         target: {
           ...event.target,
           value: "0"
         }
-      };
-      onChange(updatedEvent);
+      });
       return;
     }
 
