@@ -521,12 +521,13 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       <List>
         {
           hazardousWastes.map(hazardousWaste => {
-            const materialId = hazardousWasteMaterials.find(material => material.id === newHazardousWaste.hazardousMaterialId);
-            const wasteCategory = wasteCategories.find(category => category.id === materialId?.wasteCategoryId);
-            const fullEwcCode = materialId ? `${wasteCategory?.ewcCode || ""}${materialId?.ewcSpecificationCode}` : "";
+            const hazardousWasteMaterial = hazardousWasteMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
+            const wasteCategory = wasteCategories.find(category => category.id === hazardousWasteMaterial?.wasteCategoryId);
+            const fullEwcCode = `${wasteCategory?.ewcCode || ""}${hazardousWasteMaterial?.ewcSpecificationCode || ""}`;
 
             return (
               <SurveyItem
+                key={ hazardousWaste.id }
                 title={ hazardousWasteMaterials.find(wasteMaterial => wasteMaterial.id === hazardousWaste.hazardousMaterialId)?.name || "" }
                 subtitle={ `${hazardousWaste.amount} t` }
               >

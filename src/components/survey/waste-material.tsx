@@ -534,7 +534,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
                   disabled
                   color="primary"
                   sx={{ mb: 1 }}
-                  value={ fullEwcCode}
+                  value={ fullEwcCode }
                   label={ strings.survey.wasteMaterial.dataGridColumns.wasteCode }
                 />
                 {
