@@ -161,14 +161,13 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
+    setHazardousWastes(hazardousWastes.map(hazardousWaste => (hazardousWaste.id === updatedHazardousWaste.id ? updatedHazardousWaste : hazardousWaste)));
     try {
-      const fetchedUpdatedMaterial = await Api.getHazardousWasteApi(keycloak.token).updateSurveyHazardousWaste({
+      await Api.getHazardousWasteApi(keycloak.token).updateSurveyHazardousWaste({
         surveyId: surveyId,
         hazardousWasteId: updatedHazardousWaste.id,
         hazardousWaste: updatedHazardousWaste
       });
-
-      setHazardousWastes(hazardousWastes.map(hazardousWaste => (hazardousWaste.id === fetchedUpdatedMaterial.id ? fetchedUpdatedMaterial : hazardousWaste)));
     } catch (error) {
       errorContext.setError(strings.errorHandling.waste.update, error);
     }

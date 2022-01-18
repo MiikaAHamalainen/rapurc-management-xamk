@@ -119,14 +119,13 @@ const SurveyInformation: React.FC = () => {
       return;
     }
 
+    setSurveyors(surveyors.map(surveyorData => (surveyorData.id === surveyor.id ? surveyor : surveyorData)));
     try {
-      const updatedSurveyor = await Api.getSurveyorsApi(keycloak.token).updateSurveyor({
+      await Api.getSurveyorsApi(keycloak.token).updateSurveyor({
         surveyId: selectedSurvey.id,
         surveyorId: surveyor.id,
         surveyor: surveyor
       });
-
-      setSurveyors(surveyors.map(surveyorData => (surveyorData.id === updatedSurveyor.id ? updatedSurveyor : surveyorData)));
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveyors.update, error);
     }
