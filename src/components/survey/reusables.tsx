@@ -154,19 +154,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param updatedReusable updated reusable
    */
-  const onMaterialRowChange = async (newReusable: Reusable) => {
-    if (!keycloak?.token || !newReusable.id || !surveyId || newReusable.componentName === "") {
+  const onMaterialRowChange = async (updatedReusable: Reusable) => {
+    if (!keycloak?.token || !updatedReusable.id || !surveyId || !updatedReusable.componentName) {
       return;
     }
 
+    setSurveyReusables(surveyReusables.map(reusable => (reusable.id === updatedReusable.id ? updatedReusable : reusable)));
     try {
-      const updatedReusable = await Api.getSurveyReusablesApi(keycloak.token).updateSurveyReusable({
+      await Api.getSurveyReusablesApi(keycloak.token).updateSurveyReusable({
         surveyId: surveyId,
-        reusableId: newReusable.id,
-        reusable: newReusable
+        reusableId: updatedReusable.id,
+        reusable: updatedReusable
       });
-
-      setSurveyReusables(surveyReusables.map(reusable => (reusable.id === updatedReusable.id ? updatedReusable : reusable)));
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.update, error);
     }
@@ -232,6 +231,34 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
     maxFiles: 1,
     onDrop: reusableUploadingImage?.id ? filesUpload : newReusableFilesUpload
   });
+
+  /**
+   * Validates number input event
+   * 
+   * @param onChange event handler callback
+   */
+  const numberValidator = (
+    onChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
+  ) => (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const { value } = event.target;
+
+    if (!value) {
+      onChange({
+        ...event,
+        target: {
+          ...event.target,
+          value: "0"
+        }
+      });
+      return;
+    }
+
+    if (Number.isNaN(parseFloat(value))) {
+      return;
+    }
+
+    onChange(event);
+  };
 
   /**
    * Event Handler set material prop
@@ -314,21 +341,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    *
    * @param event React change event
    */
-  const onNewMaterialTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNewMaterialChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
     setNewMaterial({ ...newMaterial, [name]: value });
-  };
-
-  /**
-   * Event handler for new material number change
-   *
-   * @param event React change event
-   */
-  const onNewMaterialNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setNewMaterial({ ...newMaterial, [name]: Number(value) });
   };
 
   /**
@@ -428,7 +444,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       name={ name }
       value={ value }
       label={ label }
-      onChange={ onChange }
+      onChange={ numberValidator(onChange) }
       component={ props =>
         <TextField
           type="number"
@@ -591,7 +607,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           color="primary"
           name="componentName"
           label={ strings.survey.reusables.dataGridColumns.buildingPart }
-          onChange={ onNewMaterialTextChange }
+          onChange={ onNewMaterialChange }
           value={ newMaterial.componentName }
           helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartHelperText }
         />
@@ -608,7 +624,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             value={ newMaterial.reusableMaterialId }
             label={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterial }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.buildingPartOrMaterialHelperText }
-            onChange={ onNewMaterialTextChange }
+            onChange={ onNewMaterialChange }
           >
             { reusableOptions }
           </TextField>
@@ -620,7 +636,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             value={ newMaterial.usability }
             label={ strings.survey.reusables.dataGridColumns.usability }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.usabilityHelperText }
-            onChange={ onNewMaterialTextChange }
+            onChange={ onNewMaterialChange }
           >
             { usabilityOptions }
           </TextField>
@@ -637,7 +653,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             value={ newMaterial.amount }
             label={ strings.survey.reusables.dataGridColumns.amount }
             type="number"
-            onChange={ onNewMaterialNumberChange }
+            onChange={ onNewMaterialChange }
           />
           <TextField
             fullWidth
@@ -646,7 +662,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             color="primary"
             value={ newMaterial.unit }
             label={ strings.survey.reusables.dataGridColumns.unit }
-            onChange={ onNewMaterialTextChange }
+            onChange={ onNewMaterialChange }
           >
             { unitOptions }
           </TextField>
@@ -658,7 +674,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             name="description"
             label={ strings.survey.reusables.dataGridColumns.description }
             value={ newMaterial.description }
-            onChange={ onNewMaterialTextChange }
+            onChange={ onNewMaterialChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.descriptionHelperText }
           />
           <TextField
@@ -666,7 +682,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             name="amountAsWaste"
             label={ strings.survey.reusables.dataGridColumns.wasteAmountInTons }
             value={ newMaterial.amountAsWaste }
-            onChange={ onNewMaterialNumberChange }
+            onChange={ onNewMaterialChange }
             helperText={ strings.survey.reusables.addNewBuildingPartsDialog.wasteAmountHelperText }
           />
         </Stack>

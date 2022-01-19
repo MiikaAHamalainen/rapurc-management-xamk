@@ -161,19 +161,45 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
+    setHazardousWastes(hazardousWastes.map(hazardousWaste => (hazardousWaste.id === updatedHazardousWaste.id ? updatedHazardousWaste : hazardousWaste)));
     try {
-      const fetchedUpdatedMaterial = await Api.getHazardousWasteApi(keycloak.token).updateSurveyHazardousWaste({
+      await Api.getHazardousWasteApi(keycloak.token).updateSurveyHazardousWaste({
         surveyId: surveyId,
         hazardousWasteId: updatedHazardousWaste.id,
         hazardousWaste: updatedHazardousWaste
       });
-
-      setHazardousWastes(hazardousWastes.map(hazardousWaste => (hazardousWaste.id === fetchedUpdatedMaterial.id ? fetchedUpdatedMaterial : hazardousWaste)));
     } catch (error) {
       errorContext.setError(strings.errorHandling.waste.update, error);
     }
 
     setWasteDescriptionDialogOpen(true);
+  };
+
+  /**
+   * Validates number input event
+   * 
+   * @param onChange event handler callback
+   */
+  const numberValidator = (
+    onChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
+  ) => (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const { value } = event.target;
+    if (!value) {
+      onChange({
+        ...event,
+        target: {
+          ...event.target,
+          value: "0"
+        }
+      });
+      return;
+    }
+
+    if (Number.isNaN(parseFloat(value))) {
+      return;
+    }
+
+    onChange(event);
   };
 
   /**
@@ -236,21 +262,10 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    *
    * @param event React change event
    */
-  const onNewHazardousWasteTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNewHazardousWasteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
     setNewHazardousWaste({ ...newHazardousWaste, [name]: value });
-  };
-
-  /**
-   * Event handler for new waste number change
-   *
-   * @param event React change event
-   */
-  const onNewWasteNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setNewHazardousWaste({ ...newHazardousWaste, [name]: Number(value) });
   };
 
   /**
@@ -306,7 +321,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       name={ name }
       value={ value }
       label={ label }
-      onChange={ onChange }
+      onChange={ numberValidator(onChange) }
       component={ props =>
         <TextField
           type="number"
@@ -425,7 +440,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             value={ newHazardousWaste.hazardousMaterialId }
             name="hazardousMaterialId"
             label={ strings.survey.hazardousMaterial.dataGridColumns.material }
-            onChange={ onNewHazardousWasteTextChange }
+            onChange={ onNewHazardousWasteChange }
           >
             { wasteMaterialOptions }
           </TextField>
@@ -448,7 +463,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             name="wasteSpecifierId"
             label={ strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier }
             value={ newHazardousWaste.wasteSpecifierId }
-            onChange={ onNewHazardousWasteTextChange }
+            onChange={ onNewHazardousWasteChange }
           >
             { wasteSpecifierOptions }
           </TextField>
@@ -458,7 +473,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             color="primary"
             value={ newHazardousWaste.amount }
             label={ strings.survey.hazardousMaterial.dataGridColumns.amountInTons }
-            onChange={ onNewWasteNumberChange }
+            onChange={ onNewHazardousWasteChange }
           />
         </Stack>
         <Stack spacing={ 2 } marginTop={ 2 }>
@@ -468,7 +483,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
             name="description"
             label={ strings.survey.hazardousMaterial.dataGridColumns.description }
             value={ newHazardousWaste.description }
-            onChange={ onNewHazardousWasteTextChange }
+            onChange={ onNewHazardousWasteChange }
           />
         </Stack>
       </GenericDialog>
@@ -505,12 +520,13 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       <List>
         {
           hazardousWastes.map(hazardousWaste => {
-            const materialId = hazardousWasteMaterials.find(material => material.id === newHazardousWaste.hazardousMaterialId);
-            const wasteCategory = wasteCategories.find(category => category.id === materialId?.wasteCategoryId);
-            const fullEwcCode = materialId ? `${wasteCategory?.ewcCode || ""}${materialId?.ewcSpecificationCode}` : "";
+            const hazardousWasteMaterial = hazardousWasteMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
+            const wasteCategory = wasteCategories.find(category => category.id === hazardousWasteMaterial?.wasteCategoryId);
+            const fullEwcCode = `${wasteCategory?.ewcCode || ""}${hazardousWasteMaterial?.ewcSpecificationCode || ""}`;
 
             return (
               <SurveyItem
+                key={ hazardousWaste.id }
                 title={ hazardousWasteMaterials.find(wasteMaterial => wasteMaterial.id === hazardousWaste.hazardousMaterialId)?.name || "" }
                 subtitle={ `${hazardousWaste.amount} t` }
               >

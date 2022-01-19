@@ -68,14 +68,13 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
+    setBuilding(updatedBuilding);
     try {
-      const fetchedUpdatedBuilding = await Api.getBuildingsApi(keycloak.token).updateBuilding({
+      await Api.getBuildingsApi(keycloak.token).updateBuilding({
         surveyId: surveyId,
         buildingId: building.id,
         building: updatedBuilding
       });
-
-      setBuilding(fetchedUpdatedBuilding);
     } catch (error) {
       errorContext.setError(strings.errorHandling.buildings.update, error);
     }
