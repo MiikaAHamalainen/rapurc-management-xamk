@@ -192,14 +192,13 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
       return;
     }
 
+    setWastes(wastes.map(waste => (waste.id === updatedWaste.id ? updatedWaste : waste)));
     try {
-      const fetchedUpdatedMaterial = await Api.getWastesApi(keycloak.token).updateSurveyWaste({
+      await Api.getWastesApi(keycloak.token).updateSurveyWaste({
         surveyId: surveyId,
         wasteId: updatedWaste.id,
         waste: updatedWaste
       });
-
-      setWastes(wastes.map(waste => (waste.id === fetchedUpdatedMaterial.id ? fetchedUpdatedMaterial : waste)));
     } catch (error) {
       errorContext.setError(strings.errorHandling.waste.update, error);
     }

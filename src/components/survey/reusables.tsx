@@ -154,19 +154,18 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * 
    * @param updatedReusable updated reusable
    */
-  const onMaterialRowChange = async (newReusable: Reusable) => {
-    if (!keycloak?.token || !newReusable.id || !surveyId || newReusable.componentName === "") {
+  const onMaterialRowChange = async (updatedReusable: Reusable) => {
+    if (!keycloak?.token || !updatedReusable.id || !surveyId || !updatedReusable.componentName) {
       return;
     }
 
+    setSurveyReusables(surveyReusables.map(reusable => (reusable.id === updatedReusable.id ? updatedReusable : reusable)));
     try {
-      const updatedReusable = await Api.getSurveyReusablesApi(keycloak.token).updateSurveyReusable({
+      await Api.getSurveyReusablesApi(keycloak.token).updateSurveyReusable({
         surveyId: surveyId,
-        reusableId: newReusable.id,
-        reusable: newReusable
+        reusableId: updatedReusable.id,
+        reusable: updatedReusable
       });
-
-      setSurveyReusables(surveyReusables.map(reusable => (reusable.id === updatedReusable.id ? updatedReusable : reusable)));
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.update, error);
     }
