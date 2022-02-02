@@ -9,9 +9,6 @@ export const ImageGallery = styled(Box, {
   gridTemplateColumns: "repeat(2, 1fr)",
   gridGap: theme.spacing(2),
   [theme.breakpoints.up("lg")]: {
-    gridTemplateColumns: "repeat(3, 1fr)"
-  },
-  [theme.breakpoints.up("xl")]: {
     gridTemplateColumns: "repeat(4, 1fr)"
   }
 }));
