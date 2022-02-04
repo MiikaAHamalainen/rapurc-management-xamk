@@ -122,11 +122,10 @@ const SummaryView: React.FC = () => {
           const imageUrl = `${image}?noCache=${randomString}`;
 
           if (image.endsWith(".gif")) {
-            const encoded = await FileUploadUtils.gifToDataURL(imageUrl) as string;
-            return encoded;
+            return await FileUploadUtils.gifToDataURL(imageUrl) as string;
           }
 
-          return imageUrl;
+          return await FileUploadUtils.toDataURL(imageUrl) as string;
         }) || []);
   
         return {

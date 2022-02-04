@@ -433,12 +433,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
                         <View>
                           <Image
                             key={ image }
-                            src={{
-                              uri: image,
-                              method: "GET",
-                              headers: { "Access-Control-Allow-Origin": "*" },
-                              body: ""
-                            }}
+                            src={ image }
                           />
                           <Text>{`${strings.survey.summary.image}: ${reusable.componentName} ${index + 1}/${imageCount}`}</Text>
                         </View>
