@@ -9,7 +9,7 @@ import * as streamToBlob from "stream-to-blob";
 export default class FileUploadUtils {
 
   /**
-   * Convert a image source in to base64 encoded string
+   * Convert a gif image source in to base64 encoded string
    * 
    * @param url gif image url
    */
@@ -29,6 +29,8 @@ export default class FileUploadUtils {
 
   /**
    * Convert a image source in to base64 encoded string
+   * 
+   * @param url image url
    */
   public static toDataURL = async (url: string) => {
     return await fetch(url, {

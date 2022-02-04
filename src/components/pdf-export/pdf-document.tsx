@@ -428,17 +428,15 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
                     </View>
                   }
                   {
-                    reusable.images?.map((image, index) => {
-                      return (
-                        <View>
-                          <Image
-                            key={ image }
-                            src={ image }
-                          />
-                          <Text>{`${strings.survey.summary.image}: ${reusable.componentName} ${index + 1}/${imageCount}`}</Text>
-                        </View>
-                      );
-                    })
+                    reusable.images?.map((image, index) => (
+                      <View>
+                        <Image
+                          key={ image }
+                          src={ image }
+                        />
+                        <Text>{`${strings.survey.summary.image}: ${reusable.componentName} ${index + 1}/${imageCount}`}</Text>
+                      </View>
+                    ))
                   }
                 </View>
               );
