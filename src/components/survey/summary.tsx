@@ -15,6 +15,7 @@ import { SurveySummary } from "types";
 import LocalizationUtils from "utils/localization-utils";
 import FileUploadUtils from "utils/file-upload";
 import { Reusable } from "generated/client";
+import ImageGallery from "styled/generic/image-gallery";
 
 const initialSurveySummary: SurveySummary = {
   buildingTypes: [],
@@ -684,7 +685,7 @@ const SummaryView: React.FC = () => {
                         </Typography>
                       </AccordionSummary>
                       <AccordionDetails>
-                        <Stack spacing={ 2 }>
+                        <ImageGallery>
                           {
                             reusable.images?.map(image => {
                               return (
@@ -697,7 +698,7 @@ const SummaryView: React.FC = () => {
                               );
                             })
                           }
-                        </Stack>
+                        </ImageGallery>
                       </AccordionDetails>
                     </Accordion>
                   }

@@ -155,7 +155,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    * @param updatedReusable updated reusable
    */
   const onMaterialRowChange = async (updatedReusable: Reusable) => {
-    if (!keycloak?.token || !updatedReusable.id || !surveyId || updatedReusable.componentName === "") {
+    if (!keycloak?.token || !updatedReusable.id || !surveyId || !updatedReusable.componentName) {
       return;
     }
 
