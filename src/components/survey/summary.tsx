@@ -13,6 +13,8 @@ import * as React from "react";
 import theme from "theme";
 import { SurveySummary } from "types";
 import LocalizationUtils from "utils/localization-utils";
+import FileUploadUtils from "utils/file-upload";
+import { Reusable } from "generated/client";
 
 const initialSurveySummary: SurveySummary = {
   buildingTypes: [],
@@ -110,7 +112,29 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      return await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: selectedSurvey.id });
+      const reusablesRaw = await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: selectedSurvey.id });
+
+      // process the reusable images
+      const reusablesImageEncoded = await Promise.all(reusablesRaw.map(async reusable => {
+        const encodedImages = await Promise.all(reusable.images?.map(async image => {
+          const randomString = Math.random().toString();
+          const imageUrl = `${image}?noCache=${randomString}`;
+
+          if (image.endsWith(".gif")) {
+            const encoded = await FileUploadUtils.gifToDataURL(imageUrl) as string;
+            return encoded;
+          }
+
+          return imageUrl;
+        }) || []);
+  
+        return {
+          ...reusable,
+          images: encodedImages
+        } as Reusable;
+      }));
+
+      return reusablesImageEncoded;
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.list, error);
     }

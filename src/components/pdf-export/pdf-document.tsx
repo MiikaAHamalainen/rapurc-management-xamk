@@ -429,13 +429,12 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
                   }
                   {
                     reusable.images?.map((image, index) => {
-                      const randomString = Math.random().toString();
                       return (
                         <View>
                           <Image
                             key={ image }
                             src={{
-                              uri: `${image}?noCache=${randomString}`,
+                              uri: image,
                               method: "GET",
                               headers: { "Access-Control-Allow-Origin": "*" },
                               body: ""
