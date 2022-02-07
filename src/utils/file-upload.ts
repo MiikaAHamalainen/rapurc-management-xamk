@@ -14,17 +14,19 @@ export default class FileUploadUtils {
    * @param url gif image url
    */
   public static gifToDataURL = async (url: string) => {
-    return await gifFrames({
+    const frameData = await gifFrames({
       url: url,
       frames: 0
-    })
-      .then((frameData: any) => streamToBlob(frameData[0].getImage()))
-      .then((blob: any) => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      }));
+    });
+
+    const imageBlob = await streamToBlob(frameData[0].getImage());
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(imageBlob);
+    });
   };
 
   /**
@@ -33,16 +35,18 @@ export default class FileUploadUtils {
    * @param url image url
    */
   public static toDataURL = async (url: string) => {
-    return await fetch(url, {
+    const response = await fetch(url, {
       headers: { "Access-Control-Allow-Origin": "*" }
-    })
-      .then(response => response.blob())
-      .then(blob => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      }));
+    });
+
+    const imageBlob = await response.blob();
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(imageBlob);
+    });
   };
 
   /**
