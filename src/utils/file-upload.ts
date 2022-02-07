@@ -1,5 +1,7 @@
 import Config from "../app/config";
 import { PreSignedPostDataResponse, UploadData } from "../types";
+import * as gifFrames from "gif-frames";
+import * as streamToBlob from "stream-to-blob";
 
 /**
  * Utility class for uploading files
@@ -7,12 +9,51 @@ import { PreSignedPostDataResponse, UploadData } from "../types";
 export default class FileUploadUtils {
 
   /**
-   * Uploads file
+   * Convert a gif image source in to base64 encoded string
+   * 
+   * @param url gif image url
+   */
+  public static gifToDataURL = async (url: string) => {
+    const frameData = await gifFrames({
+      url: url,
+      frames: 0
+    });
+
+    const imageBlob = await streamToBlob(frameData[0].getImage());
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(imageBlob);
+    });
+  };
+
+  /**
+   * Convert a image source in to base64 encoded string
+   * 
+   * @param url image url
+   */
+  public static toDataURL = async (url: string) => {
+    const response = await fetch(url, {
+      headers: { "Access-Control-Allow-Origin": "*" }
+    });
+
+    const imageBlob = await response.blob();
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(imageBlob);
+    });
+  };
+
+  /**
+   * Normalize files names
    *
-   * @param token access token
-   * @param fileToUpload file to upload
-   * @param callback file upload progress callback function
-   * @returns Promise of UploadData
+   * @param files files
+   * @returns name normalized files
    */
   public static normalizeFileNames = (files: File[]): File[] => {
     return files.map(file => {

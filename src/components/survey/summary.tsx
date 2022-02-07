@@ -13,6 +13,8 @@ import * as React from "react";
 import theme from "theme";
 import { SurveySummary } from "types";
 import LocalizationUtils from "utils/localization-utils";
+import FileUploadUtils from "utils/file-upload";
+import { Reusable } from "generated/client";
 import ImageGallery from "styled/generic/image-gallery";
 
 const initialSurveySummary: SurveySummary = {
@@ -103,6 +105,34 @@ const SummaryView: React.FC = () => {
   };
 
   /**
+   * Convert image to base64 encoding
+   * 
+   * @param image image url
+   */
+  const imageToBase64 = async (image: string) => {
+    const randomString = Math.random().toString();
+    const imageUrl = `${image}?noCache=${randomString}`;
+
+    return image.endsWith(".gif") ?
+      await FileUploadUtils.gifToDataURL(imageUrl) as string :
+      await FileUploadUtils.toDataURL(imageUrl) as string;
+  };
+
+  /**
+   * Encodes reusable with images
+   * 
+   * @param reusable reusable
+   */
+  const encodeReusableImages = async (reusable: Reusable) => {
+    const encodedImages = await Promise.all(reusable.images?.map(imageToBase64) || []);
+  
+    return {
+      ...reusable,
+      images: encodedImages
+    } as Reusable;
+  };
+
+  /**
    * Fetches reusables
    */
   const fetchReusables = async () => {
@@ -111,7 +141,14 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      return await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: selectedSurvey.id });
+      const reusablesRaw = await Api
+        .getSurveyReusablesApi(keycloak.token)
+        .listSurveyReusables({ surveyId: selectedSurvey.id });
+
+      // process the reusable images
+      const reusablesImageEncoded = await Promise.all(reusablesRaw.map(encodeReusableImages));
+
+      return reusablesImageEncoded;
     } catch (error) {
       errorContext.setError(strings.errorHandling.reusables.list, error);
     }
