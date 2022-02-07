@@ -113,7 +113,9 @@ const SummaryView: React.FC = () => {
     }
 
     try {
-      const reusablesRaw = await Api.getSurveyReusablesApi(keycloak.token).listSurveyReusables({ surveyId: selectedSurvey.id });
+      const reusablesRaw = await Api
+        .getSurveyReusablesApi(keycloak.token)
+        .listSurveyReusables({ surveyId: selectedSurvey.id });
 
       // process the reusable images
       const reusablesImageEncoded = await Promise.all(reusablesRaw.map(async reusable => {
