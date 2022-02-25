@@ -33,7 +33,8 @@ export const fetchSurveys = createAsyncThunk<Survey[], void, { state: RootState;
         throw new Error(strings.errorHandling.missingAccessToken);
       }
 
-      return await Api.getSurveysApi(keycloak.token).listSurveys({});
+      const INT_32_MAX_VALUE = 2147483647;
+      return await Api.getSurveysApi(keycloak.token).listSurveys({ maxResults: INT_32_MAX_VALUE });
     } catch (error) {
       return rejectWithValue(error);
     }
