@@ -13,8 +13,10 @@ import strings from "localization/strings";
 
 /**
  * Set language to Finnish
+ * 
+ * Removed for demo purpose
  */
-strings.setLanguage("fi");
+// strings.setLanguage("fi");
 
 /**
  * Application component
