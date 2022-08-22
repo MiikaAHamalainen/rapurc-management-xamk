@@ -36,9 +36,7 @@ const Header: React.FC<Props> = ({
   /**
    * Method for changing language to finnish or english
    */
-  const handleLanguageChange = () => {
-    dispatch(setLanguage(language === "en" ? "fi" : "en"));
-  };
+  const handleLanguageChange = () => dispatch(setLanguage(language === "en" ? "fi" : "en"));
 
   /**
    * Renders language selection
