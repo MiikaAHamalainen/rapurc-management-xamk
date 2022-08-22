@@ -9,22 +9,18 @@ import ErrorHandler from "./error-handler/error-handler";
 import VisibleWithRole from "./containers/visible-with-role";
 import moment from "moment";
 import "moment/locale/fi";
-import strings from "localization/strings";
-
-/**
- * Set language to Finnish
- * 
- * Removed for demo purpose
- */
-// strings.setLanguage("fi");
+import { useAppSelector } from "app/hooks";
+import { selectLanguage } from "features/locale-slice";
 
 /**
  * Application component
  */
 const App: React.FC = () => {
+  const language = useAppSelector(selectLanguage);
+
   React.useEffect(() => {
-    moment.locale(strings.getLanguage());
-  }, []);
+    moment.locale(language);
+  }, [language]);
 
   return (
     <ErrorHandler>
