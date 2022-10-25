@@ -310,10 +310,10 @@
       "volume": "Rakennustilavuus (m³)",
       "floors": "Kerrosluku",
       "basementFloors": "Kellarikerrokset",
-      "foundationMaterial": "Rakennuksen perusta",
-      "supportingStructure": "Kantava rakenne",
+      "foundationMaterial": "Perustus, alapohja",
+      "supportingStructure": "Kantava runkorakenne",
       "façadeMaterial": "Julkisivumateriaali",
-      "roofStructure": "Kattorakenne",
+      "roofStructure": "Vesikattomateriaali",
       "address": "Osoite",
       "street": "Katuosoite",
       "city": "Kaupunki",
@@ -405,12 +405,12 @@
         "notValidated": "Ei arvioitu"
       },
       "units": {
-        "kg": "Kilogrammaa (kg)",
-        "m2": "Neliömetriä (\u33A1)",
-        "m3": "Kuutiometriä (\u33A5)",
-        "pcs": "Kappaletta (kpl)",
-        "rm": "Juoksumetriä (jm)",
-        "tn": "Tonnia (tn)"
+        "kg": "kg",
+        "m2": "\u33A1",
+        "m3": "\u33A5",
+        "pcs": "kpl",
+        "rm": "jm",
+        "tn": "tn"
       }
     },
     "wasteMaterial": {

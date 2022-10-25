@@ -600,7 +600,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
       {
         field: "wasteMaterialId",
         headerName: strings.survey.wasteMaterial.dataGridColumns.material,
-        width: 280,
+        width: 230,
         type: "singleSelect",
         editable: true,
         valueOptions: wasteMaterialOptions,

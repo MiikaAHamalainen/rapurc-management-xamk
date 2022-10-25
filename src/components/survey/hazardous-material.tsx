@@ -636,7 +636,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
           return params.getValue(params.id, "hazardousMaterialId");
         },
         headerName: strings.survey.hazardousMaterial.dataGridColumns.wasteCode,
-        width: 150,
+        width: 120,
         type: "string",
         editable: false,
         renderCell: (params: GridRenderCellParams) => {
@@ -667,7 +667,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       {
         field: "amount",
         headerName: strings.survey.hazardousMaterial.dataGridColumns.amount,
-        width: 120,
+        width: 100,
         type: "number",
         editable: true,
         renderCell: (params: GridRenderCellParams) => {
@@ -682,7 +682,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       {
         field: "description",
         headerName: strings.survey.hazardousMaterial.dataGridColumns.description,
-        width: 400,
+        width: 450,
         editable: true,
         renderEditCell: (params: GridRenderEditCellParams) => {
           const { value, api, id, field } = params;

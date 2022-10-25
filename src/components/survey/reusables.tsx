@@ -1031,7 +1031,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "reusableMaterialId",
         headerName: strings.survey.reusables.dataGridColumns.material,
-        width: 200,
+        width: 320,
         editable: true,
         type: "singleSelect",
         valueOptions: reusableMaterialsArray,
@@ -1047,13 +1047,13 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "componentName",
         headerName: strings.survey.reusables.dataGridColumns.buildingPart,
-        width: 220,
+        width: 300,
         editable: true
       },
       {
         field: "usability",
         headerName: strings.survey.reusables.dataGridColumns.usability,
-        width: 180,
+        width: 160,
         type: "singleSelect",
         valueOptions: localizedUsability,
         editable: true,
@@ -1069,14 +1069,14 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "amount",
         headerName: strings.survey.reusables.dataGridColumns.amount,
-        width: 100,
+        width: 80,
         type: "number",
         editable: true
       },
       {
         field: "unit",
         headerName: strings.survey.reusables.dataGridColumns.unit,
-        width: 200,
+        width: 90,
         type: "singleSelect",
         valueOptions: localizedUnits,
         editable: true,
@@ -1092,7 +1092,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "description",
         headerName: strings.survey.reusables.dataGridColumns.description,
-        width: 450,
+        width: 750,
         editable: true,
         renderEditCell: (params: GridRenderEditCellParams) => {
           const { value, api, id, field } = params;

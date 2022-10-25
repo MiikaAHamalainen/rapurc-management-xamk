@@ -439,7 +439,7 @@ const SurveyInformation: React.FC = () => {
       {
         field: "firstName",
         headerName: strings.survey.info.dataGridColumns.firstName,
-        width: 200,
+        width: 150,
         editable: true
       },
       {
@@ -457,13 +457,13 @@ const SurveyInformation: React.FC = () => {
       {
         field: "role",
         headerName: strings.survey.info.dataGridColumns.role,
-        width: 200,
+        width: 150,
         editable: true
       },
       {
         field: "phone",
         headerName: strings.survey.info.dataGridColumns.phone,
-        width: 200,
+        width: 170,
         editable: true
       },
       {
