@@ -313,6 +313,7 @@
       "supportingStructure": "Supporting structure",
       "façadeMaterial": "Façade material",
       "roofStructure": "Roof structure",
+      "propertyName": "Property name",
       "address": "Address",
       "street": "Street address",
       "city": "City",
@@ -350,7 +351,9 @@
         "role": "Role",
         "phone": "Phone",
         "email": "E-mail",
-        "reportDate": "Reporting date"
+        "reportDate": "Reporting date",
+        "visits": "Visits"
+
       },
       "addNewSurveyorDialog": {
         "title": "Add surveyor"

@@ -354,6 +354,7 @@ export interface Localized extends LocalizedStringsMethods {
       supportingStructure: string;
       façadeMaterial: string;
       roofStructure: string;
+      propertyName: string;
       address: string;
       street: string;
       city: string;
@@ -392,6 +393,7 @@ export interface Localized extends LocalizedStringsMethods {
         phone: string;
         email: string;
         reportDate: string;
+        visits: string;
       };
       addNewSurveyorDialog: {
         title: string;

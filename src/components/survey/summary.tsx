@@ -480,6 +480,7 @@ const SummaryView: React.FC = () => {
               { renderDataCell(strings.survey.building.supportingStructure, building.supportingStructure) }
               { renderDataCell(strings.survey.building.façadeMaterial, building.facadeMaterial) }
               { renderDataCell(strings.survey.building.roofStructure, building.roofType) }
+              { renderDataCell(strings.survey.building.propertyName, building.propertyName) }
             </Stack>
           </Stack>
         </Paper>
@@ -623,6 +624,7 @@ const SummaryView: React.FC = () => {
                   { renderDataValue(surveyor.phone || "") }
                   { renderDataValue(surveyor.email || "") }
                   { renderDataCell(strings.survey.info.dataGridColumns.reportDate, surveyor.reportDate ? moment(surveyor.reportDate).format("DD.MM.YYYY") : strings.generic.unknown) }
+                  { renderDataValue(surveyor.visits || "") }
                   { !isMobile &&
                     <Divider
                       variant="inset"

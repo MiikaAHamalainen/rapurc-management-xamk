@@ -242,7 +242,8 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
       foundation,
       supportingStructure,
       facadeMaterial,
-      roofType
+      roofType,
+      propertyName
     } = building;
 
     return (
@@ -250,6 +251,14 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
         <Typography variant="h2">
           { strings.survey.building.title }
         </Typography>
+        {
+          renderWithDebounceTextField(
+            "propertyName",
+            strings.survey.building.propertyName,
+            propertyName || "",
+            onBuildingPropChange
+          )
+        }
         {
           renderWithDebounceTextField(
             "propertyId",

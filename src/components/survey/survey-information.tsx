@@ -498,7 +498,12 @@ const SurveyInformation: React.FC = () => {
             </LocalizationProvider>
           );
         }
-
+      },
+      {
+        field: "visits",
+        headerName: strings.survey.info.dataGridColumns.visits,
+        width: 200,
+        editable: true
       }
     ];
 
@@ -613,6 +618,15 @@ const SurveyInformation: React.FC = () => {
         color="primary"
         label={ strings.survey.info.dataGridColumns.phone }
         value={ newSurveyor.phone }
+        onChange={ onNewSurveyorChange }
+      />
+      <TextField
+        fullWidth
+        sx={{ mt: 2 }}
+        name="visits"
+        color="primary"
+        label={ strings.survey.info.dataGridColumns.visits }
+        value={ newSurveyor.visits }
         onChange={ onNewSurveyorChange }
       />
     </GenericDialog>

@@ -314,6 +314,7 @@
       "supportingStructure": "Kantava runkorakenne",
       "façadeMaterial": "Julkisivumateriaali",
       "roofStructure": "Vesikattomateriaali",
+      "propertyName": "Kohteen nimi",
       "address": "Osoite",
       "street": "Katuosoite",
       "city": "Kaupunki",
@@ -351,7 +352,8 @@
         "role": "Rooli",
         "phone": "Puhelin",
         "email": "Sähköpostiosoite",
-        "reportDate": "Raportointipäivä"
+        "reportDate": "Raportointipäivä",
+        "visits": "Käynnit"
       },
       "addNewSurveyorDialog": {
         "title": "Lisää kartoittaja"

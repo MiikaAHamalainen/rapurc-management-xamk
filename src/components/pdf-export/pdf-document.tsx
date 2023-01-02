@@ -201,6 +201,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               <Text>{ surveyor.phone }</Text>
               <Text style={ styles.boldSmall }>{ strings.survey.info.dataGridColumns.reportDate }</Text>
               <Text>{ moment(surveyor.reportDate).format("DD.MM.YYYY") }</Text>
+              <Text>{ surveyor.visits }</Text>
             </View>
           ))
         }
@@ -291,7 +292,8 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
       foundation,
       supportingStructure,
       facadeMaterial,
-      roofType
+      roofType,
+      propertyName
     } = building;
 
     const buildingTypeName = buildingTypes?.find(buildingType => buildingType.id === buildingTypeId)?.name || "";
@@ -351,6 +353,10 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
         <View style={ styles.row }>
           <Text>{ strings.survey.building.roofStructure }</Text>
           <Text>{ roofType }</Text>
+        </View>
+        <View style={ styles.row }>
+          <Text>{ strings.survey.building.propertyName }</Text>
+          <Text>{ propertyName }</Text>
         </View>
       </View>
     );
