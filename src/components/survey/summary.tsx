@@ -449,10 +449,18 @@ const SummaryView: React.FC = () => {
 
     return (
       <Stack spacing={ 2 }>
-        <Stack spacing={ 2 }>
-          <Typography variant="h3">
+        <Stack
+          spacing={ 2 }
+          direction={ isMobile ? "column" : "row" }
+        >
+          <Typography width="50%" variant="h3">
             { strings.survey.building.title }
           </Typography>
+          <Typography width="50%" variant="h3">
+            { building.propertyName }
+          </Typography>
+        </Stack>
+        <Stack>
           <Box>
             <Typography>
               { `${building.address?.streetAddress} ${building.address?.postCode} ${building.address?.city}` }
