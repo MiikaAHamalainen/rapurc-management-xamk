@@ -177,6 +177,7 @@ export interface Localized extends LocalizedStringsMethods {
       buildingId: string;
       classificationCode: string;
       ownerName: string;
+      propertyName: string;
       city: string;
       streetAddress: string;
     };

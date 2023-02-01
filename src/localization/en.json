@@ -149,7 +149,9 @@
       "classificationCode": "Classification code",
       "ownerName": "Owner name",
       "city": "City",
-      "streetAddress": "Street address"
+      "streetAddress": "Street address",
+      "propertyName": "Property name"
+
     },
     "deleteSurveysDialog": {
       "title": "Delete survey(s)",

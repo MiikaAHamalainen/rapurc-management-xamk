@@ -21,6 +21,7 @@ export default class SurveyUtils {
     buildingId: building?.buildingId,
     classificationCode: buildingType?.name,
     ownerName: ownerInformation?.ownerName,
+    propertyName: building?.propertyName,
     city: building?.address?.city,
     streetAddress: building?.address?.streetAddress,
     creatorId: survey.metadata.creatorId

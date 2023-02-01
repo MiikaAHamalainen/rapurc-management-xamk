@@ -150,7 +150,8 @@
       "classificationCode": "Rakennusluokka",
       "ownerName": "Omistaja",
       "city": "Paikkakunta",
-      "streetAddress": "Osoite"
+      "streetAddress": "Osoite",
+      "propertyName": "Purkukohteen nimi"
     },
     "deleteSurveysDialog": {
       "title": "Poista kartoitus",
@@ -314,7 +315,7 @@
       "supportingStructure": "Kantava runkorakenne",
       "façadeMaterial": "Julkisivumateriaali",
       "roofStructure": "Vesikattomateriaali",
-      "propertyName": "Kohteen nimi",
+      "propertyName": "Purkukohteen nimi",
       "address": "Osoite",
       "street": "Katuosoite",
       "city": "Kaupunki",

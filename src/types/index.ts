@@ -26,6 +26,7 @@ export interface SurveyWithInfo {
   status: SurveyStatus;
   ownerId?: string;
   ownerName?: string;
+  propertyName?: string;
   buildingId?: string;
   classificationCode?: string;
   streetAddress?: string;
