@@ -453,6 +453,7 @@
     "otherStructures": {
       "title": "Other demolished buildings and structures",
       "description": "Add buildings and structures that are going to be demolished with the building.",
+      "addedDescription": "These building and structure materials are contained in the survey.",
       "add": "Add building",
       "dialog": {
         "title": "Add building / structure",

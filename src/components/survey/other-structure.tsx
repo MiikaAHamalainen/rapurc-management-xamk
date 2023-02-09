@@ -295,6 +295,9 @@ const OtherStructures: React.FC<Props> = ({ surveyId }) => {
             { strings.survey.otherStructures.add }
           </Button>
         </Box>
+        <Typography>
+          { strings.survey.otherStructures.addedDescription }
+        </Typography>
         <List>
           { building.otherStructures.map(renderOtherStructure) }
         </List>

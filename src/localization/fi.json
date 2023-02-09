@@ -452,6 +452,7 @@
     "otherStructures": {
       "title": "Muut purettavat rakennukset / rakennelmat",
       "description": "Jos purkamisen yhteydessä puretaan myös muita samaan kiinteistöön kuuluvia rakennuksia tai rakennelmia, lisää ne tähän listaan.",
+      "addedDescription": "Näiden rakennusten ja rakennelmien materiaalit sisältyvät tähän kartoitukseen.",
       "add": "Lisää",
       "dialog": {
         "title": "Lisää rakennus / rakennelma",

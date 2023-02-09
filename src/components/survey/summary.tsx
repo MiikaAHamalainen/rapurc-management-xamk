@@ -544,6 +544,9 @@ const SummaryView: React.FC = () => {
         <Typography variant="h3">
           { strings.survey.otherStructures.title }
         </Typography>
+        <Typography>
+          { strings.survey.otherStructures.addedDescription }
+        </Typography>
         <Stack spacing={ 2 }>
           { building?.otherStructures.map(otherStructure => (
             <Paper elevation={ 1 } key={ otherStructure.name }>

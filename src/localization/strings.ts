@@ -492,6 +492,7 @@ export interface Localized extends LocalizedStringsMethods {
     otherStructures: {
       title: string;
       description: string;
+      addedDescription: string;
       add: string;
       dialog: {
         title: string;
