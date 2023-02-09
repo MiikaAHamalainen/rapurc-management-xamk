@@ -599,7 +599,7 @@ const SummaryView: React.FC = () => {
                 flexItem
               />
             }
-            { renderDataCell(strings.survey.info.endDate, moment(selectedSurvey.endDate).format("MMMM YYYY")) }
+            { renderDataCell(strings.survey.info.endDate, moment(selectedSurvey.endDate).format("DD.MM.YYYY")) }
           </Stack>
         </Paper>
       </Stack>

@@ -310,7 +310,7 @@ const SurveyInformation: React.FC = () => {
           }
         />
         <DatePicker
-          views={["year", "month"]}
+          views={["year", "month", "day"]}
           label={ strings.survey.info.endDate }
           value={ selectedSurvey.endDate }
           onChange={ onSurveyInfoDateChange("endDate") }

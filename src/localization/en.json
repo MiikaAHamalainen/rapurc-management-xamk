@@ -338,7 +338,7 @@
       "surveyors": "Surveyors",
       "demolitionScope": "Demolition scope",
       "startDate": "Start date",
-      "endDate": "End date",
+      "endDate": "Usage end date",
       "addSurveyor": "Add new surveyor",
       "deleteSurveyor": "Delete surveyor",
       "demolitionScopes": {

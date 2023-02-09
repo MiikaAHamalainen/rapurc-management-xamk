@@ -338,7 +338,7 @@
       "surveyors": "Kartoittajat",
       "demolitionScope": "Purkamisen laajuus",
       "startDate": "Aloitusajankohta",
-      "endDate": "Lopetusajankohta",
+      "endDate": "Käyttö loppuu",
       "addSurveyor": "Lisää",
       "deleteSurveyor": "Poista",
       "demolitionScopes": {
