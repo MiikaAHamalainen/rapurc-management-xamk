@@ -65,7 +65,7 @@ export default class LocalizationUtils {
    */
   public static getLocalizedName = (localizedNames: LocalizedValue[], selectedLanguage: string) => {
     const localizedName = localizedNames.find(name => name.language === selectedLanguage);
-    return localizedName ? localizedName.value : "";
+    return localizedName?.value : "";
   };
 
 }
