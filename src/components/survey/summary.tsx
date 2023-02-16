@@ -16,7 +16,7 @@ import LocalizationUtils from "utils/localization-utils";
 import FileUploadUtils from "utils/file-upload";
 import { Reusable } from "generated/client";
 import ImageGallery from "styled/generic/image-gallery";
-import { selectLocaleState } from "features/locale-slice";
+import { selectLanguage } from "features/locale-slice";
 
 const initialSurveySummary: SurveySummary = {
   buildingTypes: [],
@@ -40,7 +40,7 @@ const SummaryView: React.FC = () => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const selectedSurvey = useAppSelector(selectSelectedSurvey);
-  const selectedLanguage = useAppSelector(selectLocaleState).language;
+  const selectedLanguage = useAppSelector(selectLanguage);
 
   const [ loading, setLoading ] = React.useState(false);
   const [ surveySummary, setSurveySummary ] = React.useState<SurveySummary>(initialSurveySummary);

@@ -9,7 +9,7 @@ import { MaterialItem, MaterialText } from "../../styled/layout-components/mater
 import { selectKeycloak } from "features/auth-slice";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { LocalizedValue, WasteSpecifier } from "generated/client";
-import { selectLocaleState } from "features/locale-slice";
+import { selectLanguage } from "features/locale-slice";
 import LocalizationUtils from "utils/localization-utils";
 
 /**
@@ -18,7 +18,7 @@ import LocalizationUtils from "utils/localization-utils";
 const HazardousMaterialsSpecifiers: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const keycloak = useAppSelector(selectKeycloak);
-  const selectedLanguage = useAppSelector(selectLocaleState).language;
+  const selectedLanguage = useAppSelector(selectLanguage);
   const availableLanguages = strings.getAvailableLanguages();
   const [ addingHazardousWasteSpecifier, setAddingHazardousWasteSpecifier ] = React.useState(false);
   const [ deletingHazardousWasteSpecifier, setDeletingHazardousWasteSpecifier ] = React.useState(false);
@@ -271,10 +271,6 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
    * Renders edit hazardous waste specifier dialog
    */
   const renderEditHazardousWasteSpecifierDialog = () => {
-    if (!editableHazardousWasteSpecifier) {
-      return null;
-    }
-
     return (
       <GenericDialog
         error={ false }
@@ -294,7 +290,7 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
               strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.fi) :
               strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.en)
             }
-            value={ LocalizationUtils.getLocalizedName(editableHazardousWasteSpecifier.localizedNames, language) }
+            value={ editableHazardousWasteSpecifier && LocalizationUtils.getLocalizedName(editableHazardousWasteSpecifier.localizedNames, language) }
             onChange={ handleEditableNameChange }
           />
         ))}

@@ -9,7 +9,7 @@ import WithDataGridDebounceFactory from "components/generic/with-data-grid-debou
 import WithDebounce from "components/generic/with-debounce";
 import SurveyItem from "components/layout-components/survey-item";
 import { selectKeycloak } from "features/auth-slice";
-import { selectLocaleState } from "features/locale-slice";
+import { selectLanguage } from "features/locale-slice";
 import { WasteCategory, HazardousWaste, HazardousMaterial, WasteSpecifier } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
@@ -32,7 +32,7 @@ interface Props {
 const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
-  const selectedLanguage = useAppSelector(selectLocaleState).language;
+  const selectedLanguage = useAppSelector(selectLanguage);
   const [ loading, setLoading ] = React.useState(false);
   const [ addingWaste, setAddingHazardousWaste ] = React.useState(false);
   const [ deletingHazardousWaste, setDeletingHazardousWaste ] = React.useState(false);
