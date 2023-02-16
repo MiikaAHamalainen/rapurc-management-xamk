@@ -271,8 +271,8 @@
     "addNewWasteSpecifierDialog": {
       "title": "Lisää haitta-ainetarkenne",
       "text": {
-        "fi": "Haitta-ainetarkenteen nimi suomeksi",
-        "en": "Haitta-ainetarkenteen nimi englanniksi"
+        "fi": "Haitta-ainetarkenteen nimi (suomeksi)",
+        "en": "Haitta-ainetarkenteen nimi (englanniksi)"
       }
     },
     "deleteWasteSpecifierDialog": {
