@@ -144,6 +144,8 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
 
   /**
    * Event handler for editable hazardous waste specifier localized name change
+   *
+   * @param event event
    */
   const handleEditableNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
     if (!editableHazardousWasteSpecifier) {
