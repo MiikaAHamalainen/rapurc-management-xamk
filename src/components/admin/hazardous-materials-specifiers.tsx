@@ -167,6 +167,8 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
 
   /**
    * Even handler for new hazardous waste specifier localized name change
+   *
+   * @param event event
    */
   const handleNewLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
     if (!newWasteSpecifierNames) {
