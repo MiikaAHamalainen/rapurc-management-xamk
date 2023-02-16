@@ -8,7 +8,9 @@ import { useAppSelector } from "app/hooks";
 import { MaterialItem, MaterialText } from "../../styled/layout-components/material-item";
 import { selectKeycloak } from "features/auth-slice";
 import { ErrorContext } from "components/error-handler/error-handler";
-import { WasteSpecifier } from "generated/client";
+import { LocalizedValue, WasteSpecifier } from "generated/client";
+import { selectLocaleState } from "features/locale-slice";
+import LocalizationUtils from "utils/localization-utils";
 
 /**
  * Component for hazardous waste specifier dropdown menu editor
@@ -16,7 +18,8 @@ import { WasteSpecifier } from "generated/client";
 const HazardousMaterialsSpecifiers: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const keycloak = useAppSelector(selectKeycloak);
-
+  const selectedLanguage = useAppSelector(selectLocaleState).language;
+  const availableLanguages = strings.getAvailableLanguages();
   const [ addingHazardousWasteSpecifier, setAddingHazardousWasteSpecifier ] = React.useState(false);
   const [ deletingHazardousWasteSpecifier, setDeletingHazardousWasteSpecifier ] = React.useState(false);
   const [ editingHazardousWasteSpecifier, setEditingHazardousWasteSpecifier ] = React.useState(false);
@@ -24,7 +27,7 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
   const [ deletableHazardousWasteSpecifier, setDeletableHazardousWasteSpecifier ] = React.useState<WasteSpecifier>();
   const [ editableHazardousWasteSpecifier, setEditableHazardousWasteSpecifier ] = React.useState<WasteSpecifier>();
   const [ hazardousWasteSpecifiers, setHazardousWasteSpecifiers ] = React.useState<WasteSpecifier[]>([]);
-  const [ newWasteSpecifierName, setNewWasteSpecifierName ] = React.useState<string>();
+  const [ newWasteSpecifierNames, setNewWasteSpecifierNames ] = React.useState<LocalizedValue[]>([]);
 
   /**
    * Fetches list of hazardous waste specifiers
@@ -56,19 +59,18 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
    * Event handler for adding hazardous waste specifier confirm
    */
   const onAddHazardousWasteSpecifierConfirm = async () => {
-    if (!keycloak?.token || !newWasteSpecifierName) {
+    if (!keycloak?.token || !newWasteSpecifierNames) {
       return;
     }
-
     try {
       const createdHazarsousWasteSpecifier = await Api.getWasteSpecifiersApi(keycloak.token).createWasteSpecifier({
         wasteSpecifier: {
-          name: newWasteSpecifierName,
+          localizedNames: newWasteSpecifierNames,
           metadata: {}
         }
       });
       setHazardousWasteSpecifiers([ ...hazardousWasteSpecifiers, createdHazarsousWasteSpecifier ]);
-      setNewWasteSpecifierName(undefined);
+      setNewWasteSpecifierNames([]);
     } catch (error) {
       errorContext.setError(strings.errorHandling.wasteSpecifiers.create, error);
     }
@@ -141,10 +143,46 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
   };
 
   /**
-   * Even handler for editable hazardous waste specifier name change
+   * Event handler for editable hazardous waste specifier localized name change
    */
   const handleEditableNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    editableHazardousWasteSpecifier && setEditableHazardousWasteSpecifier({ ...editableHazardousWasteSpecifier, name: target.value });
+    if (!editableHazardousWasteSpecifier) {
+      return;
+    }
+
+    const { name, value } = target;
+    const newLocalizedNames = [ ...editableHazardousWasteSpecifier.localizedNames ];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+
+    setEditableHazardousWasteSpecifier({ ...editableHazardousWasteSpecifier, localizedNames: newLocalizedNames });
+  };
+
+  /**
+   * Even handler for new hazardous waste specifier localized name change
+   */
+  const handleNewLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    if (!newWasteSpecifierNames) {
+      return;
+    }
+
+    const { name, value } = target;
+    const newLocalizedNames = [ ...newWasteSpecifierNames ];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+      newLocalizedNames[localizedValueIndex].language = name;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+
+    setNewWasteSpecifierNames(newLocalizedNames);
   };
 
   /**
@@ -155,7 +193,7 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
   const hazardousWasteSpecifierItems = () => (
     hazardousWasteSpecifiers.map(wasteSpecifier =>
       <MaterialItem key={ wasteSpecifier.id }>
-        <MaterialText primary={ wasteSpecifier.name }/>
+        <MaterialText primary={ LocalizationUtils.getLocalizedName(wasteSpecifier.localizedNames, selectedLanguage) }/>
         <ListItemSecondaryAction>
           <IconButton onClick={ deleteIconClick(wasteSpecifier) }>
             <Delete/>
@@ -182,54 +220,83 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <TextField
-        label={ strings.adminScreen.addNewWasteSpecifierDialog.text }
-        onChange={ event => setNewWasteSpecifierName(event.target.value) }
-      />
+      { availableLanguages.map(language => (
+        <TextField
+          key={ language }
+          name={ language }
+          label={ language === "fi" ?
+            strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.fi) :
+            strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.en)
+          }
+          onChange={ handleNewLocalizedNameChange }
+        />
+      ))}
     </GenericDialog>
   );
 
   /**
    * Renders delete hazardous waste specifier dialog
    */
-  const renderDeleteHazardousWasteSpecifierDialog = () => (
-    <GenericDialog
-      error={ false }
-      open={ deletingHazardousWasteSpecifier }
-      onClose={ () => setDeletingHazardousWasteSpecifier(false) }
-      onCancel={ () => setDeletingHazardousWasteSpecifier(false) }
-      onConfirm={ onDeleteHazardousWasteSpecifierConfirm }
-      title={ strings.adminScreen.deleteWasteSpecifierDialog.title }
-      positiveButtonText={ strings.generic.confirm }
-      cancelButtonText={ strings.generic.cancel }
-    >
-      <Typography>
-        { strings.formatString(strings.adminScreen.deleteWasteSpecifierDialog.text, deletableHazardousWasteSpecifier ? deletableHazardousWasteSpecifier.name : "") }
-      </Typography>
-    </GenericDialog>
-  );
+  const renderDeleteHazardousWasteSpecifierDialog = () => {
+    if (!deletableHazardousWasteSpecifier) {
+      return null;
+    }
+
+    return (
+      <GenericDialog
+        error={ false }
+        open={ deletingHazardousWasteSpecifier }
+        onClose={ () => setDeletingHazardousWasteSpecifier(false) }
+        onCancel={ () => setDeletingHazardousWasteSpecifier(false) }
+        onConfirm={ onDeleteHazardousWasteSpecifierConfirm }
+        title={ strings.adminScreen.deleteWasteSpecifierDialog.title }
+        positiveButtonText={ strings.generic.confirm }
+        cancelButtonText={ strings.generic.cancel }
+      >
+        <Typography>
+          {
+            strings.formatString(strings.adminScreen.deleteWasteSpecifierDialog.text,
+              LocalizationUtils.getLocalizedName(deletableHazardousWasteSpecifier.localizedNames, selectedLanguage))
+          }
+        </Typography>
+      </GenericDialog>
+    );
+  };
 
   /**
    * Renders edit hazardous waste specifier dialog
    */
-  const renderEditHazardousWasteSpecifierDialog = () => (
-    <GenericDialog
-      error={ false }
-      open={ editingHazardousWasteSpecifier }
-      onClose={ () => setEditingHazardousWasteSpecifier(false) }
-      onCancel={ () => setEditingHazardousWasteSpecifier(false) }
-      onConfirm={ onEditReusableMaterialConfirm }
-      title={ strings.adminScreen.updateWasteSpecifierDialog.title }
-      positiveButtonText={ strings.generic.confirm }
-      cancelButtonText={ strings.generic.cancel }
-    >
-      <TextField
-        label={ strings.adminScreen.updateWasteSpecifierDialog.text }
-        value={ editableHazardousWasteSpecifier?.name }
-        onChange={ handleEditableNameChange }
-      />
-    </GenericDialog>
-  );
+  const renderEditHazardousWasteSpecifierDialog = () => {
+    if (!editableHazardousWasteSpecifier) {
+      return null;
+    }
+
+    return (
+      <GenericDialog
+        error={ false }
+        open={ editingHazardousWasteSpecifier }
+        onClose={ () => setEditingHazardousWasteSpecifier(false) }
+        onCancel={ () => setEditingHazardousWasteSpecifier(false) }
+        onConfirm={ onEditReusableMaterialConfirm }
+        title={ strings.adminScreen.updateWasteSpecifierDialog.title }
+        positiveButtonText={ strings.generic.confirm }
+        cancelButtonText={ strings.generic.cancel }
+      >
+        { availableLanguages.map(language => (
+          <TextField
+            key={ language }
+            name={ language }
+            label={ language === "fi" ?
+              strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.fi) :
+              strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.en)
+            }
+            value={ LocalizationUtils.getLocalizedName(editableHazardousWasteSpecifier.localizedNames, language) }
+            onChange={ handleEditableNameChange }
+          />
+        ))}
+      </GenericDialog>
+    );
+  };
 
   /**
    * Renders list of hazardous waste specifiers

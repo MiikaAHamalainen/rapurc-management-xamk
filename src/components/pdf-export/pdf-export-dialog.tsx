@@ -7,6 +7,8 @@ import PdfDocument from "./pdf-document";
 import { Download } from "@mui/icons-material";
 import { SurveySummary } from "types";
 import { Survey } from "generated/client";
+import { useAppSelector } from "app/hooks";
+import { selectLocaleState } from "features/locale-slice";
 
 /**
  * Component properties
@@ -29,6 +31,7 @@ const PdfExportDialog: React.FC<Props> = ({
   surveySummary,
   survey
 }) => {
+  const selectedLanguage = useAppSelector(selectLocaleState).language;
   /**
    * Render PDF document
    */
@@ -38,7 +41,7 @@ const PdfExportDialog: React.FC<Props> = ({
     }
 
     return (
-      <PdfDocument selectedSurvey={ survey } summary={ surveySummary }/>
+      <PdfDocument selectedSurvey={ survey } summary={ surveySummary } selectedLanguage={ selectedLanguage }/>
     );
   };
 
