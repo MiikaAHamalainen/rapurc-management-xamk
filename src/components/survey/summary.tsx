@@ -16,6 +16,7 @@ import LocalizationUtils from "utils/localization-utils";
 import FileUploadUtils from "utils/file-upload";
 import { Reusable } from "generated/client";
 import ImageGallery from "styled/generic/image-gallery";
+import { selectLanguage } from "features/locale-slice";
 
 const initialSurveySummary: SurveySummary = {
   buildingTypes: [],
@@ -39,6 +40,8 @@ const SummaryView: React.FC = () => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const selectedSurvey = useAppSelector(selectSelectedSurvey);
+  const selectedLanguage = useAppSelector(selectLanguage);
+
   const [ loading, setLoading ] = React.useState(false);
   const [ surveySummary, setSurveySummary ] = React.useState<SurveySummary>(initialSurveySummary);
   const [ pdfDialogOpen, setPdfDialogOpen ] = React.useState(false);
@@ -800,7 +803,9 @@ const SummaryView: React.FC = () => {
             const wasteMaterial = hazardousMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
             const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
             const fullEwcCode = wasteMaterial ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
-            const wasteSpecifierName = wasteSpecifiers.find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.name;
+            const wasteSpecifierName = wasteSpecifiers
+              .find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.localizedNames
+              .find(name => name.language === selectedLanguage)?.value;
             const wasteAmount = `${hazardousWaste?.amount || ""} ${strings.units.tons}`;
 
             return (

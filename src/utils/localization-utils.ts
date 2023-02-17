@@ -1,4 +1,4 @@
-import { SurveyStatus, SurveyType, Unit, Usability } from "generated/client";
+import { LocalizedValue, SurveyStatus, SurveyType, Unit, Usability } from "generated/client";
 import strings from "localization/strings";
 
 /**
@@ -56,5 +56,16 @@ export default class LocalizationUtils {
     [SurveyType.PartialDemolition]: strings.survey.info.demolitionScopes.partial,
     [SurveyType.Renovation]: strings.survey.info.demolitionScopes.renovation
   })[scope];
+
+  /**
+   * Gets localized value for name
+   * 
+   * @param localizedNames localized names
+   * @returns localized name
+   */
+  public static getLocalizedName = (localizedNames: LocalizedValue[], selectedLanguage: string) => {
+    const localizedName = localizedNames.find(name => name.language === selectedLanguage);
+    return localizedName?.value || "";
+  };
 
 }

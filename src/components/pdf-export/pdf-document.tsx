@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
 interface Props {
   selectedSurvey: Survey;
   summary: SurveySummary;
+  selectedLanguage: string;
 }
 
 /**
@@ -135,8 +136,9 @@ interface Props {
  * @param props component properties
  * @returns survey report pdf
  */
-const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
+const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary, selectedLanguage }) => {
   const date = moment().format("DD.MM.YYYY");
+
   /**
    * Render document info with current date
    */
@@ -527,7 +529,9 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               const wasteMaterial = hazardousMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
               const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
               const fullEwcCode = wasteMaterial ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
-              const wasteSpecifierName = wasteSpecifiers.find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.name;
+              const wasteSpecifierName = wasteSpecifiers
+                .find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.localizedNames
+                .find(name => name.language === selectedLanguage)?.value;
               const wasteAmount = `${hazardousWaste?.amount || ""} ${strings.units.tons}`;
 
               return (

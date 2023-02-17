@@ -307,7 +307,10 @@ export interface Localized extends LocalizedStringsMethods {
     };
     addNewWasteSpecifierDialog: {
       title: string;
-      text: string;
+      text: {
+        fi: string;
+        en: string;
+      }
     };
     deleteWasteSpecifierDialog: {
       title: string;

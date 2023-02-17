@@ -269,7 +269,10 @@
     },
     "addNewWasteSpecifierDialog": {
       "title": "Add new waste specifier",
-      "text": "Name of the waste specifier"
+      "text": {
+        "fi": "Name of the waste specifier (in Finnish)",
+        "en": "Name of the waste specifier (in English)"
+      }
     },
     "deleteWasteSpecifierDialog": {
       "title": "Delete waste specifier",
