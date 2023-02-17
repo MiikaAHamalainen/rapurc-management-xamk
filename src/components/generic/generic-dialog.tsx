@@ -13,7 +13,7 @@ interface Props {
   onCancel?: () => void;
   onConfirm: () => void | Promise<void>;
   open: boolean;
-  error: boolean;
+  error?: boolean;
   fullScreen?: boolean;
   fullWidth?: boolean;
   disableEnforceFocus?: boolean;

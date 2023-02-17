@@ -215,7 +215,6 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
    */
   const renderAddReusableMaterialDialog = () => (
     <GenericDialog
-      error={ false }
       open={ addingHazardousWasteSpecifier }
       onClose={ () => setAddingHazardousWasteSpecifier(false) }
       onCancel={ () => setAddingHazardousWasteSpecifier(false) }
@@ -248,7 +247,6 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
 
     return (
       <GenericDialog
-        error={ false }
         open={ deletingHazardousWasteSpecifier }
         onClose={ () => setDeletingHazardousWasteSpecifier(false) }
         onCancel={ () => setDeletingHazardousWasteSpecifier(false) }
@@ -273,7 +271,6 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
   const renderEditHazardousWasteSpecifierDialog = () => {
     return (
       <GenericDialog
-        error={ false }
         open={ editingHazardousWasteSpecifier }
         onClose={ () => setEditingHazardousWasteSpecifier(false) }
         onCancel={ () => setEditingHazardousWasteSpecifier(false) }
