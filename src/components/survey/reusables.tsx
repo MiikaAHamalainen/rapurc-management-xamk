@@ -1046,7 +1046,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
             <Typography variant="body2">
               {
                 LocalizationUtils.getLocalizedName(reusableMaterials
-                  .find(material => (material.id === formattedValue))?.localizedNames!, selectedLanguage)
+                  .find(material => (material.id === formattedValue))?.localizedNames || [], selectedLanguage)
               }
             </Typography>
           );

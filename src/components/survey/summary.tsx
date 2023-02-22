@@ -472,7 +472,7 @@ const SummaryView: React.FC = () => {
             <Stack width="100%" spacing={ 2 }>
               { renderDataCell(strings.survey.building.propertyID, building.propertyId) }
               { renderDataCell(strings.survey.building.buildingID, building.buildingId) }
-              { renderDataCell(strings.survey.building.buildingClass, LocalizationUtils.getLocalizedName(buildingTypes.find(buildingType => buildingType.id === building.buildingTypeId)!.localizedNames, selectedLanguage)) }
+              { renderDataCell(strings.survey.building.buildingClass, LocalizationUtils.getLocalizedName(buildingTypes.find(buildingType => buildingType.id === building.buildingTypeId)?.localizedNames || [], selectedLanguage)) }
               { renderDataCell(strings.survey.building.year, building.constructionYear) }
               { renderDataCell(strings.survey.building.area, building.space) }
               { renderDataCell(strings.survey.building.volume, building.volume) }
