@@ -10,9 +10,11 @@ import { MaterialItem, MaterialText } from "../../styled/layout-components/mater
 import { WasteCategory, WasteMaterial } from "generated/client";
 import GenericDialog from "components/generic/generic-dialog";
 import theme from "theme";
+import { selectLanguage } from "features/locale-slice";
+import LocalizationUtils from "utils/localization-utils";
 
 const initialNewMaterialState: WasteMaterial = {
-  name: "",
+  localizedNames: [],
   ewcSpecificationCode: "",
   wasteCategoryId: "",
   metadata: {}
@@ -24,6 +26,8 @@ const initialNewMaterialState: WasteMaterial = {
 const Waste: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const keycloak = useAppSelector(selectKeycloak);
+  const selectedLanguage = useAppSelector(selectLanguage);
+  const availableLanguages = strings.getAvailableLanguages();
   
   const [ loading, setLoading ] = React.useState(false);
   const [ addingWaste, setAddingWaste ] = React.useState(false);
@@ -201,6 +205,49 @@ const Waste: React.FC = () => {
   };
 
   /**
+   * Even handler for new localized name change
+   *
+   * @param event event
+   */
+  const handleNewLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    const { name, value } = target;
+    const localizedNames = newWasteMaterial.localizedNames ? [ ...newWasteMaterial.localizedNames ] : [];
+    const localizedValueIndex = localizedNames.findIndex(localizedValue => localizedValue.language === name);
+  
+    if (localizedValueIndex > -1) {
+      localizedNames[localizedValueIndex].value = value;
+      localizedNames[localizedValueIndex].language = name;
+    } else {
+      localizedNames.push({ language: name, value: value });
+    }
+  
+    setNewWasteMaterial({ ...newWasteMaterial, localizedNames: localizedNames });
+  };
+
+  /**
+   * Event handler for editable localized name change
+   *
+   * @param event event
+   */
+  const handleEditableLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    if (!editableWasteMaterial) {
+      return;
+    }
+  
+    const { name, value } = target;
+    const newLocalizedNames = editableWasteMaterial.localizedNames ? [ ...editableWasteMaterial.localizedNames ] : [];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+      
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+
+    setEditableWasteMaterial({ ...editableWasteMaterial, localizedNames: newLocalizedNames });
+  };
+
+  /**
    * Items for waste material
    * 
    * @returns waste material items
@@ -212,7 +259,10 @@ const Waste: React.FC = () => {
       
       return (
         <MaterialItem key={ wasteMaterial.id }>
-          <MaterialText primary={ wasteMaterial.name } secondary={ fullEwcCode }/>
+          <MaterialText
+            primary={ LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage) }
+            secondary={ fullEwcCode }
+          />
           <ListItemSecondaryAction>
             <IconButton onClick={ () => deleteIconClick(wasteMaterial) }>
               <Delete/>
@@ -235,7 +285,7 @@ const Waste: React.FC = () => {
     wasteCategories.map(wasteCategory =>
       <MenuItem key={ wasteCategory.id } value={ wasteCategory.id }>
         <MaterialText
-          primary={ wasteCategory.name }
+          primary={ LocalizationUtils.getLocalizedName(wasteCategory.localizedNames, selectedLanguage) }
           secondary={ wasteCategory.ewcCode }
         />
       </MenuItem>
@@ -247,7 +297,6 @@ const Waste: React.FC = () => {
    */
   const renderAddWasteDialog = () => (
     <GenericDialog
-      error={ false }
       open={ addingWaste }
       onClose={ () => setAddingWaste(false) }
       onCancel={ () => setAddingWaste(false) }
@@ -257,11 +306,18 @@ const Waste: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Stack spacing={ 2 }>
-        <TextField
-          name="name"
-          label={ strings.adminScreen.addNewWasteMaterialDialog.text1 }
-          onChange={ onNewWasteChange }
-        />
+        { availableLanguages.map(language => (
+          <TextField
+            key={ language }
+            name={ language }
+            label={ language === "fi" ?
+              strings.formatString(strings.adminScreen.dialogText.fi) :
+              strings.formatString(strings.adminScreen.dialogText.en)
+            }
+            onChange={ handleNewLocalizedNameChange }
+          />
+        ))}
+        
         <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
           <TextField
             fullWidth
@@ -288,7 +344,6 @@ const Waste: React.FC = () => {
    */
   const renderDeleteWasteDialog = () => (
     <GenericDialog
-      error={ false }
       open={ deletingWaste }
       onClose={ () => setDeletingWaste(false) }
       onCancel={ () => setDeletingWaste(false) }
@@ -298,7 +353,8 @@ const Waste: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.formatString(strings.adminScreen.deleteWasteMaterialDialog.text, deletableWaste ? deletableWaste.name : "") }
+        { strings.formatString(strings.adminScreen.deleteWasteMaterialDialog.text,
+          deletableWaste ? LocalizationUtils.getLocalizedName(deletableWaste.localizedNames, selectedLanguage) : "") }
       </Typography>
     </GenericDialog>
   );
@@ -308,7 +364,6 @@ const Waste: React.FC = () => {
    */
   const renderEditWasteMaterialDialog = () => (
     <GenericDialog
-      error={ false }
       open={ editingWasteMaterial }
       onClose={ () => setEditingWasteMaterial(false) }
       onCancel={ () => setEditingWasteMaterial(false) }
@@ -318,13 +373,20 @@ const Waste: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Stack spacing={ 2 }>
-        <TextField
-          fullWidth
-          value={ editableWasteMaterial?.name }
-          label={ strings.adminScreen.addNewWasteMaterialDialog.text1 }
-          name="name"
-          onChange={ onEditableWasteMaterialChange }
-        />
+        { availableLanguages.map(language => (
+          <TextField
+            key={ language }
+            fullWidth
+            value={ editableWasteMaterial && LocalizationUtils.getLocalizedName(editableWasteMaterial.localizedNames, language) }
+            label={ language === "fi" ?
+              strings.formatString(strings.adminScreen.dialogText.fi) :
+              strings.formatString(strings.adminScreen.dialogText.en)
+            }
+            name={ language }
+            onChange={ handleEditableLocalizedNameChange }
+          />
+        ))}
+        
         <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
           <TextField
             fullWidth

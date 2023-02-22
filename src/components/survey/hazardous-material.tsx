@@ -393,10 +393,11 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const renderAddHazardousWasteDialog = () => {
     const wasteMaterialOptions = hazardousWasteMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteMaterial =>
         <MenuItem value={ wasteMaterial.id }>
-          { wasteMaterial.name }
+          { LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage)}
         </MenuItem>
       );
 
@@ -499,10 +500,11 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const renderHazardousWasteList = () => {
     const wasteMaterialOptions = hazardousWasteMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteMaterial =>
-        <MenuItem value={ wasteMaterial.id }>
-          { wasteMaterial.name }
+        <MenuItem value={ LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage)}>
+          { LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
@@ -525,14 +527,17 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       <List>
         {
           hazardousWastes.map(hazardousWaste => {
-            const hazardousWasteMaterial = hazardousWasteMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
+            const hazardousWasteMaterial = hazardousWasteMaterials.find(wasteMaterial => wasteMaterial.id === hazardousWaste.hazardousMaterialId);
+            const hazardousWasteMaterialName = hazardousWasteMaterial &&
+            LocalizationUtils.getLocalizedName(hazardousWasteMaterial.localizedNames, selectedLanguage);
+
             const wasteCategory = wasteCategories.find(category => category.id === hazardousWasteMaterial?.wasteCategoryId);
             const fullEwcCode = `${wasteCategory?.ewcCode || ""}${hazardousWasteMaterial?.ewcSpecificationCode || ""}`;
 
             return (
               <SurveyItem
                 key={ hazardousWaste.id }
-                title={ hazardousWasteMaterials.find(wasteMaterial => wasteMaterial.id === hazardousWaste.hazardousMaterialId)?.name || "" }
+                title={ hazardousWasteMaterialName || "" }
                 subtitle={ `${hazardousWaste.amount} t` }
               >
                 {
@@ -598,9 +603,10 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const renderHazardousWasteDataTable = () => {
     const hazardousWasteMaterialOptions = hazardousWasteMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(hazardousWasteMaterial => ({
-        label: hazardousWasteMaterial.name,
+        label: LocalizationUtils.getLocalizedName(hazardousWasteMaterial.localizedNames, selectedLanguage),
         value: hazardousWasteMaterial.id
       }));
 
@@ -619,6 +625,17 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       })
     );
 
+    /**
+     * Finds hazardous waste material name by id
+     * 
+     * @param formattedValue formatted value
+     * @returns Hazardous waste material name
+     */
+    const hazardousWasteMaterialName = (formattedValue: any) => {
+      const hazardousWasteMaterial = hazardousWasteMaterials.find(wasteMaterial => wasteMaterial.id === formattedValue);
+      return hazardousWasteMaterial ? LocalizationUtils.getLocalizedName(hazardousWasteMaterial?.localizedNames, selectedLanguage) : "";
+    };
+
     const columns: GridColDef[] = [
       {
         field: "hazardousMaterialId",
@@ -631,7 +648,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
           const { formattedValue } = params;
           return (
             <Typography variant="body2">
-              { hazardousWasteMaterials.find(hazardousWasteMaterial => (hazardousWasteMaterial.id === formattedValue))?.name }
+              { hazardousWasteMaterialName(formattedValue) }
             </Typography>
           );
         }
