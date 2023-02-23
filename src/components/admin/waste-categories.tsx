@@ -9,9 +9,11 @@ import { selectKeycloak } from "features/auth-slice";
 import { MaterialItem, MaterialText } from "../../styled/layout-components/material-item";
 import { WasteCategory } from "generated/client";
 import GenericDialog from "components/generic/generic-dialog";
+import { selectLanguage } from "features/locale-slice";
+import LocalizationUtils from "utils/localization-utils";
 
 const initialNewCategoryState: WasteCategory = {
-  name: "",
+  localizedNames: [],
   ewcCode: "",
   metadata: {}
 };
@@ -22,6 +24,8 @@ const initialNewCategoryState: WasteCategory = {
 const WasteCategories: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const keycloak = useAppSelector(selectKeycloak);
+  const selectedLanguage = useAppSelector(selectLanguage);
+  const availableLanguages = strings.getAvailableLanguages();
   
   const [ loading, setLoading ] = React.useState(false);
   const [ addingWasteCategory, setAddingWasteCategory ] = React.useState(false);
@@ -157,6 +161,26 @@ const WasteCategories: React.FC = () => {
   };
 
   /**
+   * Even handler for new localized name change
+   *
+   * @param event event
+   */
+  const handleNewLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    const { name, value } = target;
+    const localizedNames = newWasteCategory.localizedNames ? [ ...newWasteCategory.localizedNames ] : [];
+    const localizedValueIndex = localizedNames.findIndex(localizedValue => localizedValue.language === name);
+
+    if (localizedValueIndex > -1) {
+      localizedNames[localizedValueIndex].value = value;
+      localizedNames[localizedValueIndex].language = name;
+    } else {
+      localizedNames.push({ language: name, value: value });
+    }
+
+    setNewWasteCategory({ ...newWasteCategory, localizedNames: localizedNames });
+  };
+
+  /**
    * Event handler for editable waste category change
    *
    * @param event React change event
@@ -172,6 +196,29 @@ const WasteCategories: React.FC = () => {
   };
 
   /**
+   * Event handler for editable localized name change
+   *
+   * @param event event
+   */
+  const handleEditableLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    if (!editableWasteCategory) {
+      return;
+    }
+  
+    const { name, value } = target;
+    const newLocalizedNames = [ ...editableWasteCategory.localizedNames ];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+      
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+
+    setEditableWasteCategory({ ...editableWasteCategory, localizedNames: newLocalizedNames });
+  };
+
+  /**
    * Items for waste category
    * 
    * @returns waste category items
@@ -179,7 +226,10 @@ const WasteCategories: React.FC = () => {
   const wasteCategoryItems = () => (
     wasteCategories.map(wasteCategory =>
       <MaterialItem key={ wasteCategory.id }>
-        <MaterialText primary={ wasteCategory.name } secondary={ wasteCategory.ewcCode }/>
+        <MaterialText
+          primary={ LocalizationUtils.getLocalizedName(wasteCategory.localizedNames, selectedLanguage) }
+          secondary={ wasteCategory.ewcCode }
+        />
         <ListItemSecondaryAction>
           <IconButton onClick={ () => deleteIconClick(wasteCategory) }>
             <Delete/>
@@ -197,7 +247,6 @@ const WasteCategories: React.FC = () => {
    */
   const renderAddWasteCategoryDialog = () => (
     <GenericDialog
-      error={ false }
       open={ addingWasteCategory }
       onClose={ () => setAddingWasteCategory(false) }
       onCancel={ () => setAddingWasteCategory(false) }
@@ -207,13 +256,18 @@ const WasteCategories: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Stack spacing={ 2 }>
-        <TextField
-          name="name"
-          label={ strings.adminScreen.addNewWasteCategoryDialog.text1 }
-          onChange={ onNewWasteCategoryChange }
-        >
-          { wasteCategoryItems() }
-        </TextField>
+        { availableLanguages.map(language => (
+          <TextField
+            key={ language }
+            name={ language }
+            label={ language === "fi" ?
+              strings.formatString(strings.adminScreen.dialogText.fi) :
+              strings.formatString(strings.adminScreen.dialogText.en)
+            }
+            onChange={ handleNewLocalizedNameChange }
+          />
+        ))}
+        
         <TextField
           name="ewcCode"
           label={ strings.adminScreen.addNewWasteCategoryDialog.text2 }
@@ -228,7 +282,6 @@ const WasteCategories: React.FC = () => {
    */
   const renderDeleteWasteCategoryDialog = () => (
     <GenericDialog
-      error={ false }
       open={ deletingWasteCategory }
       onClose={ () => setDeletingWasteCategory(false) }
       onCancel={ () => setDeletingWasteCategory(false) }
@@ -238,7 +291,8 @@ const WasteCategories: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.formatString(strings.adminScreen.deleteWasteCategoryDialog.text, deletableWasteCategory ? deletableWasteCategory.name : "") }
+        { strings.formatString(strings.adminScreen.deleteWasteCategoryDialog.text,
+          deletableWasteCategory ? LocalizationUtils.getLocalizedName(deletableWasteCategory.localizedNames, selectedLanguage) : "") }
       </Typography>
     </GenericDialog>
   );
@@ -248,7 +302,6 @@ const WasteCategories: React.FC = () => {
    */
   const renderEditWasteCategoryDialog = () => (
     <GenericDialog
-      error={ false }
       open={ editingWasteCategory }
       onClose={ () => setEditingWasteCategory(false) }
       onCancel={ () => setEditingWasteCategory(false) }
@@ -258,13 +311,19 @@ const WasteCategories: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Stack spacing={ 2 }>
-        <TextField
-          fullWidth
-          value={ editableWasteCategory?.name }
-          label={ strings.adminScreen.updateWasteCategoryDialog.text1 }
-          name="name"
-          onChange={ onEditableWasteCategoryChange }
-        />
+        { availableLanguages.map(language => (
+          <TextField
+            fullWidth
+            key={ language }
+            value={ editableWasteCategory && LocalizationUtils.getLocalizedName(editableWasteCategory.localizedNames, language) }
+            label={ language === "fi" ?
+              strings.formatString(strings.adminScreen.dialogText.fi) :
+              strings.formatString(strings.adminScreen.dialogText.en)
+            }
+            name={ language }
+            onChange={ handleEditableLocalizedNameChange }
+          />
+        ))}
         <TextField
           value={ editableWasteCategory?.ewcCode }
           label={ strings.adminScreen.updateWasteCategoryDialog.text2 }

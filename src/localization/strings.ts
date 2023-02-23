@@ -226,6 +226,10 @@ export interface Localized extends LocalizedStringsMethods {
   adminScreen: {
     title: string;
     description: string;
+    dialogText: {
+      fi: string;
+      en: string;
+    }
     navigation: {
       dropdownSettings: {
         title: string;

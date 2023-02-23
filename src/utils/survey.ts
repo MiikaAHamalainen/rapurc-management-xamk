@@ -1,5 +1,7 @@
 import { OwnerInformation, Survey, Building, BuildingType } from "generated/client";
 import { SurveyWithInfo } from "types";
+import LocalizationUtils from "./localization-utils";
+import { store } from "app/store";
 
 /**
  * Utility class for survey
@@ -19,7 +21,7 @@ export default class SurveyUtils {
     status: survey.status,
     ownerId: ownerInformation?.id,
     buildingId: building?.buildingId,
-    classificationCode: buildingType?.name,
+    classificationCode: LocalizationUtils.getLocalizedName(buildingType?.localizedNames ?? [], store.getState().locale.language),
     ownerName: ownerInformation?.ownerName,
     city: building?.address?.city,
     streetAddress: building?.address?.streetAddress,

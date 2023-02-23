@@ -228,8 +228,8 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
           key={ language }
           name={ language }
           label={ language === "fi" ?
-            strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.fi) :
-            strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.en)
+            strings.formatString(strings.adminScreen.dialogText.fi) :
+            strings.formatString(strings.adminScreen.dialogText.en)
           }
           onChange={ handleNewLocalizedNameChange }
         />
@@ -284,8 +284,8 @@ const HazardousMaterialsSpecifiers: React.FC = () => {
             key={ language }
             name={ language }
             label={ language === "fi" ?
-              strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.fi) :
-              strings.formatString(strings.adminScreen.addNewWasteSpecifierDialog.text.en)
+              strings.formatString(strings.adminScreen.dialogText.fi) :
+              strings.formatString(strings.adminScreen.dialogText.en)
             }
             value={ editableHazardousWasteSpecifier && LocalizationUtils.getLocalizedName(editableHazardousWasteSpecifier.localizedNames, language) }
             onChange={ handleEditableNameChange }

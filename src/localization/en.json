@@ -188,6 +188,10 @@
   "adminScreen": {
     "title": "Administration",
     "description": "Control the contents of survey options.",
+    "dialogText": {
+      "fi": "Name (in Finnish)",
+      "en": "Name (in English)"
+    },
     "navigation": {
       "dropdownSettings": {
         "title": "Dropdown menus",

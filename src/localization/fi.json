@@ -189,6 +189,10 @@
   "adminScreen": {
     "title": "Ylläpito",
     "description": "Hallitse alasvetovalikoiden sisältöjä.",
+    "dialogText": {
+      "fi": "Nimi (suomeksi)",
+      "en": "Nimi (englanniksi)"
+    },
     "navigation": {
       "dropdownSettings": {
         "title": "Alasvetovalikot",
