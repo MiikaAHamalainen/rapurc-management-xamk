@@ -337,6 +337,7 @@
       "demolitionInfo": "Demolition information",
       "surveyors": "Surveyors",
       "demolitionScope": "Demolition scope",
+      "dateUnknown": "Date not known",
       "startDate": "Start date",
       "endDate": "Usage end date",
       "addSurveyor": "Add new surveyor",

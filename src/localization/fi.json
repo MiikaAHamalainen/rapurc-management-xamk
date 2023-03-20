@@ -337,6 +337,7 @@
       "demolitionInfo": "Purkutiedot",
       "surveyors": "Kartoittajat",
       "demolitionScope": "Purkamisen laajuus",
+      "dateUnknown": "Ajankohta ei tiedossa",
       "startDate": "Aloitusajankohta",
       "endDate": "Käyttö loppuu",
       "addSurveyor": "Lisää",

@@ -591,7 +591,7 @@ const SummaryView: React.FC = () => {
                 flexItem
               />
             }
-            { renderDataCell(strings.survey.info.startDate, moment(selectedSurvey.startDate).format("MMMM YYYY")) }
+            { renderDataCell(strings.survey.info.startDate, selectedSurvey.dateUnknown ? strings.survey.info.dateUnknown : moment(selectedSurvey.startDate).format("DD.MM.YYYY")) }
             { !isMobile &&
               <Divider
                 variant="inset"

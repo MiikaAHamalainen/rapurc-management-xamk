@@ -377,6 +377,7 @@ export interface Localized extends LocalizedStringsMethods {
       demolitionInfo: string;
       surveyors: string;
       demolitionScope: string;
+      dateUnknown: string;
       startDate: string;
       endDate: string;
       addSurveyor: string;
