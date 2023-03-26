@@ -453,11 +453,8 @@ const SummaryView: React.FC = () => {
           spacing={ 2 }
           direction={ isMobile ? "column" : "row" }
         >
-          <Typography width="50%" variant="h3">
+          <Typography width="100%" variant="h3">
             { strings.survey.building.title }
-          </Typography>
-          <Typography width="50%" variant="h3">
-            { building.propertyName }
           </Typography>
         </Stack>
         <Stack>
@@ -474,6 +471,7 @@ const SummaryView: React.FC = () => {
             p={ 2 }
           >
             <Stack width="100%" spacing={ 2 }>
+              { renderDataCell(strings.survey.building.propertyName, building.propertyName) }
               { renderDataCell(strings.survey.building.propertyID, building.propertyId) }
               { renderDataCell(strings.survey.building.buildingID, building.buildingId) }
               { renderDataCell(strings.survey.building.buildingClass, buildingTypes?.find(buildingType => buildingType.id === building.buildingTypeId)?.name) }
@@ -488,7 +486,6 @@ const SummaryView: React.FC = () => {
               { renderDataCell(strings.survey.building.supportingStructure, building.supportingStructure) }
               { renderDataCell(strings.survey.building.façadeMaterial, building.facadeMaterial) }
               { renderDataCell(strings.survey.building.roofStructure, building.roofType) }
-              { renderDataCell(strings.survey.building.propertyName, building.propertyName) }
             </Stack>
           </Stack>
         </Paper>
