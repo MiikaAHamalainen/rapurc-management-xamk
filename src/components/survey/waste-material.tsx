@@ -9,11 +9,13 @@ import WithDataGridDebounceFactory from "components/generic/with-data-grid-debou
 import WithDebounce from "components/generic/with-debounce";
 import SurveyItem from "components/layout-components/survey-item";
 import { selectKeycloak } from "features/auth-slice";
+import { selectLanguage } from "features/locale-slice";
 import { Usage, Waste, WasteCategory, WasteMaterial } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
 import { SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
+import LocalizationUtils from "utils/localization-utils";
 
 const WithWasteDataGridDebounce = WithDataGridDebounceFactory<Waste>();
 
@@ -30,6 +32,8 @@ interface Props {
 const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
+  const selectedLanguage = useAppSelector(selectLanguage);
+
   const [ loading, setLoading ] = React.useState(false);
   const [ addingWaste, setAddingWaste ] = React.useState(false);
   const [ deletingWaste, setDeletingWaste ] = React.useState(false);
@@ -394,18 +398,20 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const renderAddWasteDialog = () => {
     const wasteMaterialOptions = wasteMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteMaterial =>
         <MenuItem value={ wasteMaterial.id }>
-          { wasteMaterial.name }
+          { LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
     const usageOptions = usages
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(usage =>
         <MenuItem value={ usage.id }>
-          { usage.name }
+          { LocalizationUtils.getLocalizedName(usage.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
@@ -493,18 +499,20 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const renderWasteList = () => {
     const wasteMaterialOptions = wasteMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteMaterial =>
         <MenuItem value={ wasteMaterial.id }>
-          { wasteMaterial.name }
+          { LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
     const usageOptions = usages
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(usage =>
         <MenuItem value={ usage.id }>
-          { usage.name }
+          { LocalizationUtils.getLocalizedName(usage.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
@@ -517,7 +525,10 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
             const fullEwcCode = `${wasteCategory?.ewcCode || ""}${materialId?.ewcSpecificationCode}`;
             return (
               <SurveyItem
-                title={ wasteMaterials.find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.name || "" }
+                title={
+                  LocalizationUtils.getLocalizedName(wasteMaterials
+                    .find(wasteMaterial => wasteMaterial.id === waste.wasteMaterialId)?.localizedNames || [], selectedLanguage)
+                }
                 subtitle={ `${waste.amount} t` }
               >
                 {
@@ -583,16 +594,18 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const renderWasteDataTable = () => {
     const wasteMaterialOptions = wasteMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteMaterial => ({
-        label: wasteMaterial.name,
+        label: LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage),
         value: wasteMaterial.id
       }));
 
     const usageOptions = usages
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(usage => ({
-        label: usage.name,
+        label: LocalizationUtils.getLocalizedName(usage.localizedNames, selectedLanguage),
         value: usage.id
       }));
 
@@ -600,14 +613,14 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
       {
         field: "wasteMaterialId",
         headerName: strings.survey.wasteMaterial.dataGridColumns.material,
-        width: 280,
+        width: 230,
         type: "singleSelect",
         editable: true,
         valueOptions: wasteMaterialOptions,
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography variant="body2">{ wasteMaterials.find(wasteMaterial => (wasteMaterial.id === formattedValue))?.name }</Typography>
+            <Typography variant="body2">{ LocalizationUtils.getLocalizedName(wasteMaterials.find(wasteMaterial => (wasteMaterial.id === formattedValue))?.localizedNames || [], selectedLanguage) }</Typography>
           );
         }
       },
@@ -639,7 +652,7 @@ const WasteMaterialView: React.FC<Props> = ({ surveyId }) => {
         renderCell: (params: GridRenderCellParams) => {
           const { formattedValue } = params;
           return (
-            <Typography variant="body2">{ usages.find(usage => (usage.id === formattedValue))?.name }</Typography>
+            <Typography variant="body2">{ LocalizationUtils.getLocalizedName(usages.find(usage => (usage.id === formattedValue))?.localizedNames || [], selectedLanguage) }</Typography>
           );
         }
       },

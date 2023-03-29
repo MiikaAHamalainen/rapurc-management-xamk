@@ -149,7 +149,9 @@
       "classificationCode": "Classification code",
       "ownerName": "Owner name",
       "city": "City",
-      "streetAddress": "Street address"
+      "streetAddress": "Street address",
+      "propertyName": "Property name"
+
     },
     "deleteSurveysDialog": {
       "title": "Delete survey(s)",
@@ -188,6 +190,10 @@
   "adminScreen": {
     "title": "Administration",
     "description": "Control the contents of survey options.",
+    "dialogText": {
+      "fi": "Name (in Finnish)",
+      "en": "Name (in English)"
+    },
     "navigation": {
       "dropdownSettings": {
         "title": "Dropdown menus",
@@ -269,7 +275,10 @@
     },
     "addNewWasteSpecifierDialog": {
       "title": "Add new waste specifier",
-      "text": "Name of the waste specifier"
+      "text": {
+        "fi": "Name of the waste specifier (in Finnish)",
+        "en": "Name of the waste specifier (in English)"
+      }
     },
     "deleteWasteSpecifierDialog": {
       "title": "Delete waste specifier",
@@ -313,6 +322,7 @@
       "supportingStructure": "Supporting structure",
       "façadeMaterial": "Façade material",
       "roofStructure": "Roof structure",
+      "propertyName": "Property name",
       "address": "Address",
       "street": "Street address",
       "city": "City",
@@ -334,8 +344,9 @@
       "demolitionInfo": "Demolition information",
       "surveyors": "Surveyors",
       "demolitionScope": "Demolition scope",
+      "dateUnknown": "Date not known",
       "startDate": "Start date",
-      "endDate": "End date",
+      "endDate": "Usage end date",
       "addSurveyor": "Add new surveyor",
       "deleteSurveyor": "Delete surveyor",
       "demolitionScopes": {
@@ -350,7 +361,9 @@
         "role": "Role",
         "phone": "Phone",
         "email": "E-mail",
-        "reportDate": "Reporting date"
+        "reportDate": "Reporting date",
+        "visits": "Visits"
+
       },
       "addNewSurveyorDialog": {
         "title": "Add surveyor"
@@ -448,6 +461,7 @@
     "otherStructures": {
       "title": "Other demolished buildings and structures",
       "description": "Add buildings and structures that are going to be demolished with the building.",
+      "addedDescription": "These building and structure materials are contained in the survey.",
       "add": "Add building",
       "dialog": {
         "title": "Add building / structure",

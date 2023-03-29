@@ -177,6 +177,7 @@ export interface Localized extends LocalizedStringsMethods {
       buildingId: string;
       classificationCode: string;
       ownerName: string;
+      propertyName: string;
       city: string;
       streetAddress: string;
     };
@@ -226,6 +227,10 @@ export interface Localized extends LocalizedStringsMethods {
   adminScreen: {
     title: string;
     description: string;
+    dialogText: {
+      fi: string;
+      en: string;
+    }
     navigation: {
       dropdownSettings: {
         title: string;
@@ -307,7 +312,10 @@ export interface Localized extends LocalizedStringsMethods {
     };
     addNewWasteSpecifierDialog: {
       title: string;
-      text: string;
+      text: {
+        fi: string;
+        en: string;
+      }
     };
     deleteWasteSpecifierDialog: {
       title: string;
@@ -354,6 +362,7 @@ export interface Localized extends LocalizedStringsMethods {
       supportingStructure: string;
       façadeMaterial: string;
       roofStructure: string;
+      propertyName: string;
       address: string;
       street: string;
       city: string;
@@ -375,6 +384,7 @@ export interface Localized extends LocalizedStringsMethods {
       demolitionInfo: string;
       surveyors: string;
       demolitionScope: string;
+      dateUnknown: string;
       startDate: string;
       endDate: string;
       addSurveyor: string;
@@ -392,6 +402,7 @@ export interface Localized extends LocalizedStringsMethods {
         phone: string;
         email: string;
         reportDate: string;
+        visits: string;
       };
       addNewSurveyorDialog: {
         title: string;
@@ -489,6 +500,7 @@ export interface Localized extends LocalizedStringsMethods {
     otherStructures: {
       title: string;
       description: string;
+      addedDescription: string;
       add: string;
       dialog: {
         title: string;

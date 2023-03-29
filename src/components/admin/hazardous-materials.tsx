@@ -10,9 +10,11 @@ import { MaterialItem, MaterialText } from "../../styled/layout-components/mater
 import { WasteCategory, HazardousMaterial } from "generated/client";
 import GenericDialog from "components/generic/generic-dialog";
 import theme from "theme";
+import LocalizationUtils from "utils/localization-utils";
+import { selectLanguage } from "features/locale-slice";
 
 const initialNewHazardousMaterialState: HazardousMaterial = {
-  name: "",
+  localizedNames: [],
   ewcSpecificationCode: "",
   wasteCategoryId: "",
   metadata: {}
@@ -24,6 +26,8 @@ const initialNewHazardousMaterialState: HazardousMaterial = {
 const HazardousMaterials: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const keycloak = useAppSelector(selectKeycloak);
+  const selectedLanguage = useAppSelector(selectLanguage);
+  const availableLanguages = strings.getAvailableLanguages();
   
   const [ loading, setLoading ] = React.useState(false);
   const [ addingHazardousMaterial, setAddingHazardousMaterial ] = React.useState(false);
@@ -204,6 +208,49 @@ const HazardousMaterials: React.FC = () => {
   };
 
   /**
+   * Even handler for new localized name change
+   *
+   * @param event event
+   */
+  const handleNewLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    const { name, value } = target;
+    const localizedNames = newHazardousMaterial.localizedNames ? [ ...newHazardousMaterial.localizedNames ] : [];
+    const localizedValueIndex = localizedNames.findIndex(localizedValue => localizedValue.language === name);
+    
+    if (localizedValueIndex > -1) {
+      localizedNames[localizedValueIndex].value = value;
+      localizedNames[localizedValueIndex].language = name;
+    } else {
+      localizedNames.push({ language: name, value: value });
+    }
+    
+    setNewHazardousMaterial({ ...newHazardousMaterial, localizedNames: localizedNames });
+  };
+  
+  /**
+     * Event handler for editable localized name change
+     *
+     * @param event event
+     */
+  const handleEditableLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    if (!editableHazardousMaterial) {
+      return;
+    }
+    
+    const { name, value } = target;
+    const newLocalizedNames = editableHazardousMaterial.localizedNames ? [ ...editableHazardousMaterial.localizedNames ] : [];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+        
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+  
+    setEditableHazardousMaterial({ ...editableHazardousMaterial, localizedNames: newLocalizedNames });
+  };
+
+  /**
    * Items for hazardous material
    * 
    * @returns hazardous material items
@@ -215,7 +262,7 @@ const HazardousMaterials: React.FC = () => {
 
       return (
         <MaterialItem key={ hazardousMaterial.id }>
-          <MaterialText primary={ hazardousMaterial.name } secondary={ fullEwcCode }/>
+          <MaterialText primary={ LocalizationUtils.getLocalizedName(hazardousMaterial.localizedNames, selectedLanguage) } secondary={ fullEwcCode }/>
           <ListItemSecondaryAction>
             <IconButton onClick={ () => deleteIconClick(hazardousMaterial) }>
               <Delete/>
@@ -236,11 +283,12 @@ const HazardousMaterials: React.FC = () => {
    */
   const wasteCategoryItems = () => (
     wasteCategories
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteCategory =>
         <MenuItem key={ wasteCategory.id } value={ wasteCategory.id }>
           <MaterialText
-            primary={ wasteCategory.name }
+            primary={ LocalizationUtils.getLocalizedName(wasteCategory.localizedNames, selectedLanguage) }
             secondary={ wasteCategory.ewcCode }
           />
         </MenuItem>
@@ -262,12 +310,19 @@ const HazardousMaterials: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Stack>
-        <TextField
-          sx={{ marginBottom: theme.spacing(2) }}
-          name="name"
-          label={ strings.adminScreen.addNewHazardousMaterialDialog.text1 }
-          onChange={ onNewHazardousMaterialChange }
-        />
+        { availableLanguages.map(language => (
+          <TextField
+            key={ language }
+            sx={{ marginBottom: theme.spacing(2) }}
+            name={ language }
+            label={ language === "fi" ?
+              strings.formatString(strings.adminScreen.dialogText.fi) :
+              strings.formatString(strings.adminScreen.dialogText.en)
+            }
+            onChange={ handleNewLocalizedNameChange }
+          />
+        )) }
+        
         <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
           <TextField
             fullWidth
@@ -304,7 +359,12 @@ const HazardousMaterials: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.formatString(strings.adminScreen.deleteHazardousMaterialDialog.text, deletableHazardousMaterial ? deletableHazardousMaterial.name : "") }
+        { strings.formatString(
+          strings.adminScreen.deleteHazardousMaterialDialog.text,
+          deletableHazardousMaterial ?
+            LocalizationUtils.getLocalizedName(deletableHazardousMaterial.localizedNames, selectedLanguage)
+            : ""
+        )}
       </Typography>
     </GenericDialog>
   );
@@ -324,14 +384,21 @@ const HazardousMaterials: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Stack>
-        <TextField
-          sx={{ marginBottom: theme.spacing(2) }}
-          fullWidth
-          value={ editableHazardousMaterial?.name }
-          label={ strings.adminScreen.addNewHazardousMaterialDialog.text1 }
-          name="name"
-          onChange={ onEditableHazardousMaterialChange }
-        />
+        { availableLanguages.map(language => (
+          <TextField
+            sx={{ marginBottom: theme.spacing(2) }}
+            fullWidth
+            value={ editableHazardousMaterial && LocalizationUtils.getLocalizedName(editableHazardousMaterial.localizedNames, language) }
+            label={ language === "fi" ?
+              strings.formatString(strings.adminScreen.dialogText.fi) :
+              strings.formatString(strings.adminScreen.dialogText.en)
+            }
+            name={ language }
+            key={ language }
+            onChange={ handleEditableLocalizedNameChange }
+          />
+        ))}
+        
         <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
           <TextField
             fullWidth

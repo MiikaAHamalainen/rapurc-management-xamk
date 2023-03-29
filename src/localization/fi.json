@@ -150,7 +150,8 @@
       "classificationCode": "Rakennusluokka",
       "ownerName": "Omistaja",
       "city": "Paikkakunta",
-      "streetAddress": "Osoite"
+      "streetAddress": "Osoite",
+      "propertyName": "Purkukohteen nimi"
     },
     "deleteSurveysDialog": {
       "title": "Poista kartoitus",
@@ -189,6 +190,10 @@
   "adminScreen": {
     "title": "Ylläpito",
     "description": "Hallitse alasvetovalikoiden sisältöjä.",
+    "dialogText": {
+      "fi": "Nimi (suomeksi)",
+      "en": "Nimi (englanniksi)"
+    },
     "navigation": {
       "dropdownSettings": {
         "title": "Alasvetovalikot",
@@ -270,7 +275,10 @@
     },
     "addNewWasteSpecifierDialog": {
       "title": "Lisää haitta-ainetarkenne",
-      "text": "Haitta-ainetarkenteen nimi"
+      "text": {
+        "fi": "Haitta-ainetarkenteen nimi (suomeksi)",
+        "en": "Haitta-ainetarkenteen nimi (englanniksi)"
+      }
     },
     "deleteWasteSpecifierDialog": {
       "title": "Poista haitta-ainetarkenne",
@@ -310,10 +318,11 @@
       "volume": "Rakennustilavuus (m³)",
       "floors": "Kerrosluku",
       "basementFloors": "Kellarikerrokset",
-      "foundationMaterial": "Rakennuksen perusta",
-      "supportingStructure": "Kantava rakenne",
+      "foundationMaterial": "Perustus, alapohja",
+      "supportingStructure": "Kantava runkorakenne",
       "façadeMaterial": "Julkisivumateriaali",
-      "roofStructure": "Kattorakenne",
+      "roofStructure": "Vesikattomateriaali",
+      "propertyName": "Purkukohteen nimi",
       "address": "Osoite",
       "street": "Katuosoite",
       "city": "Kaupunki",
@@ -335,8 +344,9 @@
       "demolitionInfo": "Purkutiedot",
       "surveyors": "Kartoittajat",
       "demolitionScope": "Purkamisen laajuus",
+      "dateUnknown": "Ajankohta ei tiedossa",
       "startDate": "Aloitusajankohta",
-      "endDate": "Lopetusajankohta",
+      "endDate": "Käyttö loppuu",
       "addSurveyor": "Lisää",
       "deleteSurveyor": "Poista",
       "demolitionScopes": {
@@ -351,7 +361,8 @@
         "role": "Rooli",
         "phone": "Puhelin",
         "email": "Sähköpostiosoite",
-        "reportDate": "Raportointipäivä"
+        "reportDate": "Raportointipäivä",
+        "visits": "Käynnit"
       },
       "addNewSurveyorDialog": {
         "title": "Lisää kartoittaja"
@@ -362,7 +373,7 @@
       }
     },
     "reusables": {
-      "title": "Uudelleenkäytettävät rakennusosat",
+      "title": "Uudelleenkäyttökelpoiset purkutuotteet",
       "dropFile": "Pudota kuvat tähän tai valitse alla olevasta painikkeesta.",
       "viewImage": "Näytä kuvat",
       "moreImage": "Lisää kuvia",
@@ -405,12 +416,12 @@
         "notValidated": "Ei arvioitu"
       },
       "units": {
-        "kg": "Kilogrammaa (kg)",
-        "m2": "Neliömetriä (\u33A1)",
-        "m3": "Kuutiometriä (\u33A5)",
-        "pcs": "Kappaletta (kpl)",
-        "rm": "Juoksumetriä (jm)",
-        "tn": "Tonnia (tn)"
+        "kg": "kg",
+        "m2": "\u33A1",
+        "m3": "\u33A5",
+        "pcs": "kpl",
+        "rm": "jm",
+        "tn": "tn"
       }
     },
     "wasteMaterial": {
@@ -449,6 +460,7 @@
     "otherStructures": {
       "title": "Muut purettavat rakennukset / rakennelmat",
       "description": "Jos purkamisen yhteydessä puretaan myös muita samaan kiinteistöön kuuluvia rakennuksia tai rakennelmia, lisää ne tähän listaan.",
+      "addedDescription": "Näiden rakennusten ja rakennelmien materiaalit sisältyvät tähän kartoitukseen.",
       "add": "Lisää",
       "dialog": {
         "title": "Lisää rakennus / rakennelma",

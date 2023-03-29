@@ -1,4 +1,4 @@
-import { Stack, TextField, Typography, MenuItem, Paper, Box, Hidden, useMediaQuery, List } from "@mui/material";
+import { Stack, TextField, Typography, MenuItem, Paper, Box, Hidden, useMediaQuery, List, Checkbox, FormControlLabel } from "@mui/material";
 import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import WithDebounce from "components/generic/with-debounce";
@@ -85,6 +85,22 @@ const SurveyInformation: React.FC = () => {
 
     try {
       await dispatch(updateSurvey({ ...selectedSurvey, [name]: selectedDate })).unwrap();
+    } catch (error) {
+      errorContext.setError(strings.errorHandling.surveys.update);
+    }
+  };
+  /**
+  * Event Handler set survey date
+  * 
+  * @param name field name
+  * @param dateUnknown date unknown
+  */
+  const onDateUnknownChange = (name: string) => async (event: React.ChangeEvent<HTMLInputElement>, Checked: Boolean | null) => {
+    if (!selectedSurvey?.id) {
+      return;
+    }
+    try {
+      await dispatch(updateSurvey({ ...selectedSurvey, [name]: Checked })).unwrap();
     } catch (error) {
       errorContext.setError(strings.errorHandling.surveys.update);
     }
@@ -304,13 +320,14 @@ const SurveyInformation: React.FC = () => {
           views={["year", "month"]}
           label={ strings.survey.info.startDate }
           value={ (selectedSurvey.startDate) }
+          disabled={selectedSurvey.dateUnknown}
           onChange={ onSurveyInfoDateChange("startDate") }
           renderInput={ params =>
             <TextField label={ strings.survey.info.startDate } { ...params }/>
           }
         />
         <DatePicker
-          views={["year", "month"]}
+          views={["year", "month", "day"]}
           label={ strings.survey.info.endDate }
           value={ selectedSurvey.endDate }
           onChange={ onSurveyInfoDateChange("endDate") }
@@ -322,6 +339,26 @@ const SurveyInformation: React.FC = () => {
     );
   };
 
+  /**
+   * Renders Date unknown checkbox
+   */
+  const renderDateUnknownCheckbox = () => {
+    if (!selectedSurvey) {
+      return null;
+    }
+
+    return (
+      <FormControlLabel
+        label={String(strings.survey.info.dateUnknown)}
+        control={
+          <Checkbox
+            checked={selectedSurvey.dateUnknown}
+            onChange={ onDateUnknownChange("dateUnknown") }
+          />
+        }
+      />
+    );
+  };
   /**
    * Renders surveyor data grid header
    */
@@ -439,7 +476,7 @@ const SurveyInformation: React.FC = () => {
       {
         field: "firstName",
         headerName: strings.survey.info.dataGridColumns.firstName,
-        width: 200,
+        width: 150,
         editable: true
       },
       {
@@ -457,13 +494,13 @@ const SurveyInformation: React.FC = () => {
       {
         field: "role",
         headerName: strings.survey.info.dataGridColumns.role,
-        width: 200,
+        width: 150,
         editable: true
       },
       {
         field: "phone",
         headerName: strings.survey.info.dataGridColumns.phone,
-        width: 200,
+        width: 170,
         editable: true
       },
       {
@@ -498,7 +535,12 @@ const SurveyInformation: React.FC = () => {
             </LocalizationProvider>
           );
         }
-
+      },
+      {
+        field: "visits",
+        headerName: strings.survey.info.dataGridColumns.visits,
+        width: 200,
+        editable: true
       }
     ];
 
@@ -615,6 +657,15 @@ const SurveyInformation: React.FC = () => {
         value={ newSurveyor.phone }
         onChange={ onNewSurveyorChange }
       />
+      <TextField
+        fullWidth
+        sx={{ mt: 2 }}
+        name="visits"
+        color="primary"
+        label={ strings.survey.info.dataGridColumns.visits }
+        value={ newSurveyor.visits }
+        onChange={ onNewSurveyorChange }
+      />
     </GenericDialog>
   );
 
@@ -638,6 +689,9 @@ const SurveyInformation: React.FC = () => {
       ) }
       <Stack direction={ isMobile ? "column" : "row" } spacing={ 2 }>
         { renderDatePickers() }
+      </Stack>
+      <Stack>
+        { renderDateUnknownCheckbox() }
       </Stack>
       <Stack
         spacing={ 2 }

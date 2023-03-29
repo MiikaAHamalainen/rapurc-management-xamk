@@ -437,6 +437,11 @@ const SurveysScreen: React.FC = () => {
         flex: 1
       },
       {
+        field: "propertyName",
+        headerName: strings.surveysScreen.dataGridColumns.propertyName,
+        flex: 1
+      },
+      {
         field: "city",
         headerName: strings.surveysScreen.dataGridColumns.city,
         width: 200

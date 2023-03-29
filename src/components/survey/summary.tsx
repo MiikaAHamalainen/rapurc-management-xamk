@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { ExpandMore, Print } from "@mui/icons-material";
 import { Accordion, Box, Button, CircularProgress, Divider, Paper, Stack, Typography, useMediaQuery, AccordionDetails, AccordionSummary } from "@mui/material";
 import Api from "api";
@@ -16,6 +17,7 @@ import LocalizationUtils from "utils/localization-utils";
 import FileUploadUtils from "utils/file-upload";
 import { Reusable } from "generated/client";
 import ImageGallery from "styled/generic/image-gallery";
+import { selectLanguage } from "features/locale-slice";
 
 const initialSurveySummary: SurveySummary = {
   buildingTypes: [],
@@ -39,6 +41,8 @@ const SummaryView: React.FC = () => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
   const selectedSurvey = useAppSelector(selectSelectedSurvey);
+  const selectedLanguage = useAppSelector(selectLanguage);
+
   const [ loading, setLoading ] = React.useState(false);
   const [ surveySummary, setSurveySummary ] = React.useState<SurveySummary>(initialSurveySummary);
   const [ pdfDialogOpen, setPdfDialogOpen ] = React.useState(false);
@@ -449,10 +453,15 @@ const SummaryView: React.FC = () => {
 
     return (
       <Stack spacing={ 2 }>
-        <Stack spacing={ 2 }>
-          <Typography variant="h3">
+        <Stack
+          spacing={ 2 }
+          direction={ isMobile ? "column" : "row" }
+        >
+          <Typography width="100%" variant="h3">
             { strings.survey.building.title }
           </Typography>
+        </Stack>
+        <Stack>
           <Box>
             <Typography>
               { `${building.address?.streetAddress} ${building.address?.postCode} ${building.address?.city}` }
@@ -466,9 +475,10 @@ const SummaryView: React.FC = () => {
             p={ 2 }
           >
             <Stack width="100%" spacing={ 2 }>
+              { renderDataCell(strings.survey.building.propertyName, building.propertyName) }
               { renderDataCell(strings.survey.building.propertyID, building.propertyId) }
               { renderDataCell(strings.survey.building.buildingID, building.buildingId) }
-              { renderDataCell(strings.survey.building.buildingClass, buildingTypes?.find(buildingType => buildingType.id === building.buildingTypeId)?.name) }
+              { renderDataCell(strings.survey.building.buildingClass, LocalizationUtils.getLocalizedName(buildingTypes.find(buildingType => buildingType.id === building.buildingTypeId)?.localizedNames || [], selectedLanguage)) }
               { renderDataCell(strings.survey.building.year, building.constructionYear) }
               { renderDataCell(strings.survey.building.area, building.space) }
               { renderDataCell(strings.survey.building.volume, building.volume) }
@@ -535,6 +545,9 @@ const SummaryView: React.FC = () => {
         <Typography variant="h3">
           { strings.survey.otherStructures.title }
         </Typography>
+        <Typography>
+          { strings.survey.otherStructures.addedDescription }
+        </Typography>
         <Stack spacing={ 2 }>
           { building?.otherStructures.map(otherStructure => (
             <Paper elevation={ 1 } key={ otherStructure.name }>
@@ -579,7 +592,7 @@ const SummaryView: React.FC = () => {
                 flexItem
               />
             }
-            { renderDataCell(strings.survey.info.startDate, moment(selectedSurvey.startDate).format("MMMM YYYY")) }
+            { renderDataCell(strings.survey.info.startDate, selectedSurvey.dateUnknown ? strings.survey.info.dateUnknown : moment(selectedSurvey.startDate).format("DD.MM.YYYY")) }
             { !isMobile &&
               <Divider
                 variant="inset"
@@ -587,7 +600,7 @@ const SummaryView: React.FC = () => {
                 flexItem
               />
             }
-            { renderDataCell(strings.survey.info.endDate, moment(selectedSurvey.endDate).format("MMMM YYYY")) }
+            { renderDataCell(strings.survey.info.endDate, moment(selectedSurvey.endDate).format("DD.MM.YYYY")) }
           </Stack>
         </Paper>
       </Stack>
@@ -623,6 +636,7 @@ const SummaryView: React.FC = () => {
                   { renderDataValue(surveyor.phone || "") }
                   { renderDataValue(surveyor.email || "") }
                   { renderDataCell(strings.survey.info.dataGridColumns.reportDate, surveyor.reportDate ? moment(surveyor.reportDate).format("DD.MM.YYYY") : strings.generic.unknown) }
+                  { renderDataValue(surveyor.visits || "") }
                   { !isMobile &&
                     <Divider
                       variant="inset"
@@ -653,7 +667,8 @@ const SummaryView: React.FC = () => {
         </Typography>
         <Stack spacing={ 2 }>
           { reusables.map(reusable => {
-            const materialName = reusableMaterials.find(reusableMaterial => reusableMaterial.id === reusable.reusableMaterialId)?.name || "";
+            const materialObject = reusableMaterials.find(reusableMaterial => reusableMaterial.id === reusable.reusableMaterialId);
+            const materialName = materialObject && LocalizationUtils.getLocalizedName(materialObject.localizedNames, selectedLanguage);
             const materialUsability = LocalizationUtils.getLocalizedUsability(reusable.usability);
             const materialAmount = `${reusable.amount} ${reusable.unit ? LocalizationUtils.getLocalizedUnits(reusable.unit) : ""}`;
             const materialAmountAsWaste = `${reusable.amountAsWaste} ${strings.units.tons}`;
@@ -741,16 +756,18 @@ const SummaryView: React.FC = () => {
         <Stack spacing={ 2 }>
           { wastes.map(waste => {
             const wasteMaterial = wasteMaterials.find(material => material.id === waste.wasteMaterialId);
+            const wasteMaterialName = wasteMaterial && LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage);
             const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
             const fullEwcCode = wasteCategory ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
-            const wasteUsage = usages.find(usage => usage.id === waste.usageId)?.name;
+            const wasteUsageObject = usages.find(usage => usage.id === waste.usageId);
+            const wasteUsage = wasteUsageObject && LocalizationUtils.getLocalizedName(wasteUsageObject.localizedNames, selectedLanguage);
             const wasteAmount = `${waste?.amount || ""} ${strings.units.tons}`;
 
             return (
               <Paper elevation={ 1 } key={ waste.id }>
                 <Stack spacing={ 2 } p={ 2 }>
                   <Typography variant="h4">
-                    { wasteMaterial?.name }
+                    { wasteMaterialName }
                   </Typography>
                   <Stack
                     spacing={ isMobile ? 2 : 4}
@@ -800,14 +817,18 @@ const SummaryView: React.FC = () => {
             const wasteMaterial = hazardousMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
             const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
             const fullEwcCode = wasteMaterial ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
-            const wasteSpecifierName = wasteSpecifiers.find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.name;
+            const wasteSpecifierName = wasteSpecifiers
+              .find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.localizedNames
+              .find(name => name.language === selectedLanguage)?.value;
             const wasteAmount = `${hazardousWaste?.amount || ""} ${strings.units.tons}`;
+            const hazardousMaterialObject = hazardousMaterials.find(hazardousMaterial => hazardousMaterial.id === hazardousWaste.hazardousMaterialId);
+            const hazardousMaterialName = LocalizationUtils.getLocalizedName(hazardousMaterialObject?.localizedNames || [], selectedLanguage);
 
             return (
               <Paper key={ hazardousWaste.id }>
                 <Stack spacing={ 2 } p={ 2 }>
                   <Typography variant="h4">
-                    { hazardousMaterials.find(hazardousMaterial => hazardousMaterial.id === hazardousWaste.hazardousMaterialId)?.name }
+                    { hazardousMaterialName }
                   </Typography>
                   <Stack
                     spacing={ isMobile ? 2 : 4}

@@ -19,6 +19,7 @@ import { useDropzone } from "react-dropzone";
 import FileUploadUtils from "utils/file-upload";
 import { UploadFile } from "types";
 import produce from "immer";
+import { selectLanguage } from "features/locale-slice";
 
 const WithReusableDataGridDebounce = WithDataGridDebounceFactory<Reusable>();
 
@@ -35,6 +36,7 @@ interface Props {
 const Reusables: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
+  const selectedLanguage = useAppSelector(selectLanguage);
   const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
   const [ loading, setLoading ] = React.useState(false);
   const [ uploadedFiles, setUploadedFiles ] = React.useState<UploadFile[]>([]);
@@ -566,10 +568,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const renderAddSurveyReusableDialog = () => {
     const reusableOptions = Object.values(reusableMaterials)
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(material =>
         <MenuItem key={ material.id } value={ material.id }>
-          { material.name }
+          { LocalizationUtils.getLocalizedName(material.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
@@ -892,10 +895,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const renderMaterialListItems = () => {
     const materialOptions = reusableMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(material => (
         <MenuItem key={ material.id } value={ material.id }>
-          { material.name }
+          { LocalizationUtils.getLocalizedName(material.localizedNames, selectedLanguage) }
         </MenuItem>
       ));
     const usabilityOptions = Object.values(Usability)
@@ -1024,14 +1028,15 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       }));
 
     const reusableMaterialsArray = reusableMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map(material => ({ value: material.id, label: material.name }));
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
+      .map(material => ({ value: material.id, label: LocalizationUtils.getLocalizedName(material.localizedNames, selectedLanguage) }));
 
     const columns: GridColDef[] = [
       {
         field: "reusableMaterialId",
         headerName: strings.survey.reusables.dataGridColumns.material,
-        width: 200,
+        width: 320,
         editable: true,
         type: "singleSelect",
         valueOptions: reusableMaterialsArray,
@@ -1039,7 +1044,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           const { formattedValue } = params;
           return (
             <Typography variant="body2">
-              { reusableMaterials.find(material => (material.id === formattedValue))?.name }
+              {
+                LocalizationUtils.getLocalizedName(reusableMaterials
+                  .find(material => (material.id === formattedValue))?.localizedNames || [], selectedLanguage)
+              }
             </Typography>
           );
         }
@@ -1047,13 +1055,13 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "componentName",
         headerName: strings.survey.reusables.dataGridColumns.buildingPart,
-        width: 220,
+        width: 300,
         editable: true
       },
       {
         field: "usability",
         headerName: strings.survey.reusables.dataGridColumns.usability,
-        width: 180,
+        width: 160,
         type: "singleSelect",
         valueOptions: localizedUsability,
         editable: true,
@@ -1069,14 +1077,14 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "amount",
         headerName: strings.survey.reusables.dataGridColumns.amount,
-        width: 100,
+        width: 80,
         type: "number",
         editable: true
       },
       {
         field: "unit",
         headerName: strings.survey.reusables.dataGridColumns.unit,
-        width: 200,
+        width: 90,
         type: "singleSelect",
         valueOptions: localizedUnits,
         editable: true,
@@ -1092,7 +1100,7 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       {
         field: "description",
         headerName: strings.survey.reusables.dataGridColumns.description,
-        width: 450,
+        width: 750,
         editable: true,
         renderEditCell: (params: GridRenderEditCellParams) => {
           const { value, api, id, field } = params;

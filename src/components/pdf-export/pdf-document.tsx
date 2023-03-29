@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
 interface Props {
   selectedSurvey: Survey;
   summary: SurveySummary;
+  selectedLanguage: string;
 }
 
 /**
@@ -135,8 +136,9 @@ interface Props {
  * @param props component properties
  * @returns survey report pdf
  */
-const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
+const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary, selectedLanguage }) => {
   const date = moment().format("DD.MM.YYYY");
+
   /**
    * Render document info with current date
    */
@@ -201,6 +203,7 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               <Text>{ surveyor.phone }</Text>
               <Text style={ styles.boldSmall }>{ strings.survey.info.dataGridColumns.reportDate }</Text>
               <Text>{ moment(surveyor.reportDate).format("DD.MM.YYYY") }</Text>
+              <Text>{ surveyor.visits }</Text>
             </View>
           ))
         }
@@ -291,10 +294,12 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
       foundation,
       supportingStructure,
       facadeMaterial,
-      roofType
+      roofType,
+      propertyName
     } = building;
 
-    const buildingTypeName = buildingTypes?.find(buildingType => buildingType.id === buildingTypeId)?.name || "";
+    const buildingTypeObject = buildingTypes?.find(buildingType => buildingType.id === buildingTypeId);
+    const buildingTypeName = buildingTypeObject && LocalizationUtils.getLocalizedName(buildingTypeObject.localizedNames, selectedLanguage);
 
     return (
       <View style={ styles.container }>
@@ -352,6 +357,10 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
           <Text>{ strings.survey.building.roofStructure }</Text>
           <Text>{ roofType }</Text>
         </View>
+        <View style={ styles.row }>
+          <Text>{ strings.survey.building.propertyName }</Text>
+          <Text>{ propertyName }</Text>
+        </View>
       </View>
     );
   };
@@ -404,7 +413,8 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
         <View>
           {
             reusables.map(reusable => {
-              const materialName = reusableMaterials.find(reusableMaterial => reusableMaterial.id === reusable.reusableMaterialId)?.name || "";
+              const materialObject = reusableMaterials.find(reusableMaterial => reusableMaterial.id === reusable.reusableMaterialId);
+              const materialName = materialObject && LocalizationUtils.getLocalizedName(materialObject.localizedNames, selectedLanguage);
               const materialUsability = LocalizationUtils.getLocalizedUsability(reusable.usability);
               const materialAmount = `${reusable.amount} ${reusable.unit ? LocalizationUtils.getLocalizedUnits(reusable.unit) : ""}`;
               const materialAmountAsWaste = `${reusable.amountAsWaste} ${strings.units.tons}`;
@@ -473,12 +483,13 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               const wasteMaterial = wasteMaterials.find(material => material.id === waste.wasteMaterialId);
               const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
               const fullEwcCode = wasteCategory ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
-              const wasteUsage = usages.find(usage => usage.id === waste.usageId)?.name;
+              const wasteUsageObject = usages.find(usage => usage.id === waste.usageId);
+              const wasteUsage = wasteUsageObject && LocalizationUtils.getLocalizedName(wasteUsageObject.localizedNames, selectedLanguage);
               const wasteAmount = `${waste?.amount || ""} ${strings.units.tons}`;
 
               return (
                 <View wrap={ false } style={ styles.materialItem } key={ waste.id }>
-                  <Text style={ styles.bold }>{ wasteMaterial?.name }</Text>
+                  <Text style={ styles.bold }>{ wasteMaterial && LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage) }</Text>
                   <Text style={ styles.marginBottom }>{`${strings.survey.wasteMaterial.dataGridColumns.wasteCode}: ${fullEwcCode}`}</Text>
                   <Text style={ styles.marginBottom }>{`${strings.survey.wasteMaterial.dataGridColumns.usage}: ${wasteUsage}`}</Text>
                   { !!waste.amount &&
@@ -527,12 +538,14 @@ const PdfDocument: React.FC<Props> = ({ selectedSurvey, summary }) => {
               const wasteMaterial = hazardousMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
               const wasteCategory = wasteCategories.find(category => category.id === wasteMaterial?.wasteCategoryId);
               const fullEwcCode = wasteMaterial ? `${wasteCategory?.ewcCode || ""}${wasteMaterial?.ewcSpecificationCode}` : "";
-              const wasteSpecifierName = wasteSpecifiers.find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.name;
+              const wasteSpecifierName = wasteSpecifiers
+                .find(wasteSpecifier => wasteSpecifier.id === hazardousWaste.wasteSpecifierId)?.localizedNames
+                .find(name => name.language === selectedLanguage)?.value;
               const wasteAmount = `${hazardousWaste?.amount || ""} ${strings.units.tons}`;
 
               return (
                 <View style={ styles.materialItem } key={ hazardousWaste.id }>
-                  <Text style={ styles.bold }>{ wasteMaterial?.name }</Text>
+                  <Text style={ styles.bold }>{ wasteMaterial && LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage) }</Text>
                   { !!hazardousWaste.wasteSpecifierId &&
                     <Text style={ styles.marginBottom }>{`${strings.survey.hazardousMaterial.dataGridColumns.wasteSpecifier}: ${wasteSpecifierName}`}</Text>
                   }
