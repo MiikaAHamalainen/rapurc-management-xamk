@@ -190,6 +190,10 @@
   "adminScreen": {
     "title": "Ylläpito",
     "description": "Hallitse alasvetovalikoiden sisältöjä.",
+    "dialogText": {
+      "fi": "Nimi (suomeksi)",
+      "en": "Nimi (englanniksi)"
+    },
     "navigation": {
       "dropdownSettings": {
         "title": "Alasvetovalikot",
@@ -271,7 +275,10 @@
     },
     "addNewWasteSpecifierDialog": {
       "title": "Lisää haitta-ainetarkenne",
-      "text": "Haitta-ainetarkenteen nimi"
+      "text": {
+        "fi": "Haitta-ainetarkenteen nimi (suomeksi)",
+        "en": "Haitta-ainetarkenteen nimi (englanniksi)"
+      }
     },
     "deleteWasteSpecifierDialog": {
       "title": "Poista haitta-ainetarkenne",

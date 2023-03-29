@@ -8,7 +8,9 @@ import { useAppSelector } from "app/hooks";
 import { MaterialItem, MaterialText } from "../../styled/layout-components/material-item";
 import { selectKeycloak } from "features/auth-slice";
 import { ErrorContext } from "components/error-handler/error-handler";
-import { ReusableMaterial } from "generated/client";
+import { LocalizedValue, ReusableMaterial } from "generated/client";
+import { selectLanguage } from "features/locale-slice";
+import LocalizationUtils from "utils/localization-utils";
 
 /**
  * Component for reusable materials dropdown menu editor
@@ -16,6 +18,8 @@ import { ReusableMaterial } from "generated/client";
 const Reusables: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const keycloak = useAppSelector(selectKeycloak);
+  const selectedLanguage = useAppSelector(selectLanguage);
+  const availableLanguages = strings.getAvailableLanguages();
 
   const [ addingMaterial, setAddingMaterial ] = React.useState(false);
   const [ deletingMaterial, setDeletingMaterial ] = React.useState(false);
@@ -24,7 +28,7 @@ const Reusables: React.FC = () => {
   const [ deletableMaterial, setDeletableMaterial ] = React.useState<ReusableMaterial>();
   const [ editableMaterial, setEditableMaterial ] = React.useState<ReusableMaterial>();
   const [ materials, setMaterials ] = React.useState<ReusableMaterial[]>([]);
-  const [ newMaterialName, setNewMaterialName ] = React.useState<string>();
+  const [ newMaterialName, setNewMaterialName ] = React.useState<LocalizedValue[]>([]);
 
   /**
    * Fetches list of reusable materials and building parts
@@ -63,12 +67,12 @@ const Reusables: React.FC = () => {
     try {
       const createdReusableMaterial = await Api.getReusableMaterialApi(keycloak.token).createReusableMaterial({
         reusableMaterial: {
-          name: newMaterialName,
+          localizedNames: newMaterialName,
           metadata: {}
         }
       });
       setMaterials([ ...materials, createdReusableMaterial ]);
-      setNewMaterialName(undefined);
+      setNewMaterialName([]);
     } catch (error) {
       errorContext.setError(strings.errorHandling.materials.create, error);
     }
@@ -138,10 +142,46 @@ const Reusables: React.FC = () => {
   };
 
   /**
-   * Even handler for editable material name change
+   * Event handler for editable material localized name change
+   *
+   * @param event event
    */
   const handleEditableNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    editableMaterial && setEditableMaterial({ ...editableMaterial, name: target.value });
+    if (!editableMaterial) {
+      return;
+    }
+  
+    const { name, value } = target;
+    const newLocalizedNames = [ ...editableMaterial.localizedNames ];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+  
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+  
+    setEditableMaterial({ ...editableMaterial, localizedNames: newLocalizedNames });
+  };
+
+  /**
+   * Even handler for new material localized name change
+   *
+   * @param event event
+   */
+  const handleNewLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    const { name, value } = target;
+    const newLocalizedNames = [ ...newMaterialName ];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+  
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+      newLocalizedNames[localizedValueIndex].language = name;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+  
+    setNewMaterialName(newLocalizedNames);
   };
 
   /**
@@ -152,7 +192,7 @@ const Reusables: React.FC = () => {
   const reusableMaterialItems = () => (
     materials.map(material =>
       <MaterialItem key={ material.id }>
-        <MaterialText primary={ material.name }/>
+        <MaterialText primary={ LocalizationUtils.getLocalizedName(material.localizedNames, selectedLanguage) }/>
         <ListItemSecondaryAction>
           <IconButton onClick={ deleteIconClick(material) }>
             <Delete/>
@@ -170,7 +210,6 @@ const Reusables: React.FC = () => {
    */
   const renderAddReusableMaterialDialog = () => (
     <GenericDialog
-      error={ false }
       open={ addingMaterial }
       onClose={ () => setAddingMaterial(false) }
       onCancel={ () => setAddingMaterial(false) }
@@ -179,10 +218,17 @@ const Reusables: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <TextField
-        label={ strings.adminScreen.addNewReusableMaterialDialog.text }
-        onChange={ event => setNewMaterialName(event.target.value) }
-      />
+      { availableLanguages.map(language => (
+        <TextField
+          key={ language }
+          name={ language }
+          label={ language === "fi" ?
+            strings.formatString(strings.adminScreen.dialogText.fi) :
+            strings.formatString(strings.adminScreen.dialogText.en)
+          }
+          onChange={ handleNewLocalizedNameChange }
+        />
+      ))}
     </GenericDialog>
   );
 
@@ -191,7 +237,6 @@ const Reusables: React.FC = () => {
    */
   const renderDeleteReusableMaterialDialog = () => (
     <GenericDialog
-      error={ false }
       open={ deletingMaterial }
       onClose={ () => setDeletingMaterial(false) }
       onCancel={ () => setDeletingMaterial(false) }
@@ -201,7 +246,9 @@ const Reusables: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.formatString(strings.adminScreen.deleteReusableMaterialDialog.text, deletableMaterial ? deletableMaterial.name : "") }
+        { strings.formatString(strings.adminScreen.deleteReusableMaterialDialog.text,
+          deletableMaterial ? LocalizationUtils.getLocalizedName(deletableMaterial.localizedNames, selectedLanguage) : ""
+        )}
       </Typography>
     </GenericDialog>
   );
@@ -220,11 +267,18 @@ const Reusables: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <TextField
-        label={ strings.adminScreen.updateReusableMaterialDialog.text }
-        value={ editableMaterial?.name }
-        onChange={ handleEditableNameChange }
-      />
+      { availableLanguages.map(language => (
+        <TextField
+          key={ language }
+          name={ language }
+          label={ language === "fi" ?
+            strings.formatString(strings.adminScreen.dialogText.fi) :
+            strings.formatString(strings.adminScreen.dialogText.en)
+          }
+          value={ editableMaterial && LocalizationUtils.getLocalizedName(editableMaterial.localizedNames, language) }
+          onChange={ handleEditableNameChange }
+        />
+      ))}
     </GenericDialog>
   );
 

@@ -19,6 +19,7 @@ import { useDropzone } from "react-dropzone";
 import FileUploadUtils from "utils/file-upload";
 import { UploadFile } from "types";
 import produce from "immer";
+import { selectLanguage } from "features/locale-slice";
 
 const WithReusableDataGridDebounce = WithDataGridDebounceFactory<Reusable>();
 
@@ -35,6 +36,7 @@ interface Props {
 const Reusables: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
+  const selectedLanguage = useAppSelector(selectLanguage);
   const [ addingSurveyReusable, setAddingSurveyReusable ] = React.useState<boolean>(false);
   const [ loading, setLoading ] = React.useState(false);
   const [ uploadedFiles, setUploadedFiles ] = React.useState<UploadFile[]>([]);
@@ -566,10 +568,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const renderAddSurveyReusableDialog = () => {
     const reusableOptions = Object.values(reusableMaterials)
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(material =>
         <MenuItem key={ material.id } value={ material.id }>
-          { material.name }
+          { LocalizationUtils.getLocalizedName(material.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
@@ -892,10 +895,11 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
    */
   const renderMaterialListItems = () => {
     const materialOptions = reusableMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(material => (
         <MenuItem key={ material.id } value={ material.id }>
-          { material.name }
+          { LocalizationUtils.getLocalizedName(material.localizedNames, selectedLanguage) }
         </MenuItem>
       ));
     const usabilityOptions = Object.values(Usability)
@@ -1024,8 +1028,9 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
       }));
 
     const reusableMaterialsArray = reusableMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map(material => ({ value: material.id, label: material.name }));
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
+      .map(material => ({ value: material.id, label: LocalizationUtils.getLocalizedName(material.localizedNames, selectedLanguage) }));
 
     const columns: GridColDef[] = [
       {
@@ -1039,7 +1044,10 @@ const Reusables: React.FC<Props> = ({ surveyId }) => {
           const { formattedValue } = params;
           return (
             <Typography variant="body2">
-              { reusableMaterials.find(material => (material.id === formattedValue))?.name }
+              {
+                LocalizationUtils.getLocalizedName(reusableMaterials
+                  .find(material => (material.id === formattedValue))?.localizedNames || [], selectedLanguage)
+              }
             </Typography>
           );
         }

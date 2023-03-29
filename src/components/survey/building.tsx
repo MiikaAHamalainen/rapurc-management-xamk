@@ -4,10 +4,12 @@ import { useAppSelector } from "app/hooks";
 import { ErrorContext } from "components/error-handler/error-handler";
 import WithDebounce from "components/generic/with-debounce";
 import { selectKeycloak } from "features/auth-slice";
+import { selectLanguage } from "features/locale-slice";
 import { Address, Building, BuildingType } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
 import theme from "theme";
+import LocalizationUtils from "utils/localization-utils";
 
 /**
  * Component properties
@@ -22,6 +24,7 @@ interface Props {
 const BuildingView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
+  const selectedLanguage = useAppSelector(selectLanguage);
   const [ building, setBuilding ] = React.useState<Building>();
   const [ buildingTypes, setBuildingTypes ] = React.useState<BuildingType[]>();
 
@@ -183,15 +186,17 @@ const BuildingView: React.FC<Props> = ({ surveyId }) => {
           sx={{ mb: 1 }}
           { ...props }
         >
-          { buildingTypes?.sort((a, b) => a.name.localeCompare(b.name)).map(buildingType =>
-            (
-              <MenuItem
-                key={ buildingType.id }
-                value={ buildingType.id }
-              >
-                { buildingType.name }
-              </MenuItem>
-            )) }
+          { buildingTypes && buildingTypes.sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+            .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
+            .map(buildingType =>
+              (
+                <MenuItem
+                  key={ buildingType.id }
+                  value={ buildingType.id }
+                >
+                  { LocalizationUtils.getLocalizedName(buildingType.localizedNames, selectedLanguage) }
+                </MenuItem>
+              )) }
         </TextField>
       }
     />

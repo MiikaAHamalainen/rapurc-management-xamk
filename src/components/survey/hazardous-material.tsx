@@ -9,11 +9,13 @@ import WithDataGridDebounceFactory from "components/generic/with-data-grid-debou
 import WithDebounce from "components/generic/with-debounce";
 import SurveyItem from "components/layout-components/survey-item";
 import { selectKeycloak } from "features/auth-slice";
+import { selectLanguage } from "features/locale-slice";
 import { WasteCategory, HazardousWaste, HazardousMaterial, WasteSpecifier } from "generated/client";
 import strings from "localization/strings";
 import * as React from "react";
 import { SurveyButton } from "styled/screens/surveys-screen";
 import theme from "theme";
+import LocalizationUtils from "utils/localization-utils";
 
 const WithWasteDataGridDebounce = WithDataGridDebounceFactory<HazardousWaste>();
 
@@ -30,6 +32,7 @@ interface Props {
 const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
   const keycloak = useAppSelector(selectKeycloak);
   const errorContext = React.useContext(ErrorContext);
+  const selectedLanguage = useAppSelector(selectLanguage);
   const [ loading, setLoading ] = React.useState(false);
   const [ addingWaste, setAddingHazardousWaste ] = React.useState(false);
   const [ deletingHazardousWaste, setDeletingHazardousWaste ] = React.useState(false);
@@ -390,18 +393,20 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const renderAddHazardousWasteDialog = () => {
     const wasteMaterialOptions = hazardousWasteMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteMaterial =>
         <MenuItem value={ wasteMaterial.id }>
-          { wasteMaterial.name }
+          { LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage)}
         </MenuItem>
       );
 
     const wasteSpecifierOptions = wasteSpecifiers
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteSpecifier =>
         <MenuItem value={ wasteSpecifier.id }>
-          { wasteSpecifier.name }
+          { LocalizationUtils.getLocalizedName(wasteSpecifier.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
@@ -495,18 +500,20 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const renderHazardousWasteList = () => {
     const wasteMaterialOptions = hazardousWasteMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteMaterial =>
-        <MenuItem value={ wasteMaterial.id }>
-          { wasteMaterial.name }
+        <MenuItem value={ LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage)}>
+          { LocalizationUtils.getLocalizedName(wasteMaterial.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
     const wasteSpecifierOptions = wasteSpecifiers
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteSpecifier =>
         <MenuItem value={ wasteSpecifier.id }>
-          { wasteSpecifier.name }
+          { LocalizationUtils.getLocalizedName(wasteSpecifier.localizedNames, selectedLanguage) }
         </MenuItem>
       );
 
@@ -520,14 +527,17 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
       <List>
         {
           hazardousWastes.map(hazardousWaste => {
-            const hazardousWasteMaterial = hazardousWasteMaterials.find(material => material.id === hazardousWaste.hazardousMaterialId);
+            const hazardousWasteMaterial = hazardousWasteMaterials.find(wasteMaterial => wasteMaterial.id === hazardousWaste.hazardousMaterialId);
+            const hazardousWasteMaterialName = hazardousWasteMaterial &&
+              LocalizationUtils.getLocalizedName(hazardousWasteMaterial.localizedNames, selectedLanguage);
+
             const wasteCategory = wasteCategories.find(category => category.id === hazardousWasteMaterial?.wasteCategoryId);
             const fullEwcCode = `${wasteCategory?.ewcCode || ""}${hazardousWasteMaterial?.ewcSpecificationCode || ""}`;
 
             return (
               <SurveyItem
                 key={ hazardousWaste.id }
-                title={ hazardousWasteMaterials.find(wasteMaterial => wasteMaterial.id === hazardousWaste.hazardousMaterialId)?.name || "" }
+                title={ hazardousWasteMaterialName || "" }
                 subtitle={ `${hazardousWaste.amount} t` }
               >
                 {
@@ -593,16 +603,18 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
    */
   const renderHazardousWasteDataTable = () => {
     const hazardousWasteMaterialOptions = hazardousWasteMaterials
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(hazardousWasteMaterial => ({
-        label: hazardousWasteMaterial.name,
+        label: LocalizationUtils.getLocalizedName(hazardousWasteMaterial.localizedNames, selectedLanguage),
         value: hazardousWasteMaterial.id
       }));
 
     const wasteSpecifierOptions = wasteSpecifiers
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => LocalizationUtils.getLocalizedName(a.localizedNames, selectedLanguage)
+        .localeCompare(LocalizationUtils.getLocalizedName(b.localizedNames, selectedLanguage)))
       .map(wasteSpecifier => ({
-        label: wasteSpecifier.name,
+        label: LocalizationUtils.getLocalizedName(wasteSpecifier.localizedNames, selectedLanguage),
         value: wasteSpecifier.id
       }));
 
@@ -612,6 +624,17 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
         value: undefined
       })
     );
+
+    /**
+     * Finds hazardous waste material name by id
+     * 
+     * @param formattedValue formatted value
+     * @returns Hazardous waste material name
+     */
+    const hazardousWasteMaterialName = (formattedValue: any) => {
+      const hazardousWasteMaterial = hazardousWasteMaterials.find(wasteMaterial => wasteMaterial.id === formattedValue);
+      return hazardousWasteMaterial ? LocalizationUtils.getLocalizedName(hazardousWasteMaterial?.localizedNames, selectedLanguage) : "";
+    };
 
     const columns: GridColDef[] = [
       {
@@ -625,7 +648,7 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
           const { formattedValue } = params;
           return (
             <Typography variant="body2">
-              { hazardousWasteMaterials.find(hazardousWasteMaterial => (hazardousWasteMaterial.id === formattedValue))?.name }
+              { hazardousWasteMaterialName(formattedValue) }
             </Typography>
           );
         }
@@ -659,7 +682,9 @@ const HazardousMaterialView: React.FC<Props> = ({ surveyId }) => {
           const { formattedValue } = params;
           return (
             <Typography variant="body2">
-              { wasteSpecifiers.find(wasteSpecifier => (wasteSpecifier.id === formattedValue))?.name }
+              { wasteSpecifiers
+                .find(wasteSpecifier => (wasteSpecifier.id === formattedValue))?.localizedNames
+                .find(name => name.language === selectedLanguage)?.value }
             </Typography>
           );
         }

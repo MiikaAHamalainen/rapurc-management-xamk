@@ -9,10 +9,12 @@ import { MaterialItem, MaterialText } from "../../styled/layout-components/mater
 import { selectKeycloak } from "features/auth-slice";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { BuildingType } from "generated/client";
+import LocalizationUtils from "utils/localization-utils";
+import { selectLanguage } from "features/locale-slice";
 
 const initialNewBuildingTypeState: BuildingType = {
   code: "",
-  name: "",
+  localizedNames: [],
   metadata: {}
 };
 
@@ -22,6 +24,8 @@ const initialNewBuildingTypeState: BuildingType = {
 const BuildingTypes: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const keycloak = useAppSelector(selectKeycloak);
+  const selectedLanguage = useAppSelector(selectLanguage);
+  const availableLanguages = strings.getAvailableLanguages();
 
   const [ addingBuildingType, setAddingBuildingType ] = React.useState(false);
   const [ deletingBuildingType, setDeletingBuildingType ] = React.useState(false);
@@ -157,6 +161,29 @@ const BuildingTypes: React.FC = () => {
   };
 
   /**
+   * Event handler for editable localized name change
+   *
+   * @param event event
+   */
+  const handleEditableLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    if (!editableBuildingType) {
+      return;
+    }
+
+    const { name, value } = target;
+    const newLocalizedNames = [ ...editableBuildingType.localizedNames ];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+    
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+
+    setEditableBuildingType({ ...editableBuildingType, localizedNames: newLocalizedNames });
+  };
+
+  /**
    * Event handler for new building type string change
    *
    * @param event React change event
@@ -172,6 +199,26 @@ const BuildingTypes: React.FC = () => {
   };
 
   /**
+   * Even handler for new localized name change
+   *
+   * @param event event
+   */
+  const handleNewLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    const { name, value } = target;
+    const localizedNames = newBuildingType.localizedNames ? [ ...newBuildingType.localizedNames ] : [];
+    const localizedValueIndex = localizedNames.findIndex(localizedValue => localizedValue.language === name);
+  
+    if (localizedValueIndex > -1) {
+      localizedNames[localizedValueIndex].value = value;
+      localizedNames[localizedValueIndex].language = name;
+    } else {
+      localizedNames.push({ language: name, value: value });
+    }
+  
+    setNewBuildingType({ ...newBuildingType, localizedNames: localizedNames });
+  };
+
+  /**
    * Items for building types
    * 
    * @returns building type items
@@ -179,7 +226,7 @@ const BuildingTypes: React.FC = () => {
   const buildingTypeItems = () => (
     buildingTypes.map(buildingType =>
       <MaterialItem key={ buildingType.id }>
-        <MaterialText primary={ buildingType.name } secondary={ buildingType.code }/>
+        <MaterialText primary={ LocalizationUtils.getLocalizedName(buildingType.localizedNames, selectedLanguage) } secondary={ buildingType.code }/>
         <ListItemSecondaryAction>
           <IconButton onClick={ deleteIconClick(buildingType) }>
             <Delete/>
@@ -197,7 +244,6 @@ const BuildingTypes: React.FC = () => {
    */
   const renderAddBuildingTypeDialog = () => (
     <GenericDialog
-      error={ false }
       open={ addingBuildingType }
       onClose={ () => setAddingBuildingType(false) }
       onCancel={ () => setAddingBuildingType(false) }
@@ -207,12 +253,19 @@ const BuildingTypes: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Stack spacing={ 2 }>
-        <TextField
-          label={ strings.adminScreen.addNewBuildingTypeDialog.text1 }
-          helperText={ strings.adminScreen.addNewBuildingTypeDialog.text1help }
-          name="name"
-          onChange={ onNewBuildingTypeTextChange }
-        />
+        { availableLanguages.map(language => (
+          <TextField
+            key={ language }
+            label={ language === "fi" ?
+              strings.formatString(strings.adminScreen.dialogText.fi) :
+              strings.formatString(strings.adminScreen.dialogText.en)
+            }
+            helperText={ strings.adminScreen.addNewBuildingTypeDialog.text1help }
+            name={ language }
+            onChange={ handleNewLocalizedNameChange }
+          />
+        ))}
+        
         <TextField
           label={ strings.adminScreen.addNewBuildingTypeDialog.text2 }
           helperText={ strings.adminScreen.addNewBuildingTypeDialog.text2help }
@@ -228,7 +281,6 @@ const BuildingTypes: React.FC = () => {
    */
   const renderDeleteBuildingTypeDialog = () => (
     <GenericDialog
-      error={ false }
       open={ deletingBuildingType }
       onClose={ () => setDeletingBuildingType(false) }
       onCancel={ () => setDeletingBuildingType(false) }
@@ -238,7 +290,11 @@ const BuildingTypes: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.formatString(strings.adminScreen.deleteBuildingTypeDialog.text, deletableBuildingType ? deletableBuildingType.name : "") }
+        { strings.formatString(strings.adminScreen.deleteBuildingTypeDialog.text,
+          deletableBuildingType ?
+            LocalizationUtils.getLocalizedName(deletableBuildingType.localizedNames, selectedLanguage)
+            : ""
+        )}
       </Typography>
     </GenericDialog>
   );
@@ -248,7 +304,6 @@ const BuildingTypes: React.FC = () => {
    */
   const renderEditBuildingTypeDialog = () => (
     <GenericDialog
-      error={ false }
       open={ editingBuildingType }
       onClose={ () => setEditingBuildingType(false) }
       onCancel={ () => setEditingBuildingType(false) }
@@ -258,13 +313,19 @@ const BuildingTypes: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Stack spacing={ 2 }>
-        <TextField
-          fullWidth
-          value={ editableBuildingType?.name }
-          label={ strings.adminScreen.updateBuildingTypeDialog.text1 }
-          name="name"
-          onChange={ onEditableBuildingTypeTextChange }
-        />
+        { availableLanguages.map(language => (
+          <TextField
+            fullWidth
+            key={ language }
+            name={ language }
+            value={ editableBuildingType && LocalizationUtils.getLocalizedName(editableBuildingType.localizedNames, language) }
+            label={ language === "fi" ?
+              strings.formatString(strings.adminScreen.dialogText.fi) :
+              strings.formatString(strings.adminScreen.dialogText.en)
+            }
+            onChange={ handleEditableLocalizedNameChange }
+          />
+        ))}
         <TextField
           fullWidth
           value={ editableBuildingType?.code }

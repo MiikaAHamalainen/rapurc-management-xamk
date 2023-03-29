@@ -8,7 +8,9 @@ import Api from "api";
 import { selectKeycloak } from "features/auth-slice";
 import { ErrorContext } from "components/error-handler/error-handler";
 import { MaterialItem, MaterialText } from "../../styled/layout-components/material-item";
-import { Usage } from "generated/client";
+import { LocalizedValue, Usage } from "generated/client";
+import LocalizationUtils from "utils/localization-utils";
+import { selectLanguage } from "features/locale-slice";
 
 /**
  * Component for post processing dropdown menu editor
@@ -16,11 +18,13 @@ import { Usage } from "generated/client";
 const PostProcessing: React.FC = () => {
   const errorContext = React.useContext(ErrorContext);
   const keycloak = useAppSelector(selectKeycloak);
+  const selectedLanguage = useAppSelector(selectLanguage);
+  const availableLanguages = strings.getAvailableLanguages();
 
   const [ addingPostProcessing, setAddingPostProcessing ] = React.useState(false);
   const [ deletingPostProcess, setDeletingPostProcess ] = React.useState(false);
   const [ editingPostProcess, setEditingPostProcess ] = React.useState(false);
-  const [ newPostProcessName, setNewPostProcessName ] = React.useState<string>();
+  const [ newPostProcessName, setNewPostProcessName ] = React.useState<LocalizedValue[]>([]);
   const [ deletablePostProcess, setDeletablePostProcess ] = React.useState<Usage>();
   const [ postProcesses, setPostProcesses ] = React.useState<Usage[]>([]);
   const [ editablePostProcess, setEditablePostProcess ] = React.useState<Usage>();
@@ -59,16 +63,16 @@ const PostProcessing: React.FC = () => {
     if (!keycloak?.token || !newPostProcessName) {
       return;
     }
-
+    
     try {
       const createdPostProcess = await Api.getUsagesApi(keycloak.token).createUsage({
         usage: {
-          name: newPostProcessName,
+          localizedNames: newPostProcessName,
           metadata: {}
         }
       });
       setPostProcesses([ ...postProcesses, createdPostProcess ]);
-      setNewPostProcessName(undefined);
+      setNewPostProcessName([]);
     } catch (error) {
       errorContext.setError(strings.errorHandling.postProcess.create, error);
     }
@@ -93,6 +97,26 @@ const PostProcessing: React.FC = () => {
     }
 
     setDeletingPostProcess(false);
+  };
+
+  /**
+   * Even handler for new post processing localized name change
+   *
+   * @param event event
+   */
+  const handleNewLocalizedNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
+    const { name, value } = target;
+    const newLocalizedNames = postProcesses ? [ ...newPostProcessName ] : [];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+  
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+      newLocalizedNames[localizedValueIndex].language = name;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+  
+    setNewPostProcessName(newLocalizedNames);
   };
 
   /**
@@ -139,10 +163,26 @@ const PostProcessing: React.FC = () => {
   };
 
   /**
-   * Even handler for editable post process name change
+   * Event handler for editable post process localized name change
+   *
+   * @param event event
    */
   const handleEditableNameChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = ({ target }) => {
-    editablePostProcess && setEditablePostProcess({ ...editablePostProcess, name: target.value });
+    if (!editablePostProcess) {
+      return;
+    }
+
+    const { name, value } = target;
+    const newLocalizedNames = [ ...editablePostProcess.localizedNames ] || [];
+    const localizedValueIndex = newLocalizedNames.findIndex(localizedValue => localizedValue.language === name);
+
+    if (localizedValueIndex > -1) {
+      newLocalizedNames[localizedValueIndex].value = value;
+    } else {
+      newLocalizedNames.push({ language: name, value: value });
+    }
+
+    setEditablePostProcess({ ...editablePostProcess, localizedNames: newLocalizedNames });
   };
 
   /**
@@ -153,7 +193,7 @@ const PostProcessing: React.FC = () => {
   const postProcessingItems = () => (
     postProcesses.map(postProcess =>
       <MaterialItem key={ postProcess.id }>
-        <MaterialText primary={ postProcess.name }/>
+        <MaterialText primary={ LocalizationUtils.getLocalizedName(postProcess.localizedNames, selectedLanguage) }/>
         <ListItemSecondaryAction>
           <IconButton onClick={ () => deleteIconClick(postProcess) }>
             <Delete/>
@@ -171,7 +211,6 @@ const PostProcessing: React.FC = () => {
    */
   const renderAddPostProcessingDialog = () => (
     <GenericDialog
-      error={ false }
       open={ addingPostProcessing }
       onClose={ () => setAddingPostProcessing(false) }
       onCancel={ () => setAddingPostProcessing(false) }
@@ -180,10 +219,18 @@ const PostProcessing: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <TextField
-        label={ strings.adminScreen.addNewPostProcessDialog.text }
-        onChange={ event => setNewPostProcessName(event.target.value) }
-      />
+      { availableLanguages.map(language => (
+        <TextField
+          key={ language }
+          name={ language }
+          label={ language === "fi" ?
+            strings.formatString(strings.adminScreen.dialogText.fi) :
+            strings.formatString(strings.adminScreen.dialogText.en)
+          }
+          onChange={ handleNewLocalizedNameChange }
+        />
+      ))}
+      
     </GenericDialog>
   );
 
@@ -192,7 +239,6 @@ const PostProcessing: React.FC = () => {
    */
   const renderDeletePostProcessingDialog = () => (
     <GenericDialog
-      error={ false }
       open={ deletingPostProcess }
       onClose={ () => setDeletingPostProcess(false) }
       onCancel={ () => setDeletingPostProcess(false) }
@@ -202,7 +248,10 @@ const PostProcessing: React.FC = () => {
       cancelButtonText={ strings.generic.cancel }
     >
       <Typography>
-        { strings.formatString(strings.adminScreen.deletePostProcessDialog.text, deletablePostProcess ? deletablePostProcess.name : "") }
+        { strings.formatString(strings.adminScreen.deletePostProcessDialog.text,
+          deletablePostProcess ? LocalizationUtils.getLocalizedName(deletablePostProcess.localizedNames, selectedLanguage)
+            : ""
+        )}
       </Typography>
     </GenericDialog>
   );
@@ -212,7 +261,6 @@ const PostProcessing: React.FC = () => {
    */
   const renderEditPostProcessDialog = () => (
     <GenericDialog
-      error={ false }
       open={ editingPostProcess }
       onClose={ () => setEditingPostProcess(false) }
       onCancel={ () => setEditingPostProcess(false) }
@@ -221,11 +269,19 @@ const PostProcessing: React.FC = () => {
       positiveButtonText={ strings.generic.confirm }
       cancelButtonText={ strings.generic.cancel }
     >
-      <TextField
-        label={ strings.adminScreen.updatePostProcessDialog.text }
-        value={ editablePostProcess?.name }
-        onChange={ handleEditableNameChange }
-      />
+      { availableLanguages.map(language => (
+        <TextField
+          key={ language }
+          name={ language }
+          label={ language === "fi" ?
+            strings.formatString(strings.adminScreen.dialogText.fi) :
+            strings.formatString(strings.adminScreen.dialogText.en)
+          }
+          value={ editablePostProcess && LocalizationUtils.getLocalizedName(editablePostProcess.localizedNames, language) }
+          onChange={ handleEditableNameChange }
+        />
+      ))}
+      
     </GenericDialog>
   );
 
