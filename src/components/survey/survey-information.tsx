@@ -349,7 +349,7 @@ const SurveyInformation: React.FC = () => {
 
     return (
       <FormControlLabel
-        label={String(strings.survey.info.dateUnknown)}
+        label={ strings.survey.info.dateUnknown }
         control={
           <Checkbox
             checked={selectedSurvey.dateUnknown}
