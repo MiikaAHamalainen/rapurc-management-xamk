@@ -96,7 +96,7 @@ const SurveyInformation: React.FC = () => {
   * @param dateUnknown date unknown
   */
   const onDateUnknownChange = (name: string) => async (event: React.ChangeEvent<HTMLInputElement>, Checked: Boolean | null) => {
-    if (!selectedSurvey?.id) {
+    if (!selectedSurvey || !selectedSurvey.id) {
       return;
     }
     try {
