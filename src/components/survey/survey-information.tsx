@@ -352,7 +352,7 @@ const SurveyInformation: React.FC = () => {
         label={ strings.survey.info.dateUnknown }
         control={
           <Checkbox
-            checked={selectedSurvey.dateUnknown}
+            checked={ selectedSurvey.dateUnknown }
             onChange={ onDateUnknownChange("dateUnknown") }
           />
         }
